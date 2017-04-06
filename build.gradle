@@ -22,8 +22,8 @@ allprojects  {
 
 idea {
   project {
-    jdkName = '1.7'
-    languageLevel = '1.7'
+    jdkName = '1.8'
+    languageLevel = '1.8'
     vcs = 'Git'
   }
 }
@@ -33,8 +33,8 @@ subprojects {
 
   apply plugin: 'java'
 
-  sourceCompatibility = 1.7
-  targetCompatibility = 1.7
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8
 
   /**
    * Keep the version out of the jars to avoid re

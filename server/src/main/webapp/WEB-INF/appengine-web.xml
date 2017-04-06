@@ -55,6 +55,8 @@
   <precompilation-enabled>false</precompilation-enabled>
   <threadsafe>true</threadsafe>
 
+  <runtime>java8</runtime>
+
   <static-error-handlers>
     <handler file="error.html"/>
   </static-error-handlers>
