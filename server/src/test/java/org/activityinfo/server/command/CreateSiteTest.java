@@ -226,10 +226,10 @@ public class CreateSiteTest extends CommandTestCase2 {
         // try to retrieve what we've created
         SiteDTO firstRead = readSite(newSite.getId());
 
-        Assert.assertEquals(1d, firstRead.getIndicatorValue(1));
-        Assert.assertEquals(2d, firstRead.getIndicatorValue(2));
-        Assert.assertEquals(3d, firstRead.getIndicatorValue(11));
-        Assert.assertEquals(0.5d, firstRead.getIndicatorValue(12));
+        assertThat(firstRead.getIndicatorDoubleValue(1), equalTo(1d));
+        assertThat(firstRead.getIndicatorDoubleValue(2), equalTo(2d));
+        assertThat(firstRead.getIndicatorDoubleValue(11), equalTo(3d));
+        assertThat(firstRead.getIndicatorDoubleValue(12), equalTo(0.5d));
 
         SiteDTO updateSite = new SiteDTO(newSite);
         updateSite.setIndicatorValue(1, null);
