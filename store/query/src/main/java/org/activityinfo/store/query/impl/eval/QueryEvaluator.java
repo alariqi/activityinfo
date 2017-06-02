@@ -42,10 +42,10 @@ public class QueryEvaluator {
 
     private Deque<SymbolExpr> evaluationStack = new ArrayDeque<>();
 
-    public QueryEvaluator(FormTree formTree, FormClass rootFormClass, FormScanBatch batch) {
+    public QueryEvaluator(FormTree formTree, FormScanBatch batch) {
         this.tree = formTree;
         this.resolver = new NodeMatcher(formTree);
-        this.rootFormClass = rootFormClass;
+        this.rootFormClass = tree.getRootFormClass();
         this.batch = batch;
     }
 

@@ -145,7 +145,8 @@ public class MySqlCatalogTest extends AbstractMySqlTest {
     @Test
     public void testNoColumns() {
         QueryModel queryModel = new QueryModel(CuidAdapter.activityFormClass(1));
-        columnSet = executor.build(queryModel);
+
+        query(queryModel);
 
         assertThat(columnSet.getNumRows(), equalTo(3));
     }
@@ -333,6 +334,18 @@ public class MySqlCatalogTest extends AbstractMySqlTest {
         assertThat(permissions.isEditAllowed(), equalTo(false));
         assertThat(permissions.getVisibilityFilter(), nullValue());
     }
+
+    @Test
+    public void queryFormWithNoPermissions() {
+
+        // Christian's view permissions have been revoked
+        setUserId(5);
+
+        query(CuidAdapter.activityFormClass(1), "_id", "partner.label");
+
+        assertThat(column("_id"), hasValues(new String[0]));
+
+    }
     
     @Test
     public void editPartnerPermissions() {
@@ -347,6 +360,24 @@ public class MySqlCatalogTest extends AbstractMySqlTest {
         assertThat(permissions.getEditFilter(), CoreMatchers.equalTo("a00000000010000000007=p0000000002"));
     }
 
+    @Test
+    public void recordsAreFiltered() {
+
+        // User 4: Marlene (Solidarites)
+        // Can only view records with the partner Solidarites (2) in database 1
+
+        // Database 1:
+        // Activity 1: NFI (Once)
+
+        // Site 1: Partner: (1)
+        // Site 2: Partner: (1)
+        // Site 3: Partner: Solidarites (2)
+
+
+        query(CuidAdapter.activityFormClass(1), "_id", "partner.label");
+
+        assertThat(column("_id"), hasValues("s0000000003"));
+    }
 
     @Test
     public void editAllPermissions() {
@@ -385,7 +416,6 @@ public class MySqlCatalogTest extends AbstractMySqlTest {
 
     @Test
     public void malformedFormId() {
-
 
         Optional<FormStorage> form = catalog.getForm(ResourceId.valueOf("a1"));
         assertTrue("form should not exist", !form.isPresent());

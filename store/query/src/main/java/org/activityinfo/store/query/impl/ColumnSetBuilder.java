@@ -27,26 +27,32 @@ public class ColumnSetBuilder {
 
     private final FormCatalog catalog;
     private final FormTreeBuilder formTreeBuilder;
+    private final FormSupervisor supervisor;
     private FormScanCache cache;
     private Function<ColumnView, ColumnView> filter;
     private Map<String, Slot<ColumnView>> columnViews;
     private Slot<ColumnView> columnForRowCount;
 
-    public ColumnSetBuilder(FormCatalog catalog) {
-        this(catalog, new AppEngineFormScanCache());
-    }
-
-    public ColumnSetBuilder(FormCatalog catalog, FormScanCache cache) {
+    public ColumnSetBuilder(FormCatalog catalog, FormScanCache cache, FormSupervisor supervisor) {
         this.catalog = catalog;
         this.formTreeBuilder = new FormTreeBuilder(catalog);
         this.cache = cache;
+        this.supervisor = supervisor;
+    }
+
+    public ColumnSetBuilder(FormCatalog catalog) {
+        this(catalog, new AppEngineFormScanCache(), new NullFormSupervisor());
+    }
+
+    public ColumnSetBuilder(FormCatalog formCatalog, FormScanCache formScanCache) {
+        this(formCatalog, formScanCache, new NullFormSupervisor());
     }
 
     public ColumnSet build(QueryModel queryModel) {
 
         // We want to make at most one pass over every collection we need to scan,
         // so first queue up all necessary work before executing
-        FormScanBatch batch = new FormScanBatch(catalog, cache);
+        FormScanBatch batch = new FormScanBatch(new FormStorageScanner(catalog), cache);
 
         // Enqueue the columns we need
         enqueue(queryModel, batch);
@@ -63,13 +69,14 @@ public class ColumnSetBuilder {
 
 
     public void enqueue(QueryModel table, FormScanBatch batch) {
-        ResourceId classId = table.getRowSources().get(0).getRootFormId();
-        FormTree tree = formTreeBuilder.queryTree(classId);
+        ResourceId formId = table.getRowSources().get(0).getRootFormId();
+        FormTree tree = formTreeBuilder.queryTree(formId);
 
         FormClass formClass = tree.getRootFormClass();
         Preconditions.checkNotNull(formClass);
 
-        QueryEvaluator evaluator = new QueryEvaluator(tree, formClass, batch);
+        FormScanBatch filteredBatch = new FormScanBatch(new FilteredScanner(tree, batch, supervisor));
+        QueryEvaluator evaluator = new QueryEvaluator(tree, filteredBatch);
 
         filter = evaluator.filter(table.getFilter());
 

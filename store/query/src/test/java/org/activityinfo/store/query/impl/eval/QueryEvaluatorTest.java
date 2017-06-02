@@ -35,7 +35,7 @@ public class QueryEvaluatorTest {
         catalog.addForm(formClass).withRowCount(10);
 
         FormScanBatch batch = new FormScanBatch(catalog);
-        QueryEvaluator evaluator = new QueryEvaluator(catalog.getTree(formClass.getId()), formClass, batch);
+        QueryEvaluator evaluator = new QueryEvaluator(catalog.getTree(formClass.getId()), batch);
 
         Slot<ColumnView> a = evaluator.evaluateExpression(new SymbolExpr("A"));
         Slot<ColumnView> aPlusOne = evaluator.evaluateExpression(ExprParser.parse("A+1"));

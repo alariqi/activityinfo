@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import org.activityinfo.model.expr.ExprNode;
 import org.activityinfo.model.expr.SymbolExpr;
 import org.activityinfo.model.form.FormClass;
-import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
@@ -19,6 +18,7 @@ import org.activityinfo.store.query.shared.JoinNode;
 import org.activityinfo.store.query.shared.JoinType;
 import org.activityinfo.store.query.shared.NodeMatch;
 import org.activityinfo.store.spi.FormCatalog;
+import org.activityinfo.store.spi.FormPermissions;
 
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -38,9 +38,9 @@ public class FormScanBatch {
 
     private static final Logger LOGGER = Logger.getLogger(FormScanBatch.class.getName());
 
+    private final FormScanner scanner;
     private final FormScanCache cache;
 
-    private final FormCatalog store;
 
     /**
      * We want to do one pass over each FormClass so
@@ -53,35 +53,30 @@ public class FormScanBatch {
 
     private List<Future<Integer>> pendingCachePuts = new ArrayList<>();
 
-    public FormScanBatch(FormCatalog store) {
-        this.store = store;
+    public FormScanBatch(FormScanner scanner) {
+        this.scanner = scanner;
         this.cache = new AppEngineFormScanCache();
     }
 
-    public FormScanBatch(FormCatalog catalog, FormScanCache cache) {
-        this.store = catalog;
+    public FormScanBatch(FormScanner formScanner, FormScanCache cache) {
+        this.scanner = formScanner;
         this.cache = cache;
     }
 
-
-    private FormScan getTable(FormTree.Node node) {
-        return getTable(node.getDefiningFormClass().getId());
-    }
-
-    private FormScan getTable(FormClass formClass) {
+    public FormScan getTable(FormClass formClass) {
         return getTable(formClass.getId());
     }
 
-    private FormScan getTable(ResourceId formClassId) {
-        FormScan scan = tableMap.get(formClassId);
+    public FormScan getTable(ResourceId formId) {
+        FormScan scan = tableMap.get(formId);
         if(scan == null) {
-            scan = new FormScan(store.getForm(formClassId).get());
-            tableMap.put(formClassId, scan);
+            scan = scanner.scan(formId);
+            tableMap.put(formId, scan);
         }
         return scan;
     }
 
-    public com.google.common.base.Optional<Slot<ColumnView>> addParentMask(FormClass subFormClass) {
+    public Optional<Slot<ColumnView>> addParentMask(FormClass subFormClass) {
 
         if(!subFormClass.isSubForm()) {
             return Optional.absent();
@@ -239,8 +234,13 @@ public class FormScanBatch {
         return getTable(formClassId).addField(node);
     }
 
+    public Slot<Integer> addRowCount(ResourceId formId) {
+        return getTable(formId).addCount();
+    }
+
+
     public Slot<Integer> addRowCount(FormClass formClass) {
-        return getTable(formClass.getId()).addCount();
+        return addRowCount(formClass.getId());
     }
 
     /**
