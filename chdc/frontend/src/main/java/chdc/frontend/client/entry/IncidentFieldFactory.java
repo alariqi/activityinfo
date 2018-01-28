@@ -20,8 +20,6 @@ import org.activityinfo.ui.client.input.view.field.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static chdc.frontend.client.entry.IncidentForm.*;
-
 public class IncidentFieldFactory {
 
     private final Map<ResourceId, FieldWidget> fieldMap = new HashMap<>();
@@ -62,7 +60,7 @@ public class IncidentFieldFactory {
 
             @Override
             public FieldWidget visitQuantity(QuantityType type) {
-                return null;
+                return new NativeQuantityWidget(field, updater(field));
             }
 
             @Override
@@ -97,7 +95,7 @@ public class IncidentFieldFactory {
 
             @Override
             public FieldWidget visitLocalDate(LocalDateType localDateType) {
-                return new IncidentDateWidget(field, updater(field));
+                return new NativeDateWidget(field, updater(field));
             }
 
             @Override

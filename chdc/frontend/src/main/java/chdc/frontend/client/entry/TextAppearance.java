@@ -2,18 +2,22 @@ package chdc.frontend.client.entry;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.sencha.gxt.cell.core.client.form.FieldCell;
 import com.sencha.gxt.cell.core.client.form.TextInputCell;
-import com.sencha.gxt.core.client.GXT;
 import com.sencha.gxt.core.client.dom.XElement;
 
 public class TextAppearance implements TextInputCell.TextFieldAppearance {
 
     private final String label;
+    private final String type;
+
+    public TextAppearance(String label, String type) {
+        this.label = label;
+        this.type = type;
+    }
 
     public TextAppearance(String label) {
-        this.label = label;
+        this(label, "text");
     }
 
     @Override
@@ -28,7 +32,7 @@ public class TextAppearance implements TextInputCell.TextFieldAppearance {
         sb.appendHtmlConstant("<div>");
         sb.appendEscaped(label);
         sb.appendHtmlConstant("</div>");
-        sb.appendHtmlConstant("<input type=\"text\" value=\"");
+        sb.appendHtmlConstant("<input type=\"" + this.type + "\" value=\"");
         sb.appendEscaped(value);
         sb.appendHtmlConstant("\">");
         sb.appendHtmlConstant("</label>");

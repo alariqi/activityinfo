@@ -24,6 +24,7 @@ public class TextWidget implements FieldWidget {
     public TextWidget(TextType textType, TextInputCell.TextFieldAppearance appearance, FieldUpdater updater) {
         field = new TextField(new TextInputCell(appearance));
         field.addKeyUpHandler(event -> updater.update(input()));
+        field.setWidth(-1);
 
         if(textType.hasInputMask()) {
             field.setEmptyText(textType.getInputMask());

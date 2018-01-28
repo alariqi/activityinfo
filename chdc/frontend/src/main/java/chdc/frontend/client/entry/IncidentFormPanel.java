@@ -5,11 +5,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.InsertContainer;
-import org.activityinfo.model.form.FormClass;
-import org.activityinfo.model.form.FormElement;
-import org.activityinfo.model.form.FormField;
-import org.activityinfo.model.form.FormSection;
-import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.form.*;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
@@ -87,11 +83,17 @@ public class IncidentFormPanel implements IsWidget {
 
         // Create the widgets and add them to the panel
         FormClass formSchema = viewModel.getFormTree().getRootFormClass();
-        for (FormElement rootElement : formSchema.getElements()) {
-            if(rootElement instanceof FormSection) {
 
-                FormSection section = (FormSection) rootElement;
-                initFieldSet(factory, section);
+        if(formSchema.getElements().get(0) instanceof FormField) {
+            initFieldSet(factory, formSchema);
+        } else {
+
+            for (FormElement rootElement : formSchema.getElements()) {
+                if (rootElement instanceof FormSection) {
+
+                    FormSection section = (FormSection) rootElement;
+                    initFieldSet(factory, section);
+                }
             }
         }
 
@@ -110,7 +112,7 @@ public class IncidentFormPanel implements IsWidget {
         }
     }
 
-    private void initFieldSet(IncidentFieldFactory factory, FormSection section) {
+    private void initFieldSet(IncidentFieldFactory factory, FormElementContainer section) {
         FieldSetContainer fieldSet = new FieldSetContainer(section.getLabel());
 
         InsertContainer fieldContainer;
@@ -141,7 +143,7 @@ public class IncidentFormPanel implements IsWidget {
         }
     }
 
-    private boolean shouldUseFormGrid(FormSection section) {
+    private boolean shouldUseFormGrid(FormElementContainer section) {
         switch (section.getId().asString()) {
             case "date_section":
             case "location_section":
