@@ -441,6 +441,8 @@ public class FormResource {
             }
         }
 
+        LOGGER.info(queryModel.toString());
+
         return executeQuery(queryModel);
     }
 

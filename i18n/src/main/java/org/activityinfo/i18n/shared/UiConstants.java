@@ -1627,7 +1627,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Fortnightly Sub-Form")
     String fortnightlySubform();
 
-    @DefaultStringValue("Fortnight")
+    @DefaultStringValue("{0,number,#}W{1}-{2}")
     String fortnight();
 
     @DefaultStringValue("Daily Sub-Form")
@@ -1804,6 +1804,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Folder")
     String folder();
 
-
-
+    @DefaultStringValue("New Folder")
+    String newFolder();
 }

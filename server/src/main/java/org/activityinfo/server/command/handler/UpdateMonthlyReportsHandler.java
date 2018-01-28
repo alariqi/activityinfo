@@ -29,6 +29,7 @@ import org.activityinfo.legacy.shared.command.result.CommandResult;
 import org.activityinfo.legacy.shared.command.result.VoidResult;
 import org.activityinfo.legacy.shared.exception.CommandException;
 import org.activityinfo.legacy.shared.exception.IllegalAccessCommandException;
+import org.activityinfo.legacy.shared.exception.LockAcquisitionException;
 import org.activityinfo.model.legacy.KeyGenerator;
 import org.activityinfo.model.type.time.Month;
 import org.activityinfo.server.database.hibernate.entity.*;
@@ -36,9 +37,11 @@ import org.activityinfo.server.event.sitehistory.ChangeType;
 import org.activityinfo.server.event.sitehistory.SiteHistoryProcessor;
 
 import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.activityinfo.legacy.shared.model.IndicatorDTO.getPropertyName;
 
@@ -47,6 +50,9 @@ import static org.activityinfo.legacy.shared.model.IndicatorDTO.getPropertyName;
  * @see org.activityinfo.legacy.shared.command.UpdateMonthlyReports
  */
 public class UpdateMonthlyReportsHandler implements CommandHandler<UpdateMonthlyReports> {
+
+    private final String lockKeyRoot = "site";
+    private final double lockTimeout = 1;
 
     private final EntityManager em;
     private final KeyGenerator keyGenerator;
@@ -66,67 +72,111 @@ public class UpdateMonthlyReportsHandler implements CommandHandler<UpdateMonthly
     @Override
     public CommandResult execute(UpdateMonthlyReports cmd, User user) throws CommandException {
 
-        Site site = em.find(Site.class, cmd.getSiteId());
-        if (site == null) {
-            throw new CommandException(cmd, "site " + cmd.getSiteId() + " not found for user " + user.getEmail());
+        // Phantom Row issue occurs when attempting to update Monthly ReportingPeriods concurrently.
+        // To prevent this, we introduce a locking mechanism to prevent simultaneous insertions into table which result
+        // in duplicate reporting periods on the given site.
+        // Once we have acquired a lock, we can then safely execute the command
+
+
+        if (!acquireLock(cmd.getSiteId())) {
+            throw new LockAcquisitionException("Cannot acquire lock for site " + cmd.getSiteId());
         }
 
-        if (!permissionOracle.isEditAllowed(site, user)) {
-            throw new IllegalAccessCommandException("Not authorized to modify sites");
-        }
+        try {
 
-        Map<Month, ReportingPeriod> periods = Maps.newHashMap();
-        Map<String, Object> siteHistoryChangeMap = createChangeMap();
-
-
-        for (ReportingPeriod period : site.getReportingPeriods()) {
-            periods.put(HandlerUtil.monthFromRange(period.getDate1(), period.getDate2()), period);
-        }
-
-        // update tables in consistent order to avoid deadlocks
-
-        // First create any new reporting periods needed
-
-        for (UpdateMonthlyReports.Change change : cmd.getChanges()) {
-            if (!periods.containsKey(change.getMonth())) {
-
-                ReportingPeriod period = new ReportingPeriod(site);
-                period.setId(keyGenerator.generateInt());
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.YEAR, change.getMonth().getYear());
-                calendar.set(Calendar.MONTH, change.getMonth().getMonth() - 1);
-                calendar.set(Calendar.DATE, 1);
-                period.setDate1(calendar.getTime());
-
-                calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
-                period.setDate2(calendar.getTime());
-
-                em.persist(period);
-
-                periods.put(change.getMonth(), period);
+            Site site = em.find(Site.class, cmd.getSiteId());
+            if (site == null) {
+                throw new CommandException(cmd, "site " + cmd.getSiteId() + " not found for user " + user.getEmail());
             }
+
+            if (!permissionOracle.isEditAllowed(site, user)) {
+                throw new IllegalAccessCommandException("Not authorized to modify sites");
+            }
+
+            Map<Month, ReportingPeriod> periods = Maps.newHashMap();
+            Map<String, Object> siteHistoryChangeMap = createChangeMap();
+
+
+            for (ReportingPeriod period : site.getReportingPeriods()) {
+                periods.put(HandlerUtil.monthFromRange(period.getDate1(), period.getDate2()), period);
+            }
+
+            // update tables in consistent order to avoid deadlocks
+
+            // First create any new reporting periods needed
+
+            for (UpdateMonthlyReports.Change change : cmd.getChanges()) {
+                if (!periods.containsKey(change.getMonth())) {
+
+                    ReportingPeriod period = new ReportingPeriod(site);
+                    period.setId(keyGenerator.generateInt());
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.YEAR, change.getMonth().getYear());
+                    calendar.set(Calendar.MONTH, change.getMonth().getMonth() - 1);
+                    calendar.set(Calendar.DATE, 1);
+                    period.setDate1(calendar.getTime());
+
+                    calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+                    period.setDate2(calendar.getTime());
+
+                    em.persist(period);
+
+                    periods.put(change.getMonth(), period);
+                }
+            }
+
+            // Now update indicator values
+
+            for (UpdateMonthlyReports.Change change : cmd.getChanges()) {
+
+                updateIndicatorValue(em,
+                        periods.get(change.getMonth()),
+                        change.getIndicatorId(),
+                        change.getValue(), false);
+
+                siteHistoryChangeMap.put(getPropertyName(change.getIndicatorId(), change.getMonth()), change.getValue());
+            }
+
+            // update the timestamp on the site entity so changes get picked up
+            // by the synchro mechanism
+            site.setVersion(site.getActivity().incrementSiteVersion());
+
+            siteHistoryProcessor.persistHistory(site, user, ChangeType.UPDATE, siteHistoryChangeMap);
+
+        } finally {
+            releaseLock(cmd.getSiteId());
         }
-
-        // Now update indicator values
-
-        for (UpdateMonthlyReports.Change change : cmd.getChanges()) {
-
-            updateIndicatorValue(em,
-                periods.get(change.getMonth()),
-                change.getIndicatorId(),
-                change.getValue(), false);
-
-            siteHistoryChangeMap.put(getPropertyName(change.getIndicatorId(), change.getMonth()), change.getValue());
-        }
-
-        // finally update the timestamp on the site entity so changes get picked up
-        // by the synchro mechanism
-        site.setVersion(site.getActivity().incrementSiteVersion());
-
-        siteHistoryProcessor.persistHistory(site, user, ChangeType.UPDATE, siteHistoryChangeMap);
 
         return new VoidResult();
+    }
+
+    /**
+     * <p>Attempts to acquire a lock on the database for the update of site {@code siteId}
+     * with the lock key "siteId.<{@code siteId}>", and a timeout of {@code lockTimeout} seconds.
+     *
+     * @param siteId
+     * @return TRUE if lock is acquired. FALSE otherwise.
+     *
+     * @see <a href="https://dev.mysql.com/doc/refman/5.7/en/miscellaneous-functions.html#function_get-lock">GET_LOCK() documentation</a>
+     */
+    private boolean acquireLock(int siteId) {
+        String lockKey = lockKeyRoot + "." + siteId;
+
+        BigInteger lockResult = (BigInteger) em
+                .createNativeQuery("SELECT GET_LOCK(?1, ?2)")
+                .setParameter(1, lockKey)
+                .setParameter(2, lockTimeout)
+                .getSingleResult();
+
+        return Objects.equals(lockResult,BigInteger.valueOf(1));
+    }
+
+    private void releaseLock(int siteId) {
+        String lockKey = lockKeyRoot + "." + siteId;
+
+        em.createNativeQuery("SELECT RELEASE_LOCK(?1)")
+                .setParameter(1, lockKey);
     }
 
     public void updateIndicatorValue(EntityManager em,
