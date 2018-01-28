@@ -61,6 +61,7 @@ task compileApp(type: JavaExec) {
     main = 'com.google.gwt.dev.Compiler'
 
     args '-logLevel', 'INFO'
+    args '-localWorkers', Integer.toString(Runtime.runtime.availableProcessors())
 
     // Disable class metadata -- Class.getName() will not
     // be available to compiled code, but we save ~150k
