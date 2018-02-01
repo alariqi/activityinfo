@@ -32,7 +32,7 @@ public class ChdcApiBackend implements ApiBackend {
 
     @Override
     public int getAuthenticatedUserId() {
-        throw new UnsupportedOperationException("TODO");
+        return 1;
     }
 
     @Override
@@ -42,7 +42,8 @@ public class ChdcApiBackend implements ApiBackend {
 
     @Override
     public Updater newUpdater() {
-        throw new UnsupportedOperationException("TODO");
+        return new Updater(getStorage(), getAuthenticatedUserId(), new BlobAuthorizerStub(),
+                new MySqlSerialNumberProvider());
     }
 
     @Override
@@ -59,4 +60,5 @@ public class ChdcApiBackend implements ApiBackend {
     public RecordHistoryProvider getRecordHistoryProvider() {
         throw new UnsupportedOperationException("TODO");
     }
+
 }

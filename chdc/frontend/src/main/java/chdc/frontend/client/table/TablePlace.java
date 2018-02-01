@@ -19,6 +19,10 @@ public class TablePlace extends Place {
         this(formId.asString());
     }
 
+    public String getFormId() {
+        return formId;
+    }
+
     public SafeUri toUri() {
         return UriUtils.fromTrustedString("#" + toString());
     }

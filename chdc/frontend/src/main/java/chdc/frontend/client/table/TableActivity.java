@@ -13,15 +13,17 @@ public class TableActivity implements Activity {
 
 
     private final FormStore formStore;
+    private final TablePlace place;
 
-    public TableActivity(FormStore formStore) {
+    public TableActivity(FormStore formStore, TablePlace place) {
         this.formStore = formStore;
+        this.place = place;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         TableModel model = ImmutableTableModel.builder()
-                .formId(ResourceId.valueOf("incident"))
+                .formId(ResourceId.valueOf(place.getFormId()))
                 .build();
 
         TableViewModel viewModel = new TableViewModel(formStore, model);

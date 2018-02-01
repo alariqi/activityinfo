@@ -4,6 +4,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.store.server.ApiBackend;
 import org.activityinfo.store.server.FormResource;
 import org.activityinfo.store.server.QueryResource;
+import org.activityinfo.store.server.UpdateResource;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -25,6 +26,11 @@ public class ApiResource {
     @Path("query")
     public QueryResource query() {
         return new QueryResource(backend);
+    }
+
+    @Path("update")
+    public UpdateResource update() {
+        return new UpdateResource(backend);
     }
 
     @GET

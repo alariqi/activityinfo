@@ -4,6 +4,12 @@
   "label": "Actor",
   "elements": [
     {
+      "id": "iso2",
+      "label": "ISO Country Code 2",
+      "type": "FREE_TEXT",
+      "required": true
+    },
+    {
       "id": "name",
       "label": "Name",
       "required": true,

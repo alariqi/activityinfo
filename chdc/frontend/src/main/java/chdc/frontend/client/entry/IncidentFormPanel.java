@@ -1,6 +1,5 @@
 package chdc.frontend.client.entry;
 
-import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
@@ -45,14 +44,11 @@ public class IncidentFormPanel implements IsWidget {
 
         container = new FlowLayoutContainer();
         container.addStyleName("data-entry-form");
-        container.addAttachHandler(new AttachEvent.Handler() {
-            @Override
-            public void onAttachOrDetach(AttachEvent event) {
-                if(event.isAttached()) {
-                    subscriptionSet.add(viewModel.subscribe(vm -> onViewModelChanged(vm)));
-                } else {
-                    subscriptionSet.unsubscribeAll();
-                }
+        container.addAttachHandler(event -> {
+            if(event.isAttached()) {
+                subscriptionSet.add(viewModel.subscribe(vm -> onViewModelChanged(vm)));
+            } else {
+                subscriptionSet.unsubscribeAll();
             }
         });
 
@@ -62,8 +58,6 @@ public class IncidentFormPanel implements IsWidget {
     public Widget asWidget() {
         return container;
     }
-
-
 
     private void onViewModelChanged(Observable<FormInputViewModel> viewModel) {
         if(viewModel.isLoaded()) {
@@ -133,7 +127,14 @@ public class IncidentFormPanel implements IsWidget {
                 FieldWidget fieldWidget = factory.createWidget(field);
                 if(fieldWidget != null) {
                     widgetMap.put(field.getId(), fieldWidget);
-                    fieldContainer.add(fieldWidget);
+
+                    if(fieldWidget instanceof MultiFieldWidget) {
+                        for (IsWidget widget : ((MultiFieldWidget) fieldWidget).getWidgets()) {
+                            fieldContainer.add(widget);
+                        }
+                    } else {
+                        fieldContainer.add(fieldWidget);
+                    }
                 }
             }
         }
@@ -153,7 +154,6 @@ public class IncidentFormPanel implements IsWidget {
                 return false;
         }
     }
-
 
     private void updateWidgets(FormInputViewModel viewModel) {
         // Update the widgets to the current form status

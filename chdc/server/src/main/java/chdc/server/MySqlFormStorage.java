@@ -96,16 +96,20 @@ public class MySqlFormStorage implements FormStorage {
             stmt.setString(2, update.getRecordId().asString());
             stmt.setLong(3, newVersion);
             stmt.setString(4, fields);
+            stmt.executeUpdate();
 
         } catch(SQLException e) {
             throw new RuntimeException(e);
         }
 
         try(PreparedStatement stmt = ChdcDatabase.getConnection().prepareStatement(
-                "INSERT INTO form_version (form_id, version) VALUES (?, ?)")) {
+                "REPLACE INTO form_version (form_id, version) VALUES (?, ?)")) {
+
 
             stmt.setString(1, schema.getId().asString());
             stmt.setLong(2, newVersion);
+
+            stmt.executeUpdate();
 
         } catch(SQLException e) {
             throw new RuntimeException(e);

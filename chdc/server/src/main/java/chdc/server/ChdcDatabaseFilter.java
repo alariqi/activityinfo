@@ -1,11 +1,6 @@
 package chdc.server;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import java.io.IOException;
 import java.util.logging.Logger;
 
@@ -26,6 +21,7 @@ public class ChdcDatabaseFilter implements Filter {
         } catch (Exception e) {
             LOGGER.info("Request failed, rolling back transaction");
             ChdcDatabase.rollbackRequestTransactionIfActive();
+            throw new ServletException(e);
         }
     }
 

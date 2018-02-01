@@ -24,8 +24,6 @@ package org.activityinfo.server.endpoint.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import org.activityinfo.json.Json;
-import org.activityinfo.json.JsonValue;
 import org.activityinfo.legacy.shared.AuthenticatedUser;
 import org.activityinfo.legacy.shared.command.GetCountries;
 import org.activityinfo.legacy.shared.command.GetSchema;
@@ -43,19 +41,13 @@ import org.activityinfo.server.database.hibernate.entity.AdminLevel;
 import org.activityinfo.server.database.hibernate.entity.Country;
 import org.activityinfo.server.endpoint.rest.usage.UsageResource;
 import org.activityinfo.store.mysql.collections.CountryTable;
-import org.activityinfo.store.query.server.InvalidUpdateException;
-import org.activityinfo.store.query.server.Updater;
-import org.activityinfo.store.server.ApiBackend;
-import org.activityinfo.store.server.CatalogResource;
-import org.activityinfo.store.server.FormResource;
-import org.activityinfo.store.server.QueryResource;
+import org.activityinfo.store.server.*;
 import org.activityinfo.store.spi.FormStorageProvider;
 import org.codehaus.jackson.map.annotate.JsonView;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
@@ -180,22 +172,9 @@ public class RootResource {
         return new QueryResource(backend);
     }
     
-    @POST
-    @Path("/update") 
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(String json) {
-
-        final JsonValue jsonElement = Json.parse(json);
-
-        Updater updater = backend.newUpdater();
-        try {
-            updater.execute(jsonElement);
-        } catch (InvalidUpdateException e) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-                    .entity(e.getMessage())
-                    .build());
-        }
-        return Response.ok().build();
+    @Path("/update")
+    public UpdateResource update() {
+        return new UpdateResource(backend);
     }
 
     @Path("/users")
