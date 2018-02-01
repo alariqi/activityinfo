@@ -14,6 +14,10 @@ public class LiveRecordGridView extends LiveGridView<Integer> {
 
     private static final boolean SORTING_IMPLEMENTED = false;
 
+    public LiveRecordGridView(GridAppearance appearance) {
+        super(appearance);
+    }
+
     /**
      * Creates a context menu for the given column, including sort menu items and column visibility sub-menu.
      *

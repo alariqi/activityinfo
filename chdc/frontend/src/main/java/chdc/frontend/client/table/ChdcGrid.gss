@@ -1,0 +1,150 @@
+
+@external x-treegrid-column x-treegrid;
+
+.grid {
+    position: relative;
+    overflow: hidden;
+    outline: 0 none;
+}
+
+.scroller {
+    overflow: auto;
+    zoom: 1;
+    position: relative;
+    background-color: white;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.body {
+    border-style: BODY_BORDER_STYLE;
+    border-color: BODY_BORDER_COLOR;
+    border-width: BODY_BORDER_WIDTH;
+}
+
+.rowHighlight {
+}
+
+.dataTable {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.headerRow {
+}
+
+.row {
+    cursor: default;
+    padding: 0 1px;
+    vertical-align: top;
+}
+
+.cell {
+    background-color: CELL_BACKGROUND_COLOR;
+    border-color: CELL_BACKGROUND_COLOR CELL_V_BORDER_COLOR CELL_H_BORDER_COLOR;
+    border-style: solid;
+    border-width: CELL_BORDER_WIDTH 0;
+    border-right-style: none;
+    font-family: CELL_FAMILY;
+    font-size: CELL_SIZE;
+    color: CELL_COLOR;
+    font-weight: CELL_WEIGHT;
+    overflow: hidden;
+}
+
+.rowAlt .cell {
+    background-color: CELL_ALT_BACKGROUND_COLOR;
+    border-top-color: CELL_ALT_BACKGROUND_COLOR;
+}
+
+.rowWrap {
+    border-color: CELL_BACKGROUND_COLOR CELL_V_BORDER_COLOR CELL_H_BORDER_COLOR;
+    border-style: solid;
+    border-right-style: none;
+    border-width: CELL_BORDER_WIDTH 0;
+    overflow: hidden;
+}
+
+.rowAlt .rowWrap {
+    border-top-color: CELL_ALT_BACKGROUND_COLOR;
+}
+
+.rowWrap .cell,
+.rowWrap .cellInner {
+    border-style: none;
+}
+
+.rowOver .cell,
+.rowOver .rowWrap {
+    background-color: CELL_OVER_BACKGROUND_COLOR;
+    border-style: solid CELL_OVER_V_BORDER_STYLE CELL_OVER_H_BORDER_STYLE;
+    border-color: CELL_OVER_BACKGROUND_COLOR CELL_OVER_V_BORDER_COLOR CELL_OVER_H_BORDER_COLOR;
+}
+
+.grid-rowSelected .cell,
+.grid-rowSelected .rowWrap,
+.row .grid-cellSelected {
+    background-color: CELL_SELECTED_BACKGROUND_COLOR !important;
+    border-style: solid CELL_SELECTED_V_BORDER_STYLE CELL_SELECTED_H_BORDER_STYLE;
+    border-color: CELL_SELECTED_BACKGROUND_COLOR CELL_SELECTED_V_BORDER_COLOR CELL_SELECTED_H_BORDER_COLOR;
+}
+
+.columnLines .cell {
+    border-right: CELL_BORDER_WIDTH solid CELL_V_BORDER_COLOR;
+}
+
+.rowDirty {
+}
+
+.cellDirty {
+    background: transparent no-repeat 0 0;
+    background-image: DIRTY;
+}
+
+.cellInner {
+    overflow: hidden;
+    padding: CELL_PADDING;
+    line-height: CELL_LINE_HEIGHT;
+    white-space: nowrap;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.noPadding {
+    padding: 0;
+    height: 100%;
+}
+
+.empty {
+    padding: 10px;
+    color: gray;
+    font: normal 11px tahoma, arial, helvetica, sans-serif;
+}
+
+.rowBody {
+    font: 11px/ 13px tahoma, arial, verdana, sans-serif;
+    padding: 4px;
+}
+
+.footer {
+    background: FOOTER_BACKGROUND_COLOR none repeat scroll 0 0;
+    border-width: FOOTER_BORDER_WIDTH;
+    border-style: FOOTER_BORDER_STYLE;
+    border-color: FOOTER_BORDER_COLOR;
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.footer .cell {
+    background: none;
+    font-family: FOOTER_TEXT_FAMILY;
+    font-size: FOOTER_TEXT_SIZE;
+    font-weight: FOOTER_TEXT_WEIGHT;
+    color: FOOTER_TEXT_COLOR;
+}
+
+.x-treegrid .x-treegrid-column .cellInner {
+    padding: 0 !important;
+}

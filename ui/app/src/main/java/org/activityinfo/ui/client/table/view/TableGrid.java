@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.table.view;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -13,6 +14,7 @@ import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.CellSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.GridView;
 import com.sencha.gxt.widget.core.client.selection.CellSelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
@@ -45,6 +47,13 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
     private final TableGridFilters filters;
 
     public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet, TableUpdater tableUpdater) {
+        this(tableModel, columnSet, GWT.create(GridView.GridAppearance.class), tableUpdater);
+    }
+
+    public TableGrid(final EffectiveTableModel tableModel,
+                     Observable<ColumnSet> columnSet,
+                     GridView.GridAppearance gridAppearance,
+                     TableUpdater tableUpdater) {
 
         this.initialTableModel = tableModel;
         this.tableUpdater = tableUpdater;
@@ -63,7 +72,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         ColumnModelBuilder columns = new ColumnModelBuilder(proxy);
         columns.addAll(tableModel.getColumns());
 
-        LiveRecordGridView gridView = new LiveRecordGridView();
+        LiveRecordGridView gridView = new LiveRecordGridView(gridAppearance);
         gridView.setColumnLines(true);
         gridView.setTrackMouseOver(false);
         gridView.addColumnResizeHandler(this::changeColumnWidth);
