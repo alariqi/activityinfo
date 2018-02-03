@@ -1,12 +1,24 @@
 
 @external x-treegrid-column x-treegrid;
 
+@def CELL_BACKGROUND_COLOR inherit;
+@def CELL_ALT_BACKGROUND_COLOR inherit;
+@def CELL_BORDER_WIDTH 1px;
+@def CELL_V_BORDER_COLOR rgba(101, 116, 127, 0.3);
+@def CELL_H_BORDER_COLOR rgba(101, 116, 127, 0.3);
+@def CELL_PADDING 0.75rem;
+@def CELL_LINE_HEIGHT inherit;
+
+
 .grid {
     position: relative;
     overflow: hidden;
     outline: 0 none;
 }
 
+/**
+ * Outer div region that contains the body and scrolls.
+ */
 .scroller {
     overflow: auto;
     zoom: 1;
@@ -16,15 +28,23 @@
     touch-action: none;
 }
 
+/**
+ * The whole grid body..
+ * Not really visible...
+ */
 .body {
-    border-style: BODY_BORDER_STYLE;
-    border-color: BODY_BORDER_COLOR;
-    border-width: BODY_BORDER_WIDTH;
+
+    /*border-style: BODY_BORDER_STYLE;*/
+    /*border-color: BODY_BORDER_COLOR;*/
+    /*border-width: BODY_BORDER_WIDTH;*/
 }
 
 .rowHighlight {
 }
 
+/**
+ * Style for the <table> element
+ */
 .dataTable {
     table-layout: fixed;
     border-collapse: separate;
@@ -46,16 +66,13 @@
     border-style: solid;
     border-width: CELL_BORDER_WIDTH 0;
     border-right-style: none;
-    font-family: CELL_FAMILY;
-    font-size: CELL_SIZE;
-    color: CELL_COLOR;
-    font-weight: CELL_WEIGHT;
+    font-family: Overpass,sans-serif;
     overflow: hidden;
 }
 
 .rowAlt .cell {
-    background-color: CELL_ALT_BACKGROUND_COLOR;
-    border-top-color: CELL_ALT_BACKGROUND_COLOR;
+    /*background-color: CELL_ALT_BACKGROUND_COLOR;*/
+    /*border-top-color: CELL_ALT_BACKGROUND_COLOR;*/
 }
 
 .rowWrap {
@@ -77,17 +94,17 @@
 
 .rowOver .cell,
 .rowOver .rowWrap {
-    background-color: CELL_OVER_BACKGROUND_COLOR;
-    border-style: solid CELL_OVER_V_BORDER_STYLE CELL_OVER_H_BORDER_STYLE;
-    border-color: CELL_OVER_BACKGROUND_COLOR CELL_OVER_V_BORDER_COLOR CELL_OVER_H_BORDER_COLOR;
+    /*background-color: CELL_OVER_BACKGROUND_COLOR;*/
+    /*border-style: solid CELL_OVER_V_BORDER_STYLE CELL_OVER_H_BORDER_STYLE;*/
+    /*border-color: CELL_OVER_BACKGROUND_COLOR CELL_OVER_V_BORDER_COLOR CELL_OVER_H_BORDER_COLOR;*/
 }
 
 .grid-rowSelected .cell,
 .grid-rowSelected .rowWrap,
 .row .grid-cellSelected {
-    background-color: CELL_SELECTED_BACKGROUND_COLOR !important;
-    border-style: solid CELL_SELECTED_V_BORDER_STYLE CELL_SELECTED_H_BORDER_STYLE;
-    border-color: CELL_SELECTED_BACKGROUND_COLOR CELL_SELECTED_V_BORDER_COLOR CELL_SELECTED_H_BORDER_COLOR;
+    /*background-color: CELL_SELECTED_BACKGROUND_COLOR !important;*/
+    /*border-style: solid CELL_SELECTED_V_BORDER_STYLE CELL_SELECTED_H_BORDER_STYLE;*/
+    /*border-color: CELL_SELECTED_BACKGROUND_COLOR CELL_SELECTED_V_BORDER_COLOR CELL_SELECTED_H_BORDER_COLOR;*/
 }
 
 .columnLines .cell {
@@ -98,8 +115,9 @@
 }
 
 .cellDirty {
-    background: transparent no-repeat 0 0;
-    background-image: DIRTY;
+    /*TODO */
+    /*background: transparent no-repeat 0 0;*/
+    /*background-image: DIRTY;*/
 }
 
 .cellInner {
@@ -119,30 +137,36 @@
 .empty {
     padding: 10px;
     color: gray;
-    font: normal 11px tahoma, arial, helvetica, sans-serif;
+    /*font: normal 11px tahoma, arial, helvetica, sans-serif;*/
 }
 
 .rowBody {
-    font: 11px/ 13px tahoma, arial, verdana, sans-serif;
+    /*font: 11px/ 13px tahoma, arial, verdana, sans-serif;*/
     padding: 4px;
 }
 
+/**
+ * Not used, I think
+ */
 .footer {
-    background: FOOTER_BACKGROUND_COLOR none repeat scroll 0 0;
+   /* background: FOOTER_BACKGROUND_COLOR none repeat scroll 0 0;
     border-width: FOOTER_BORDER_WIDTH;
     border-style: FOOTER_BORDER_STYLE;
     border-color: FOOTER_BORDER_COLOR;
     display: block;
     overflow: hidden;
-    position: relative;
+    position: relative;*/
 }
 
+/**
+  * Unused
+  */
 .footer .cell {
-    background: none;
-    font-family: FOOTER_TEXT_FAMILY;
-    font-size: FOOTER_TEXT_SIZE;
-    font-weight: FOOTER_TEXT_WEIGHT;
-    color: FOOTER_TEXT_COLOR;
+    /*background: none;*/
+    /*font-family: FOOTER_TEXT_FAMILY;*/
+    /*font-size: FOOTER_TEXT_SIZE;*/
+    /*font-weight: FOOTER_TEXT_WEIGHT;*/
+    /*color: FOOTER_TEXT_COLOR;*/
 }
 
 .x-treegrid .x-treegrid-column .cellInner {
