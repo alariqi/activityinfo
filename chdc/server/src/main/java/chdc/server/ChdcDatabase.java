@@ -33,8 +33,8 @@ public class ChdcDatabase {
             config.setPassword(ChdcConfig.getAppSetting("MYSQL_PASSWORD"));
         } else {
             config.setJdbcUrl("jdbc:mysql://localhost:3306/chdc");
-            config.setUsername("root");
-            config.setPassword("root");
+            config.setUsername(System.getenv("localMySqlUsername"));
+            config.setPassword(System.getenv("localMySqlPassword"));
         }
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");

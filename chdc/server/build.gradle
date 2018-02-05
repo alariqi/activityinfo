@@ -68,6 +68,10 @@ task devMode(type: JavaExec) {
 
     main = 'com.google.gwt.dev.DevMode'
 
+    // Configure local database
+    environment 'localMySqlUsername', project.property("localMySqlUsername")
+    environment 'localMySqlPassword', project.property("localMySqlPassword")
+
     // Enable debugging
     jvmArgs "-Xdebug"
     jvmArgs "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
