@@ -58,10 +58,6 @@ public class FieldWidgetFactory  {
 
         @Override
         public FieldWidget visitReference(ReferenceType referenceType) {
-            if (referenceType.getRange().size() != 1) {
-                return null;
-            }
-
             return new ReferenceFieldWidget(formSource, formTree, field, permissionFilters, updater);
         }
 
