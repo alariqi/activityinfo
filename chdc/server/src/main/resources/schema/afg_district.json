@@ -1,0 +1,36 @@
+{
+  "id": "afg_district",
+  "schemaVersion": 1,
+  "label": "District",
+  "elements": [
+    {
+      "id": "name",
+      "code": "name",
+      "label": "Name",
+      "required": true,
+      "type": "FREE_TEXT",
+      "key": true
+    },
+    {
+      "id": "code",
+      "code": "code",
+      "label": "Code",
+      "type": "FREE_TEXT"
+    },
+    {
+      "id": "province",
+      "code": "province",
+      "label": "Province",
+      "type": "reference",
+      "key": true,
+      "typeParameters": {
+        "cardinality": "single",
+        "range": [
+          {
+            "formId": "afg_province"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -8,8 +8,8 @@ import org.activityinfo.model.form.CatalogEntryType;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.store.spi.FormCatalog;
-import org.activityinfo.store.spi.FormStorageProvider;
 import org.activityinfo.store.spi.FormStorage;
+import org.activityinfo.store.spi.FormStorageProvider;
 
 import java.net.URL;
 import java.util.*;
@@ -30,6 +30,10 @@ public class ChdcStorageProvider implements FormStorageProvider, FormCatalog {
         loadSchema("schema/life_impact.json");
         loadSchema("schema/location.json");
         loadSchema("schema/means.json");
+        loadSchema("schema/afg_district.json");
+        loadSchema("schema/afg_province.json");
+        loadSchema("schema/afg_settlement.json");
+
 //        loadSchema("schema/property_impact.json");
 
     }

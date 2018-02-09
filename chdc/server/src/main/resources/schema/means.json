@@ -4,45 +4,6 @@
   "label": "Means",
   "elements": [
     {
-      "id": "name",
-      "label": "Means",
-      "required": true,
-      "type": "FREE_TEXT",
-      "key": true
-    },
-    {
-      "id": "type",
-      "label": "Type",
-      "required": true,
-      "type": "enumerated",
-      "typeParameters": {
-        "cardinality": "single",
-        "presentation": "automatic",
-        "values": [
-          {
-            "id": "mele",
-            "label": "Melee weapon/CQC"
-          },
-          {
-            "id": "firearm",
-            "label": "Firearms"
-          },
-          {
-            "id": "explosive",
-            "label": "Explosives"
-          },
-          {
-            "id": "missiles",
-            "label": "Missiles, rockets, artillery, aerial bombs"
-          },
-          {
-            "id": "other",
-            "label": "Other"
-          }
-        ]
-      }
-    },
-    {
       "id": "scale",
       "label": "Scale",
       "required": true,
@@ -65,6 +26,45 @@
           }
         ]
       }
+    },
+    {
+      "id": "type",
+      "label": "Type",
+      "required": true,
+      "type": "enumerated",
+      "typeParameters": {
+        "cardinality": "single",
+        "presentation": "automatic",
+        "values": [
+          {
+            "id": "mele",
+            "label": "Melee weapons/CQC"
+          },
+          {
+            "id": "firearm",
+            "label": "Firearms"
+          },
+          {
+            "id": "explosive",
+            "label": "Explosives"
+          },
+          {
+            "id": "missiles",
+            "label": "Missiles, rockets, artillery, aerial bombs"
+          },
+          {
+            "id": "other",
+            "label": "Other"
+          }
+        ]
+      }
+    },
+    {
+      "id": "name",
+      "label": "Means",
+      "required": true,
+      "type": "FREE_TEXT",
+      "key": true
     }
   ]
 }

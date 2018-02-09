@@ -1,0 +1,21 @@
+{
+  "id": "afg_province",
+  "schemaVersion": 1,
+  "label": "Province",
+  "elements": [
+    {
+      "id": "name",
+      "code": "name",
+      "label": "Name",
+      "required": true,
+      "type": "FREE_TEXT",
+      "key": true
+    },
+    {
+      "id": "code",
+      "code": "code",
+      "label": "Code",
+      "type": "FREE_TEXT"
+    }
+  ]
+}

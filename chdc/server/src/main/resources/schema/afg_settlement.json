@@ -1,0 +1,42 @@
+{
+  "id": "afg_settlement",
+  "schemaVersion": 1,
+  "label": "Settlement",
+  "elements": [
+    {
+      "id": "name",
+      "code": "name",
+      "label": "Name",
+      "required": true,
+      "type": "FREE_TEXT",
+      "key": true
+    },
+    {
+      "id": "district",
+      "code": "district",
+      "label": "District",
+      "required": true,
+      "type": "reference",
+      "typeParameters": {
+        "cardinality": "single",
+        "range": [
+          {
+            "formId": "afg_district"
+          }
+        ]
+      }
+    },
+    {
+      "id": "geo_id",
+      "code": "geo_id",
+      "label": "Geo-ID",
+      "type": "FREE_TEXT"
+    },
+    {
+      "id": "point",
+      "code": "point",
+      "label": "Location",
+      "type": "geopoint"
+    }
+  ]
+}
