@@ -1,0 +1,39 @@
+.banner {
+    background-color: #7295CD;
+    padding: 4px 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.banner h1 {
+    font-size: 36px;
+    margin: 0;
+}
+
+
+.banner h1 > a {
+    color: white;
+    font-weight: 100;
+    line-height: 1.5;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.banner h1 span {
+    font-weight:700;
+}
+
+
+.topnav {
+    display: flex;
+    align-items: center;
+}
+
+.topnav a {
+    color: white;
+}
+
+.topnav a:hover, .topnav a:focus {
+  color: white;
+}

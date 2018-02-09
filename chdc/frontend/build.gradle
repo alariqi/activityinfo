@@ -30,6 +30,29 @@ dependencies {
     compile project(':ui:app')
 }
 
+
+task generateTheme(type: JavaExec) {
+
+    def themeFile = project.file('src/main/theme/chdc.theme')
+
+    inputs.file themeFile
+
+    // Compiled java classes and libraries second
+    classpath sourceSets.main.java.srcDirs
+    classpath sourceSets.main.resources.srcDirs
+    classpath sourceSets.main.runtimeClasspath
+
+    main = 'com.sencha.gxt.themebuilder.ThemeBuilder'
+
+    args '-gen', "$buildDir/theme"
+    args '-slicedDisabled', 'true'
+    args '-sourcesOnly', 'true'
+
+    args themeFile
+
+}
+
+
 task compileApp(type: JavaExec) {
 
     outputs.dir outputDir

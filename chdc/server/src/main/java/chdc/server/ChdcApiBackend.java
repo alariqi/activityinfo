@@ -53,7 +53,7 @@ public class ChdcApiBackend implements ApiBackend {
 
     @Override
     public PermissionsEnforcer newPermissionsEnforcer() {
-        throw new UnsupportedOperationException("TODO");
+        return new PermissionsEnforcer(getFormSupervisor(), getStorage());
     }
 
     @Override

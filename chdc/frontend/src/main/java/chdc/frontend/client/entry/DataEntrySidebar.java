@@ -12,7 +12,7 @@ public class DataEntrySidebar extends Widget {
         main.addClassName("sidebar");
         setElement(main);
 
-        renderIncident();
+        //renderIncident();
     }
 
     public void renderIncident() {

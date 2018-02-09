@@ -49,7 +49,7 @@
             "cardinality": "single",
             "range": [
               {
-                "formId": "location"
+                "formId": "afg_settlement"
               }
             ]
           }
@@ -111,7 +111,7 @@
           "id": "act_mode",
           "label": "Act Mode",
           "visible": true,
-          "required": false,
+          "required": true,
           "type": "enumerated",
           "typeParameters": {
             "cardinality": "single",

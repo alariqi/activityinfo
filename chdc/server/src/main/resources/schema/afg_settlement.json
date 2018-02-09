@@ -15,6 +15,7 @@
       "id": "district",
       "code": "district",
       "label": "District",
+      "key": true,
       "required": true,
       "type": "reference",
       "typeParameters": {

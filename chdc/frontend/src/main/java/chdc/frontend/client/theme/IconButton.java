@@ -8,6 +8,8 @@ import com.sencha.gxt.widget.core.client.button.CellButtonBase;
 
 public class IconButton extends CellButtonBase<String> {
 
+    public static final ChdcStyles STYLES = ChdcResources.INSTANCE.styles();
+
     public IconButton(Icon icon, String label) {
         super(new ButtonCell<>(new IconButtonAppearance(icon)), label);
     }
@@ -23,6 +25,7 @@ public class IconButton extends CellButtonBase<String> {
         @Override
         public void render(ButtonCell<String> cell, Cell.Context context, String value, SafeHtmlBuilder sb) {
             sb.appendHtmlConstant("<button class=\"button button--icon button--dimmed\">");
+            sb.appendHtmlConstant("<button class=\"" + STYLES.button() + " " + STYLES.buttonIcon() + " " + STYLES.buttonDimmed() + "\">");
             sb.append(icon.svg());
             sb.appendHtmlConstant("<span>");
             sb.appendEscaped(value);

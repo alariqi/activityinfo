@@ -1,0 +1,23 @@
+.icon-boxes li{
+    border:1px solid #fff;
+    display:inline-block;
+    margin:0 2em 2em 0;
+    padding:.5em
+}
+.icon{
+    height:38px;
+    width:38px
+}
+.icon--small{
+    height:27px;
+    width:27px
+}
+.icon--xs{
+    height:20px;
+    width:20px
+}
+.icon--dimmed{
+    transition:opacity .1s ease-in
+}
+.icon--dimmed:focus,.icon--dimmed:hover{
+}

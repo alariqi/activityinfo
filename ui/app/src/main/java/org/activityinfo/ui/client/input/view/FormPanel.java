@@ -128,8 +128,11 @@ public class FormPanel implements IsWidget {
         this.viewModel = viewModel;
 
         // Update Field Views
+        boolean layoutNeeded = false;
         for (FieldView fieldView : fieldViews) {
-            fieldView.updateView(viewModel);
+            if(fieldView.updateView(viewModel)) {
+                layoutNeeded = true;
+            }
         }
 
         // Update Subforms
@@ -140,6 +143,9 @@ public class FormPanel implements IsWidget {
             subFormView.updateView(viewModel.getSubForm(subFormView.getFieldId()));
         }
 
+        if(layoutNeeded) {
+            panel.forceLayout();
+        }
     }
 
     private void onInput(FormTree.Node node, FieldInput input) {
@@ -176,7 +182,7 @@ public class FormPanel implements IsWidget {
         panel.add(fieldPanel, new CssFloatLayoutContainer.CssFloatData(1,
                 new Margins(10, horizontalPadding, 10, horizontalPadding)));
 
-        fieldViews.add(new FieldView(node.getFieldId(), fieldWidget, validationMessage));
+        fieldViews.add(new FieldView(node.getFieldId(), fieldPanel, fieldWidget, validationMessage));
     }
 
     private void addSubForm(FormTree formTree, FormTree.Node node) {

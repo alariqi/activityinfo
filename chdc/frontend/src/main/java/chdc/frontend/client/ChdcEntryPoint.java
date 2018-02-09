@@ -1,8 +1,7 @@
 package chdc.frontend.client;
 
 import chdc.frontend.client.dashboard.DashboardPlace;
-import chdc.frontend.client.theme.Banner;
-import chdc.frontend.client.theme.MainDisplay;
+import chdc.frontend.client.theme.ChdcResources;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
@@ -10,9 +9,10 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
@@ -36,8 +36,14 @@ public class ChdcEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        RootPanel rootPanel = RootPanel.get();
-        rootPanel.add(new Banner());
+        ChdcResources.INSTANCE.styles().ensureInjected();
+
+        ChdcFrame appFrame = new ChdcFrame();
+
+        Viewport viewport = new Viewport();
+        viewport.add(appFrame);
+
+        RootLayoutPanel.get().add(viewport);
 
         EventBus eventBus = new SimpleEventBus();
         PlaceController placeController = new PlaceController(eventBus);
@@ -54,7 +60,7 @@ public class ChdcEntryPoint implements EntryPoint {
 
         ActivityMapper activityMapper = new ChdcActivityMapper(formStore);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(new MainDisplay(rootPanel));
+        activityManager.setDisplay(appFrame);
 
         ChdcPlaceHistoryMapper historyMapper = new ChdcPlaceHistoryMapper();
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);

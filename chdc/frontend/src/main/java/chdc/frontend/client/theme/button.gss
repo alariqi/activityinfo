@@ -1,0 +1,100 @@
+.button {
+    border:1px solid #486a9d;
+    border-radius:5px;
+    color:#486a9d;
+    display:inline-block;
+    font-family:Overpass Mono,monospace;
+    font-size:.875em;
+    font-weight:700;
+    line-height:1.25;
+    outline:none;
+    padding:.7rem .75rem .5rem;
+    text-align:center;
+    text-transform:uppercase
+}
+.button:focus,.button:hover {
+    background-color:#486a9d;
+    color:#ecf1ef
+}
+.button:active {
+    background-color:#601;
+    color:#fff
+}
+@media print{
+    .button,button{
+        display:none
+    }
+}
+.button+.button{
+    margin-left:.5rem
+}
+.button--primary{
+    background-color:#486a9d;
+    color:#ecf1ef
+}
+.button--primary:focus,.button--primary:hover{
+    background-color:#ecf1ef!important
+}
+.button[disabled]{
+    border:1px solid #8eabd7;
+    color:#8eabd7
+}
+.button[disabled]:focus,.button[disabled]:hover{
+    background-color:transparent;
+    color:#8eabd7
+}
+.button--naked{
+    background-color:transparent;
+    border:1px solid transparent;
+    padding:0
+}
+.button--naked:focus,.button--naked:hover{
+    background-color:transparent;
+    color:#304769
+}
+.button--small{
+    padding:.25rem .5rem
+}
+.button--icon{
+    -webkit-box-align:center;
+    align-items:center;
+    background-color:transparent;
+    border:1px solid transparent;
+    color:rgba(114,149,205,.4);
+    display:inline-flex;
+    padding:.25rem;
+    position:relative;
+    text-align:center;
+    transition:.15s ease-in
+}
+.button--icon span{
+    -webkit-transform:translate(-50%);
+    bottom:-8px;
+    display:block;
+    font-size:10px;
+    left:50%;
+    opacity:0;
+    position:absolute;
+    text-align:center;
+    transform:translate(-50%);
+    transition:all .1s ease-in;
+    white-space:nowrap
+}
+.button--icon:focus,.button--icon:hover{
+    -webkit-transform:translateY(-5px);
+    background-color:transparent;
+    border-color:transparent;
+    color:#7295cd;
+    transform:translateY(-5px)
+}
+.button--icon:focus span,.button--icon:hover span{
+    -webkit-transform:translate(-50%);
+    opacity:1;
+    transform:translate(-50%)
+}
+.button--dimmed{
+    opacity:.3
+}
+.button--dimmed:focus,.button--dimmed:hover{
+    opacity:1
+}

@@ -17,6 +17,7 @@ import org.activityinfo.store.spi.TypedRecordUpdate;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,7 @@ public class MySqlFormStorage implements FormStorage {
 
     @Override
     public List<FormRecord> getSubRecords(ResourceId resourceId) {
-        throw new UnsupportedOperationException("TODO");
+        return Collections.emptyList();
     }
 
     @Override
