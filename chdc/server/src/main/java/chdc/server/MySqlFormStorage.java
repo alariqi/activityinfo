@@ -8,6 +8,7 @@ import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormPermissions;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.store.spi.ColumnQueryBuilder;
 import org.activityinfo.store.spi.FormStorage;
@@ -17,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class MySqlFormStorage implements FormStorage {
 
@@ -91,6 +93,10 @@ public class MySqlFormStorage implements FormStorage {
             throw new RuntimeException(e);
         }
 
+        updateFormVersion(newVersion);
+    }
+
+    private void updateFormVersion(long newVersion) {
         try(PreparedStatement stmt = ChdcDatabase.getConnection().prepareStatement(
                 "REPLACE INTO form_version (form_id, version) VALUES (?, ?)")) {
 
@@ -107,7 +113,54 @@ public class MySqlFormStorage implements FormStorage {
 
     @Override
     public void update(TypedRecordUpdate update) {
-        throw new UnsupportedOperationException("TODO");
+
+
+        // Fetch original record
+
+        JsonValue fieldValues;
+
+        try(PreparedStatement stmt = ChdcDatabase.getConnection().prepareStatement(
+                "SELECT fields FROM record WHERE form_id = ? AND record_id = ?")) {
+
+
+            stmt.setString(1, schema.getId().asString());
+            stmt.setString(2, update.getRecordId().asString());
+            try(ResultSet resultSet = stmt.executeQuery()) {
+                if(!resultSet.next()) {
+                    throw new IllegalStateException("Record does not exist");
+                }
+                fieldValues = Json.parse(resultSet.getString(1));
+            }
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Apply updates to the field map
+        for (Map.Entry<ResourceId, FieldValue> entry : update.getChangedFieldValues().entrySet()) {
+            if(entry.getValue() == null) {
+                fieldValues.remove(entry.getKey().asString());
+            } else {
+                fieldValues.put(entry.getKey().asString(), entry.getValue().toJson());
+            }
+        }
+
+        // Update database
+        long newVersion = cacheVersion() + 1;
+        try(PreparedStatement stmt = ChdcDatabase.getConnection().prepareStatement(
+                "UPDATE record SET fields = ?, version = ? WHERE form_id = ? AND record_id = ?")) {
+
+            stmt.setString(1, fieldValues.toJson());
+            stmt.setLong(2, newVersion);
+            stmt.setString(3, schema.getId().asString());
+            stmt.setString(4, update.getRecordId().asString());
+
+            stmt.executeUpdate();
+
+        } catch(SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        updateFormVersion(newVersion);
     }
 
     @Override

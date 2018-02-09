@@ -63,7 +63,9 @@ public class TypedRecordUpdate {
     public JsonValue getChangedFieldValuesObject() {
         JsonValue object = Json.createObject();
         for (Map.Entry<ResourceId, FieldValue> entry : changedFieldValues.entrySet()) {
-            object.put(entry.getKey().asString(), entry.getValue().toJson());
+            if(entry.getValue() != null) {
+                object.put(entry.getKey().asString(), entry.getValue().toJson());
+            }
         }
         return object;
     }

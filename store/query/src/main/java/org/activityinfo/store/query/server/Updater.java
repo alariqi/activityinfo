@@ -204,13 +204,23 @@ public class Updater {
 
     private static ResourceId parseEnumId(EnumType type, String item) {
 
+        // First try by ID
         for (EnumItem enumItem : type.getValues()) {
             if(enumItem.getId().asString().equals(item)) {
                 return enumItem.getId();
             }
         }
+
+        // Then try by exact label match
         for (EnumItem enumItem : type.getValues()) {
             if(enumItem.getLabel().equals(item)) {
+                return enumItem.getId();
+            }
+        }
+
+        // Now try case-insensitve label match
+        for (EnumItem enumItem : type.getValues()) {
+            if(enumItem.getLabel().equalsIgnoreCase(item)) {
                 return enumItem.getId();
             }
         }
@@ -553,7 +563,7 @@ public class Updater {
                         updatedValue = null;
                     } else {
                         try {
-                            updatedValue = formField.getType().parseJsonValue(updatedValueElement);
+                            updatedValue = parseFieldValue(formField, updatedValueElement);
                         } catch(Exception e) {
                             e.printStackTrace();
                             throw new InvalidUpdateException("Could not parse updated value for field " +
