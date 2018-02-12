@@ -33,7 +33,7 @@ dependencies {
 
 task generateTheme(type: JavaExec) {
 
-    def themeFile = project.file('src/main/theme/chdc.theme')
+    def themeFile = project.file('src/main/theme/chdc.groovy')
 
     inputs.file themeFile
 

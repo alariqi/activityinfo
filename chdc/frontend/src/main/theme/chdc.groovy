@@ -496,15 +496,15 @@ theme {
         top = 0
       }
       columnHeader {
-        backgroundColor = '#f5f5f5'
-        borderWidth = 1
+      /*  backgroundColor = '#f5f5f5' */
+        borderWidth = 0
         borderColor = '#c0c0c0'
         borderStyle = 'solid'
-        gradient = '#f5f5f5 0%, #f5f5f5 100%'
+        gradient = ''
         overBackgroundColor = '#eef6fb'
-        overGradient = '#eef6fb 0%, #eef6fb 100%'
+        overGradient = ''
 
-        text = util.fontStyle(overpass, '13px', '#666666', 'bold')
+        text = util.fontStyle(overpassMono, '11px', '#4a6da1', '600')
         padding = util.padding(7, 10)
         lineHeight = "15px"
 
@@ -522,10 +522,10 @@ theme {
       }
 
       cellPadding = util.padding(5,10,4)
-      cellText = util.fontStyle(overpass, '13px', '#000000')
-      cellLineHeight = "15px"
-      cellVBorderColor = '#ededed'
-      cellHBorderColor = '#ededed'
+      cellText = util.fontStyle(overpass, '14px', 'rgb(74, 74, 74)', 400)
+      cellLineHeight = "18.2px"
+      cellVBorderColor = 'rgba(101, 116, 127, 0.3)'
+      cellHBorderColor = 'rgba(101, 116, 127, 0.3)'
       cellBorderWidth = 1
       cellBackgroundColor = '#ffffff'
       cellAltBackgroundColor = '#fafafa'

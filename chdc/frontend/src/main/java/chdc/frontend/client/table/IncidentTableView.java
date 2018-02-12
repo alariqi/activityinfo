@@ -90,7 +90,7 @@ public class IncidentTableView implements IsWidget, HasTitle {
         }
 
 
-        grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), new ChdcGridAppearance(), viewModel);
+        grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
         grid.addSelectionChangedHandler(event -> {
             if(!event.getSelection().isEmpty()) {
                 RecordRef ref = event.getSelection().get(0);
