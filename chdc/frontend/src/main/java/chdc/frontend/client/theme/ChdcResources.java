@@ -7,7 +7,7 @@ public interface ChdcResources extends ClientBundle {
 
     ChdcResources INSTANCE = GWT.create(ChdcResources.class);
 
-    @Source({"banner.gss", "button.gss", "icons.gss"})
+    @Source({"body.gss", "banner.gss", "button.gss", "icons.gss"})
     ChdcStyles styles();
 
 }

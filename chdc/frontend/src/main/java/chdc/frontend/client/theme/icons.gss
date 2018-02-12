@@ -8,7 +8,7 @@
     height:38px;
     width:38px
 }
-.icon--small{
+.icon--small {
     height:27px;
     width:27px
 }
