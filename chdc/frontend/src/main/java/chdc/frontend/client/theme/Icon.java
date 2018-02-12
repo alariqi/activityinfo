@@ -13,7 +13,9 @@ public enum Icon {
 
     public final SafeHtml svg() {
         return SafeHtmlUtils.fromSafeConstant(
-                "<svg viewBox=\"0 0 64 64\" class=\"icon icon--small\">" +
+                "<svg viewBox=\"0 0 64 64\" class=\"" +
+                        ChdcTheme.INSTANCE.styles().icon() + " " +
+                        ChdcTheme.INSTANCE.styles().iconSmall() +  "\">" +
                 "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + symbolName() + "\"></use>" +
                 "</svg>");
     }

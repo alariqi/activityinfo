@@ -9,8 +9,8 @@ public class Banner extends Widget {
     public Banner() {
         Element header = Document.get().createElement("header");
         header.setAttribute("role", "banner");
-        header.addClassName(ChdcResources.INSTANCE.styles().banner());
-        header.setInnerSafeHtml(ChdcTemplates.TEMPLATES.banner(ChdcResources.INSTANCE.styles()));
+        header.addClassName(ChdcTheme.INSTANCE.styles().banner());
+        header.setInnerSafeHtml(ChdcTemplates.TEMPLATES.banner(ChdcTheme.INSTANCE.styles()));
         setElement(header);
     }
 }

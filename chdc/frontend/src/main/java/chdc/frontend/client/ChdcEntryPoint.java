@@ -1,7 +1,7 @@
 package chdc.frontend.client;
 
 import chdc.frontend.client.dashboard.DashboardPlace;
-import chdc.frontend.client.theme.ChdcResources;
+import chdc.frontend.client.theme.ChdcTheme;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
@@ -36,7 +36,7 @@ public class ChdcEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        ChdcResources.INSTANCE.styles().ensureInjected();
+        ChdcTheme.INSTANCE.styles().ensureInjected();
 
         ChdcFrame appFrame = new ChdcFrame();
 

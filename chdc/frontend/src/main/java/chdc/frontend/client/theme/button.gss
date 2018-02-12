@@ -10,7 +10,8 @@
     outline:none;
     padding:.7rem .75rem .5rem;
     text-align:center;
-    text-transform:uppercase
+    text-transform:uppercase;
+    text-decoration: none;
 }
 .button:focus,.button:hover {
     background-color:#486a9d;

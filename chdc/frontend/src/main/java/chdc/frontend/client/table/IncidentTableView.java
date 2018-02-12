@@ -2,15 +2,18 @@ package chdc.frontend.client.table;
 
 import chdc.frontend.client.entry.DataEntryPlace;
 import chdc.frontend.client.i18n.ChdcLabels;
-import chdc.frontend.client.theme.*;
+import chdc.frontend.client.theme.ActionBar;
+import chdc.frontend.client.theme.Icon;
+import chdc.frontend.client.theme.IconLinkButton;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.observable.Subscription;
 import org.activityinfo.ui.client.chrome.HasTitle;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.view.TableGrid;
@@ -24,53 +27,43 @@ public class IncidentTableView implements IsWidget, HasTitle {
 
     private static final Logger LOGGER = Logger.getLogger(IncidentTableView.class.getName());
 
-    private final MainContainer main;
-    private final FlowLayoutContainer gridContainer;
     private TableViewModel viewModel;
     private FormStore formStore;
     private TableGrid grid;
+    private final BorderLayoutContainer container;
+    private Subscription subscription;
 
     public IncidentTableView(FormStore formStore, final TableViewModel viewModel) {
         this.formStore = formStore;
 
-        gridContainer = new FlowLayoutContainer() {
-            @Override
-            protected void onAttach() {
-                super.onAttach();
-                viewModel.getEffectiveTable().subscribe(tm -> effectiveModelChanged());
-            }
-        };
         this.viewModel = viewModel;
-        gridContainer.addStyleName("gridholder");
 
-        FlowLayoutContainer mainContent = new FlowLayoutContainer();
-        mainContent.setStyleName("maincontent");
-        mainContent.add(gridContainer);
+        // Action barToo
 
-        // Action bar
+        ActionBar toolBar = new ActionBar();
+        IconLinkButton newRow = new IconLinkButton(Icon.PLUS, ChdcLabels.LABELS.newRow(),
+                new DataEntryPlace(viewModel.getFormId()).toUri());
 
-        FlowLayoutContainer tableActions = new FlowLayoutContainer();
-        tableActions.add(new IconLinkButton(Icon.PLUS, ChdcLabels.LABELS.newRow(),
-                new DataEntryPlace(viewModel.getFormId()).toUri()));
+        toolBar.addShortcut(newRow);
 
-        ActionBar actionBar = new ActionBar();
-        actionBar.addShortcut(new QuickSearchForm());
-        actionBar.addShortcut(tableActions);
-
-        // Main
-
-        main = new MainContainer();
-        main.add(mainContent);
-        main.add(actionBar);
-
+        container = new BorderLayoutContainer();
+        container.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(60));
+        container.addAttachHandler(event -> {
+            if(event.isAttached()) {
+                subscription = viewModel.getEffectiveTable().subscribe(tm -> effectiveModelChanged());
+            } else {
+                subscription.unsubscribe();
+                subscription = null;
+            }
+        });
     }
 
 
     private void effectiveModelChanged() {
         if(viewModel.getEffectiveTable().isLoading()) {
-            this.gridContainer.mask();
+            this.container.mask();
         } else {
-            this.gridContainer.unmask();
+            this.container.unmask();
 
             switch (viewModel.getEffectiveTable().get().getRootFormState()) {
                 case FORBIDDEN:
@@ -96,11 +89,6 @@ public class IncidentTableView implements IsWidget, HasTitle {
             return;
         }
 
-        if(grid != null) {
-            gridContainer.remove(grid);
-        }
-
-        LOGGER.info("mainContent = {" + main.getOffsetWidth() + " x " + main.getOffsetHeight() + "}");
 
         grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), new ChdcGridAppearance(), viewModel);
         grid.addSelectionChangedHandler(event -> {
@@ -109,13 +97,13 @@ public class IncidentTableView implements IsWidget, HasTitle {
                 viewModel.select(ref);
             }
         });
-        grid.asWidget().setPixelSize(main.getOffsetWidth(), main.getOffsetHeight());
-        gridContainer.add(grid);
+        container.setCenterWidget(grid);
+        container.forceLayout();
     }
 
     @Override
     public Widget asWidget() {
-        return main;
+        return container;
     }
 
     @Override

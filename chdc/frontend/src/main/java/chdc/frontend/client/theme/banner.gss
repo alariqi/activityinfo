@@ -5,12 +5,10 @@
     justify-content: space-between;
 }
 
-
 .banner h1 {
     font-size: 36px;
     margin: 0;
 }
-
 
 .banner h1 > a {
     color: white;

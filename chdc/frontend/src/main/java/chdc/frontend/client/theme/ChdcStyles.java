@@ -43,5 +43,16 @@ public interface ChdcStyles extends CssResource {
     String iconBoxes();
 
 
+    @ClassName("actionbar__inner")
+    String actionBarInner();
 
+    @ClassName("actionbar__shortcuts")
+    String actionBarShortcuts();
+
+
+    @ClassName("actionbar__primary")
+    String actionbarPrimary();
+
+    @ClassName("actionbar__secondary")
+    String actionbarSecondary();
 }
