@@ -7,15 +7,15 @@ import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.CatalogEntryType;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.store.TransactionalStorageProvider;
 import org.activityinfo.store.spi.FormCatalog;
 import org.activityinfo.store.spi.FormStorage;
-import org.activityinfo.store.spi.FormStorageProvider;
 
 import java.net.URL;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class ChdcStorageProvider implements FormStorageProvider, FormCatalog {
+public class ChdcStorageProvider implements TransactionalStorageProvider, FormCatalog {
 
     private static final Logger LOGGER = Logger.getLogger(ChdcStorageProvider.class.getName());
 
@@ -94,5 +94,21 @@ public class ChdcStorageProvider implements FormStorageProvider, FormCatalog {
     @Override
     public List<CatalogEntry> getChildren(String parentId, int userId) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public void begin() {
+        // NOOP: each request is wrapped in a transaction
+    }
+
+    @Override
+    public void commit() {
+        // NOOP: each request is wrapped in a transaction
+
+    }
+
+    @Override
+    public void rollback() {
+        // NOOP: each request is wrapped in a transaction
     }
 }
