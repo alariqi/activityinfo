@@ -88,8 +88,10 @@ public class LookupKeySet {
 
         // Now that we know how many keys there are and from which forms,
         // we can compose labels
+        Set<ResourceId> multiKeyForms = findFormsWithMultipleKeyFields();
+
         for (LookupKey lookupKey : lookupKeys) {
-            composeLabel(lookupKey);
+            composeLabel(multiKeyForms, lookupKey);
         }
     }
 
@@ -191,26 +193,49 @@ public class LookupKeySet {
     }
 
 
-    private void composeLabel(LookupKey lookupKey) {
+    private void composeLabel(Set<ResourceId> multiKeyForms, LookupKey lookupKey) {
+
+
         StringBuilder label = new StringBuilder();
 
         if (formMap.size() > 1) {
             // If there are keys that live on multiple forms,
             // we need to distinguish them by their form name
-            label.append(lookupKey.getFormLabel()).append(" ");
+            label.append(lookupKey.getFormLabel());
         } else {
             // If there is only one form referenced,
             // we always use the referencing field's label
-            label.append(Strings.nullToEmpty(referenceFieldLabel)).append(" ");
+            label.append(Strings.nullToEmpty(referenceFieldLabel));
         }
 
-        if(lookupKey.getFieldLabel() == null) {
-            label.append("ID");
-        } else {
-            label.append(lookupKey.getFieldLabel());
+        // Only qualify the label with the field name of the key if this
+        // form has multiple (non-reference) key fields.
+        if(multiKeyForms.contains(lookupKey.getFormId())) {
+            if(label.length() > 0) {
+                label.append(" ");
+            }
+            if(lookupKey.getFieldLabel() == null) {
+                label.append("ID");
+            } else {
+                label.append(lookupKey.getFieldLabel());
+            }
         }
 
         lookupKey.keyLabel = label.toString();
+    }
+
+    private Set<ResourceId> findFormsWithMultipleKeyFields() {
+        Set<ResourceId> once = new HashSet<>();
+        Set<ResourceId> multiple = new HashSet<>();
+
+        for (LookupKey lookupKey : lookupKeys) {
+            ResourceId formId = lookupKey.getFormId();
+            if(!once.add(formId)) {
+                multiple.add(formId);
+            }
+        }
+
+        return multiple;
     }
 
     public List<LookupKey> getLookupKeys() {
