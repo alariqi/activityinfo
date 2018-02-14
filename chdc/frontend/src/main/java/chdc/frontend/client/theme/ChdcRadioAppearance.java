@@ -7,7 +7,11 @@ import com.google.gwt.resources.client.ClientBundle;
 public class ChdcRadioAppearance extends Css3RadioAppearance {
 
     public interface ChdcRadioResources extends Css3RadioAppearance.Css3RadioResources {
-        @ClientBundle.Source({"Css3ValueBaseField.gss", "Css3CheckBox.gss", "Css3Radio.gss", "radio.gss"})
+        @ClientBundle.Source({
+                "chdc/theme/client/base/field/Css3ValueBaseField.gss",
+                "chdc/theme/client/base/field/Css3CheckBox.gss",
+                "chdc/theme/client/base/field/Css3Radio.gss",
+                "radio.gss"})
         ChdcRadioStyle style();
     }
 
