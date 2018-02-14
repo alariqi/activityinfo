@@ -11,7 +11,11 @@ import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.FieldSet;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.form.FormElement;
+import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.form.FormSection;
 import org.activityinfo.model.form.SubFormKind;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
@@ -48,6 +52,9 @@ public class FormPanel implements IsWidget {
 
     private FormInputViewModel viewModel;
 
+    private final FormTree formTree;
+    private final FieldWidgetFactory widgetFactory;
+
     public FormPanel(FormSource formSource, FormTree formTree, RecordRef recordRef, InputHandler inputHandler) {
         this.formSource = formSource;
 
@@ -65,21 +72,15 @@ public class FormPanel implements IsWidget {
             panel.addStyleName(InputResources.INSTANCE.style().subform());
         }
 
-        FieldWidgetFactory widgetFactory = new FieldWidgetFactory(formSource, formTree);
+        this.formTree = formTree;
+        this.widgetFactory = new FieldWidgetFactory(formSource, formTree);
 
-        for (FormTree.Node node : formTree.getRootFields()) {
-            if(node.isSubForm()) {
-                if(node.isSubFormVisible()) {
-                    addSubForm(formTree, node);
-                }
-            } else if(node.isParentReference()) {
-                // ignore
-            } else if(node.getField().isVisible() && !isSubFormKey(node)) {
-                FieldWidget fieldWidget = widgetFactory.create(node.getField(), input -> onInput(node, input));
-
-                if (fieldWidget != null) {
-                    addField(node, fieldWidget);
-                }
+        for (FormElement formElement : formTree.getRootFormClass().getElements()) {
+            if(formElement instanceof FormField) {
+                FormTree.Node node = formTree.getRootField(formElement.getId());
+                addField(this.panel, node);
+            } else {
+                addSection(((FormSection) formElement));
             }
         }
 
@@ -88,6 +89,41 @@ public class FormPanel implements IsWidget {
             deleteButton.addSelectHandler(this::onDelete);
             panel.add(deleteButton, new CssFloatLayoutContainer.CssFloatData(1,
                     new Margins(0, horizontalPadding, 10, horizontalPadding)));
+        }
+    }
+
+    private void addSection(FormSection section) {
+
+        CssFloatLayoutContainer container = new CssFloatLayoutContainer();
+
+        FieldSet fieldSet = new FieldSet();
+        fieldSet.setHeading(section.getLabel());
+        fieldSet.setWidget(container);
+
+        for (FormElement formElement : section.getElements()) {
+            if(formElement instanceof FormField) {
+                FormTree.Node node = formTree.getRootField(formElement.getId());
+                addField(container, node);
+            }
+        }
+
+        this.panel.add(fieldSet, new CssFloatLayoutContainer.CssFloatData(1,
+                new Margins(0, 0, 36, 0)));
+    }
+
+    private void addField(CssFloatLayoutContainer container, FormTree.Node node) {
+        if(node.getType() instanceof SubFormReferenceType) {
+            if(node.isSubFormVisible()) {
+                addSubForm(formTree, node);
+            }
+        } else if(node.isParentReference()) {
+            // ignore
+        } else if(node.getField().isVisible() && !isSubFormKey(node)) {
+            FieldWidget fieldWidget = widgetFactory.create(node.getField(), input -> onInput(node, input));
+
+            if (fieldWidget != null) {
+                addField(container, node, fieldWidget);
+            }
         }
     }
 
@@ -157,7 +193,7 @@ public class FormPanel implements IsWidget {
         }
     }
 
-    private void addField(FormTree.Node node, FieldWidget fieldWidget) {
+    private void addField(CssFloatLayoutContainer container, FormTree.Node node, FieldWidget fieldWidget) {
 
         Label fieldLabel = new Label(node.getField().getLabel());
         fieldLabel.addStyleName(InputResources.INSTANCE.style().fieldLabel());
@@ -178,9 +214,10 @@ public class FormPanel implements IsWidget {
                     new CssFloatLayoutContainer.CssFloatData(1));
         }
 
-        fieldPanel.add(validationMessage, new CssFloatLayoutContainer.CssFloatData(1));
-        panel.add(fieldPanel, new CssFloatLayoutContainer.CssFloatData(1,
-                new Margins(10, horizontalPadding, 10, horizontalPadding)));
+        // TODO(inso)
+        //fieldPanel.add(validationMessage, new CssFloatLayoutContainer.CssFloatData(1));
+        container.add(fieldPanel, new CssFloatLayoutContainer.CssFloatData(1,
+                new Margins(10, horizontalPadding, 10, 48)));
 
         fieldViews.add(new FieldView(node.getFieldId(), fieldPanel, fieldWidget, validationMessage));
     }

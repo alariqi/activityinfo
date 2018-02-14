@@ -1,6 +1,8 @@
 package org.activityinfo.store;
 
-public interface TransactionalStorageProvider {
+import org.activityinfo.store.spi.FormStorageProvider;
+
+public interface TransactionalStorageProvider extends FormStorageProvider {
 
     void begin();
 

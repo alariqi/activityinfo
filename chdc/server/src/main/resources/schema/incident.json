@@ -9,7 +9,7 @@
       "elements": [
         {
           "id": "narrative",
-          "label": "Incident Narrative",
+          "label": "Narrative",
           "visible": true,
           "required": false,
           "type": "NARRATIVE"
@@ -57,13 +57,7 @@
         {
           "id": "precise_location",
           "label": "Precise Location",
-          "description": "Please describe the precise location within the settlement",
           "type": "FREE_TEXT"
-        },
-        {
-          "id": "precise_coords",
-          "label": "Precise Coordinates",
-          "type": "geopoint"
         }
       ]
     },
