@@ -10,3 +10,16 @@ svg:not(:root) {
     overflow: hidden;
     fill: currentColor;
 }
+
+/* Custom scrollbars */
+
+::-webkit-scrollbar{
+    height:8px;
+    width:8px
+}
+::-webkit-scrollbar-track{
+    background-color:rgba(101,116,127,.1)
+}
+::-webkit-scrollbar-thumb{
+    background-color:#65747f
+}

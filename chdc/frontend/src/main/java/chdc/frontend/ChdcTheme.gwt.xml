@@ -1,0 +1,18 @@
+<module>
+    <inherits name="com.sencha.gxt.ui.GXT"/>
+    <inherits name="com.sencha.gxt.theme.triton.BaseTheme"/>
+
+    <!-- This is the base theme generated from chdc.groovy -->
+    <inherits name="chdc.theme.Theme"/>
+
+    <!-- The following are additional overrides -->
+    <replace-with class="chdc.frontend.client.theme.ChdcFieldSetAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.form.FieldSet.FieldSetAppearance"/>
+        <when-property-is name="gxt.theme" value="chdc"/>
+    </replace-with>
+
+    <replace-with class="chdc.frontend.client.theme.ChdcRadioAppearance">
+        <when-type-is class="com.sencha.gxt.cell.core.client.form.RadioCell.RadioAppearance"/>
+        <when-property-is name="gxt.theme" value="chdc"/>
+    </replace-with>
+</module>

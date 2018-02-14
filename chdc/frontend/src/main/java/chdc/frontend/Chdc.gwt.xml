@@ -6,7 +6,7 @@
 
     <inherits name="org.activityinfo.ui.AppCore"/>
 
-    <inherits name="chdc.theme.Theme"/>
+    <inherits name="chdc.frontend.ChdcTheme"/>
 
     <set-configuration-property name="CssResource.conversionMode" value="strict" />
 

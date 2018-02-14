@@ -1,0 +1,4 @@
+
+.checkBoxLabel {
+    text-transform: uppercase;
+}

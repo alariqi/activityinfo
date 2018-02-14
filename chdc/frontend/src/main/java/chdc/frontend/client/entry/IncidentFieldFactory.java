@@ -77,7 +77,7 @@ public class IncidentFieldFactory {
             public FieldWidget visitEnum(EnumType enumType) {
                 if(enumType.getCardinality() == Cardinality.SINGLE &&
                         enumType.getEffectivePresentation() == EnumType.Presentation.RADIO_BUTTON) {
-                    return new RadioGroupWidget(enumType, new RadioAppearance(field.getLabel()), updater(field));
+                    return new RadioGroupWidget(enumType, updater(field));
                 }
 
                 return null;

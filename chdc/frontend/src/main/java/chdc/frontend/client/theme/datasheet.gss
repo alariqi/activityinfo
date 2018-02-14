@@ -1,0 +1,11 @@
+
+
+.datasheet ::-webkit-scrollbar{
+    width:8px
+}
+.datasheet ::-webkit-scrollbar-track{
+    background-color:rgba(101,116,127,.7)
+}
+.datasheet ::-webkit-scrollbar-thumb{
+    background-color:#6f8ebd
+}

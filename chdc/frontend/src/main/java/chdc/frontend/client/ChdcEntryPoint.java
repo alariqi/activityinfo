@@ -1,6 +1,6 @@
 package chdc.frontend.client;
 
-import chdc.frontend.client.dashboard.DashboardPlace;
+import chdc.frontend.client.table.TablePlace;
 import chdc.frontend.client.theme.ChdcTheme;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
@@ -31,7 +31,7 @@ import org.activityinfo.ui.client.store.offline.OfflineStore;
  */
 public class ChdcEntryPoint implements EntryPoint {
 
-    private static final Place DEFAULT_PLACE = new DashboardPlace();
+    private static final Place DEFAULT_PLACE = new TablePlace("incident");
 
     @Override
     public void onModuleLoad() {

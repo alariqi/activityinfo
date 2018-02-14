@@ -4,6 +4,7 @@ plugins {
 }
 
 ext {
+    themeOutputDir = "$buildDir/theme"
     outputDir = "$buildDir/gwt-out"
 }
 
@@ -30,6 +31,12 @@ dependencies {
     compile project(':ui:app')
 }
 
+sourceSets {
+    theme {
+        java.srcDir themeOutputDir
+    }
+}
+
 
 task generateTheme(type: JavaExec) {
 
@@ -37,14 +44,11 @@ task generateTheme(type: JavaExec) {
 
     inputs.file themeFile
 
-    // Compiled java classes and libraries second
-    classpath sourceSets.main.java.srcDirs
-    classpath sourceSets.main.resources.srcDirs
-    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.compile
 
     main = 'com.sencha.gxt.themebuilder.ThemeBuilder'
 
-    args '-gen', "$buildDir/theme"
+    args '-gen', themeOutputDir
     args '-slicedDisabled', 'true'
     args '-sourcesOnly', 'true'
 
@@ -52,6 +56,10 @@ task generateTheme(type: JavaExec) {
 
 }
 
+compileJava {
+    dependsOn generateTheme
+    source    += sourceSets.theme.java
+}
 
 task compileApp(type: JavaExec) {
 

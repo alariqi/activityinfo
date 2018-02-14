@@ -1,6 +1,7 @@
 package chdc.frontend.client;
 
 import chdc.frontend.client.theme.Banner;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,5 +27,11 @@ public class ChdcFrame implements IsWidget, AcceptsOneWidget {
     @Override
     public void setWidget(IsWidget w) {
         this.container.setCenterWidget(w);
+        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+            @Override
+            public void execute() {
+                container.forceLayout();
+            }
+        });
     }
 }

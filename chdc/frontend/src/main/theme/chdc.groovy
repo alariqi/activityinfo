@@ -103,6 +103,7 @@ theme {
       borderColor = "#c5d1da"
       borderWidth = 1
       borderStyle = "solid"
+      /* TODO: border-radius: 2px */
       emptyTextColor = "#808080"
       focusBorderColor = insoBlue
       height = 44
@@ -110,8 +111,13 @@ theme {
       invalidBorderColor = '#D94E37'
       invalidBorderWidth = 1
       lineHeight = "18px"
-      padding = util.padding(2, 6, 1, 6)
-      text = util.fontStyle(overpassMono, '14px', '#000000');
+      padding {
+        top = 12
+        left = 8
+        right = 8
+        bottom = 12
+      }
+      text = util.fontStyle(overpassMono, '14px', '#4a4a4a', 400);
       checkBox {
          boxLabel = text;
          padding {
@@ -294,17 +300,33 @@ theme {
     })
 
     fieldset {
-      backgroundColor = "#f6f6f6"
-      text = util.fontStyle(overpass, '13px')
-      border = util.border('solid', '#b5b8c8', 1)
+      backgroundColor = ""
+      text = {
+        family = overpassMono
+        size = '13px'
+        color = '#5d6f62'
+        weight = 700
+      }
+      border = {
+        style = 'solid'
+        color = '#c5d1da'
+        left = 0
+        right = 0
+        top = 0
+        bottom = 0
+      }
 
-      legendPadding = util.padding(5)
+      legendPadding {
+        top = 0
+        bottom = 4
+        left = 0
+        right = 0
+      }
       padding = util.padding(5)
       collapseIconColor = tools.primaryColor
       collapseOverIconColor = tools.primaryOverColor
       expandIconColor = collapseIconColor
       expandOverIconColor = collapseOverIconColor
-
     }
 
     toolbar {
