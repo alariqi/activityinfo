@@ -107,7 +107,6 @@ public class TableView implements IsWidget, HasTitle {
         } else {
             this.panel.unmask();
 
-
             switch (viewModel.getEffectiveTable().get().getRootFormState()) {
                 case FORBIDDEN:
                 case DELETED:

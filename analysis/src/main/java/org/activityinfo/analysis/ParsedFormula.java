@@ -28,6 +28,8 @@ public class ParsedFormula {
      */
     private boolean simpleReference = true;
 
+    private boolean calculated;
+
 
     private List<FormulaError> errors = new ArrayList<>();
     private List<FieldReference> references = new ArrayList<>();
@@ -55,6 +57,7 @@ public class ParsedFormula {
             this.resultType = validator.getResultType();
             this.references = validator.getReferences();
             this.simpleReference = validator.isSimpleReference();
+            this.calculated = validator.isCalculated();
         }
     }
 
@@ -64,6 +67,14 @@ public class ParsedFormula {
 
     public String getFormula() {
         return formula;
+    }
+
+    public boolean isCalculated() {
+        return calculated;
+    }
+
+    public boolean isSimpleReference() {
+        return simpleReference;
     }
 
     public ExprNode getRootNode() {

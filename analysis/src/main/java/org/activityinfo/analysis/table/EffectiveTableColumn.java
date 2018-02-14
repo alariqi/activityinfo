@@ -1,13 +1,16 @@
 package org.activityinfo.analysis.table;
 
+import org.activityinfo.analysis.FieldReference;
 import org.activityinfo.analysis.ParsedFormula;
 import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.model.type.FieldType;
 import org.activityinfo.model.type.primitive.TextType;
+import org.activityinfo.store.query.shared.NodeMatch;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EffectiveTableColumn {
 
@@ -52,6 +55,21 @@ public class EffectiveTableColumn {
 
     public String getLabel() {
         return label;
+    }
+
+    public Optional<FormTree.Node> getField() {
+        if (formula.isValid()) {
+            if (!formula.isCalculated()) {
+                if (formula.isSimpleReference()) {
+                    FieldReference reference = formula.getReferences().get(0);
+                    NodeMatch match = reference.getMatch();
+                    if (match.getType() == NodeMatch.Type.FIELD) {
+                        return Optional.of(match.getFieldNode());
+                    }
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public TableColumn getModel() {

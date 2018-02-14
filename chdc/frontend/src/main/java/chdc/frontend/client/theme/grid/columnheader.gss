@@ -1,0 +1,8 @@
+
+.headRow .head {
+    text-transform: uppercase;
+}
+
+.header {
+    border-bottom: 1px solid rgba(101,116,127,.3);
+}

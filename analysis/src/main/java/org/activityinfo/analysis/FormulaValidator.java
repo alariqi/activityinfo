@@ -29,6 +29,11 @@ public class FormulaValidator {
     private boolean valid;
     private boolean simpleReference = true;
 
+    /**
+     * True if this field is calculated (or references a calculated field)
+     */
+    private boolean calculated = false;
+
     private FieldType resultType;
 
     public FormulaValidator(FormTree formTree) {
@@ -54,6 +59,10 @@ public class FormulaValidator {
         return simpleReference;
     }
 
+    public boolean isCalculated() {
+        return calculated;
+    }
+
     public FieldType getResultType() {
         return resultType;
     }
@@ -64,7 +73,9 @@ public class FormulaValidator {
 
     private FieldType validateExpr(ExprNode exprNode) {
         if(exprNode instanceof ConstantExpr) {
+            calculated = true;
             return ((ConstantExpr) exprNode).getType();
+
         } else if(exprNode instanceof GroupExpr) {
             return validateExpr(exprNode);
         } else if(exprNode instanceof SymbolExpr) {
@@ -72,6 +83,7 @@ public class FormulaValidator {
         } else if(exprNode instanceof CompoundExpr) {
             return validateReference(exprNode);
         } else if(exprNode instanceof FunctionCallNode) {
+            calculated = true;
             return validateFunctionCall((FunctionCallNode) exprNode);
         } else {
             throw new UnsupportedOperationException("type: " + exprNode.getClass().getSimpleName());

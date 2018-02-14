@@ -15,4 +15,9 @@
         <when-type-is class="com.sencha.gxt.cell.core.client.form.RadioCell.RadioAppearance"/>
         <when-property-is name="gxt.theme" value="chdc"/>
     </replace-with>
+
+    <replace-with class="chdc.frontend.client.theme.grid.ChdcColumnHeaderAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.grid.ColumnHeader.ColumnHeaderAppearance"/>
+        <when-property-is name="gxt.theme" value="chdc"/>
+    </replace-with>
 </module>

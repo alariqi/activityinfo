@@ -13,6 +13,7 @@ import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.CellSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
 import com.sencha.gxt.widget.core.client.selection.CellSelectionChangedEvent;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
@@ -93,6 +94,12 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         grid.setView(gridView);
         grid.setSelectionModel(sm);
         grid.addSortChangeHandler(this::changeSort);
+
+        // Setup grid editing
+        GridInlineEditing<Integer> editing = new GridInlineEditing<>(grid);
+        for (ColumnModelBuilder.Editor editor : columns.getEditors()) {
+            editing.addEditor(editor.getConfig(), editor.getField());
+        }
 
         // Setup grid filters
         filters = new TableGridFilters(tableUpdater);

@@ -543,7 +543,12 @@ theme {
         menuActiveBorder = menuBorder
       }
 
-      cellPadding = util.padding(5,10,4)
+      cellPadding = {
+        left = 8
+        right = 16
+        top = 12
+        bottom = 12
+      }
       cellText = util.fontStyle(overpass, '14px', 'rgb(74, 74, 74)', 400)
       cellLineHeight = "18.2px"
       cellVBorderColor = 'rgba(101, 116, 127, 0.3)'

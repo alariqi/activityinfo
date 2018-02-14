@@ -27,6 +27,11 @@ public class DataEntryPlace extends Place {
         this(formId.asString());
     }
 
+    public DataEntryPlace(RecordRef ref) {
+        this.formId = ref.getFormId().asString();
+        this.recordId = ref.getRecordId().asString();
+    }
+
     public RecordRef getRecordRef() {
         return new RecordRef(ResourceId.valueOf(formId), ResourceId.valueOf(recordId));
     }

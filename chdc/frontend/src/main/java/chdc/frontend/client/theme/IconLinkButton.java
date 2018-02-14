@@ -26,4 +26,9 @@ public class IconLinkButton extends Widget {
         link.setInnerSafeHtml(TEMPLATES.label(icon.svg(), label));
         setElement(link);
     }
+
+    public void setHref(SafeUri uri) {
+        AnchorElement anchor = getElement().cast();
+        anchor.setHref(uri);
+    }
 }

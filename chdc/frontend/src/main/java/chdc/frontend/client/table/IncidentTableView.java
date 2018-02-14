@@ -5,15 +5,18 @@ import chdc.frontend.client.i18n.ChdcLabels;
 import chdc.frontend.client.theme.ActionBar;
 import chdc.frontend.client.theme.Icon;
 import chdc.frontend.client.theme.IconLinkButton;
+import com.google.common.base.Optional;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.Subscription;
+import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.chrome.HasTitle;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.view.TableGrid;
@@ -31,7 +34,9 @@ public class IncidentTableView implements IsWidget, HasTitle {
     private FormStore formStore;
     private TableGrid grid;
     private final BorderLayoutContainer container;
-    private Subscription subscription;
+    private SubscriptionSet subscriptions = new SubscriptionSet();
+
+    private final IconLinkButton editRowButton;
 
     public IncidentTableView(FormStore formStore, final TableViewModel viewModel) {
         this.formStore = formStore;
@@ -44,16 +49,20 @@ public class IncidentTableView implements IsWidget, HasTitle {
         IconLinkButton newRow = new IconLinkButton(Icon.PLUS, ChdcLabels.LABELS.newRow(),
                 new DataEntryPlace(viewModel.getFormId()).toUri());
 
+        editRowButton = new IconLinkButton(Icon.PENCIL, I18N.CONSTANTS.edit(), UriUtils.fromTrustedString("#"));
+
         toolBar.addShortcut(newRow);
+        toolBar.addShortcut(editRowButton);
 
         container = new BorderLayoutContainer();
         container.setSouthWidget(toolBar, new BorderLayoutContainer.BorderLayoutData(60));
         container.addAttachHandler(event -> {
             if(event.isAttached()) {
-                subscription = viewModel.getEffectiveTable().subscribe(tm -> effectiveModelChanged());
+                subscriptions.add(viewModel.getEffectiveTable().subscribe(tm -> effectiveModelChanged()));
+                subscriptions.add(viewModel.getSelectedRecordRef().subscribe(ref -> selectionChanged(ref)));
+
             } else {
-                subscription.unsubscribe();
-                subscription = null;
+                subscriptions.unsubscribeAll();
             }
         });
     }
@@ -74,6 +83,14 @@ public class IncidentTableView implements IsWidget, HasTitle {
                     updateGrid(viewModel.getEffectiveTable().get());
                     break;
             }
+        }
+    }
+
+    private void selectionChanged(Observable<Optional<RecordRef>> ref) {
+        if(ref.isLoading() || !ref.get().isPresent()) {
+            editRowButton.setHref(UriUtils.fromSafeConstant("#"));
+        } else {
+            editRowButton.setHref(new DataEntryPlace(ref.get().get()).toUri());
         }
     }
 

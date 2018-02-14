@@ -32,7 +32,6 @@ public class FormulaValidatorTest {
         assertThat(validator.getErrors(), hasSize(2));
     }
 
-
     @Test
     public void goodSymbols() {
         FormulaValidator validator = validate("AGE");
@@ -40,6 +39,8 @@ public class FormulaValidatorTest {
         assertThat(validator.getErrors(), hasSize(0));
         assertTrue(validator.isValid());
         assertThat(validator.getResultType(), instanceOf(QuantityType.class));
+        assertTrue(validator.isSimpleReference());
+        assertFalse(validator.isCalculated());
     }
 
     @Test
@@ -53,6 +54,8 @@ public class FormulaValidatorTest {
     @Test
     public void badNumberOfArguments() {
         FormulaValidator validator = validate("IF(1)");
+        assertThat(validator.isCalculated(), equalTo(true));
+        assertThat(validator.isSimpleReference(), equalTo(false));
         assertThat(validator.getErrors(), hasSize(1));
         assertThat(validator.getErrors().get(0).getSourceRange(), equalTo(new SourceRange(new SourcePos(0, 0), 5)));
     }
@@ -67,6 +70,7 @@ public class FormulaValidatorTest {
     @Test
     public void booleanEnumReference() {
         FormulaValidator validator = validate("Gender.Female || Gender.Male");
+        assertTrue(validator.isCalculated());
         assertThat(validator.getErrors(), hasSize(0));
         assertTrue(validator.isValid());
         assertThat(validator.getResultType(), equalTo(BooleanType.INSTANCE));

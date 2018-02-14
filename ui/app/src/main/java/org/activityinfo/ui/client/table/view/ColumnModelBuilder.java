@@ -6,7 +6,9 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.form.Field;
 import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.HeaderGroupConfig;
@@ -16,21 +18,44 @@ import com.sencha.gxt.widget.core.client.grid.filters.NumericFilter;
 import com.sencha.gxt.widget.core.client.grid.filters.StringFilter;
 import org.activityinfo.analysis.table.*;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.type.NarrativeType;
 import org.activityinfo.model.type.enumerated.EnumItem;
 import org.activityinfo.model.type.enumerated.EnumType;
+import org.activityinfo.model.type.primitive.TextType;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Constructs a GXT Grid column model from our EffectiveTableModel.
  */
 public class ColumnModelBuilder {
 
+    public class Editor<T> {
+        private ColumnConfig<Integer, T> config;
+        private Field<T> field;
+
+        public Editor(ColumnConfig<Integer, T> config, Field<T> field) {
+            this.config = config;
+            this.field = field;
+        }
+
+        public ColumnConfig<Integer, T> getConfig() {
+            return config;
+        }
+
+        public Field<T> getField() {
+            return field;
+        }
+    }
+
     private final ColumnSetProxy proxy;
     private final List<ColumnConfig<Integer, ?>> columnConfigs = new ArrayList<>();
     private final List<HeaderGroupConfig> headerGroupConfigs = new ArrayList<>();
+    private final List<Editor<?>> editors = new ArrayList<>();
     private final List<ColumnView> filters = new ArrayList<>();
 
     public ColumnModelBuilder(ColumnSetProxy proxy) {
@@ -93,17 +118,31 @@ public class ColumnModelBuilder {
         }
     }
 
-
-
     private void addTextColumn(EffectiveTableColumn tableColumn, TextFormat textFormat) {
         ValueProvider<Integer, String> valueProvider = proxy.getValueProvider(textFormat);
 
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
+        config.setWidth(200);
         columnConfigs.add(config);
+
+        Optional<FormTree.Node> field = tableColumn.getField();
+        if(field.isPresent()) {
+            addTextEditor(config, field.get());
+        }
 
         StringFilter<Integer> filter = new StringFilter<>(valueProvider);
         filters.add(new ColumnView(tableColumn.getFormula(), filter));
+    }
+
+    private void addTextEditor(ColumnConfig<Integer, String> config, FormTree.Node node) {
+        if(node.isRoot()) {
+            if(node.getType() instanceof NarrativeType) {
+                editors.add(new Editor<>(config, new TextField()));
+            } else if(node.getType() instanceof TextType) {
+                editors.add(new Editor<>(config, new TextField()));
+            }
+        }
     }
 
 
@@ -230,6 +269,10 @@ public class ColumnModelBuilder {
         }
 
         return cm;
+    }
+
+    public List<Editor<?>> getEditors() {
+        return editors;
     }
 
     public List<ColumnView> getFilters() {
