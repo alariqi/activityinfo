@@ -4,11 +4,10 @@ import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.form.Field;
-import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
-import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.HeaderGroupConfig;
@@ -126,7 +125,7 @@ public class ColumnModelBuilder {
         config.setWidth(200);
         columnConfigs.add(config);
 
-        Optional<FormTree.Node> field = tableColumn.getField();
+        Optional<FormTree.Node> field = getEditableField(tableColumn);
         if(field.isPresent()) {
             addTextEditor(config, field.get());
         }
@@ -144,6 +143,7 @@ public class ColumnModelBuilder {
             }
         }
     }
+
 
 
     private void addNumberColumn(EffectiveTableColumn tableColumn, NumberFormat numberFormat) {
@@ -168,7 +168,35 @@ public class ColumnModelBuilder {
         config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
 
+        Optional<FormTree.Node> field = getEditableField(tableColumn);
+        if(field.isPresent()) {
+            addEnumEditor(config, field.get());
+        }
+
         addEnumFilter(valueProvider.getPath(), tableColumn, (EnumType) tableColumn.getType());
+    }
+
+    private Optional<FormTree.Node> getEditableField(EffectiveTableColumn tableColumn) {
+        Optional<FormTree.Node> field = tableColumn.getField();
+        if(field.isPresent() && field.get().isRoot()) {
+            return field;
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private void addEnumEditor(ColumnConfig<Integer, String> config, FormTree.Node field) {
+        ListStore<String> store = new ListStore<>(string -> string);
+        EnumType enumType = (EnumType) field.getType();
+        for (EnumItem enumItem : enumType.getValues()) {
+            store.add(enumItem.getLabel());
+        }
+
+        ComboBox<String> comboBox = new ComboBox<>(store, string -> string);
+        comboBox.setForceSelection(true);
+        comboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+
+        editors.add(new Editor<>(config, comboBox));
     }
 
     private void addEnumFilter(String path, EffectiveTableColumn columnModel, EnumType enumType) {
@@ -191,8 +219,20 @@ public class ColumnModelBuilder {
         config.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
         columnConfigs.add(config);
 
+        Optional<FormTree.Node> field = getEditableField(tableColumn);
+        if(field.isPresent()) {
+            addDateEditor(config, field.get());
+        }
+
         DateFilter<Integer> filter = new DateFilter<>(valueProvider);
         filters.add(new ColumnView(tableColumn.getFormula(), filter));
+    }
+
+
+    private void addDateEditor(ColumnConfig<Integer, Date> config, FormTree.Node node) {
+        if(node.isRoot()) {
+            editors.add(new Editor<>(config, new DateField()));
+        }
     }
 
 
