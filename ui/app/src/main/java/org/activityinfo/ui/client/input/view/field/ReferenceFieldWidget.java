@@ -7,9 +7,9 @@ import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.model.type.ReferenceValue;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
@@ -40,7 +40,7 @@ public class ReferenceFieldWidget implements FieldWidget {
                                 FieldUpdater fieldUpdater) {
 
         this.fieldUpdater = fieldUpdater;
-        this.viewModel = new LookupViewModel(formSource, formTree, field,
+        this.viewModel = new LookupViewModel(formSource, new LookupKeySet(formTree, field),
                 Observable.just(filters.getReferenceBaseFilter(field.getId())));
 
         for (LookupKeyViewModel level : viewModel.getLookupKeys()) {
@@ -52,7 +52,7 @@ public class ReferenceFieldWidget implements FieldWidget {
         }
 
         if(levelWidgets.size() == 1) {
-            // If we have a single lookup key, then just show a single combobox
+            // If we have a single lookup key, then just show a single combo box
             widget = levelWidgets.get(0).getComboBox();
 
         } else {
@@ -86,7 +86,6 @@ public class ReferenceFieldWidget implements FieldWidget {
     @Override
     public void init(FieldValue value) {
         ReferenceValue referenceValue = (ReferenceValue) value;
-        RecordRef recordRef = referenceValue.getOnlyReference();
         viewModel.setInitialSelection(referenceValue.getReferences());
     }
 

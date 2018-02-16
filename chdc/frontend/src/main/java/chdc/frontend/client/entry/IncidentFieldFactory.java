@@ -1,141 +1,35 @@
 package chdc.frontend.client.entry;
 
+import chdc.frontend.client.cheatsheet.CheatsheetField;
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.*;
-import org.activityinfo.model.type.attachment.AttachmentType;
-import org.activityinfo.model.type.barcode.BarcodeType;
-import org.activityinfo.model.type.enumerated.EnumType;
-import org.activityinfo.model.type.expr.CalculatedFieldType;
-import org.activityinfo.model.type.geo.GeoAreaType;
-import org.activityinfo.model.type.geo.GeoPointType;
-import org.activityinfo.model.type.number.QuantityType;
-import org.activityinfo.model.type.primitive.BooleanType;
-import org.activityinfo.model.type.primitive.TextType;
-import org.activityinfo.model.type.subform.SubFormReferenceType;
-import org.activityinfo.model.type.time.*;
-import org.activityinfo.ui.client.input.view.InputHandler;
-import org.activityinfo.ui.client.input.view.field.*;
+import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.store.query.shared.FormSource;
+import org.activityinfo.ui.client.input.view.field.FieldUpdater;
+import org.activityinfo.ui.client.input.view.field.FieldWidget;
+import org.activityinfo.ui.client.input.view.field.FieldWidgetFactory;
+import org.activityinfo.ui.client.input.view.field.FieldWidgetFactoryImpl;
 
-import java.util.HashMap;
-import java.util.Map;
+public class IncidentFieldFactory implements FieldWidgetFactory {
 
-public class IncidentFieldFactory {
+    private final FormSource formSource;
+    private final FormTree formTree;
+    private FieldWidgetFactoryImpl delegate;
 
-    private final Map<ResourceId, FieldWidget> fieldMap = new HashMap<>();
-    private RecordRef recordRef;
-    private InputHandler handler;
-
-    public IncidentFieldFactory(RecordRef recordRef, InputHandler handler) {
-        this.recordRef = recordRef;
-        this.handler = handler;
+    public IncidentFieldFactory(FormSource formSource, FormTree formTree) {
+        this.formSource = formSource;
+        this.formTree = formTree;
+        delegate = new FieldWidgetFactoryImpl(formSource, formTree);
     }
 
-    public FieldWidget createWidget(FormField field) {
-        return field.getType().accept(new FieldTypeVisitor<FieldWidget>() {
-            @Override
-            public FieldWidget visitAttachment(AttachmentType attachmentType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitCalculated(CalculatedFieldType calculatedFieldType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitReference(ReferenceType referenceType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitNarrative(NarrativeType narrativeType) {
-                return new NarrativeWidget(new NarrativeAppearance(field.getLabel()), updater(field));
-            }
-
-            @Override
-            public FieldWidget visitBoolean(BooleanType booleanType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitQuantity(QuantityType type) {
-                return new NativeQuantityWidget(field, updater(field));
-            }
-
-            @Override
-            public FieldWidget visitGeoPoint(GeoPointType geoPointType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitGeoArea(GeoAreaType geoAreaType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitEnum(EnumType enumType) {
-                if(enumType.getCardinality() == Cardinality.SINGLE &&
-                        enumType.getEffectivePresentation() == EnumType.Presentation.RADIO_BUTTON) {
-                    return new RadioGroupWidget(enumType, updater(field));
-                }
-
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitBarcode(BarcodeType barcodeType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitSubForm(SubFormReferenceType subFormReferenceType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitLocalDate(LocalDateType localDateType) {
-                return new NativeDateWidget(field, updater(field));
-            }
-
-            @Override
-            public FieldWidget visitMonth(MonthType monthType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitYear(YearType yearType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitFortnight(FortnightType fortnightType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitWeek(EpiWeekType epiWeekType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitLocalDateInterval(LocalDateIntervalType localDateIntervalType) {
-                return null;
-            }
-
-            @Override
-            public FieldWidget visitText(TextType textType) {
-                return new TextWidget(textType, new TextAppearance(field.getLabel()), updater(field));
-            }
-
-            @Override
-            public FieldWidget visitSerialNumber(SerialNumberType serialNumberType) {
-                return null;
-            }
-        });
+    @Override
+    public FieldWidget create(FormField field, FieldUpdater updater) {
+        if(field.getId().asString().equals("act")) {
+            return createActWidget(field, updater);
+        }
+        return delegate.create(field, updater);
     }
 
-    private FieldUpdater updater(FormField field) {
-        return input -> handler.updateModel(recordRef, field.getId(), input);
+    private FieldWidget createActWidget(FormField field, FieldUpdater updater) {
+        return new CheatsheetField(formSource, formTree, field, updater);
     }
 }

@@ -55,4 +55,35 @@ public interface ChdcStyles extends CssResource {
 
     @ClassName("actionbar__secondary")
     String actionbarSecondary();
+
+    @ClassName("panel__header")
+    String panelHeader();
+
+    @ClassName("panel__headerinfo")
+    String panelHeaderInfo();
+
+    @ClassName("no-sidebar")
+    String noSidebar();
+
+    @ClassName("panel__container")
+    String panelContainer();
+
+    String share();
+
+    String panel();
+
+    @ClassName("panel--half")
+    String panelHalf();
+
+    @ClassName("panel__content")
+    String panelContent();
+
+    @ClassName("is-hidden")
+    String isHidden();
+
+    @ClassName("panel__search-count")
+    String panelSearchCount();
+
+    @ClassName("panelholder")
+    String panelHolder();
 }

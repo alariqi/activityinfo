@@ -9,7 +9,8 @@ public interface ChdcResources extends ClientBundle {
             "button.gss",
             "actionbar.gss",
             "banner.gss",
-            "icons.gss"})
+            "icons.gss",
+            "panel.gss"})
     ChdcStyles styles();
 
 }

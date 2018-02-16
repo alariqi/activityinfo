@@ -1,0 +1,100 @@
+
+.panelholder {
+    bottom:3.375em;
+    position:absolute;
+    right:0;
+    transition:-webkit-transform .25s ease-in;
+    transition:transform .25s ease-in;
+    transition:transform .25s ease-in,-webkit-transform .25s ease-in;
+    width:100%;
+    z-index:-1
+}
+.panelholder.is-hidden{
+    -webkit-transform:translateY(calc(100% + 5em));
+    transform:translateY(calc(100% + 5em))
+}
+.panel__container{
+    padding:0
+}
+.panel,.panel__container{
+    -webkit-box-direction:normal;
+    -webkit-box-orient:vertical;
+    display:-webkit-box;
+    display:flex;
+    flex-direction:column;
+    max-height:80vh
+}
+.panel{
+    background-color:#ecf1ef;
+    border-bottom:none;
+    border-radius:10px 10px 0 0;
+    box-shadow:0 2px 20px 0 rgba(0,0,0,.3);
+    font-weight:600;
+    margin:0 1rem;
+    min-height:4em;
+    overflow-y:auto;
+    position:relative
+}
+@media only screen and (min-width:40em){
+    .panel{
+        margin:0 4rem
+    }
+}
+@media only screen and (min-width:40em){
+    .panel--half{
+        max-width:40%
+    }
+}
+.no-sidebar .panel{
+    margin:0 6rem
+}
+.panel h3{
+    font-weight:400
+}
+.panel__header{
+    -webkit-box-align:center;
+    -webkit-box-flex:0;
+    -webkit-box-pack:justify;
+    align-items:center;
+    border-bottom:1px solid rgba(97,92,98,.2);
+    box-shadow:0 0 10px rgba(97,92,98,.3);
+    display:inline-block;
+    display:-webkit-box;
+    display:flex;
+    flex-grow:0;
+    font-family:Overpass Mono,monospace;
+    justify-content:space-between;
+    left:0;
+    padding:1.25rem 1.5rem;
+    position:-webkit-sticky;
+    position:sticky;
+    text-transform:uppercase;
+    top:0;
+    width:100%
+}
+.panel__header,.share .panel__header{
+    background-color:#ecf1ef
+}
+.panel__header .panel__headerinfo{
+    -webkit-box-align:center;
+    align-items:center;
+    display:-webkit-box;
+    display:flex
+}
+.panel__header h2{
+    margin-bottom:0
+}
+.panel__header .panel__search-count{
+    color:#6f8ebd;
+    font-family:Overpass Mono,monospace;
+    font-size:.75em;
+    font-weight:700;
+    margin-left:3.125rem;
+    text-transform:uppercase
+}
+.panel__content{
+    -webkit-box-flex:1;
+    -webkit-overflow-scrolling:touch;
+    flex-grow:1;
+    overflow-y:auto
+}

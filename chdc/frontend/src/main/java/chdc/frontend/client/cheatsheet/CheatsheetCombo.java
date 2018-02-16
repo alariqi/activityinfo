@@ -1,15 +1,16 @@
-package org.activityinfo.ui.client.lookup.view;
+package chdc.frontend.client.cheatsheet;
 
 import com.google.common.base.Optional;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.event.BeforeQueryEvent;
+import com.sencha.gxt.widget.core.client.event.TriggerClickEvent;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
@@ -20,25 +21,24 @@ import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
 import java.util.List;
 import java.util.Objects;
 
-public class LevelWidget implements IsWidget {
+public class CheatsheetCombo implements IsWidget {
 
     private LookupKeyViewModel level;
 
     private ListStore<String> store;
     private ComboBox<String> comboBox;
-    private FieldLabel fieldLabel;
 
     private Subscription choiceSubscription;
     private SubscriptionSet subscriptionSet = new SubscriptionSet();
 
     private boolean relevant = true;
 
-    public LevelWidget(LookupViewModel selectViewModel, LookupKeyViewModel level) {
+    public CheatsheetCombo(LookupViewModel selectViewModel, LookupKeyViewModel level) {
         this.level = level;
 
         store = new ListStore<>(key -> key);
 
-        comboBox = new ComboBox<>(new ChoiceCell(level.getChoices(), store));
+        comboBox = new ComboBox<>(new CheatsheetCell(level.getChoices(), store));
         comboBox.setWidth(300);
 
         comboBox.addAttachHandler(this::onAttach);
@@ -50,12 +50,10 @@ public class LevelWidget implements IsWidget {
                 selectViewModel.select(level.getLookupKey(), event.getSelectedItem());
             }
         });
-
-        this.fieldLabel = new FieldLabel(comboBox, level.getKeyLabel());
     }
 
-    public void clear() {
-
+    public HandlerRegistration addTriggerHandler(TriggerClickEvent.TriggerClickHandler handler) {
+        return comboBox.addTriggerClickHandler(handler);
     }
 
     public void addSelectionHandler(SelectionHandler<String> handler) {
@@ -101,13 +99,9 @@ public class LevelWidget implements IsWidget {
         }
     }
 
-    public ComboBox<String> getComboBox() {
-        return comboBox;
-    }
-
     @Override
     public Widget asWidget() {
-        return fieldLabel;
+        return comboBox;
     }
 
     public void setRelevant(boolean relevant) {
@@ -117,7 +111,7 @@ public class LevelWidget implements IsWidget {
 
     private void updateEnabledView() {
         this.comboBox.setEnabled(relevant &&
-            level.getSelectedKey().isLoaded() &&
-            level.isEnabled().isLoaded() && level.isEnabled().get());
+                level.getSelectedKey().isLoaded() &&
+                level.isEnabled().isLoaded() && level.isEnabled().get());
     }
 }

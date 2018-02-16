@@ -74,12 +74,16 @@ public class LookupKeySet {
 
     private Multimap<ResourceId, ResourceId> parentMap = HashMultimap.create();
 
+
     private FormTree formTree;
     private String referenceFieldLabel;
+
+    private Collection<ResourceId> range;
 
     public LookupKeySet(FormTree formTree, FormField referenceField) {
         this.formTree = formTree;
         this.referenceFieldLabel = referenceField.getLabel();
+        this.range = ((ReferenceType) referenceField.getType()).getRange();
 
         ReferenceType referenceType = (ReferenceType) referenceField.getType();
         for (ResourceId referenceFormId : referenceType.getRange()) {
@@ -93,6 +97,10 @@ public class LookupKeySet {
         for (LookupKey lookupKey : lookupKeys) {
             composeLabel(multiKeyForms, lookupKey);
         }
+    }
+
+    public Collection<ResourceId> getRange() {
+        return range;
     }
 
     private LookupKey addLevels(FormClass formClass) {

@@ -9,7 +9,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  */
 public enum Icon {
 
-    TABLE, PLUS, LIST, SEARCH, SAVE, PENCIL;
+    TABLE, PLUS, LIST, SEARCH, SAVE, PENCIL, HELP;
 
     public final SafeHtml svg() {
         return SafeHtmlUtils.fromSafeConstant(

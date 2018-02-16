@@ -48,7 +48,6 @@ class ChoiceCell extends ComboBoxCell<String> {
 
     private Observable<List<String>> observable;
 
-
     public ChoiceCell(Observable<List<String>> observable, ListStore<String> store) {
         super(store, key -> key);
         this.observable = observable;

@@ -6,7 +6,6 @@ import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 
@@ -48,18 +47,15 @@ public class KeyMatrixSet {
      * Maps a form by id to its corresponding key matrix.
      */
     private final Map<ResourceId, KeyMatrix> map = new HashMap<>();
-    private final ReferenceType referenceType;
     private final LookupKeySet lookupKeySet;
 
     public KeyMatrixSet(
             FormSource formSource,
-            ReferenceType referenceType,
             LookupKeySet lookupKeySet,
             Observable<Optional<ExprNode>> filter) {
-        this.referenceType = referenceType;
         this.lookupKeySet = lookupKeySet;
 
-        for (ResourceId referencedFormId : referenceType.getRange()) {
+        for (ResourceId referencedFormId : lookupKeySet.getRange()) {
             LookupKey leafKey = lookupKeySet.getLeafKey(referencedFormId);
             KeyMatrix keyMatrix = new KeyMatrix(formSource, lookupKeySet, leafKey, filter);
             map.put(referencedFormId, keyMatrix);
@@ -72,7 +68,7 @@ public class KeyMatrixSet {
             for (RecordRef ref : refs) {
                 KeyMatrix matrix = map.get(ref.getFormId());
                 if(matrix == null) {
-                    LOGGER.warning("Invalid selection for field. " + ref.getFormId() + " not in " + referenceType.getRange());
+                    LOGGER.warning("Invalid selection for field. " + ref.getFormId() + " not in " + lookupKeySet.getRange());
                 } else {
                     labels.add(matrix.findKeyLabels(ref));
                 }

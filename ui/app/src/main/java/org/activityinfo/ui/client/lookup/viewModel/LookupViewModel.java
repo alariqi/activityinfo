@@ -8,7 +8,6 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.store.query.shared.FormSource;
@@ -39,17 +38,16 @@ public class LookupViewModel {
 
     public LookupViewModel(FormSource formSource, FormTree formTree,
                            FormField referenceField) {
-        this(formSource, formTree, referenceField, Observable.just(Optional.absent()));
+        this(formSource, new LookupKeySet(formTree, referenceField), Observable.just(Optional.absent()));
     }
 
     public LookupViewModel(FormSource formSource,
-                           FormTree formTree,
-                           FormField referenceField,
+                           LookupKeySet lookupKeySet,
                            Observable<Optional<ExprNode>> filter) {
 
-        this.lookupKeySet = new LookupKeySet(formTree, referenceField);
+        this.lookupKeySet = lookupKeySet;
 
-        this.keyMatrixSet = new KeyMatrixSet(formSource, (ReferenceType) referenceField.getType(), lookupKeySet, filter);
+        this.keyMatrixSet = new KeyMatrixSet(formSource, lookupKeySet, filter);
 
         /*
          * The labels that we display for each of the labels come EITHER from the
@@ -75,7 +73,7 @@ public class LookupViewModel {
          * Go from an observable map to a map of observable values...
          */
         selectedKeys = new HashMap<>();
-        for (LookupKey key : lookupKeySet.getLookupKeys()) {
+        for (LookupKey key : this.lookupKeySet.getLookupKeys()) {
             selectedKeys.put(key, labels.transform(m -> Optional.fromNullable(m.get(key))));
         }
 
@@ -84,7 +82,7 @@ public class LookupViewModel {
         /*
          * Now add a view model for each level
          */
-        for (LookupKey lookupKey : lookupKeySet.getLookupKeys())
+        for (LookupKey lookupKey : this.lookupKeySet.getLookupKeys())
             levels.add(new LookupKeyViewModel(lookupKey,
                     keySelection.isEnabled(lookupKey),
                     keySelection.getSelectedKey(lookupKey),

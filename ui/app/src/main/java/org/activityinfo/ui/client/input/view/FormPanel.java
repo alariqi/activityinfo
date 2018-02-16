@@ -26,6 +26,7 @@ import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.view.field.FieldView;
 import org.activityinfo.ui.client.input.view.field.FieldWidget;
 import org.activityinfo.ui.client.input.view.field.FieldWidgetFactory;
+import org.activityinfo.ui.client.input.view.field.FieldWidgetFactoryImpl;
 import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
 
 import java.util.ArrayList;
@@ -56,6 +57,12 @@ public class FormPanel implements IsWidget {
     private final FieldWidgetFactory widgetFactory;
 
     public FormPanel(FormSource formSource, FormTree formTree, RecordRef recordRef, InputHandler inputHandler) {
+        this(formSource, formTree, recordRef, new FieldWidgetFactoryImpl(formSource, formTree), inputHandler);
+    }
+
+    public FormPanel(FormSource formSource, FormTree formTree, RecordRef recordRef,
+                     FieldWidgetFactory fieldWidgetFactory,
+                     InputHandler inputHandler) {
         this.formSource = formSource;
 
         assert recordRef != null;
@@ -64,6 +71,8 @@ public class FormPanel implements IsWidget {
 
         this.recordRef = recordRef;
         this.inputHandler = inputHandler;
+        this.formTree = formTree;
+        this.widgetFactory = fieldWidgetFactory;
 
         panel = new CssFloatLayoutContainer();
         panel.addStyleName(InputResources.INSTANCE.style().form());
@@ -71,9 +80,6 @@ public class FormPanel implements IsWidget {
         if(formTree.getRootFormClass().isSubForm()) {
             panel.addStyleName(InputResources.INSTANCE.style().subform());
         }
-
-        this.formTree = formTree;
-        this.widgetFactory = new FieldWidgetFactory(formSource, formTree);
 
         for (FormElement formElement : formTree.getRootFormClass().getElements()) {
             if(formElement instanceof FormField) {

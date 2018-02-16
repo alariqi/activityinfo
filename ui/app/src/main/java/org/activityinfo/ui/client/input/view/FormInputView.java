@@ -19,7 +19,11 @@ import org.activityinfo.observable.Subscription;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
-import org.activityinfo.ui.client.input.viewModel.*;
+import org.activityinfo.ui.client.input.view.field.FieldWidgetFactory;
+import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
+import org.activityinfo.ui.client.input.viewModel.FormInputViewModelBuilder;
+import org.activityinfo.ui.client.input.viewModel.FormStructure;
+import org.activityinfo.ui.client.input.viewModel.LiveActivePeriodMemory;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.logging.Logger;
@@ -43,6 +47,7 @@ public class FormInputView implements IsWidget, InputHandler {
     private FormPanel formPanel = null;
 
     private FormStore formStore;
+    private final FormInputViewAppearance appearance;
     private Maybe<RecordTree> existingRecord;
     private FormInputModel inputModel;
     private FormInputViewModelBuilder viewModelBuilder = null;
@@ -53,9 +58,13 @@ public class FormInputView implements IsWidget, InputHandler {
 
     private Subscription structureSubscription;
 
-
     public FormInputView(FormStore formStore, RecordRef recordRef) {
+        this(formStore, recordRef, new FormInputViewAppearanceImpl());
+    }
+
+    public FormInputView(FormStore formStore, RecordRef recordRef, FormInputViewAppearance appearance) {
         this.formStore = formStore;
+        this.appearance = appearance;
         this.formStructure = FormStructure.fetch(formStore, recordRef);
         this.inputModel = new FormInputModel(recordRef);
 
@@ -87,7 +96,8 @@ public class FormInputView implements IsWidget, InputHandler {
         viewModelBuilder = new FormInputViewModelBuilder(formStore, formStructure.getFormTree(), new LiveActivePeriodMemory());
         existingRecord = formStructure.getExistingRecord();
 
-        formPanel = new FormPanel(formStore, formStructure.getFormTree(), inputModel.getRecordRef(), this);
+        FieldWidgetFactory fieldFactory = appearance.createFactory(formStore, formStructure.getFormTree());
+        formPanel = new FormPanel(formStore, formStructure.getFormTree(), inputModel.getRecordRef(), fieldFactory, this);
         container.add(formPanel, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(15, 25, 10, 15)));
         container.forceLayout();
 

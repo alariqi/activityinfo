@@ -26,7 +26,7 @@ public class DataEntryWidget implements IsWidget, HasSidebar {
     public DataEntryWidget(FormStore formStore, RecordRef recordRef) {
         this.formStore = formStore;
 
-        FormInputView inputView = new FormInputView(formStore, recordRef);
+        FormInputView inputView = new FormInputView(formStore, recordRef, new IncidentFormAppearance());
 
 
         // Action bar

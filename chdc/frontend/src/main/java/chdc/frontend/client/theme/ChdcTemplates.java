@@ -9,6 +9,9 @@ public interface ChdcTemplates extends XTemplates {
 
     ChdcTemplates TEMPLATES = GWT.create(ChdcTemplates.class);
 
+    @XTemplate(source = "panel.html")
+    SafeHtml panel(ChdcStyles style);
+
     @XTemplate(source = "Banner.html")
     SafeHtml banner(ChdcStyles style);
 
