@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:chdc="urn:import:chdc.frontend.client.theme"
+             xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container">
+
+    <ui:with field='res' type='chdc.frontend.client.theme.ChdcResources'/>
+    <g:HTMLPanel styleName="{res.style.panelHolder}" addStyleNames="{res.style.isHidden}">
+
+        <div class="{res.style.panel}">
+            <div class="{res.style.panelContainer}">
+
+                <div class="{res.style.panelHeader}">
+                    <h2 class="{res.style.twoLiner}" ui:field="titleHeading"/>
+
+                    <chdc:CloseButton ui:field="closeButton"/>
+                </div>
+                <container:FlowLayoutContainer styleName="{res.style.panelContent}" ui:field="panelContent"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

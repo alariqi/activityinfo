@@ -25,6 +25,9 @@ public interface ChdcStyles extends CssResource {
     @ClassName("button--icon")
     String buttonIcon();
 
+    @ClassName("button--close")
+    String buttonClose();
+
     @ClassName("button--dimmed")
     String buttonDimmed();
 
@@ -42,6 +45,7 @@ public interface ChdcStyles extends CssResource {
     @ClassName("icon-boxes")
     String iconBoxes();
 
+    String actionbar();
 
     @ClassName("actionbar__inner")
     String actionBarInner();
@@ -86,4 +90,10 @@ public interface ChdcStyles extends CssResource {
 
     @ClassName("panelholder")
     String panelHolder();
+
+    @ClassName("twoliner")
+    String twoLiner();
+
+    @ClassName("icon__container")
+    String iconContainer();
 }

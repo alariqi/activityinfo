@@ -1,6 +1,6 @@
 package chdc.frontend.client.entry;
 
-import chdc.frontend.client.cheatsheet.CheatsheetField;
+import chdc.frontend.client.cheatsheet.CheatsheetFieldWidget;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.store.query.shared.FormSource;
@@ -30,6 +30,6 @@ public class IncidentFieldFactory implements FieldWidgetFactory {
     }
 
     private FieldWidget createActWidget(FormField field, FieldUpdater updater) {
-        return new CheatsheetField(formSource, formTree, field, updater);
+        return new CheatsheetFieldWidget(formSource, formTree, field, updater);
     }
 }

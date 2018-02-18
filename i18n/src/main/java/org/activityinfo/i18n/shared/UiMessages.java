@@ -264,4 +264,7 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
 
     @DefaultMessage("Distinct count of {0}")
     String countDistinctMeasure(String formLabel);
+
+    @DefaultMessage("Find <strong>{0}</strong>")
+    SafeHtml findFieldValue(String fieldName);
 }

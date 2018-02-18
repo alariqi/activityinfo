@@ -6,11 +6,12 @@ public interface ChdcResources extends ClientBundle {
 
     @Source({ /* Order is important! */
             "body.gss",
+            "headings.gss",
             "button.gss",
             "actionbar.gss",
             "banner.gss",
             "icons.gss",
             "panel.gss"})
-    ChdcStyles styles();
+    ChdcStyles style();
 
 }

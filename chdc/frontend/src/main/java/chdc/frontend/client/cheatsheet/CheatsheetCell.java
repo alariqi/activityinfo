@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Variant of a ComboBox cell that has a trigger which opens a cheatsheet popup.
+ *
  */
 public class CheatsheetCell extends ComboBoxCell<String> {
 

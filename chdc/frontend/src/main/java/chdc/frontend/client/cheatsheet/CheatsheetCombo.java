@@ -56,6 +56,10 @@ public class CheatsheetCombo implements IsWidget {
         return comboBox.addTriggerClickHandler(handler);
     }
 
+    public HandlerRegistration addAttachHandler(AttachEvent.Handler handler) {
+        return comboBox.addAttachHandler(handler);
+    }
+
     public void addSelectionHandler(SelectionHandler<String> handler) {
         comboBox.addSelectionHandler(handler);
     }

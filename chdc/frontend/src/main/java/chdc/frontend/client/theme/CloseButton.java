@@ -8,28 +8,22 @@ import com.sencha.gxt.widget.core.client.button.CellButtonBase;
 
 import static chdc.frontend.client.theme.ChdcTheme.STYLES;
 
-public class IconButton extends CellButtonBase<String> {
+public class CloseButton extends CellButtonBase<String> {
 
 
-    public IconButton(Icon icon, String label) {
-        super(new ButtonCell<>(new IconButtonAppearance(icon)), label);
+    public CloseButton() {
+        super(new ButtonCell<>(new CloseButtonAppearance()), "");
     }
 
-    private static class IconButtonAppearance implements ButtonCell.ButtonCellAppearance<String> {
+    private static class CloseButtonAppearance implements ButtonCell.ButtonCellAppearance<String> {
 
-        private Icon icon;
-
-        public IconButtonAppearance(Icon icon) {
-            this.icon = icon;
+        public CloseButtonAppearance() {
         }
 
         @Override
         public void render(ButtonCell<String> cell, Cell.Context context, String value, SafeHtmlBuilder sb) {
-            sb.appendHtmlConstant("<button class=\"" + STYLES.button() + " " + STYLES.buttonIcon() + " " + STYLES.buttonDimmed() + "\">");
-            sb.append(icon.small());
-            sb.appendHtmlConstant("<span>");
-            sb.appendEscaped(value);
-            sb.appendHtmlConstant("</span>");
+            sb.appendHtmlConstant("<button class=\"" + STYLES.button() +  " " + STYLES.buttonClose() + " " + "\">");
+            sb.append(Icon.CLOSE.normal());
             sb.appendHtmlConstant("</button>");
         }
 

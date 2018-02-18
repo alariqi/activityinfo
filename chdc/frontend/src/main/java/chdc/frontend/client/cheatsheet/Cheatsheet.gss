@@ -1,0 +1,75 @@
+
+.cheatsheet {
+    display:-webkit-box;
+    display:flex;
+    font-size:.875em;
+    max-height:100%;
+    z-index: 2;
+}
+
+.cheatsheet>*{
+    -webkit-box-flex:0;
+    background-color:#f1f5f3;
+    border-left:.75rem solid #ecf1ef;
+    flex:0 1 14em;
+    max-height:100%;
+    overflow-y:auto;
+    padding:1.5rem 0 3rem
+}
+
+.cheatsheet>:first-child {
+    border-left:none
+}
+
+.cheatsheet>:first-child .item {
+    padding-left:1.5rem
+}
+
+.view {
+}
+
+.item {
+    color: #65747f;
+    font-family: Overpass,sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 0;
+    padding: 1px .75em 1px .75rem;
+    text-transform: capitalize;
+}
+
+.over {
+
+}
+
+.sel {
+    background-color: #c5d1da;
+    color: #454047;
+    font-weight: 600;
+    padding-right: .5rem;
+}
+
+/**
+ * Style the final column, the "leaf" key distinctly
+ * from the parent keys.
+ */
+.cheatsheet>:last-child {
+    -webkit-box-flex: 1;
+    background-color:#fff;
+    flex:1 1 20em;
+    font-size:1rem;
+    line-height:1.4;
+    padding-left:0
+}
+
+.cheatsheet>:last-child .item {
+    font-weight:600;
+    padding-left:1.5rem;
+    padding-right:.75rem
+}
+
+.cheatsheet>:last-child .sel {
+    background-color: transparent;
+    color: #6f8ebd;
+    font-weight: 800;
+}

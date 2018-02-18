@@ -20,10 +20,10 @@ public class IconLinkButton extends Widget {
 
     public IconLinkButton(Icon icon, String label, SafeUri href) {
         AnchorElement link = Document.get().createAnchorElement();
-        link.addClassName(ChdcTheme.INSTANCE.styles().button());
-        link.addClassName(ChdcTheme.INSTANCE.styles().buttonIcon());
+        link.addClassName(ChdcTheme.INSTANCE.style().button());
+        link.addClassName(ChdcTheme.INSTANCE.style().buttonIcon());
         link.setHref(href);
-        link.setInnerSafeHtml(TEMPLATES.label(icon.svg(), label));
+        link.setInnerSafeHtml(TEMPLATES.label(icon.small(), label));
         setElement(link);
     }
 

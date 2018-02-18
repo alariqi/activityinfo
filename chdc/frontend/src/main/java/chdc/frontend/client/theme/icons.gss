@@ -21,3 +21,7 @@
 }
 .icon--dimmed:focus,.icon--dimmed:hover{
 }
+
+.icon__container {
+
+}

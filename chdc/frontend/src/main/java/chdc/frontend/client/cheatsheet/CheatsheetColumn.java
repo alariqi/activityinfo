@@ -25,7 +25,8 @@ public class CheatsheetColumn implements IsWidget {
         this.viewModel = viewModel;
 
         store = new ListStore<>(string -> string);
-        listView = new ListView<>(store, new IdentityValueProvider<>());
+        ListView.ListViewAppearance<String> appearance = new CheatsheetAppearance();
+        listView = new ListView<>(store, new IdentityValueProvider<String>(), appearance);
         listView.addAttachHandler(this::onAttach);
     }
 

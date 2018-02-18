@@ -19,7 +19,7 @@ public class ActionBar implements IsWidget {
         inner.add(shortcuts);
 
         outer = new FlowLayoutContainer();
-        outer.setStyleName("actionbar");
+        outer.setStyleName(ChdcTheme.STYLES.actionbar());
         outer.add(inner);
     }
 

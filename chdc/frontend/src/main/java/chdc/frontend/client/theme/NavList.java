@@ -27,7 +27,7 @@ public class NavList extends Widget {
         public Builder addIconLink(Icon icon, Place place, String label) {
             html.appendHtmlConstant("<li>");
             html.appendHtmlConstant("<a href=\"#" + place.toString() + "\">");
-            html.append(icon.svg());
+            html.append(icon.small());
             html.appendHtmlConstant("<span>");
             html.appendEscaped(label);
             html.appendHtmlConstant("</span>");

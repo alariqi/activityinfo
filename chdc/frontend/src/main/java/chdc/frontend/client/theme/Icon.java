@@ -9,15 +9,23 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  */
 public enum Icon {
 
-    TABLE, PLUS, LIST, SEARCH, SAVE, PENCIL, HELP;
+    TABLE, PLUS, LIST, SEARCH, SAVE, PENCIL, HELP, CLOSE;
 
-    public final SafeHtml svg() {
+    public final SafeHtml small() {
         return SafeHtmlUtils.fromSafeConstant(
                 "<svg viewBox=\"0 0 64 64\" class=\"" +
-                        ChdcTheme.INSTANCE.styles().icon() + " " +
-                        ChdcTheme.INSTANCE.styles().iconSmall() +  "\">" +
+                        ChdcTheme.INSTANCE.style().icon() + " " +
+                        ChdcTheme.INSTANCE.style().iconSmall() +  "\">" +
                 "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + symbolName() + "\"></use>" +
                 "</svg>");
+    }
+
+    public final SafeHtml normal() {
+        return SafeHtmlUtils.fromSafeConstant(
+                "<svg viewBox=\"0 0 64 64\" class=\"" +
+                        ChdcTheme.INSTANCE.style().icon() + "\">" +
+                        "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + symbolName() + "\"></use>" +
+                        "</svg>");
     }
 
     private String symbolName() {

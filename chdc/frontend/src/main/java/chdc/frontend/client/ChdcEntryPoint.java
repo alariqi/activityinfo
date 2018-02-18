@@ -36,7 +36,7 @@ public class ChdcEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
-        ChdcTheme.INSTANCE.styles().ensureInjected();
+        ChdcTheme.INSTANCE.style().ensureInjected();
 
         ChdcFrame appFrame = new ChdcFrame();
 
