@@ -1,0 +1,119 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:chdc="urn:import:chdc.frontend.client.theme"
+>
+
+    <ui:with field='res' type='chdc.frontend.client.theme.ChdcResources'/>
+
+    <g:HTMLPanel styleName="{res.style.sidebar}">
+        <div class="{res.style.datasheet}">
+            <header class="{res.style.datasheetHead}">
+                <h2 class="{res.style.incidentTitle}">
+                    INCIDENT
+                    <strong>ID #ARC-0021452</strong>
+                </h2>
+
+                <div class="{res.style.detailField}">
+                    <h4 class="{res.style.incidentDetail}">Narrative</h4>
+                    <p class="{res.style.output} {res.style.outputText}" ui:field="narrativeValue"/>
+                </div>
+            </header>
+
+            <div class="{res.style.datasheetBody}">
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Date &amp; Time</h3>
+                    <div class="formgrid">
+                        <div class="{res.style.detailField}">
+                            <h4 class="{res.style.incidentDetail}">Date</h4>
+                            <p class="{res.style.output}">21-01-2016</p>
+                        </div>
+                        <div class="{res.style.detailField}">
+                            <h4 class="{res.style.incidentDetail}">Time</h4>
+                            <p class="{res.style.output}">11:00</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Location</h3>
+                    <div class="{res.style.detailField}">
+                        <h4 class="{res.style.incidentDetail}">Location</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Ninawa, Mosul, Mosul</p>
+                    </div>
+                    <div class="{res.style.detailField} location">
+                        <h4 class="{res.style.incidentDetail}">Precise location</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Hay Al-Dubat area</p>
+                    </div>
+
+                    <div class="formgrid">
+                        <div class="{res.style.detailField} latitude">
+                            <h4 class="{res.style.incidentDetail}">Latitude</h4>
+                            <p class="{res.style.output}">36,339698</p>
+                        </div>
+                        <div class="{res.style.detailField} longitude">
+                            <h4 class="{res.style.incidentDetail}">Longitude</h4>
+                            <p class="{res.style.output}">43,152521</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Actor</h3>
+                    <div class="formgrid">
+                        <div class="{res.style.detailField}">
+                            <h4 class="{res.style.incidentDetail}">Perpetrator</h4>
+                            <p class="{res.style.output} {res.style.outputText}">Coalition</p>
+                        </div>
+                        <div class="{res.style.detailField}">
+                            <h4 class="{res.style.incidentDetail}">Victim</h4>
+                            <p class="{res.style.output} {res.style.outputText}">IS</p>
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Act</h3>
+                    <div class="{res.style.detailField}">
+                        <h4 class="{res.style.incidentDetail}">Mode of action</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Perpetrated</p>
+                    </div>
+
+                    <div class="{res.style.detailField}">
+                        <h4 class="{res.style.incidentDetail}">Act</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Air-to-ground attack</p>
+                    </div>
+
+                </section>
+
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Means</h3>
+                    <div class="{res.style.detailField}">
+                        <h4 class="{res.style.incidentDetail}">Means</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Air-to-surface missiles</p>
+                    </div>
+
+                </section>
+
+                <section class="{res.style.detailContainer}">
+                    <h3>Impact</h3>
+                    <div class="{res.style.detailField}">
+                        <h4 class="{res.style.incidentDetail}">IS</h4>
+                        <p class="{res.style.output} {res.style.outputText}">Unknown</p>
+                    </div>
+
+                </section>
+            </div>
+
+            <div class="{res.style.datasheetControls}">
+
+                <chdc:IconButton icon="PRINTER" label="Print" iconStyle="LARGE"/>
+                <chdc:IconButton icon="SHARE" label="E-mail" iconStyle="LARGE"/>
+            </div>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

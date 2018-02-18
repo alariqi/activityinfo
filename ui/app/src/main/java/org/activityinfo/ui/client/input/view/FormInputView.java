@@ -81,6 +81,10 @@ public class FormInputView implements IsWidget, InputHandler {
         });
     }
 
+    public FormInputViewModel getViewModel() {
+        return viewModel;
+    }
+
     private void onStructureChanged(Observable<FormStructure> observable) {
         if(!initialLoad && observable.isLoaded()) {
             onInitialLoad(observable.get());

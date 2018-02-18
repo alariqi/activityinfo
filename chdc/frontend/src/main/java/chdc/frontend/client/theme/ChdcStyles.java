@@ -96,4 +96,37 @@ public interface ChdcStyles extends CssResource {
 
     @ClassName("icon__container")
     String iconContainer();
+
+    @ClassName("datasheet__head")
+    String datasheetHead();
+
+    @ClassName("datasheet__controls")
+    String datasheetControls();
+
+    @ClassName("incident-id")
+    String incidentId();
+
+    String output();
+
+    String sidebar();
+
+    @ClassName("detail-field")
+    String detailField();
+
+    @ClassName("datasheet__body")
+    String datasheetBody();
+
+    @ClassName("incident-detail")
+    String incidentDetail();
+
+    String datasheet();
+
+    @ClassName("output-text")
+    String outputText();
+
+    @ClassName("detail-container")
+    String detailContainer();
+
+    @ClassName("incident-title")
+    String incidentTitle();
 }

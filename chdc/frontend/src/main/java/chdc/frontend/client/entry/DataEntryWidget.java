@@ -30,7 +30,7 @@ public class DataEntryWidget implements IsWidget, HasSidebar {
 
 
         // Action bar
-        IconButton saveButton = new IconButton(Icon.SAVE, I18N.CONSTANTS.save());
+        IconButton saveButton = new IconButton(Icon.SAVE, I18N.CONSTANTS.save(), IconStyle.SMALL_DIMMED);
         saveButton.addSelectHandler(event -> inputView.save(this::onSaved));
 
         LinkButton addAnotherLink = new LinkButton(ChdcLabels.LABELS.addAnotherIncident(),
@@ -54,7 +54,7 @@ public class DataEntryWidget implements IsWidget, HasSidebar {
 
         // Side bar
 
-        DataEntrySidebar sideBar = new DataEntrySidebar();
+        IncidentSidebar sideBar = new IncidentSidebar();
 
         container = new BorderLayoutContainer();
         container.setWestWidget(sideBar, new BorderLayoutContainer.BorderLayoutData(340));

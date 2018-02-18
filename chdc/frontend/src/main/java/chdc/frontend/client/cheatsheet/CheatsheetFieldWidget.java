@@ -21,12 +21,10 @@ import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
  */
 public class CheatsheetFieldWidget implements FieldWidget {
 
-
     private final FormField field;
     private final LookupViewModel viewModel;
     private final CheatsheetCombo combo;
     private final FieldUpdater fieldUpdater;
-
 
     private final SlideoutPanel slideOutPanel;
 
