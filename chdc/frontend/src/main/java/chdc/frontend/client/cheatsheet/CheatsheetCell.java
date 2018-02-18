@@ -1,14 +1,15 @@
 package chdc.frontend.client.cheatsheet;
 
+import chdc.theme.client.base.field.Css3TriggerFieldAppearance;
+import chdc.theme.client.base.field.Css3TriggerFieldAppearance.Css3TriggerFieldResources;
 import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.data.shared.ListStore;
-import org.activityinfo.observable.Observable;
-
-import java.util.List;
 
 /**
  * Variant of a ComboBox cell that has a trigger which opens a cheatsheet popup.
@@ -17,16 +18,30 @@ import java.util.List;
 public class CheatsheetCell extends ComboBoxCell<String> {
 
 
-    interface Style extends CssResource {
-        String message();
+    public interface HelperTriggerResources extends Css3TriggerFieldResources {
+
+        @Override
+        @ClientBundle.Source({
+                "chdc/theme/client/base/field/Css3ValueBaseField.gss",
+                "chdc/theme/client/base/field/Css3TextField.gss",
+                "help.gss"})
+        HelperTriggerStyles style();
+
+        @ClientBundle.Source("help.png")
+        ImageResource helpTrigger();
     }
 
-    private Observable<List<String>> observable;
+    public interface HelperTriggerStyles extends Css3TriggerFieldAppearance.Css3TriggerFieldStyle { }
 
+    private static class HelperTriggerAppearance extends Css3TriggerFieldAppearance {
 
-    public CheatsheetCell(Observable<List<String>> observable, ListStore<String> store) {
-        super(store, key -> key);
-        this.observable = observable;
+        public HelperTriggerAppearance() {
+            super(GWT.create(HelperTriggerResources.class));
+        }
+    }
+
+    public CheatsheetCell(ListStore<String> store) {
+        super(store, key -> key, new HelperTriggerAppearance());
         setForceSelection(true);
         setUseQueryCache(false);
         setTriggerAction(ComboBoxCell.TriggerAction.ALL);
@@ -42,4 +57,5 @@ public class CheatsheetCell extends ComboBoxCell<String> {
     public void finishEditing(Element parent, String value, Object key, ValueUpdater<String> valueUpdater) {
         // NOOP
     }
+
 }

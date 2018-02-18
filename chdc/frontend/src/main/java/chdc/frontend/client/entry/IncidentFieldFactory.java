@@ -26,10 +26,18 @@ public class IncidentFieldFactory implements FieldWidgetFactory {
         if(field.getId().asString().equals("act")) {
             return createActWidget(field, updater);
         }
+        if(field.getId().asString().equals("means")) {
+            return createMeansWidget(field, updater);
+        }
         return delegate.create(field, updater);
     }
 
     private FieldWidget createActWidget(FormField field, FieldUpdater updater) {
         return new CheatsheetFieldWidget(formSource, formTree, field, updater);
     }
+
+    private FieldWidget createMeansWidget(FormField field, FieldUpdater updater) {
+        return new CheatsheetFieldWidget(formSource, formTree, field, updater);
+    }
+
 }

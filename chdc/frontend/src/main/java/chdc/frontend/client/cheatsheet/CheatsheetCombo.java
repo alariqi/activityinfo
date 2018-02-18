@@ -20,8 +20,11 @@ import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class CheatsheetCombo implements IsWidget {
+
+    private static final Logger LOGGER = Logger.getLogger(CheatsheetCombo.class.getName());
 
     private LookupKeyViewModel level;
 
@@ -38,7 +41,7 @@ public class CheatsheetCombo implements IsWidget {
 
         store = new ListStore<>(key -> key);
 
-        comboBox = new ComboBox<>(new CheatsheetCell(level.getChoices(), store));
+        comboBox = new ComboBox<>(new CheatsheetCell(store));
         comboBox.setWidth(300);
 
         comboBox.addAttachHandler(this::onAttach);
@@ -114,8 +117,11 @@ public class CheatsheetCombo implements IsWidget {
     }
 
     private void updateEnabledView() {
-        this.comboBox.setEnabled(relevant &&
-                level.getSelectedKey().isLoaded() &&
-                level.isEnabled().isLoaded() && level.isEnabled().get());
+
+        LOGGER.info("relevant = " + relevant +
+            ", selectedKey.loaded = " + level.getSelectedKey().isLoaded() +
+            ", level.enabled = " + (level.isEnabled().isLoaded() && level.isEnabled().get()));
+
+        this.comboBox.setEnabled(relevant && level.getSelectedKey().isLoaded());
     }
 }

@@ -2,6 +2,7 @@ package chdc.frontend.client.cheatsheet;
 
 import chdc.frontend.client.theme.ChdcTheme;
 import chdc.frontend.client.theme.CloseButton;
+import chdc.frontend.client.theme.CssLayoutContainer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -11,7 +12,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 /**
@@ -32,7 +32,7 @@ public class SlideoutPanel {
     HeadingElement titleHeading;
 
     @UiField
-    FlowLayoutContainer panelContent;
+    CssLayoutContainer panelContent;
 
     @UiField
     CloseButton closeButton;

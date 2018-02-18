@@ -14,6 +14,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The key table is a large matrix with all records from the referenced form in the
@@ -32,6 +33,8 @@ import java.util.*;
  *
  */
 class KeyMatrix {
+
+    private static final Logger LOGGER = Logger.getLogger(KeyMatrix.class.getName());
 
     private static final String ID_COLUMN = "id";
 
@@ -54,6 +57,9 @@ class KeyMatrix {
             for (Map.Entry<LookupKey, ExprNode> entry : keyFormulas.entrySet()) {
                 queryModel.selectExpr(entry.getValue()).as(keyColumn(entry.getKey()));
             }
+
+            LOGGER.fine("Query KeyMatrix[" + formId + "]: " + queryModel);
+
             return formSource.query(queryModel);
         });
     }

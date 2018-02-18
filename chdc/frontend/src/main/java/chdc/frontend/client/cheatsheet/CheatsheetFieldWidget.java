@@ -1,23 +1,20 @@
 package chdc.frontend.client.cheatsheet;
 
-import com.google.common.base.Optional;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.expr.ExprNode;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.ReferenceValue;
-import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.input.view.field.FieldUpdater;
 import org.activityinfo.ui.client.input.view.field.FieldWidget;
-import org.activityinfo.ui.client.lookup.viewModel.LookupKeyViewModel;
 import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
 
 /**
- * A field widget for reference fields that
+ * A field widget for reference fields that shows only the leaf key in the
+ * main form, but provides a popup with the complete selection of keys.
  */
 public class CheatsheetFieldWidget implements FieldWidget {
 
@@ -31,11 +28,10 @@ public class CheatsheetFieldWidget implements FieldWidget {
     public CheatsheetFieldWidget(FormSource formSource, FormTree formTree, FormField field, FieldUpdater fieldUpdater) {
         this.field = field;
         this.fieldUpdater = fieldUpdater;
-        Observable<Optional<ExprNode>> filter = Observable.just(Optional.absent());
-        this.viewModel = new LookupViewModel(formSource, new LookupKeySet(formTree, field), filter);
-        LookupKeyViewModel nameKeyViewModel = this.viewModel.getLookupKeys().get(0);
+        this.viewModel = new LookupViewModel(formSource, new LookupKeySet(formTree, field));
 
-        combo = new CheatsheetCombo(viewModel, nameKeyViewModel);
+
+        combo = new CheatsheetCombo(viewModel, this.viewModel.getLeafLookupKey());
 
         // Setup the slideout panel with the cheatsheet
 
@@ -44,7 +40,6 @@ public class CheatsheetFieldWidget implements FieldWidget {
         slideOutPanel = new SlideoutPanel();
         slideOutPanel.setTitleHeading(I18N.MESSAGES.findFieldValue(field.getLabel()));
         slideOutPanel.add(cheatsheet);
-
 
 
         // Add the slide out panel to the dom when this field is attached,

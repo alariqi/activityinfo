@@ -1,8 +1,8 @@
 package chdc.frontend.client.cheatsheet;
 
+import chdc.frontend.client.theme.CssLayoutContainer;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import org.activityinfo.ui.client.lookup.viewModel.LookupKeyViewModel;
 import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
 
@@ -11,15 +11,15 @@ import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
  */
 public class CheatsheetPanel implements IsWidget {
 
-    private final FlowLayoutContainer container;
+    private final CssLayoutContainer container;
 
     public CheatsheetPanel(LookupViewModel viewModel) {
 
-        container = new FlowLayoutContainer();
+        container = new CssLayoutContainer();
         container.setStyleName(CheatsheetAppearance.STYLE.cheatsheet());
 
         for (LookupKeyViewModel key : viewModel.getLookupKeys()) {
-            container.add(new CheatsheetColumn(key));
+            container.add(new CheatsheetColumn(viewModel, key));
         }
     }
 

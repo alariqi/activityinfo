@@ -22,7 +22,7 @@
     display:-webkit-box;
     display:flex;
     flex-direction:column;
-    max-height:80vh
+    height:80vh
 }
 .panel{
     background-color:#ecf1ef;

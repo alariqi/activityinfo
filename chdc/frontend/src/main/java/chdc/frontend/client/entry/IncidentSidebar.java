@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
 
 public class IncidentSidebar extends Composite {
 
@@ -14,12 +13,9 @@ public class IncidentSidebar extends Composite {
 
     private static IncidentSidebarUiBinder ourUiBinder = GWT.create(IncidentSidebarUiBinder.class);
 
-    private final FormInputViewModel viewModel;
 
-    public IncidentSidebar(FormInputViewModel viewModel) {
-        this.viewModel = viewModel;
+    public IncidentSidebar() {
         initWidget(ourUiBinder.createAndBindUi(this));
-
     }
 
 }

@@ -41,6 +41,10 @@ public class LookupViewModel {
         this(formSource, new LookupKeySet(formTree, referenceField), Observable.just(Optional.absent()));
     }
 
+    public LookupViewModel(FormSource formSource, LookupKeySet lookupKeySet) {
+        this(formSource, lookupKeySet,  Observable.just(Optional.absent()));
+    }
+
     public LookupViewModel(FormSource formSource,
                            LookupKeySet lookupKeySet,
                            Observable<Optional<ExprNode>> filter) {
@@ -105,6 +109,11 @@ public class LookupViewModel {
         return levels;
     }
 
+
+    public LookupKeyViewModel getLeafLookupKey() {
+        return levels.get(levels.size() - 1);
+    }
+
     public void select(LookupKey lookupKey, String keyChoice) {
 
         Map<LookupKey, String> newSelectedKeys = new HashMap<>();
@@ -155,4 +164,5 @@ public class LookupViewModel {
     public void clearSelection() {
         model.updateIfNotEqual(new LookupModel());
     }
+
 }

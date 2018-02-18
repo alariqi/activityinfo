@@ -4,26 +4,20 @@
   "label": "Acts",
   "elements": [
     {
-      "id": "name",
-      "label": "Name",
+      "id": "category",
+      "label": "Category",
       "visible": true,
       "required": false,
       "type": "FREE_TEXT",
       "key": true
     },
     {
-      "id": "category",
-      "label": "Category",
-      "visible": true,
-      "required": false,
-      "type": "FREE_TEXT"
-    },
-    {
       "id": "sub_category",
       "label": "Sub-Category",
       "visible": true,
       "required": false,
-      "type": "FREE_TEXT"
+      "type": "FREE_TEXT",
+      "key": true
     },
     {
       "id": "range",
@@ -31,6 +25,14 @@
       "visible": true,
       "required": false,
       "type": "FREE_TEXT"
+    },
+    {
+      "id": "name",
+      "label": "Name",
+      "visible": true,
+      "required": false,
+      "type": "FREE_TEXT",
+      "key": true
     },
     {
       "id": "description",

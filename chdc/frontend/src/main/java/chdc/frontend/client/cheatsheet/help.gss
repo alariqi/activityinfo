@@ -1,0 +1,19 @@
+
+.noedit {
+}
+
+.trigger {
+    gwt-sprite: "helpTrigger";
+    background-position: center center;
+    position: absolute;
+    top: 0%;
+    cursor: pointer;
+}
+
+.text {
+    padding-right: 0;
+}
+
+.click {}
+
+.over {}
