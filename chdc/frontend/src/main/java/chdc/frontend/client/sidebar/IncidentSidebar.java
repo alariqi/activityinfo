@@ -1,4 +1,4 @@
-package chdc.frontend.client.entry;
+package chdc.frontend.client.sidebar;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

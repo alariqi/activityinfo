@@ -1,9 +1,5 @@
 package chdc.frontend.client;
 
-import chdc.frontend.client.dashboard.DashboardActivity;
-import chdc.frontend.client.dashboard.DashboardPlace;
-import chdc.frontend.client.entry.DataEntryActivity;
-import chdc.frontend.client.entry.DataEntryPlace;
 import chdc.frontend.client.table.TableActivity;
 import chdc.frontend.client.table.TablePlace;
 import com.google.gwt.activity.shared.Activity;
@@ -26,13 +22,7 @@ public class ChdcActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if(place instanceof DashboardPlace) {
-            return new DashboardActivity();
-
-        } else if(place instanceof DataEntryPlace) {
-            return new DataEntryActivity(formStore, (DataEntryPlace) place);
-
-        } else if(place instanceof TablePlace) {
+        if(place instanceof TablePlace) {
             return new TableActivity(formStore, (TablePlace) place);
         }
         return null;

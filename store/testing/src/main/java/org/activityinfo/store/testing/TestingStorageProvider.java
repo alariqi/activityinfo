@@ -64,6 +64,8 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
     private final ClinicForm clinicForm;
     private final IdpLocationForm idpLocationForm;
 
+    private final ActForm actForm;
+
 
     public TestingStorageProvider() {
 
@@ -104,6 +106,10 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
         // List of locations
         idpLocationForm = new IdpLocationForm(new UnitTestingIds(), 100, province);
         add(idpLocationForm);
+
+
+        actForm = new ActForm();
+        add(actForm);
     }
 
     public Survey getSurvey() {
@@ -225,6 +231,10 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
 
     public LocaliteForm getLocaliteForm() {
         return localiteForm;
+    }
+
+    public ActForm getActForm() {
+        return actForm;
     }
 
     @Override

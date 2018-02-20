@@ -310,8 +310,6 @@ public class LookupViewModelTest {
         RecordRef zoneRef = new RecordRef(catalog.getHealthZone().getFormId(), ResourceId.valueOf("c165"));
 
         assertThat(selection.assertLoaded(), containsInAnyOrder(territoryRef, zoneRef));
-
-
     }
 
     @Test
@@ -339,6 +337,10 @@ public class LookupViewModelTest {
         assertThat(province.assertLoaded().get(), equalTo("Province 11"));
         assertThat(territory.assertLoaded().get(), equalTo("Territory 24"));
         assertThat(healthZone.assertLoaded().isPresent(), equalTo(false));
+    }
+
+    @Test
+    public void optionalLookupKeys() {
 
 
     }

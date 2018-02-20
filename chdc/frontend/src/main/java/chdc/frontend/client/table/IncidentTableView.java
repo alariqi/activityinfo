@@ -1,6 +1,5 @@
 package chdc.frontend.client.table;
 
-import chdc.frontend.client.entry.DataEntryPlace;
 import chdc.frontend.client.i18n.ChdcLabels;
 import chdc.frontend.client.theme.ActionBar;
 import chdc.frontend.client.theme.Icon;
@@ -46,8 +45,7 @@ public class IncidentTableView implements IsWidget, HasTitle {
         // Action barToo
 
         ActionBar toolBar = new ActionBar();
-        IconLinkButton newRow = new IconLinkButton(Icon.PLUS, ChdcLabels.LABELS.newRow(),
-                new DataEntryPlace(viewModel.getFormId()).toUri());
+        IconLinkButton newRow = new IconLinkButton(Icon.PLUS, ChdcLabels.LABELS.newRow(), UriUtils.fromTrustedString("#"));
 
         editRowButton = new IconLinkButton(Icon.PENCIL, I18N.CONSTANTS.edit(), UriUtils.fromTrustedString("#"));
 
@@ -87,11 +85,7 @@ public class IncidentTableView implements IsWidget, HasTitle {
     }
 
     private void selectionChanged(Observable<Optional<RecordRef>> ref) {
-        if(ref.isLoading() || !ref.get().isPresent()) {
-            editRowButton.setHref(UriUtils.fromSafeConstant("#"));
-        } else {
-            editRowButton.setHref(new DataEntryPlace(ref.get().get()).toUri());
-        }
+
     }
 
     private void showErrorState(FormTree.State rootFormState) {
