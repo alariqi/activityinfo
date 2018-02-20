@@ -9,7 +9,18 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
  */
 public enum Icon {
 
-    TABLE, PLUS, LIST, SEARCH, SAVE, PENCIL, HELP, CLOSE, PRINTER, SHARE;
+    BAR_CHART,
+    CLOSE,
+    HELP,
+    TABLE,
+    PLUS,
+    LIST,
+    LOGOUT,
+    SAVE,
+    SEARCH,
+    SHARE,
+    PENCIL,
+    PRINTER;
 
     public final SafeHtml small() {
         return svg(IconStyle.SMALL_DIMMED);
@@ -29,6 +40,6 @@ public enum Icon {
     }
 
     private String symbolName() {
-        return "#icon-" + name().toLowerCase();
+        return "#icon-" + name().toLowerCase().replace('_', '-');
     }
 }

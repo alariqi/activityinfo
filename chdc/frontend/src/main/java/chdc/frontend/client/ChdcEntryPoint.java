@@ -38,10 +38,7 @@ public class ChdcEntryPoint implements EntryPoint {
 
         ChdcTheme.INSTANCE.style().ensureInjected();
 
-        ChdcFrame appFrame = new ChdcFrame();
-
         Viewport viewport = new Viewport();
-        viewport.add(appFrame);
 
         RootLayoutPanel.get().add(viewport);
 
@@ -60,7 +57,7 @@ public class ChdcEntryPoint implements EntryPoint {
 
         ActivityMapper activityMapper = new ChdcActivityMapper(formStore);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(appFrame);
+        activityManager.setDisplay(viewport);
 
         ChdcPlaceHistoryMapper historyMapper = new ChdcPlaceHistoryMapper();
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);

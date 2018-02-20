@@ -1,0 +1,18 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:chdc="urn:import:chdc.frontend.client.theme"
+>
+
+    <!-- Include our application styles -->
+    <ui:with field='res' type='chdc.frontend.client.theme.ChdcResources'/>
+
+    <g:HTMLPanel styleName="{res.style.banner}">
+        <h1>
+            <a href="#dashboard" rel="home"><span>CHDC</span> Data Entry</a>
+        </h1>
+        <div class="{res.style.topnav}">
+            <chdc:IconLinkButton icon="BAR_CHART" label="Analysis" href="#"/>
+            <chdc:IconLinkButton icon="LOGOUT" label="Logout" href="#"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>

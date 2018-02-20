@@ -7,7 +7,7 @@ import com.google.gwt.resources.client.ClientBundle;
 public class ChdcColumnHeaderAppearance extends Css3ColumnHeaderAppearance {
 
     public interface Resources extends Css3ColumnHeaderAppearance.Css3ColumnHeaderResources  {
-        @ClientBundle.Source({ "chdc/theme/client/base/grid/Css3ColumnHeader.gss", "columnheader.gss"})
+        @ClientBundle.Source({  "columnheader.gss"})
         ChdcStyles style();
     }
 

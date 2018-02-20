@@ -20,4 +20,9 @@
         <when-type-is class="com.sencha.gxt.widget.core.client.grid.ColumnHeader.ColumnHeaderAppearance"/>
         <when-property-is name="gxt.theme" value="chdc"/>
     </replace-with>
+
+    <replace-with class="chdc.frontend.client.theme.grid.ChdcGridAppearance">
+        <when-type-is class="com.sencha.gxt.widget.core.client.grid.GridView.GridAppearance"/>
+        <when-property-is name="gxt.theme" value="chdc"/>
+    </replace-with>
 </module>

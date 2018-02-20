@@ -6,6 +6,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.client.ui.Widget;
 
 public class IconLinkButton extends Widget {
@@ -18,6 +19,7 @@ public class IconLinkButton extends Widget {
 
     public static final Templates TEMPLATES = GWT.create(Templates.class);
 
+    @UiConstructor
     public IconLinkButton(Icon icon, String label, SafeUri href) {
         AnchorElement link = Document.get().createAnchorElement();
         link.addClassName(ChdcTheme.INSTANCE.style().button());

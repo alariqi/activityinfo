@@ -554,8 +554,8 @@ theme {
       cellVBorderColor = 'rgba(101, 116, 127, 0.3)'
       cellHBorderColor = 'rgba(101, 116, 127, 0.3)'
       cellBorderWidth = 1
-      cellBackgroundColor = '#ffffff'
-      cellAltBackgroundColor = '#fafafa'
+      cellBackgroundColor = '#F0F0F0'
+      cellAltBackgroundColor = '#FFFFFF'
 
       cellOverVBorderColor = '#ededed'
       cellOverVBorderStyle = 'solid'

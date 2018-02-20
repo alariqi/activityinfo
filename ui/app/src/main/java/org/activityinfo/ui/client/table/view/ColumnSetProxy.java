@@ -6,17 +6,16 @@ import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
-import org.activityinfo.analysis.table.ColumnRenderer;
-import org.activityinfo.analysis.table.EffectiveTableModel;
-import org.activityinfo.analysis.table.SimpleColumnFormat;
+import org.activityinfo.analysis.table.*;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer>> {
+public class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer>> {
 
 
 
@@ -117,6 +116,14 @@ class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer
         valueProviders.add(provider);
 
         return provider;
+    }
+
+    public ValueProvider<Integer, Date> getDateProvider(String id) {
+        return getValueProvider(id, new DateRenderer(id));
+    }
+
+    public ValueProvider<Integer, String> getStringProvider(String id) {
+        return getValueProvider(id, new StringRenderer(id));
     }
 
     public <T> ValueProvider<Integer, T> getValueProvider(SimpleColumnFormat<T> format) {
