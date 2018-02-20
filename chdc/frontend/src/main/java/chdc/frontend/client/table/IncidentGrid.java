@@ -1,22 +1,14 @@
 package chdc.frontend.client.table;
 
-import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
-import com.sencha.gxt.widget.core.client.form.ComboBox;
-import com.sencha.gxt.widget.core.client.form.DateField;
-import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
-import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.CellSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
@@ -27,16 +19,12 @@ import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 import org.activityinfo.ui.client.table.view.LiveRecordGridView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Editable grid widget
  */
 public class IncidentGrid implements IsWidget {
-
-
-    private static final DateTimeFormat DATE_TIME_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
 
     private final ColumnSetProxy proxy;
     private final PagingLoader loader;
@@ -54,93 +42,37 @@ public class IncidentGrid implements IsWidget {
 
         store = new ListStore<>(index -> index.toString());
 
-        List<ColumnConfig<Integer, ?>> columns = new ArrayList<>();
-
-        // Time:
-        // Time will be one cell which includes both a textfield with a datepicker dropdown and a
-        // second smaller textfield where the time can be entered in 24 hour format. The time
-        // textfield will round to the nearest hour and validate the datetime automatically.
-
-
-        ColumnConfig<Integer, Date> timeColumn = new ColumnConfig<>(proxy.getDateProvider("date"));
-        timeColumn.setHeader(I18N.CONSTANTS.time());
-        timeColumn.setWidth(200);
-        timeColumn.setCell(new DateCell(DATE_TIME_FORMAT));
-        columns.add(timeColumn);
-
-        DateField timeEditor = new DateField(new DateTimePropertyEditor(DATE_TIME_FORMAT));
-
-        // Location
-        ColumnConfig<Integer, String> locationColumn = new ColumnConfig<>(proxy.getStringProvider("location.name"));
-        locationColumn.setWidth(200);
-        locationColumn.setHeader("Location");
-        columns.add(locationColumn);
+        // Create the columns for the table, as well as their editors, etc.
+        List<IncidentColumn> columns = new ArrayList<>();
+        columns.add(new TimeColumn(proxy));
+        columns.add(new LocationColumn(proxy));
+        columns.add(new PerpColumn(proxy));
+        columns.add(new TargetColumn(proxy));
+        columns.add(new ActModeColumn(proxy));
+        columns.add(new ActColumn(proxy));
+        columns.add(new MeansColumn(proxy));
+        columns.add(new NarrativeColumn(proxy));
+        columns.add(new ImpactColumn(proxy));
+        columns.add(new NgoSpecColumn(proxy));
+        columns.add(new ConfidentialColumn(proxy));
 
 
-        // Perpetrator
-        ColumnConfig<Integer, String> perpetratorColumn = new ColumnConfig<>(proxy.getStringProvider("actor.name"));
-        perpetratorColumn.setHeader("Perpetrator");
-        perpetratorColumn.setWidth(200);
-        columns.add(perpetratorColumn);
-
-        // Primary intended target
-        ColumnConfig<Integer, String> targetColumn = new ColumnConfig<>(proxy.getStringProvider("primary_target.name"));
-        targetColumn.setHeader("Primary Target");
-        targetColumn.setWidth(200);
-        columns.add(targetColumn);
-
-        // Act Mode (Attempted, Perpetrated)
-        ColumnConfig<Integer, String> actModeColumn = new ColumnConfig<>(proxy.getStringProvider("act_mode"));
-        actModeColumn.setHeader("Act Mode");
-        actModeColumn.setWidth(200);
-        columns.add(actModeColumn);
-
-        ListStore<String> actModeStore = new ListStore<>(model -> model);
-        actModeStore.add("Attempted");
-        actModeStore.add("Perpetrated");
-
-        ComboBox<String> actModeEditor = new ComboBox<>(actModeStore, model -> model);
-        actModeEditor.setForceSelection(true);
-        actModeEditor.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-
-        // Means
-        ColumnConfig<Integer, String> meansColumn = new ColumnConfig<>(proxy.getStringProvider("means.name"));
-        meansColumn.setWidth(200);
-        meansColumn.setHeader("Means");
-        columns.add(meansColumn);
-
-        // Narrative
-        ColumnConfig<Integer, String> narrativeColumn = new ColumnConfig<>(proxy.getStringProvider("narrative"));
-        narrativeColumn.setHeader("Narrative");
-        narrativeColumn.setWidth(200);
-        columns.add(narrativeColumn);
-
-        TextField narrativeEditor = new TextField();
-
-        // Impact
-        ColumnConfig<Integer, String> impactColumn = new ColumnConfig<>(proxy.getStringProvider("'#TODO'"));
-        impactColumn.setHeader("Impact");
-        impactColumn.setWidth(200);
-        columns.add(impactColumn);
-
-        // NGO Impact
-        ColumnConfig<Integer, String> ngoColumn = new ColumnConfig<>(proxy.getStringProvider("'#TODO'"));
-        ngoColumn.setHeader("NGO Specification");
-        ngoColumn.setWidth(200);
-        columns.add(ngoColumn);
-
-        // Disable sorting until it's implemented
-        for (ColumnConfig<Integer, ?> column : columns) {
-            column.setSortable(false);
-            column.setMenuDisabled(true);
+        // Construct the Sencha column model
+        List<ColumnConfig<Integer, ?>> configs = new ArrayList<>();
+        for (IncidentColumn column : columns) {
+            configs.add(column.getColumnConfig());
         }
 
-        ColumnModel<Integer> columnModel = new ColumnModel<>(columns);
+        // Disable sorting until it's implemented
+        for (ColumnConfig<Integer, ?> config : configs) {
+            config.setSortable(false);
+            config.setMenuDisabled(true);
+        }
 
         // Define the query for columns
         QueryModel queryModel = new QueryModel(ResourceId.valueOf("incident"));
-        for (ColumnConfig<Integer, ?> column : columns) {
-            queryModel.selectExpr(column.getValueProvider().getPath()).as(column.getValueProvider().getPath());
+        for (ColumnConfig<Integer, ?> config : configs) {
+            queryModel.selectExpr(config.getValueProvider().getPath()).as(config.getValueProvider().getPath());
         }
 
         columnSet = formSource.query(queryModel);
@@ -151,7 +83,7 @@ public class IncidentGrid implements IsWidget {
         gridView.setTrackMouseOver(false);
         gridView.setStripeRows(true);
 
-        grid = new Grid<>(store, columnModel);
+        grid = new Grid<>(store, new ColumnModel<>(configs));
         grid.setLoader(loader);
         grid.setLoadMask(true);
         grid.setView(gridView);
@@ -159,10 +91,11 @@ public class IncidentGrid implements IsWidget {
 
         // Define column editors
         GridInlineEditing<Integer> editing = new GridInlineEditing<>(grid);
-        editing.addEditor(timeColumn, timeEditor);
-        editing.addEditor(actModeColumn, actModeEditor);
-        editing.addEditor(narrativeColumn, narrativeEditor);
-
+        for (IncidentColumn column : columns) {
+            if(column.getEditor().isPresent()) {
+                editing.addEditor((ColumnConfig)column.getColumnConfig(), column.getEditor().get());
+            }
+        }
     }
 
     /**
