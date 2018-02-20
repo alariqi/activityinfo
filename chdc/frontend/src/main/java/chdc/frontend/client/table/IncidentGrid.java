@@ -4,12 +4,18 @@ import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
+import com.sencha.gxt.widget.core.client.form.ComboBox;
+import com.sencha.gxt.widget.core.client.form.DateField;
+import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.CellSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.QueryModel;
@@ -29,6 +35,8 @@ import java.util.List;
  */
 public class IncidentGrid implements IsWidget {
 
+
+    private static final DateTimeFormat DATE_TIME_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
 
     private final ColumnSetProxy proxy;
     private final PagingLoader loader;
@@ -57,14 +65,17 @@ public class IncidentGrid implements IsWidget {
         ColumnConfig<Integer, Date> timeColumn = new ColumnConfig<>(proxy.getDateProvider("date"));
         timeColumn.setHeader(I18N.CONSTANTS.time());
         timeColumn.setWidth(200);
-        timeColumn.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.YEAR_MONTH_DAY)));
+        timeColumn.setCell(new DateCell(DATE_TIME_FORMAT));
         columns.add(timeColumn);
+
+        DateField timeEditor = new DateField(new DateTimePropertyEditor(DATE_TIME_FORMAT));
 
         // Location
         ColumnConfig<Integer, String> locationColumn = new ColumnConfig<>(proxy.getStringProvider("location.name"));
         locationColumn.setWidth(200);
         locationColumn.setHeader("Location");
         columns.add(locationColumn);
+
 
         // Perpetrator
         ColumnConfig<Integer, String> perpetratorColumn = new ColumnConfig<>(proxy.getStringProvider("actor.name"));
@@ -84,6 +95,14 @@ public class IncidentGrid implements IsWidget {
         actModeColumn.setWidth(200);
         columns.add(actModeColumn);
 
+        ListStore<String> actModeStore = new ListStore<>(model -> model);
+        actModeStore.add("Attempted");
+        actModeStore.add("Perpetrated");
+
+        ComboBox<String> actModeEditor = new ComboBox<>(actModeStore, model -> model);
+        actModeEditor.setForceSelection(true);
+        actModeEditor.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+
         // Means
         ColumnConfig<Integer, String> meansColumn = new ColumnConfig<>(proxy.getStringProvider("means.name"));
         meansColumn.setWidth(200);
@@ -95,6 +114,8 @@ public class IncidentGrid implements IsWidget {
         narrativeColumn.setHeader("Narrative");
         narrativeColumn.setWidth(200);
         columns.add(narrativeColumn);
+
+        TextField narrativeEditor = new TextField();
 
         // Impact
         ColumnConfig<Integer, String> impactColumn = new ColumnConfig<>(proxy.getStringProvider("'#TODO'"));
@@ -135,6 +156,13 @@ public class IncidentGrid implements IsWidget {
         grid.setLoadMask(true);
         grid.setView(gridView);
         grid.setSelectionModel(new CellSelectionModel<>());
+
+        // Define column editors
+        GridInlineEditing<Integer> editing = new GridInlineEditing<>(grid);
+        editing.addEditor(timeColumn, timeEditor);
+        editing.addEditor(actModeColumn, actModeEditor);
+        editing.addEditor(narrativeColumn, narrativeEditor);
+
     }
 
     /**

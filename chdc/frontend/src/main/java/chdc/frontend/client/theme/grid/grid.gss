@@ -146,6 +146,9 @@
     border-style: none;
 }
 
+.rowOver {
+}
+
 
 .grid-rowSelected .cell,
 .grid-rowSelected .rowWrap,
@@ -163,7 +166,7 @@
 }
 
 .cellDirty {
-    background: transparent no-repeat 0 0;
+    background: transparent no-repeat 0 0   ;
     background-image: DIRTY;
 }
 
