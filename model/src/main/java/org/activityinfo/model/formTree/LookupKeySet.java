@@ -75,19 +75,17 @@ public class LookupKeySet {
     private Multimap<ResourceId, ResourceId> parentMap = HashMultimap.create();
 
 
-    private FormTree formTree;
     private String referenceFieldLabel;
 
     private Collection<ResourceId> range;
 
     public LookupKeySet(FormTree formTree, FormField referenceField) {
-        this.formTree = formTree;
         this.referenceFieldLabel = referenceField.getLabel();
         this.range = ((ReferenceType) referenceField.getType()).getRange();
 
         ReferenceType referenceType = (ReferenceType) referenceField.getType();
         for (ResourceId referenceFormId : referenceType.getRange()) {
-            leafKeyMap.put(referenceFormId, addLevels(formTree.getFormClass(referenceFormId)));
+            leafKeyMap.put(referenceFormId, addLevels(formTree, formTree.getFormClass(referenceFormId)));
         }
 
         // Now that we know how many keys there are and from which forms,
@@ -99,11 +97,22 @@ public class LookupKeySet {
         }
     }
 
+    LookupKeySet(List<LookupKey> keys) {
+
+        LookupKey leafKey = keys.get(keys.size() - 1);
+
+        this.referenceFieldLabel = "";
+        this.range = Arrays.asList(leafKey.getFormId());
+        this.leafKeyMap.put(leafKey.getFormId(), leafKey);
+        this.lookupKeys.addAll(keys);
+
+    }
+
     public Collection<ResourceId> getRange() {
         return range;
     }
 
-    private LookupKey addLevels(FormClass formClass) {
+    private LookupKey addLevels(FormTree formTree, FormClass formClass) {
 
         ResourceId formId = formClass.getId();
 
@@ -129,7 +138,7 @@ public class LookupKeySet {
             ResourceId referencedFormId = Iterables.getOnlyElement(referenceType.getRange());
             FormClass referencedFormClass = formTree.getFormClass(referencedFormId);
             parentMap.put(formId, referencedFormId);
-            parentLevel = addLevels(referencedFormClass);
+            parentLevel = addLevels(formTree, referencedFormClass);
             parentFieldId = referenceKey.get().getId().asString();
         }
 
@@ -318,5 +327,9 @@ public class LookupKeySet {
 
     public Map<LookupKey, ExprNode> getKeyFormulas(ResourceId fieldId) {
         return getKeyFormulas(new SymbolExpr(fieldId));
+    }
+
+    public static LookupKeySetBuilder builder() {
+        return new LookupKeySetBuilder();
     }
 }

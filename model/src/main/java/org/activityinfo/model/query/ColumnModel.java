@@ -26,6 +26,13 @@ public class ColumnModel implements JsonSerializable {
     private String id;
     private ExprNode expression;
 
+    public ColumnModel() {}
+
+    public ColumnModel(String expression) {
+        this.id = expression;
+        this.expression = ExprParser.parse(expression);
+    }
+
     /**
      *
      * @return a unique, machine-readable stable id for this column

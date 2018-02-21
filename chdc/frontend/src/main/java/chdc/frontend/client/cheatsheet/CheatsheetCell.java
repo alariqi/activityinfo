@@ -8,7 +8,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
-import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.data.shared.ListStore;
 
 /**
@@ -45,12 +44,6 @@ public class CheatsheetCell extends ComboBoxCell<String> {
         setForceSelection(true);
         setUseQueryCache(false);
         setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-    }
-
-    @Override
-    public void doQuery(Context context, XElement parent, ValueUpdater<String> updater, String value, String query, boolean force) {
-        // DO NOTHING
-        // We do not want to display the drop down list.
     }
 
     @Override

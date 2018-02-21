@@ -106,14 +106,13 @@ public class CheatsheetCombo implements IsWidget {
         }
     }
 
-    @Override
-    public Widget asWidget() {
+    public ComboBox<String> getComboBox() {
         return comboBox;
     }
 
-    public void setRelevant(boolean relevant) {
-        this.relevant = relevant;
-        updateEnabledView();
+    @Override
+    public Widget asWidget() {
+        return comboBox;
     }
 
     private void updateEnabledView() {

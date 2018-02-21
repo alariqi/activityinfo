@@ -53,12 +53,11 @@ public class LookupKey {
      */
     String keyLabel;
 
-    private LookupKey(int keyIndex,
-              String parentFieldId,
-              LookupKey parentLevel,
-              FormClass formClass,
-              SymbolExpr keyFormula,
-              String fieldLabel) {
+    LookupKey(int keyIndex,
+                      String parentFieldId,
+                      LookupKey parentLevel,
+                      ResourceId formId, String formLabel,
+                      String fieldLabel, SymbolExpr keyFormula) {
         this.keyIndex = keyIndex;
         if(parentFieldId == null) {
             this.parentFieldId = null;
@@ -66,8 +65,8 @@ public class LookupKey {
             this.parentFieldId = new SymbolExpr(parentFieldId);
         }
         this.parentLevel = parentLevel;
-        this.formId = formClass.getId();
-        this.formLabel = formClass.getLabel();
+        this.formId = formId;
+        this.formLabel = formLabel;
         this.fieldLabel = fieldLabel;
         this.fieldId = keyFormula;
 
@@ -75,6 +74,9 @@ public class LookupKey {
             parentLevel.childLevels.add(this);
         }
     }
+
+
+
 
     /**
      * Constructs a new LookupKey for the given parent, form, and key field.
@@ -85,7 +87,7 @@ public class LookupKey {
               FormClass formClass,
               FormField formField) {
 
-        this(keyIndex, parentFieldId, parentLevel, formClass, new SymbolExpr(formField.getId()), formField.getLabel());
+        this(keyIndex, parentFieldId, parentLevel, formClass.getId(), formClass.getLabel(), formField.getLabel(), new SymbolExpr(formField.getId()));
     }
 
     /**
@@ -100,7 +102,7 @@ public class LookupKey {
      * Constructs a new LookupKey for the given form using the raw record id.
      */
     LookupKey(int keyIndex, FormClass formClass) {
-        this(keyIndex, null, null, formClass, new SymbolExpr(ColumnModel.ID_SYMBOL), "ID");
+        this(keyIndex, null, null, formClass.getId(), formClass.getLabel(), "ID", new SymbolExpr(ColumnModel.ID_SYMBOL));
     }
 
     public int getKeyIndex() {
@@ -115,7 +117,7 @@ public class LookupKey {
         return childLevels.isEmpty();
     }
 
-    public String getFormLabel() {
+    String getFormLabel() {
         return formLabel;
     }
 
@@ -127,7 +129,7 @@ public class LookupKey {
         return formId;
     }
 
-    public SymbolExpr getKeyField() {
+    SymbolExpr getKeyField() {
         return fieldId;
     }
 
@@ -178,15 +180,10 @@ public class LookupKey {
         return getKeyFormulas(null);
     }
 
-    public Map<LookupKey, ExprNode> getKeyFormulas(ExprNode baseField) {
+    Map<LookupKey, ExprNode> getKeyFormulas(ExprNode baseField) {
         Map<LookupKey, ExprNode> keys = new HashMap<>();
         collectKeys(baseField, keys);
         return keys;
-    }
-
-
-    public ExprNode getParentKey() {
-        return join(parentFieldId, parentLevel.getKeyField());
     }
 
     public String label(FormInstance record) {

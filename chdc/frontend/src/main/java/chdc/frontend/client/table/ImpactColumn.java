@@ -25,4 +25,5 @@ public class ImpactColumn implements IncidentColumn {
     public Optional<? extends Field<?>> getEditor() {
         return Optional.empty();
     }
+
 }

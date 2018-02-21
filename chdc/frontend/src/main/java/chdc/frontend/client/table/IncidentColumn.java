@@ -13,4 +13,5 @@ public interface IncidentColumn {
     ColumnConfig<Integer, ?> getColumnConfig();
 
     Optional<? extends Field<?>> getEditor();
+
 }

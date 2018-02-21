@@ -40,4 +40,5 @@ public class ActModeColumn implements IncidentColumn {
     public Optional<? extends Field<?>> getEditor() {
         return Optional.of(field);
     }
+
 }

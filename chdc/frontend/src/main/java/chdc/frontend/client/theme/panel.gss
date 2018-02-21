@@ -1,6 +1,6 @@
 
 .panelholder {
-    bottom:3.375em;
+    bottom: 0;
     position:absolute;
     right:0;
     transition:-webkit-transform .25s ease-in;

@@ -29,4 +29,5 @@ public class ConfidentialColumn implements IncidentColumn {
     public Optional<? extends Field<?>> getEditor() {
         return Optional.of(editor);
     }
+
 }

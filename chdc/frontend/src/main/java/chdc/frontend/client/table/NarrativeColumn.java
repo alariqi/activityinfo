@@ -27,6 +27,6 @@ public class NarrativeColumn implements IncidentColumn {
 
     @Override
     public Optional<? extends Field<?>> getEditor() {
-        return Optional.empty();
+        return Optional.of(editor);
     }
 }
