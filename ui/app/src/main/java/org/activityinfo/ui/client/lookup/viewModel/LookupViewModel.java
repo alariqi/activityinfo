@@ -12,6 +12,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.lookup.model.LookupModel;
+import org.activityinfo.ui.client.table.view.LabeledReference;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -165,4 +166,12 @@ public class LookupViewModel {
         model.updateIfNotEqual(new LookupModel());
     }
 
+    public Observable<Optional<LabeledReference>> getSelectedLabeledRecord() {
+        Observable<Optional<RecordRef>> recordRef = getSelectedRecord();
+        Observable<Optional<String>> label = getLeafLookupKey().getSelectedKey();
+
+        return Observable.transform(recordRef, label, (maybeRef, maybeLabel) -> {
+            return maybeRef.transform(ref -> new LabeledReference(ref.getRecordId().asString(), maybeLabel.or("#DELETED")));
+        });
+    }
 }

@@ -1,9 +1,12 @@
 package chdc.frontend.client.table;
 
-import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class ImpactColumn implements IncidentColumn {
@@ -11,9 +14,14 @@ public class ImpactColumn implements IncidentColumn {
     private final ColumnConfig<Integer, String> config;
 
     public ImpactColumn(ColumnSetProxy proxy) {
-        config = new ColumnConfig<>(proxy.getStringProvider("'#TODO'"));
+        config = new ColumnConfig<>(new TodoValueProvider("#TODO"));
         config.setHeader("Impact");
         config.setWidth(200);
+    }
+
+    @Override
+    public List<ColumnModel> getColumnsToQuery() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -22,7 +30,7 @@ public class ImpactColumn implements IncidentColumn {
     }
 
     @Override
-    public Optional<? extends Field<?>> getEditor() {
+    public Optional<? extends IsField<?>> getEditor() {
         return Optional.empty();
     }
 

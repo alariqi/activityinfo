@@ -1,11 +1,15 @@
 package chdc.frontend.client.table;
 
-import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.Collections.singletonList;
 
 public class ConfidentialColumn implements IncidentColumn {
 
@@ -21,12 +25,17 @@ public class ConfidentialColumn implements IncidentColumn {
     }
 
     @Override
+    public List<ColumnModel> getColumnsToQuery() {
+        return singletonList(new ColumnModel("confidential_notes"));
+    }
+
+    @Override
     public ColumnConfig<Integer, ?> getColumnConfig() {
         return config;
     }
 
     @Override
-    public Optional<? extends Field<?>> getEditor() {
+    public Optional<? extends IsField<?>> getEditor() {
         return Optional.of(editor);
     }
 

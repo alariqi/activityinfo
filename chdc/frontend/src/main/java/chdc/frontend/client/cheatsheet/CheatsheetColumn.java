@@ -2,8 +2,8 @@ package chdc.frontend.client.cheatsheet;
 
 import com.google.common.base.Optional;
 import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
@@ -33,12 +33,9 @@ public class CheatsheetColumn implements IsWidget {
         ListView.ListViewAppearance<String> appearance = new CheatsheetAppearance();
         listView = new ListView<>(store, new IdentityValueProvider<String>(), appearance);
         listView.addAttachHandler(this::onAttach);
-        listView.getSelectionModel().addSelectionHandler(new SelectionHandler<String>() {
-            @Override
-            public void onSelection(SelectionEvent<String> event) {
-                if(!updatingView) {
-                    model.select(viewModel.getLookupKey(), event.getSelectedItem());
-                }
+        listView.getSelectionModel().addSelectionHandler(event -> {
+            if(!updatingView) {
+                model.select(viewModel.getLookupKey(), event.getSelectedItem());
             }
         });
     }
@@ -73,5 +70,14 @@ public class CheatsheetColumn implements IsWidget {
     @Override
     public Widget asWidget() {
         return listView;
+    }
+
+
+    public void focus() {
+        listView.focus();
+    }
+
+    public HandlerRegistration addSelectionHandler(SelectionHandler<String> handler) {
+        return listView.getSelectionModel().addSelectionHandler(handler);
     }
 }

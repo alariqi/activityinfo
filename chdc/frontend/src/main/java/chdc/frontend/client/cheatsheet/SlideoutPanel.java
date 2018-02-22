@@ -5,6 +5,15 @@ import chdc.frontend.client.theme.CloseButton;
 import chdc.frontend.client.theme.CssLayoutContainer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.HasCloseHandlers;
+import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -15,9 +24,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 /**
- * Slide out panel
+ * Slide out panel.
  */
-public class SlideoutPanel {
+public class SlideoutPanel implements HasCloseHandlers<SlideoutPanel> {
 
 
     interface SlideoutPanelUiBinder extends UiBinder<HTMLPanel, SlideoutPanel> {
@@ -37,8 +46,21 @@ public class SlideoutPanel {
     @UiField
     CloseButton closeButton;
 
+    private boolean visible = false;
+
+    private SimpleEventBus eventBus = new SimpleEventBus();
+
     public SlideoutPanel() {
         panel = ourUiBinder.createAndBindUi(this);
+
+        panel.addDomHandler(new KeyUpHandler() {
+            @Override
+            public void onKeyUp(KeyUpEvent event) {
+                if(event.getNativeKeyCode() == KeyCodes.KEY_ESCAPE) {
+                    hide();
+                }
+            }
+        }, KeyUpEvent.getType());
     }
 
     public void setTitleHeading(SafeHtml title) {
@@ -54,6 +76,7 @@ public class SlideoutPanel {
             RootPanel.get().add(panel);
         }
         panel.removeStyleName(ChdcTheme.STYLES.isHidden());
+        visible = true;
     }
 
 
@@ -76,5 +99,21 @@ public class SlideoutPanel {
 
     public void hide() {
         panel.addStyleName(ChdcTheme.STYLES.isHidden());
+        visible = false;
+        CloseEvent.fire(this, this);
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    @Override
+    public HandlerRegistration addCloseHandler(CloseHandler<SlideoutPanel> handler) {
+        return eventBus.addHandler(CloseEvent.getType(), handler);
+    }
+
+    @Override
+    public void fireEvent(GwtEvent<?> event) {
+        eventBus.fireEvent(event);
     }
 }

@@ -1,19 +1,23 @@
 package chdc.frontend.client.table;
 
-import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.table.view.ColumnSetProxy;
+import org.activityinfo.ui.client.table.view.LabeledReference;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class PerpColumn implements IncidentColumn {
 
-    private final ColumnConfig<Integer, String> config;
+    private final ColumnConfig<Integer, LabeledReference> config;
 
     public PerpColumn(FormSource formSource, ColumnSetProxy proxy) {
 
-        config = new ColumnConfig<>(proxy.getStringProvider("actor.name"));
+        config = new ColumnConfig<>(proxy.getLabeledRefProvider("actor", "actor.name"));
         config.setHeader("Perpetrator");
         config.setWidth(200);
 //
@@ -29,12 +33,17 @@ public class PerpColumn implements IncidentColumn {
     }
 
     @Override
+    public List<ColumnModel> getColumnsToQuery() {
+        return Arrays.asList(new ColumnModel("actor"), new ColumnModel("actor.name"));
+    }
+
+    @Override
     public ColumnConfig<Integer, ?> getColumnConfig() {
         return config;
     }
 
     @Override
-    public Optional<? extends Field<?>> getEditor() {
+    public Optional<? extends IsField<?>> getEditor() {
 //        return Optional.of(cheatsheet.getField());
         return Optional.empty();
     }

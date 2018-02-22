@@ -20,11 +20,14 @@ import org.activityinfo.ui.client.table.view.LiveRecordGridView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Editable grid widget
  */
 public class IncidentGrid implements IsWidget {
+
+    private static final Logger LOGGER = Logger.getLogger(IncidentGrid.class.getName());
 
     private final ColumnSetProxy proxy;
     private final PagingLoader loader;
@@ -71,8 +74,8 @@ public class IncidentGrid implements IsWidget {
 
         // Define the query for columns
         QueryModel queryModel = new QueryModel(ResourceId.valueOf("incident"));
-        for (ColumnConfig<Integer, ?> config : configs) {
-            queryModel.selectExpr(config.getValueProvider().getPath()).as(config.getValueProvider().getPath());
+        for (IncidentColumn column : columns) {
+            queryModel.addColumns(column.getColumnsToQuery());
         }
 
         columnSet = formSource.query(queryModel);

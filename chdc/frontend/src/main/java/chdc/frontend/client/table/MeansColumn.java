@@ -1,12 +1,15 @@
 package chdc.frontend.client.table;
 
 import chdc.frontend.client.cheatsheet.CheatsheetField;
-import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import org.activityinfo.model.formTree.LookupKeySet;
+import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class MeansColumn implements IncidentColumn {
@@ -29,12 +32,17 @@ public class MeansColumn implements IncidentColumn {
     }
 
     @Override
+    public List<ColumnModel> getColumnsToQuery() {
+        return Arrays.asList(new ColumnModel("means"), new ColumnModel("means.name"));
+    }
+
+    @Override
     public ColumnConfig<Integer, ?> getColumnConfig() {
         return config;
     }
 
     @Override
-    public Optional<? extends Field<?>> getEditor() {
-        return Optional.of(cheatsheet.getField());
+    public Optional<? extends IsField<?>> getEditor() {
+        return Optional.of(cheatsheet);
     }
 }

@@ -4,12 +4,17 @@ import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
+import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.Collections.singletonList;
 
 /**
  * Time:
@@ -34,12 +39,17 @@ public class TimeColumn implements IncidentColumn {
     }
 
     @Override
+    public List<ColumnModel> getColumnsToQuery() {
+        return singletonList(new ColumnModel("date"));
+    }
+
+    @Override
     public ColumnConfig<Integer, ?> getColumnConfig() {
         return config;
     }
 
     @Override
-    public Optional<DateField> getEditor() {
+    public Optional<? extends IsField<?>> getEditor() {
         return Optional.of(field);
     }
 }

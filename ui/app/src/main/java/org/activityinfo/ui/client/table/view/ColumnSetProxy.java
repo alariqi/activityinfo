@@ -18,7 +18,6 @@ import java.util.List;
 public class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer>> {
 
 
-
     private class PendingRequest {
         PagingLoadConfig config;
         AsyncCallback<PagingLoadResult<Integer>> callback;
@@ -69,7 +68,6 @@ public class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<
         public final void setValue(Integer object, T value) {
         }
     }
-
 
     private ColumnSet columnSet;
     private PendingRequest pendingRequest;
@@ -124,6 +122,26 @@ public class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<
 
     public ValueProvider<Integer, String> getStringProvider(String id) {
         return getValueProvider(id, new StringRenderer(id));
+    }
+
+    public ValueProvider<Integer, LabeledReference> getLabeledRefProvider(String id, String label) {
+        ValueProvider<Integer, String> recordId = getStringProvider(id);
+        ValueProvider<Integer, String> labelProvider = getStringProvider(label);
+        return new ValueProvider<Integer, LabeledReference>() {
+            @Override
+            public LabeledReference getValue(Integer rowIndex) {
+                return new LabeledReference(recordId.getValue(rowIndex), labelProvider.getValue(rowIndex));
+            }
+
+            @Override
+            public void setValue(Integer object, LabeledReference value) {
+            }
+
+            @Override
+            public String getPath() {
+                return id;
+            }
+        };
     }
 
     public <T> ValueProvider<Integer, T> getValueProvider(SimpleColumnFormat<T> format) {
