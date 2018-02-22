@@ -1,5 +1,6 @@
 package chdc.frontend.client.table;
 
+import chdc.frontend.client.theme.ChdcTheme;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.sencha.gxt.widget.core.client.form.DateField;
@@ -34,6 +35,7 @@ public class TimeColumn implements IncidentColumn {
         config.setHeader(I18N.CONSTANTS.time());
         config.setWidth(200);
         config.setCell(new DateCell(FORMAT));
+        config.setColumnTextClassName(ChdcTheme.STYLES.datetimeCell());
 
         field = new DateField(new DateTimePropertyEditor(FORMAT));
     }

@@ -129,4 +129,7 @@ public interface ChdcStyles extends CssResource {
 
     @ClassName("incident-title")
     String incidentTitle();
+
+    @ClassName("datetime-cell")
+    String datetimeCell();
 }
