@@ -78,9 +78,9 @@ public class LookupKeySetTest {
 
         // Keys need to be topologically sorted,
         // with parent keys preceding child keys in the list
-        assertThat(lookupKeySet.getKey(0).getKeyLabel(), equalTo("Province Name"));
-        assertThat(lookupKeySet.getKey(1).getKeyLabel(), equalTo("Territory Name"));
-        assertThat(lookupKeySet.getKey(2).getKeyLabel(), equalTo("Village Name"));
+        assertThat(lookupKeySet.getKey(0).getKeyLabel(), equalTo("Province"));
+        assertThat(lookupKeySet.getKey(1).getKeyLabel(), equalTo("Territory"));
+        assertThat(lookupKeySet.getKey(2).getKeyLabel(), equalTo("Village"));
 
         SymbolExpr villageName = Exprs.symbol(villageForm.getNameField().getId());
         SymbolExpr villageTerritory = new SymbolExpr(villageForm.getAdminFieldId());
@@ -134,9 +134,9 @@ public class LookupKeySetTest {
 
         assertThat(lookupKeySet.getLookupKeys(), hasSize(3));
 
-        assertThat(lookupKeySet.getKey(0).getKeyLabel(), equalTo("Province Name"));
-        assertThat(lookupKeySet.getKey(1).getKeyLabel(), equalTo("Territory Name"));
-        assertThat(lookupKeySet.getKey(2).getKeyLabel(), equalTo("Zone de Sante Name"));
+        assertThat(lookupKeySet.getKey(0).getKeyLabel(), equalTo("Province"));
+        assertThat(lookupKeySet.getKey(1).getKeyLabel(), equalTo("Territory"));
+        assertThat(lookupKeySet.getKey(2).getKeyLabel(), equalTo("Zone de Sante"));
 
         // We need the relationships between the forms
         ResourceId provinceId = catalog.getProvince().getFormId();

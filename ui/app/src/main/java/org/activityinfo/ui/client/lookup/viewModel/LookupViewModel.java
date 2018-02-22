@@ -97,6 +97,9 @@ public class LookupViewModel {
          * Find the selected ref
          */
         this.selectedRef = modelState.join(state -> {
+
+            LOGGER.info("Recomputing selectedRef set...");
+
             switch (state) {
                 case INITIAL:
                     return model.transform(m -> m.getInitialSelection());
@@ -150,6 +153,7 @@ public class LookupViewModel {
 
     public Observable<Optional<RecordRef>> getSelectedRecord() {
         return selectedRef.transform(set -> {
+            LOGGER.info("Recomputing selected record...");
             if(set.isEmpty()) {
                 return Optional.absent();
             } else {

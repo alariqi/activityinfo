@@ -61,15 +61,15 @@ public class LookupViewModelTest {
         LookupViewModel viewModel = new LookupViewModel(setup.getFormStore(), formTree, nfiForm.getVillageField());
 
         LookupKeyViewModel province = viewModel.getLookupKeys().get(0);
-        assertThat(province.getKeyLabel(), equalTo("Province Name"));
+        assertThat(province.getKeyLabel(), equalTo("Province"));
 
         // The second level should now reflect these choices
         LookupKeyViewModel territory = viewModel.getLookupKeys().get(1);
-        assertThat(territory.getKeyLabel(), equalTo("Territory Name"));
+        assertThat(territory.getKeyLabel(), equalTo("Territory"));
 
         // Finally the third level is where we choose the village
         LookupKeyViewModel village = viewModel.getLookupKeys().get(2);
-        assertThat(village.getKeyLabel(), equalTo("Village Name"));
+        assertThat(village.getKeyLabel(), equalTo("Village"));
 
         // Connect to the lists
         Connection<List<String>> provinceList = setup.connect(province.getChoices());
@@ -255,16 +255,16 @@ public class LookupViewModelTest {
         assertThat(viewModel.getLookupKeys(), hasSize(3));
 
         LookupKeyViewModel province = viewModel.getLookupKeys().get(0);
-        assertThat(province.getKeyLabel(), equalTo("Province Name"));
+        assertThat(province.getKeyLabel(), equalTo("Province"));
 
         // The second level should now reflect these choices
         LookupKeyViewModel territory = viewModel.getLookupKeys().get(1);
-        assertThat(territory.getKeyLabel(), equalTo("Territory Name"));
+        assertThat(territory.getKeyLabel(), equalTo("Territory"));
 
         // We also have a third level -- Health Zone or "Zone de Sante" which
         // is related to province, but NOT territory.
         LookupKeyViewModel healthZone = viewModel.getLookupKeys().get(2);
-        assertThat(healthZone.getKeyLabel(), equalTo("Zone de Sante Name"));
+        assertThat(healthZone.getKeyLabel(), equalTo("Zone de Sante"));
 
         // Connect to the lists
         Connection<List<String>> provinceList = setup.connect(province.getChoices());
