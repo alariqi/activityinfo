@@ -32,6 +32,6 @@
     color: white;
 }
 
-.topnav a:hover, .topnav a:focus {
+.topnav a:hover, .topnav a:focus, .topnav button, .topnav button:hover {
   color: white;
 }

@@ -18,18 +18,17 @@ import com.sencha.gxt.widget.core.client.form.IsField;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.lookup.viewModel.LookupKeyViewModel;
 import org.activityinfo.ui.client.lookup.viewModel.LookupViewModel;
-import org.activityinfo.ui.client.table.view.LabeledReference;
+import org.activityinfo.ui.client.table.view.LabeledRecordRef;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class CheatsheetField implements IsField<LabeledReference> {
+public class CheatsheetField implements IsField<LabeledRecordRef> {
 
     private static final Logger LOGGER = Logger.getLogger(CheatsheetField.class.getName());
 
@@ -40,8 +39,8 @@ public class CheatsheetField implements IsField<LabeledReference> {
     private final CheatsheetPanel cheatsheet;
     private final SlideoutPanel slideOutPanel;
 
-    private ListStore<LabeledReference> store;
-    private ComboBox<LabeledReference> comboBox;
+    private ListStore<LabeledRecordRef> store;
+    private ComboBox<LabeledRecordRef> comboBox;
 
     public CheatsheetField(FormSource formSource, String fieldLabel, LookupKeySet lookupKeySet) {
 
@@ -55,10 +54,10 @@ public class CheatsheetField implements IsField<LabeledReference> {
         cheatsheet.getLeafColumn().addSelectionHandler(new SelectionHandler<String>() {
             @Override
             public void onSelection(SelectionEvent<String> event) {
-                viewModel.getSelectedLabeledRecord().once().then(new Function<Optional<LabeledReference>, Void>() {
+                viewModel.getSelectedLabeledRecord().once().then(new Function<Optional<LabeledRecordRef>, Void>() {
                     @Nullable
                     @Override
-                    public Void apply(@Nullable Optional<LabeledReference> input) {
+                    public Void apply(@Nullable Optional<LabeledRecordRef> input) {
                         if(input.isPresent()) {
 
                             LOGGER.info("Updating combo box based on cheatsheet value: " + input.get());
@@ -82,12 +81,11 @@ public class CheatsheetField implements IsField<LabeledReference> {
         comboBox.addTriggerClickHandler(new TriggerClickEvent.TriggerClickHandler() {
             @Override
             public void onTriggerClick(TriggerClickEvent event) {
-                LabeledReference ref = comboBox.getValue();
+                LabeledRecordRef ref = comboBox.getValue();
                 if(ref == null) {
                     viewModel.setInitialSelection(Collections.emptySet());
                 } else {
-                    viewModel.setInitialSelection(Collections.singleton(
-                            new RecordRef(referencedFormId, ResourceId.valueOf(ref.getRecordId()))));
+                    viewModel.setInitialSelection(Collections.singleton(ref.getRecordRef()));
                 }
                 slideOutPanel.show();
             }
@@ -130,7 +128,7 @@ public class CheatsheetField implements IsField<LabeledReference> {
     }
 
     @Override
-    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<LabeledReference> handler) {
+    public HandlerRegistration addValueChangeHandler(ValueChangeHandler<LabeledRecordRef> handler) {
         return comboBox.addValueChangeHandler(handler);
     }
 
@@ -140,12 +138,12 @@ public class CheatsheetField implements IsField<LabeledReference> {
     }
 
     @Override
-    public void setValue(LabeledReference value) {
+    public void setValue(LabeledRecordRef value) {
         comboBox.setValue(value);
     }
 
     @Override
-    public LabeledReference getValue() {
+    public LabeledRecordRef getValue() {
         return comboBox.getValue();
     }
 

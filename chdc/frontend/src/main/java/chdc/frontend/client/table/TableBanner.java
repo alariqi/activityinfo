@@ -1,7 +1,9 @@
 package chdc.frontend.client.table;
 
+import chdc.frontend.client.theme.IconButton;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 
@@ -10,12 +12,20 @@ import com.google.gwt.user.client.ui.HTMLPanel;
  * buttons for the adding and removing incidents from the table.
  */
 public class TableBanner extends Composite {
-    interface TopBarUiBinder extends UiBinder<HTMLPanel, TableBanner> {
+
+    interface BannerUiBinder extends UiBinder<HTMLPanel, TableBanner> {
     }
 
-    private static TopBarUiBinder ourUiBinder = GWT.create(TopBarUiBinder.class);
+    private static BannerUiBinder ourUiBinder = GWT.create(BannerUiBinder.class);
+
+    @UiField
+    IconButton saveButton;
 
     public TableBanner() {
         initWidget(ourUiBinder.createAndBindUi(this));
+    }
+
+    public IconButton getSaveButton() {
+        return saveButton;
     }
 }

@@ -9,13 +9,13 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.ListStore;
-import org.activityinfo.ui.client.table.view.LabeledReference;
+import org.activityinfo.ui.client.table.view.LabeledRecordRef;
 
 /**
  * Variant of a ComboBox cell that has a trigger which opens a cheatsheet popup.
  *
  */
-public class CheatsheetComboCell extends ComboBoxCell<LabeledReference> {
+public class CheatsheetComboCell extends ComboBoxCell<LabeledRecordRef> {
 
 
     public interface HelperTriggerResources extends Css3TriggerFieldResources {
@@ -40,7 +40,7 @@ public class CheatsheetComboCell extends ComboBoxCell<LabeledReference> {
         }
     }
 
-    public CheatsheetComboCell(ListStore<LabeledReference> store) {
+    public CheatsheetComboCell(ListStore<LabeledRecordRef> store) {
         super(store, key -> key.getLabel(), new HelperTriggerAppearance());
         setForceSelection(true);
         setUseQueryCache(false);
@@ -54,7 +54,7 @@ public class CheatsheetComboCell extends ComboBoxCell<LabeledReference> {
 //    }
 
     @Override
-    public void finishEditing(Element parent, LabeledReference value, Object key, ValueUpdater<LabeledReference> valueUpdater) {
+    public void finishEditing(Element parent, LabeledRecordRef value, Object key, ValueUpdater<LabeledRecordRef> valueUpdater) {
         super.finishEditing(parent, value, key, valueUpdater);
     }
 }

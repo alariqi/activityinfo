@@ -8,7 +8,6 @@ public interface ChdcResources extends ClientBundle {
             "body.gss",
             "headings.gss",
             "button.gss",
-            "actionbar.gss",
             "banner.gss",
             "icons.gss",
             "panel.gss",

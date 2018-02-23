@@ -124,17 +124,22 @@ public class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<
         return getValueProvider(id, new StringRenderer(id));
     }
 
-    public ValueProvider<Integer, LabeledReference> getLabeledRefProvider(String id, String label) {
-        ValueProvider<Integer, String> recordId = getStringProvider(id);
+    public ValueProvider<Integer, LabeledRecordRef> getLabeledRefProvider(ResourceId formId, String id, String label) {
+        ValueProvider<Integer, String> idProvider = getStringProvider(id);
         ValueProvider<Integer, String> labelProvider = getStringProvider(label);
-        return new ValueProvider<Integer, LabeledReference>() {
+        return new ValueProvider<Integer, LabeledRecordRef>() {
             @Override
-            public LabeledReference getValue(Integer rowIndex) {
-                return new LabeledReference(recordId.getValue(rowIndex), labelProvider.getValue(rowIndex));
+            public LabeledRecordRef getValue(Integer rowIndex) {
+                String id = idProvider.getValue(rowIndex);
+                if(id == null) {
+                    return null;
+                } else {
+                    return new LabeledRecordRef(formId, id, labelProvider.getValue(rowIndex));
+                }
             }
 
             @Override
-            public void setValue(Integer object, LabeledReference value) {
+            public void setValue(Integer object, LabeledRecordRef value) {
             }
 
             @Override

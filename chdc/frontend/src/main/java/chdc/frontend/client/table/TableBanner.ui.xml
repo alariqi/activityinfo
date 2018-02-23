@@ -6,13 +6,18 @@
     <!-- Include our application styles -->
     <ui:with field='res' type='chdc.frontend.client.theme.ChdcResources'/>
 
+    <!-- Translated labels -->
+    <ui:with field='i18n' type='org.activityinfo.i18n.shared.UiConstants'/>
+
     <g:HTMLPanel styleName="{res.style.banner}">
         <h1>
             <a href="#dashboard" rel="home"><span>CHDC</span> Data Entry</a>
         </h1>
         <div class="{res.style.topnav}">
+            <chdc:IconButton ui:field="addButton" icon="PLUS" iconStyle="SMALL_DIMMED" label="{i18n.add}"/>
+            <chdc:IconButton ui:field="saveButton" icon="SAVE" iconStyle="SMALL_DIMMED" label="{i18n.save}"/>
             <chdc:IconLinkButton icon="BAR_CHART" label="Analysis" href="#"/>
-            <chdc:IconLinkButton icon="LOGOUT" label="Logout" href="#"/>
+            <chdc:IconLinkButton icon="LOGOUT" label="{i18n.logout}" href="#"/>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder>

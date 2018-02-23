@@ -29,8 +29,7 @@ public class IconButton extends CellButtonBase<String> {
 
         @Override
         public void render(ButtonCell<String> cell, Cell.Context context, String value, SafeHtmlBuilder sb) {
-            sb.appendHtmlConstant("<button class=\"" + STYLES.button() + " " + STYLES.buttonIcon() + " " +
-                    (style == IconStyle.SMALL_DIMMED ? STYLES.buttonDimmed() : "") + "\">");
+            sb.appendHtmlConstant("<button class=\"" + STYLES.button() + " " + STYLES.buttonIcon() + "\">");
             sb.append(icon.svg(style));
             sb.appendHtmlConstant("<span>");
             sb.appendEscaped(value);
