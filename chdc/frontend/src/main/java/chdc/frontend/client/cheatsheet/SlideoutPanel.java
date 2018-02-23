@@ -4,6 +4,7 @@ import chdc.frontend.client.theme.ChdcTheme;
 import chdc.frontend.client.theme.CloseButton;
 import chdc.frontend.client.theme.CssLayoutContainer;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
@@ -27,6 +28,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
  * Slide out panel.
  */
 public class SlideoutPanel implements HasCloseHandlers<SlideoutPanel> {
+
 
 
     interface SlideoutPanelUiBinder extends UiBinder<HTMLPanel, SlideoutPanel> {
@@ -115,5 +117,10 @@ public class SlideoutPanel implements HasCloseHandlers<SlideoutPanel> {
     @Override
     public void fireEvent(GwtEvent<?> event) {
         eventBus.fireEvent(event);
+    }
+
+
+    public boolean isOrHasChild(Element target) {
+        return panel.getElement().isOrHasChild(target);
     }
 }

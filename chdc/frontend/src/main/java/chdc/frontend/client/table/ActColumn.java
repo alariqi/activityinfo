@@ -1,6 +1,6 @@
 package chdc.frontend.client.table;
 
-import chdc.frontend.client.cheatsheet.CheatsheetField;
+import chdc.frontend.client.cheatsheet.CheatsheetComboBox;
 import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import org.activityinfo.model.formTree.LookupKeySet;
@@ -19,7 +19,7 @@ public class ActColumn implements IncidentColumn {
     private static final ResourceId REF_FORM_ID = ResourceId.valueOf("act");
 
     private final ColumnConfig<Integer, LabeledRecordRef> config;
-    private final CheatsheetField cheatsheet;
+    private final CheatsheetComboBox cheatsheet;
 
     public ActColumn(FormSource formSource, ColumnSetProxy proxy) {
 
@@ -34,7 +34,7 @@ public class ActColumn implements IncidentColumn {
                 .add("act", "name")
                 .build();
 
-        cheatsheet = new CheatsheetField(formSource, "Act", lookupKeySet);
+        cheatsheet = new CheatsheetComboBox(formSource, "Act", lookupKeySet);
     }
 
     @Override

@@ -216,6 +216,7 @@ public class IncidentGrid implements IsWidget {
             @Override
             public void onSuccess(Void result) {
                 gridStore.commitChanges();
+                newRecordMap.clear();
             }
         });
     }
@@ -236,4 +237,7 @@ public class IncidentGrid implements IsWidget {
         throw new UnsupportedOperationException("Unsupported type: " + value);
     }
 
+    public boolean hasUnsavedChanged() {
+        return !newRecordMap.isEmpty() || !gridStore.getModifiedRecords().isEmpty();
+    }
 }

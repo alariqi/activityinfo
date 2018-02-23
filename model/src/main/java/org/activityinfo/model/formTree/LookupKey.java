@@ -164,7 +164,11 @@ public class LookupKey {
         keys.put(this, join(baseField, fieldId));
 
         if(!isRoot()) {
-            parentLevel.collectKeys(join(baseField, parentFieldId), keys);
+            if(parentFieldId == null) {
+                parentLevel.collectKeys(baseField, keys);
+            } else {
+                parentLevel.collectKeys(join(baseField, parentFieldId), keys);
+            }
         }
     }
 

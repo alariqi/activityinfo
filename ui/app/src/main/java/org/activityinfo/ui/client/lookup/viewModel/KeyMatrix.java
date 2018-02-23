@@ -32,11 +32,11 @@ import java.util.logging.Logger;
  * Where k1 = the village name, k2 = the territory name, and k3 = province name.
  *
  */
-class KeyMatrix {
+public class KeyMatrix {
 
     private static final Logger LOGGER = Logger.getLogger(KeyMatrix.class.getName());
 
-    private static final String ID_COLUMN = "id";
+    static final String ID_COLUMN = "id";
 
     private final ResourceId formId;
     private final LookupKeySet lookupKeySet;
@@ -71,10 +71,9 @@ class KeyMatrix {
     /**
      * Maps a {@link LookupKey} to its column identifier in {@link #keyColumns}
      */
-    private String keyColumn(LookupKey lookupKey) {
+    static String keyColumn(LookupKey lookupKey) {
         return "k" + lookupKey.getKeyIndex();
     }
-
 
     /**
      * Returns true if this matrix includes the given {@code lookupKey}
@@ -199,6 +198,10 @@ class KeyMatrix {
                 return Optional.of(new RecordRef(formId, ResourceId.valueOf(column.getString(rowIndex))));
             }
         });
+    }
+
+    public Observable<KeyMatrixColumnSet> getKeyMatrixColumnSet() {
+        return keyColumns.transform(kc -> new KeyMatrixColumnSet(formId, kc));
     }
 
     private List<String> sorted(Set<String> set) {

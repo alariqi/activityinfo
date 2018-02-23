@@ -84,13 +84,13 @@ task compileApp(type: JavaExec) {
 
     args '-extra', "${buildDir}/gwt-extra"
 
-    args '-saveSource'
+    args '-optimize', '9'
     args '-gen', "${buildDir}/gwt-gen"
 
     if("true".equals(project.property("gwtSoyc"))) {
         args '-compileReport'
     }
-    args 'chdc.frontend.Chdc'
+    args 'chdc.frontend.ChdcProd'
 }
 
 compileApp.onlyIf { !project.hasProperty('skipGwt') }

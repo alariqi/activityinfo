@@ -1,6 +1,6 @@
 package chdc.frontend.client.table;
 
-import chdc.frontend.client.cheatsheet.CheatsheetField;
+import chdc.frontend.client.cheatsheet.CheatsheetComboBox;
 import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import org.activityinfo.model.formTree.LookupKeySet;
@@ -19,7 +19,7 @@ public class MeansColumn implements IncidentColumn {
     private static final ResourceId REF_FORM_ID = ResourceId.valueOf("means");
 
     private final ColumnConfig<Integer, LabeledRecordRef> config;
-    private final CheatsheetField cheatsheet;
+    private final CheatsheetComboBox cheatsheet;
 
     public MeansColumn(FormSource formSource, ColumnSetProxy proxy) {
         config = new ColumnConfig<>(proxy.getLabeledRefProvider(REF_FORM_ID, "means", "means.name"));
@@ -32,7 +32,7 @@ public class MeansColumn implements IncidentColumn {
                 .add("means", "name")
                 .build();
 
-        cheatsheet = new CheatsheetField(formSource, "Means", lookupKeySet);
+        cheatsheet = new CheatsheetComboBox(formSource, "Means", lookupKeySet);
     }
 
     @Override

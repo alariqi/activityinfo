@@ -1,8 +1,10 @@
 package chdc.frontend.client.table;
 
 
+import chdc.frontend.client.cheatsheet.CheatsheetComboBox;
 import com.sencha.gxt.widget.core.client.form.IsField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.store.query.shared.FormSource;
@@ -26,6 +28,8 @@ public abstract class ActorColumn implements IncidentColumn {
 
     private final ColumnConfig<Integer, LabeledRecordRef> config;
 
+    private final CheatsheetComboBox cheatsheet;
+
     public ActorColumn(FormSource formSource, ColumnSetProxy proxy, String columnHeader, String fieldName) {
 
         idColumn = fieldName;
@@ -34,16 +38,16 @@ public abstract class ActorColumn implements IncidentColumn {
         config = new ColumnConfig<>(proxy.getLabeledRefProvider(ACTOR_FORM_ID, idColumn, nameColumn));
         config.setHeader(columnHeader);
         config.setWidth(200);
-//
-//        LookupKeySet lookupKeySet = LookupKeySet.builder()
-//                .add("actor_category", "state")
-//                .add("actor_category", "state_level")
-//                .add("actor_category", "civilian")
-//                .add("actor_category", "armed")
-//                .add("actor", "category", "name")
-//                .build();
-//
-//        cheatsheet = new CheatsheetField(formSource, "Actpr", lookupKeySet);
+
+        LookupKeySet lookupKeySet = LookupKeySet.builder()
+                .add("actor_category", "state")
+                .add("actor_category", "state_level")
+                .add("actor_category", "civilian")
+                .add("actor_category", "armed")
+                .add("actor", "category", "name")
+                .build();
+
+        cheatsheet = new CheatsheetComboBox(formSource, columnHeader, lookupKeySet);
     }
 
     @Override
@@ -58,6 +62,6 @@ public abstract class ActorColumn implements IncidentColumn {
 
     @Override
     public Optional<? extends IsField<?>> getEditor() {
-        return Optional.empty();
+        return Optional.of(cheatsheet);
     }
 }

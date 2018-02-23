@@ -37,4 +37,7 @@ public class TableFrame implements IsWidget {
         return container;
     }
 
+    public boolean hasUnsavedChanges() {
+        return grid.hasUnsavedChanged();
+    }
 }

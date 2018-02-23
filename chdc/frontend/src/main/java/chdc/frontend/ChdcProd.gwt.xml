@@ -1,0 +1,26 @@
+<module rename-to="App">
+
+    <inherits name='chdc.frontend.Chdc' />
+
+    <!-- Limit to English -->
+    <set-property name="locale" value="en"/>
+
+    <!-- Use "pretty" CSS names rather than space-saving obfuscated names -->
+    <set-configuration-property name="CssResource.style" value="pretty"/>
+
+    <!-- Specify the paths for translatable code -->
+    <source path='client'/>
+    <source path='shared'/>
+
+    <!-- Limit to English for the time being -->
+    <set-property name="locale" value="en"/>
+
+    <!-- Collapse some values for fewer permutations -->
+    <collapse-property name="gxt.device" values="*" />
+    <collapse-property name="user.agent.os" values="*"/>
+    <collapse-property name="gxt.user.agent" values="*"/>
+
+    <!-- Limit supported browsers -->
+    <set-property name="gxt.user.agent" value="safari5,chrome,ie11,gecko1_9"/>
+
+</module>

@@ -80,7 +80,7 @@ task devMode(type: JavaExec) {
     args '-startupUrl', 'App/demo.html'
     args '-war', "$buildDir/devMode"
 
-    args 'chdc.frontend.Chdc'
+    args 'chdc.frontend.ChdcDev'
 }
 
 task deploy {

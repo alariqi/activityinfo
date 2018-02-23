@@ -109,10 +109,18 @@ public class LookupViewModel {
         });
     }
 
+
     public List<LookupKeyViewModel> getLookupKeys() {
         return levels;
     }
 
+    public KeyMatrixSet getKeyMatrixSet() {
+        return keyMatrixSet;
+    }
+
+    public LookupKeySet getLookupKeySet() {
+        return lookupKeySet;
+    }
 
     public LookupKeyViewModel getLeafLookupKey() {
         return levels.get(levels.size() - 1);
