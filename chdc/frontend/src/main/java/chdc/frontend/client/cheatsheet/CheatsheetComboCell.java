@@ -247,6 +247,9 @@ public class CheatsheetComboCell extends ComboBoxCell<LabeledRecordRef> {
 
         // Update the text displayed in the combobox
         getInputElement(lastParent).setValue(event.getSelectedItem());
+
+        // Close the cheatsheet
+        collapseCheatsheet(lastContext, lastParent);
     }
 
 
