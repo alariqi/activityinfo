@@ -12,6 +12,7 @@
     text-align:center;
     text-transform:uppercase;
     text-decoration: none;
+    cursor: pointer;
 }
 .button:focus,.button:hover {
     background-color:#486a9d;
@@ -104,3 +105,4 @@
 .button--dimmed:focus,.button--dimmed:hover{
     opacity:1
 }
+

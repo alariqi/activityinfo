@@ -20,6 +20,8 @@ public class TableBanner extends Composite {
 
     @UiField
     IconButton saveButton;
+    @UiField
+    IconButton addButton;
 
     public TableBanner() {
         initWidget(ourUiBinder.createAndBindUi(this));
@@ -27,5 +29,9 @@ public class TableBanner extends Composite {
 
     public IconButton getSaveButton() {
         return saveButton;
+    }
+
+    public IconButton getAddButton() {
+        return addButton;
     }
 }

@@ -31,9 +31,7 @@ import org.activityinfo.ui.client.table.view.ColumnSetProxy;
 import org.activityinfo.ui.client.table.view.LabeledRecordRef;
 import org.activityinfo.ui.client.table.view.LiveRecordGridView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -54,6 +52,12 @@ public class IncidentGrid implements IsWidget {
     private Subscription subscription;
     private final Observable<ColumnSet> columnSet;
     private final List<IncidentColumn> columns;
+
+    /**
+     * Map from (negative) row index to the new record id.
+     *
+     */
+    private Map<Integer, ResourceId> newRecordMap = new HashMap<>();
 
     public IncidentGrid(FormStore formStore, TableBanner banner) {
 
@@ -122,7 +126,9 @@ public class IncidentGrid implements IsWidget {
 
         // Handle toolbar events
         banner.getSaveButton().addSelectHandler(this::onSave);
+        banner.getAddButton().addSelectHandler(this::onAdd);
     }
+
 
 
     @Override
@@ -143,7 +149,28 @@ public class IncidentGrid implements IsWidget {
     }
 
     /**
-     * Responds to the user's save command.
+     * Handles the user's selection of the add button
+     */
+    private void onAdd(SelectEvent selectEvent) {
+
+        // Our records are keyed by an integer row index so that we
+        // can efficiently lookup values in the column-major columnset matrix.
+
+        // To add new records, we'll give them negative indexes to distinguish
+        // between records in our ColumnSet matrix and unsaved new records.
+
+        int newIndex = -(newRecordMap.size() + 1);
+
+        newRecordMap.put(newIndex, ResourceId.generateId());
+
+        // Insert the new row at the top of the grid
+        gridStore.add(0, newIndex);
+
+    }
+
+
+    /**
+     * Handles the user's selection of the add button
      */
     private void onSave(SelectEvent event) {
 
@@ -160,13 +187,19 @@ public class IncidentGrid implements IsWidget {
 
         for (Store<Integer>.Record record : gridStore.getModifiedRecords()) {
             int rowIndex = record.getModel();
-            String recordId = recordIds.getString(rowIndex);
-
+            String recordId;
+            if(rowIndex < 0) {
+                // New record
+                recordId = newRecordMap.get(rowIndex).asString();
+            } else {
+                // Existing record
+                recordId = recordIds.getString(rowIndex);
+            }
             RecordUpdate update = tx.update(FORM_ID, ResourceId.valueOf(recordId));
 
             for (Store.Change<Integer, ?> change : record.getChanges()) {
                 String fieldId = (String) change.getChangeTag();
-                if(change.getValue() == null) {
+                if (change.getValue() == null) {
                     update.setFieldValue(fieldId, Json.createNull());
                 } else {
                     update.setFieldValue(fieldId, toFieldValue(change.getValue()).toJson());
