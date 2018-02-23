@@ -53,7 +53,6 @@ public class CheatsheetColumn implements IsWidget {
         }
     }
 
-
     private void updateView(Observable<Optional<String>> selectedKey) {
         if(selectedKey.isLoaded()) {
             Optional<String> selection = selectedKey.get();
@@ -78,6 +77,10 @@ public class CheatsheetColumn implements IsWidget {
     }
 
     public HandlerRegistration addSelectionHandler(SelectionHandler<String> handler) {
-        return listView.getSelectionModel().addSelectionHandler(handler);
+        return listView.getSelectionModel().addSelectionHandler(event -> {
+            if(!updatingView) {
+                handler.onSelection(event);
+            }
+        });
     }
 }
