@@ -37,9 +37,9 @@ public class LockedPeriod implements Serializable, HardDeleteable {
     private String name;
     private int id;
     private Database database;
-    private Database userDatabase;
     private Project project;
     private Activity activity;
+    private Folder folder;
     private boolean enabled;
 
     public LockedPeriod() {
@@ -113,18 +113,6 @@ public class LockedPeriod implements Serializable, HardDeleteable {
         this.database = database;
     }
 
-    @Deprecated
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "UserDatabaseId", nullable = true)
-    public Database getUserDatabase() {
-        return userDatabase;
-    }
-
-    @Deprecated
-    public void setUserDatabase(Database userDatabase) {
-        this.userDatabase = userDatabase;
-    }
-
     public void setProject(Project project) {
         this.project = project;
     }
@@ -145,6 +133,16 @@ public class LockedPeriod implements Serializable, HardDeleteable {
         return activity;
     }
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "FolderId", nullable = true)
+    public Folder getFolder() {
+        return folder;
+    }
+
+    public void setFolder(Folder folder) {
+        this.folder = folder;
+    }
+
     public void setEnabled(boolean isEnabled) {
         this.enabled = isEnabled;
     }
@@ -160,6 +158,8 @@ public class LockedPeriod implements Serializable, HardDeleteable {
     public ResourceId getResourceId() {
         if(activity != null) {
             return CuidAdapter.activityFormClass(activity.getId());
+        } else if(folder != null) {
+            return CuidAdapter.folderId(folder.getId());
         } else {
             return CuidAdapter.databaseId(database.getId());
         }

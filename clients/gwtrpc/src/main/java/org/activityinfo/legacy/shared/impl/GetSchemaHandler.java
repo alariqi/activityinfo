@@ -433,6 +433,7 @@ public class GetSchemaHandler implements CommandHandlerAsync<GetSchema, SchemaDT
                     "lockedPeriodId",
                     "databaseId",
                     "activityId",
+                    "folderId",
                     "projectId")
                     .from("lockedperiod")
                     .where("databaseId").in(databaseMap.keySet())
@@ -463,6 +464,13 @@ public class GetSchemaHandler implements CommandHandlerAsync<GetSchema, SchemaDT
                                     if (project != null) {
                                         project.getLockedPeriods().add(lockedPeriod);
                                         lockedPeriod.setParent(project);
+                                    }
+                                } else if(!row.isNull("folderId")) {
+                                    Integer folderId = row.getInt("folderId");
+                                    FolderDTO folder = folders.get(folderId);
+                                    if(folder != null) {
+                                        folder.getLockedPeriods().add(lockedPeriod);
+                                        lockedPeriod.setParent(folder);
                                     }
                                 } else {
                                     Integer databaseId = row.getInt("databaseId");
