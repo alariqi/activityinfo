@@ -1,0 +1,112 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def TAB_STRIP_SPACER_BACKGROUND value('theme.tabs.lastStopColor');
+@def BORDER_COLOR value('theme.tabs.borderColor');
+@def PLAIN_TAB_BAR_BORDER_TOP value('theme.tabs.plainTabBarBorderTop', 'px');
+@def PLAIN_TAB_STRIP_SPACER_HEIGHT value('theme.tabs.plainTabStripSpacerHeight', 'px');
+@def PLAIN_TAB_STRIP_SPACER_BORDER value('theme.tabs.plainTabStripSpacerBorder', 'px');
+@def PLAIN_HEADING_TEXT_COLOR value('theme.tabs.plainHeadingText.color');
+@def PLAIN_HEADING_TEXT_SIZE value('theme.tabs.plainHeadingText.size');
+@def PLAIN_HEADING_TEXT_WEIGHT value('theme.tabs.plainHeadingText.weight');
+@def PLAIN_HEADING_TEXT_FONT value('theme.tabs.plainHeadingText.family');
+@def PLAIN_ACTIVE_HEADING_TEXT_COLOR value('theme.tabs.plainActiveHeadingText.color');
+@def PLAIN_ACTIVE_HEADING_TEXT_SIZE value('theme.tabs.plainActiveHeadingText.size');
+@def PLAIN_ACTIVE_HEADING_TEXT_WEIGHT value('theme.tabs.plainActiveHeadingText.weight');
+@def PLAIN_ACTIVE_HEADING_TEXT_FONT value('theme.tabs.plainActiveHeadingText.family');
+@def PLAIN_HOVER_HEADING_TEXT_COLOR value('theme.tabs.plainHoverHeadingText.color');
+@def PLAIN_HOVER_HEADING_TEXT_SIZE value('theme.tabs.plainHoverHeadingText.size');
+@def PLAIN_HOVER_HEADING_TEXT_WEIGHT value('theme.tabs.plainHoverHeadingText.weight');
+@def PLAIN_HOVER_HEADING_TEXT_FONT value('theme.tabs.plainHoverHeadingText.family');
+
+.tabBar {
+  background: transparent;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+  border-top: PLAIN_TAB_BAR_BORDER_TOP;
+}
+
+.x-tabScrollerLeftHidden + .tabStripWrap {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.tabStripWrap {
+  background: transparent;
+  height: auto;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.tabBar .tabStripSpacer {
+  border: PLAIN_TAB_STRIP_SPACER_BORDER solid BORDER_COLOR;
+  height: PLAIN_TAB_STRIP_SPACER_HEIGHT;
+  font-size: 1px;
+  line-height: 1px;
+  background-color: TAB_STRIP_SPACER_BACKGROUND;
+  border-bottom: 0 none;
+}
+
+.tabStripActive span.tabStripText {
+  font: normal PLAIN_ACTIVE_HEADING_TEXT_WEIGHT PLAIN_ACTIVE_HEADING_TEXT_SIZE PLAIN_ACTIVE_HEADING_TEXT_FONT;
+  color: PLAIN_ACTIVE_HEADING_TEXT_COLOR;
+}
+
+.tabItem {
+  color: PLAIN_HEADING_TEXT_COLOR;
+}
+
+.tabStripText {
+  font: normal PLAIN_HEADING_TEXT_WEIGHT PLAIN_HEADING_TEXT_SIZE PLAIN_HEADING_TEXT_FONT;
+}
+
+.tabStrip .tabStripClosable a.tabStripClose {
+  gwt-sprite: "plainTabClose";
+}
+
+.tabStrip .tabStripClosable a.tabStripClose:hover {
+  gwt-sprite: "plainTabCloseOver";
+}
+
+.tabScrollerLeft {
+  background-color: transparent;
+}
+
+.tabScrollerRight {
+  background-color: transparent;
+}

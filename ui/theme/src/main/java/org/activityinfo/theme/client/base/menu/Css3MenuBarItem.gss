@@ -1,0 +1,75 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def ACTIVE_ITEM_BACKGROUND_COLOR value('theme.menu.bar.activeItemBackgroundColor');
+@def ACTIVE_ITEM_GRADIENT value('theme.menu.bar.activeItemGradient');
+@def ACTIVE_ITEM_TEXT_COLOR value('theme.menu.bar.activeItemText.color');
+@def HOVER_ITEM_BACKGROUND_COLOR value('theme.menu.bar.hoverItemBackgroundColor');
+@def HOVER_ITEM_GRADIENT value('theme.menu.bar.hoverItemGradient');
+@def HOVER_ITEM_TEXT_COLOR value('theme.menu.bar.hoverItemText.color');
+@def ITEM_PADDING value('theme.menu.bar.itemPadding.toString');
+@def TEXT_COLOR value('theme.menu.bar.itemText.color');
+@def TEXT_FAMILY value('theme.menu.bar.itemText.family');
+@def TEXT_LINE_HEIGHT value('theme.menu.bar.itemLineHeight');
+@def TEXT_SIZE value('theme.menu.bar.itemText.size');
+@def TEXT_WEIGHT value('theme.menu.bar.itemText.weight');
+
+.menuBarItem {
+  font-size: TEXT_SIZE;
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  line-height: TEXT_LINE_HEIGHT;
+  padding: ITEM_PADDING;
+  float: left;
+}
+
+.over {
+  background: HOVER_ITEM_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, HOVER_ITEM_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, HOVER_ITEM_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, HOVER_ITEM_GRADIENT);
+  color: HOVER_ITEM_TEXT_COLOR;
+}
+
+.active {
+  background: ACTIVE_ITEM_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, ACTIVE_ITEM_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, ACTIVE_ITEM_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, ACTIVE_ITEM_GRADIENT);
+  color: ACTIVE_ITEM_TEXT_COLOR;
+}

@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client;
 
-import com.google.common.base.Optional;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
@@ -35,8 +34,8 @@ import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
-import org.activityinfo.ui.client.catalog.CatalogPlace;
-import org.activityinfo.ui.client.chrome.AppFrame;
+import org.activityinfo.ui.client.databases.DatabaseListPlace;
+import org.activityinfo.ui.client.header.Frame;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.ConnectionListener;
@@ -52,7 +51,7 @@ import java.util.logging.Logger;
  */
 public class AppEntryPoint implements EntryPoint {
 
-    public static final Place DEFAULT_PLACE = new CatalogPlace(Optional.absent());
+    public static final Place DEFAULT_PLACE = new DatabaseListPlace();
 
     private static final Logger LOGGER = Logger.getLogger(AppEntryPoint.class.getName());
 
@@ -85,11 +84,11 @@ public class AppEntryPoint implements EntryPoint {
         LocalStorage storage = LocalStorage.create();
 
         Viewport viewport = new Viewport();
-        AppFrame appFrame = new AppFrame(appCache, httpStore, offlineStore);
+        Frame frame = new Frame();
 
         ActivityMapper activityMapper = new AppActivityMapper(formStore, storage);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(appFrame.getDisplayWidget());
+        activityManager.setDisplay(frame);
 
         AppPlaceHistoryMapper historyMapper = new AppPlaceHistoryMapper();
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
@@ -98,7 +97,7 @@ public class AppEntryPoint implements EntryPoint {
         // Start synchronizer...
         RecordSynchronizer synchronizer = new RecordSynchronizer(httpStore, offlineStore);
 
-        viewport.add(appFrame);
+        viewport.add(frame);
 
         RootLayoutPanel.get().add(viewport);
 

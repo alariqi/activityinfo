@@ -1,0 +1,128 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def ACTIVE_BACKGROUND_COLOR value('theme.menu.activeItemBackgroundColor');
+@def ACTIVE_BORDER_COLOR value('theme.menu.activeItemBorder.color');
+@def ACTIVE_BORDER_STYLE value('theme.menu.activeItemBorder.style');
+@def ACTIVE_BORDER_WIDTH value('theme.menu.activeItemBorder.toString');
+@def ACTIVE_GRADIENT value('theme.menu.activeItemGradient');
+@def ACTIVE_TEXT_COLOR value('theme.menu.activeItemText.color');
+@def ACTIVE_TEXT_FAMILY value('theme.menu.activeItemText.family');
+@def ACTIVE_TEXT_SIZE value('theme.menu.activeItemText.size');
+@def ACTIVE_TEXT_WEIGHT value('theme.menu.activeItemText.weight');
+@def ITEM_LINE_HEIGHT value('theme.menu.itemLineHeight');
+@def ITEM_PADDING value('theme.menu.itemPadding.toString');
+@def TEXT_COLOR value('theme.menu.itemText.color');
+@def TEXT_FAMILY value('theme.menu.itemText.family');
+@def TEXT_SIZE value('theme.menu.itemText.size');
+@def TEXT_WEIGHT value('theme.menu.itemText.weight');
+
+@if (is("user.agent", "gecko") || is("user.agent", "gecko1_8")) {
+  .menuItem {
+    outline-color: -moz-use-text-color;
+  }
+}
+
+.menuItem {
+  display: block;
+  outline-style: none;
+  outline-width: 0;
+  padding: 0 21px 0 27px;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.menuListItem {
+  white-space: nowrap;
+  display: block;
+  padding: ACTIVE_BORDER_WIDTH;
+  margin: ITEM_PADDING;
+  cursor: pointer;
+  font-size: TEXT_SIZE;
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  line-height: ITEM_LINE_HEIGHT;
+  color: TEXT_COLOR;
+}
+
+.menuItemIcon {
+  border: 0 none;
+  height: 16px;
+  padding: 0;
+  vertical-align: top;
+  width: 16px;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  margin: 0;
+  background-position: center;
+}
+
+@if (is("user.agent", "ie8") || is("user.agent", "ie9")) {
+  .menuItemIcon {
+    vertical-align: middle;
+  }
+}
+
+.menuItemArrow {
+  gwt-sprite: "menuParent";
+  height: auto;
+  width: auto;
+  background-position: right;
+  background-repeat: no-repeat;
+}
+
+.active {
+  background: ACTIVE_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(left, ACTIVE_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(left, ACTIVE_GRADIENT);
+  /* @alternate */ background: linear-gradient(to right, ACTIVE_GRADIENT);
+  border-color: ACTIVE_BORDER_COLOR;
+  border-width: ACTIVE_BORDER_WIDTH;
+  border-style: ACTIVE_BORDER_STYLE;
+  color: ACTIVE_TEXT_COLOR;
+  padding: 0 !important;
+}
+
+.active .menuItemArrow {
+  gwt-sprite: "activeMenuParent";
+  height: auto;
+  width: auto;
+  background-position: right;
+  background-repeat: no-repeat;
+}

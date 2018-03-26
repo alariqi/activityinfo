@@ -1,0 +1,101 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def OPACITY value('theme.mask.opacity');
+@def BACKGROUND_COLOR value('theme.mask.backgroundColor');
+@def BOX_PADDING value('theme.mask.box.padding.toString');
+@def BOX_BORDER_COLOR value('theme.mask.box.borderColor');
+@def BOX_BORDER_STYLE value('theme.mask.box.borderStyle');
+@def BOX_BORDER_WIDTH value('theme.mask.box.borderWidth', 'px');
+@def BOX_BORDER_RADIUS value('theme.mask.box.borderRadius', 'px');
+@def BOX_RADIUS_MINUS_BORDER_WIDTH value('theme.mask.box.radiusMinusBorderWidth', 'px');
+@def BOX_BACKGROUND_COLOR value('theme.mask.box.backgroundColor');
+@def BOX_TEXT_FAMILY value('theme.mask.box.text.family');
+@def BOX_TEXT_WEIGHT value('theme.mask.box.text.weight');
+@def BOX_TEXT_SIZE value('theme.mask.box.text.size');
+@def BOX_TEXT_COLOR value('theme.mask.box.text.color');
+@def BOX_TEXT_PADDING value('theme.mask.box.textPadding.toString');
+@def BOX_LOADING_IMAGE_POSITION value('theme.mask.box.loadingImagePosition');
+
+.mask {
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  opacity: OPACITY;
+  background-color: BACKGROUND_COLOR;
+}
+
+.box {
+  position: absolute;
+  border-radius: BOX_BORDER_RADIUS;
+  border-width: BOX_BORDER_WIDTH;
+  border-style: BOX_BORDER_STYLE;
+  border-color: BOX_BORDER_COLOR;
+  padding: BOX_RADIUS_MINUS_BORDER_WIDTH;
+  overflow: hidden;
+  background-color: BOX_BACKGROUND_COLOR;
+}
+
+.text {
+  gwt-sprite: "loading";
+  width: auto;
+  height: auto;
+  background-position: BOX_LOADING_IMAGE_POSITION;
+  margin: BOX_PADDING;
+  padding: BOX_TEXT_PADDING;
+  color: BOX_TEXT_COLOR;
+  font-family: BOX_TEXT_FAMILY;
+  font-weight: BOX_TEXT_WEIGHT;
+  font-size: BOX_TEXT_SIZE;
+}
+
+.positioned {
+  position: relative !important;
+}
+
+.masked {
+  overflow: hidden !important;
+}
+
+.masked select, 
+.masked object, 
+.masked embed {
+  visibility: hidden;
+}

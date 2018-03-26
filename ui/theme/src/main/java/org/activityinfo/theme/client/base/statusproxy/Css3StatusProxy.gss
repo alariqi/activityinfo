@@ -1,0 +1,96 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def TEXT_FAMILY value('theme.statusproxy.text.family');
+@def TEXT_WEIGHT value('theme.statusproxy.text.weight');
+@def TEXT_SIZE value('theme.statusproxy.text.size');
+@def TEXT_COLOR value('theme.statusproxy.text.color');
+@def BORDER_WIDTH value('theme.statusproxy.border.toString');
+@def BORDER_COLOR value('theme.statusproxy.border.color');
+@def BORDER_STYLE value('theme.statusproxy.border.style');
+@def BACKGROUND_COLOR value('theme.statusproxy.backgroundColor');
+@def OPACITY value('theme.statusproxy.opacity');
+@def IE_FILTER_OPACITY eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.opacityToIe8Filter(theme().info().opacity())');
+
+.proxy {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  z-index: 15000;
+}
+
+.dragGhost {
+  font-family: TEXT_FAMILY;
+  font-weight: TEXT_WEIGHT;
+  font-size: TEXT_SIZE;
+  color: TEXT_COLOR;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  background-color: BACKGROUND_COLOR;
+  padding: 3px;
+  padding-left: 20px;
+  white-space: nowrap;
+}
+
+@if (is("user.agent", "ie8")) {
+  .dragGhost {
+    filter: IE_FILTER_OPACITY;
+  }
+}
+@else  {
+  .dragGhost {
+    opacity: OPACITY;
+  }
+}
+
+.dropIcon {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: block;
+  z-index: 1;
+}
+
+.dropDisallowed .dropIcon {
+  gwt-sprite: "dropNotAllowed";
+}
+
+.dropAllowed .dropIcon {
+  gwt-sprite: "dropAllowed";
+}

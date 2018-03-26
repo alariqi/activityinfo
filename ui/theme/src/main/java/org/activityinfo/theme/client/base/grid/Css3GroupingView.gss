@@ -1,0 +1,79 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def BORDER_WIDTH value('theme.grid.group.border.toString');
+@def BORDER_COLOR value('theme.grid.group.border.color');
+@def BORDER_STYLE value('theme.grid.group.border.style');
+@def BACKGROUND_COLOR value('theme.grid.group.backgroundColor');
+@def TEXT_FAMILY value('theme.grid.group.text.family');
+@def TEXT_SIZE value('theme.grid.group.text.size');
+@def TEXT_WEIGHT value('theme.grid.group.text.weight');
+@def TEXT_COLOR value('theme.grid.group.text.color');
+@def PADDING value('theme.grid.group.padding.toString');
+@def ICON_SPACING value('theme.grid.group.iconSpacing', 'px');
+
+.group .groupHead {
+  cursor: pointer;
+  padding: PADDING;
+  background-color: BACKGROUND_COLOR;
+  border-color: BORDER_COLOR;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+}
+
+.bodyCollapsed {
+  display: none;
+}
+
+.group .grid-cell .grid-cellInner {
+  gwt-sprite: "collapse";
+  width: auto;
+  height: auto;
+  background-position: left center;
+  padding-left: ICON_SPACING;
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+}
+
+.groupCollapsed .grid-cell .grid-cellInner {
+  gwt-sprite: "expand";
+  width: auto;
+  height: auto;
+  background-position: left center;
+}

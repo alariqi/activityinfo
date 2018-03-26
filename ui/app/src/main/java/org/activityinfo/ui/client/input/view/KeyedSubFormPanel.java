@@ -23,7 +23,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.theme.triton.custom.client.toolbar.TritonToolBarAppearance;
 import com.sencha.gxt.widget.core.client.Component;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -204,7 +203,7 @@ public class KeyedSubFormPanel implements IsWidget {
         return true;
     }
 
-    private class KeyedSubFormBarAppearance extends TritonToolBarAppearance {
+    private class KeyedSubFormBarAppearance extends org.activityinfo.theme.client.base.toolbar.Css3ToolBarAppearance {
 
         @Override
         public String toolBarClassName() {

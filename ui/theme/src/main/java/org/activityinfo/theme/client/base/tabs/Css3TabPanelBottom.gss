@@ -1,0 +1,381 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@external x-tabScrollerLeftHidden;
+@def BORDER_COLOR value('theme.tabs.borderColor');
+@def BODY_BACKGROUND_COLOR value('theme.tabs.bodyBackgroundColor');
+@def CORNER_RADIUS value('theme.tabs.borderRadius', 'px');
+@def LAST_STOP_COLOR value('theme.tabs.lastStopColor');
+@def HEADER_GRADIENT value('theme.tabs.gradient');
+@def HOVER_TAB_ITEM_BACKGROUND_COLOR value('theme.tabs.hoverTabItemBackgroundColor');
+@def HOVER_GRADIENT value('theme.tabs.hoverGradient');
+@def ACTIVE_TAB_ITEM_BACKGROUND_COLOR value('theme.tabs.activeTabItemBackgroundColor');
+@def INACTIVE_HEADER_GRADIENT value('theme.tabs.inactiveGradient');
+@def INACTIVE_TAB_ITEM_BACKGROUND_COLOR value('theme.tabs.inactiveTabItemBackgroundColor');
+@def TAB_STRIP_BACKGROUND_COLOR value('theme.tabs.tabStripBackgroundColor');
+@def TAB_STRIP_GRADIENT value('theme.tabs.tabStripGradient');
+@def HEADING_TEXT_COLOR value('theme.tabs.headingText.color');
+@def HEADING_TEXT_SIZE value('theme.tabs.headingText.size');
+@def HEADING_TEXT_WEIGHT value('theme.tabs.headingText.weight');
+@def HEADING_TEXT_FONT value('theme.tabs.headingText.family');
+@def ACTIVE_HEADING_TEXT_COLOR value('theme.tabs.activeHeadingText.color');
+@def ACTIVE_HEADING_TEXT_SIZE value('theme.tabs.activeHeadingText.size');
+@def ACTIVE_HEADING_TEXT_WEIGHT value('theme.tabs.activeHeadingText.weight');
+@def ACTIVE_HEADING_TEXT_FONT value('theme.tabs.activeHeadingText.family');
+@def TAB_LEFT_PADDING value('theme.tabs.padding.left', 'px');
+@def TAB_LEFT_PADDING_ICON value('theme.tabs.paddingWithIcon.left', 'px');
+@def TAB_RIGHT_PADDING value('theme.tabs.padding.right', 'px');
+@def TAB_RIGHT_PADDING_CLOSABLE value('theme.tabs.paddingWithClosable.right', 'px');
+@def TAB_ICON_LEFT_OFFSET value('theme.tabs.iconLeftOffset', 'px');
+@def TAB_ICON_TOP_OFFSET value('theme.tabs.iconTopOffset', 'px');
+@def SCROLLER_BACKGROUND_COLOR value('theme.tabs.scrollerBackgroundColor');
+@def SCROLLER_WIDTH value('theme.tabs.scrollerWidth', 'px');
+@def TAB_HEIGHT value('theme.tabs.tabHeight', 'px');
+@def TAB_SPACING value('theme.tabs.tabSpacing', 'px');
+@def TAB_ITEM_BORDER_BOTTOM value('theme.tabs.tabItemBorderBottom');
+@def TAB_ITEM_BORDER_LEFT value('theme.tabs.tabItemBorderLeft');
+@def TAB_ITEM_BORDER_TOP value('theme.tabs.tabItemBorderTop');
+@def TAB_ITEM_BORDER_RIGHT value('theme.tabs.tabItemBorderRight');
+@def ACTIVE_TAB_ITEM_BORDER_TOP value('theme.tabs.activeTabItemBorderTop');
+@def OVER_TAB_ITEM_BORDER_TOP value('theme.tabs.overTabItemBorderTop');
+@def TAB_STRIP_PADDING_LEFT value('theme.tabs.tabStripPadding.left', 'px');
+@def TAB_STRIP_PADDING_RIGHT value('theme.tabs.tabStripPadding.right', 'px');
+@def TAB_STRIP_PADDING_TOP value('theme.tabs.tabStripPadding.top', 'px');
+@def TAB_BAR_BORDER value('theme.tabs.tabBarBorder');
+@def TAB_BAR_BOTTOM_HEIGHT value('theme.tabs.tabBarBottomHeight', 'px');
+@def TAB_STRIP_BOTTOM_BORDER value('theme.tabs.tabStripBottomBorder');
+@def TAB_STRIP_TOP_BORDER value('theme.tabs.tabStripTopBorder');
+@def TAB_BODY_BORDER value('theme.tabs.tabBodyBorder');
+@def TAB_TEXT_PADDING value('theme.tabs.tabTextPadding.toString');
+@def ACTIVE_TAB_CLOSE_ICON_OPACITY value('theme.tabs.activeTabCloseIconOpacity');
+@def ACTIVE_TAB_CLOSE_OVER_ICON_OPACITY value('theme.tabs.activeTabCloseOverIconOpacity');
+@def TAB_CLOSE_ICON_OPACITY value('theme.tabs.tabCloseIconOpacity');
+@def TAB_CLOSE_OVER_ICON_OPACITY value('theme.tabs.tabCloseOverIconOpacity');
+@def SCROLLER_LEFT_DISABLED_OPACITY value('theme.tabs.scrollerLeftDisabledOpacity');
+@def SCROLLER_LEFT_OVER_OPACITY value('theme.tabs.scrollerLeftOverOpacity');
+@def SCROLLER_RIGHT_DISABLED_OPACITY value('theme.tabs.scrollerRightDisabledOpacity');
+@def SCROLLER_RIGHT_OVER_OPACITY value('theme.tabs.scrollerRightOverOpacity');
+
+.tab {
+  overflow: hidden;
+  outline: none;
+}
+
+.tabBar {
+  background-color: LAST_STOP_COLOR;
+  border: TAB_BAR_BORDER;
+  overflow: hidden;
+  padding-top: TAB_BAR_BOTTOM_HEIGHT;
+}
+
+.tabScrollerLeft + .tabStripWrap {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.x-tabScrollerLeftHidden + .tabStripWrap {
+  padding-left: TAB_STRIP_PADDING_LEFT;
+  padding-right: TAB_STRIP_PADDING_RIGHT;
+}
+
+
+.tabStripWrap {
+  background: TAB_STRIP_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(bottom, TAB_STRIP_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(bottom, TAB_STRIP_GRADIENT);
+  /* @alternate */ background: linear-gradient(to top, TAB_STRIP_GRADIENT);
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  padding-left: TAB_STRIP_PADDING_LEFT;
+  padding-right: TAB_STRIP_PADDING_RIGHT;
+  padding-bottom: TAB_STRIP_PADDING_TOP;
+}
+
+.tabStrip {
+  display: block;
+  width: 65520px;
+  background: repeat-x top;
+  border-top: TAB_STRIP_TOP_BORDER;
+  border-bottom: 0 none;
+}
+
+li.tabItem {
+  float: left;
+  position: relative;
+  margin-right: TAB_SPACING;
+  height: TAB_HEIGHT;
+  cursor: pointer;
+}
+
+.tabStripActive.tabItem {
+  cursor: default;
+}
+
+.tabStrip li.tabEdge {
+  float: left;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 none !important;
+  font-size: 1px !important;
+  line-height: 1px !important;
+  overflow: hidden;
+  background: transparent !important;
+  width: 1px;
+}
+
+.tabStrip a, 
+.tabStrip span, 
+.tabStrip em {
+  display: block;
+}
+
+.tabStrip a {
+  text-decoration: none !important;
+  cursor: pointer;
+  outline: none;
+}
+
+.tabStripInner {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabStripText {
+  font: normal HEADING_TEXT_WEIGHT HEADING_TEXT_SIZE HEADING_TEXT_FONT;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: TAB_TEXT_PADDING;
+}
+
+.tabWithIcon .tabStripText {
+  padding-left: TAB_LEFT_PADDING_ICON;
+  background-position: 0 3px;
+  background-repeat: no-repeat;
+}
+
+.tabStripActive, 
+.tabStripActive a.tabRight {
+  cursor: default;
+}
+
+.tabStripActive span.tabStripText {
+  cursor: default;
+  margin-top: -1px;
+}
+
+.tabStrip .tabStripClosable a.tabStripClose {
+  gwt-sprite: "tabClose";
+}
+
+.tabStrip .tabStripClosable a.tabStripClose:hover {
+  gwt-sprite: "tabClose";
+}
+
+.tabStrip .tabStripActive.tabStripClosable a.tabStripClose {
+  gwt-sprite: "activeTabClose";
+}
+
+.tabStrip .tabStripActive.tabStripClosable a.tabStripClose:hover {
+  gwt-sprite: "activeTabCloseOver";
+}
+
+.tabBody {
+  overflow: hidden;
+}
+
+.tabStripActive .tabRight {
+  margin-top: -1px;
+}
+
+.tabStripActive span.tabStripText {
+  font: normal ACTIVE_HEADING_TEXT_WEIGHT ACTIVE_HEADING_TEXT_SIZE ACTIVE_HEADING_TEXT_FONT;
+  color: ACTIVE_HEADING_TEXT_COLOR;
+}
+
+.tabRight {
+  padding: 0;
+}
+
+.tabStrip .tabStripClose {
+  display: none;
+}
+
+.tabStripClosable .tabStripClose {
+  background-repeat: no-repeat;
+  display: block;
+  width: 11px;
+  height: 11px;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.tabStripClosable .tabStripClose {
+  opacity: TAB_CLOSE_ICON_OPACITY;
+}
+
+.tabStripActive .tabStripClose {
+  opacity: ACTIVE_TAB_CLOSE_ICON_OPACITY;
+}
+
+.tabStripClosable .tabStripClose:hover {
+  opacity: TAB_CLOSE_OVER_ICON_OPACITY;
+}
+
+.tabStripActive .tabStripClose:hover {
+  opacity: ACTIVE_TAB_CLOSE_OVER_ICON_OPACITY;
+}
+
+.tabBody {
+  background-color: BODY_BACKGROUND_COLOR;
+  border: TAB_BODY_BORDER;
+  border-bottom: 0 none;
+}
+
+.tabScrollerLeft, 
+.tabScrollerRight {
+  margin-top: 1px;
+}
+
+.tabScrolling .tabStripWrap {
+  margin-left: SCROLLER_WIDTH;
+  margin-right: SCROLLER_WIDTH;
+}
+
+.tabScrolling {
+  position: relative;
+}
+
+.tabImage {
+  position: absolute;
+  top: TAB_ICON_TOP_OFFSET;
+  left: TAB_ICON_LEFT_OFFSET;
+}
+
+.tabStripOver {
+}
+
+.tabItem {
+  color: HEADING_TEXT_COLOR;
+}
+
+.tabStripActive.tabItem .tabStripText {
+  font: normal ACTIVE_HEADING_TEXT_WEIGHT ACTIVE_HEADING_TEXT_SIZE ACTIVE_HEADING_TEXT_FONT;
+}
+
+.tabStripOver.tabItem {
+  background: HOVER_TAB_ITEM_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, HOVER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, HOVER_GRADIENT);
+  border-top: OVER_TAB_ITEM_BORDER_TOP solid LAST_STOP_COLOR;
+}
+
+.tabStripActive.tabItem {
+  background: ACTIVE_TAB_ITEM_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(bottom, HEADER_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(bottom, HEADER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to top, HEADER_GRADIENT);
+  border-top: ACTIVE_TAB_ITEM_BORDER_TOP solid LAST_STOP_COLOR;
+}
+
+.tabItem {
+  border-bottom-left-radius: CORNER_RADIUS;
+  border-bottom-right-radius: CORNER_RADIUS;
+  border-bottom: TAB_ITEM_BORDER_BOTTOM;
+  border-left: TAB_ITEM_BORDER_LEFT;
+  border-right: TAB_ITEM_BORDER_RIGHT;
+  border-top: TAB_ITEM_BORDER_TOP;
+  padding-left: TAB_LEFT_PADDING;
+  padding-right: TAB_RIGHT_PADDING;
+  background: INACTIVE_TAB_ITEM_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(bottom, INACTIVE_HEADER_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(bottom, INACTIVE_HEADER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to top, INACTIVE_HEADER_GRADIENT);
+}
+
+.tabItem.tabStripClosable {
+  padding-right: TAB_RIGHT_PADDING_CLOSABLE;
+}
+
+.tabScrollerLeft {
+  gwt-sprite: "scrollerLeft";
+  width: SCROLLER_WIDTH;
+  background-position: center;
+  background-color: SCROLLER_BACKGROUND_COLOR;
+  margin-top: 0px;
+  border: none;
+  position: absolute;
+  left: 0;
+  top: TAB_BAR_BOTTOM_HEIGHT;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.tabScrollerLeftOver {
+  opacity: SCROLLER_LEFT_OVER_OPACITY;
+}
+
+.tabScrollerRight {
+  gwt-sprite: "scrollerRight";
+  width: SCROLLER_WIDTH;
+  background-position: center;
+  background-color: SCROLLER_BACKGROUND_COLOR;
+  margin-top: 0px;
+  border: none;
+  right: 0;
+  top: TAB_BAR_BOTTOM_HEIGHT;
+  z-index: 10;
+  cursor: pointer;
+  position: absolute;
+}
+
+.tabScrollerRightOver {
+  opacity: SCROLLER_RIGHT_OVER_OPACITY;
+}
+
+.tabScrollerLeftDisabled {
+  cursor: default;
+  opacity: SCROLLER_LEFT_DISABLED_OPACITY;
+}
+.tabScrollerRightDisabled {
+  cursor: default;
+  opacity: SCROLLER_RIGHT_DISABLED_OPACITY;
+}
+

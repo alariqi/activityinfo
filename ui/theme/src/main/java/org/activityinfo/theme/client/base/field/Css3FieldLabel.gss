@@ -1,0 +1,107 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def TEXT_FAMILY value('theme.field.sideLabel.text.family');
+@def TEXT_WEIGHT value('theme.field.sideLabel.text.weight');
+@def TEXT_SIZE value('theme.field.sideLabel.text.size');
+@def TEXT_COLOR value('theme.field.sideLabel.text.color');
+@def TOP_TEXT_FAMILY value('theme.field.topLabel.text.family');
+@def TOP_TEXT_WEIGHT value('theme.field.topLabel.text.weight');
+@def TOP_TEXT_SIZE value('theme.field.topLabel.text.size');
+@def TOP_TEXT_COLOR value('theme.field.topLabel.text.color');
+@def PADDING value('theme.field.sideLabel.padding');
+@def LABEL_PADDING value('theme.field.sideLabel.labelPadding');
+@def FIELD_PADDING value('theme.field.sideLabel.fieldPadding');
+@def TEXT_ALIGN value('theme.field.sideLabel.textAlign');
+@def TOP_PADDING value('theme.field.topLabel.padding');
+@def TOP_LABEL_PADDING value('theme.field.topLabel.labelPadding');
+@def TOP_FIELD_PADDING value('theme.field.topLabel.fieldPadding');
+@def TOP_TEXT_ALIGN value('theme.field.topLabel.textAlign');
+
+.fieldItem {
+  display: block;
+  padding: PADDING;
+  position: relative;
+}
+
+.fieldItemLabelTop {
+  padding: TOP_PADDING;
+}
+
+.fieldLabel {
+  font-family: TEXT_FAMILY;
+  font-size: TEXT_SIZE;
+  font-weight: TEXT_WEIGHT;
+  color: TEXT_COLOR;
+  text-align: TEXT_ALIGN;
+  clear: left;
+  display: block;
+  float: left;
+  padding: LABEL_PADDING;
+  position: relative;
+  z-index: 2;
+  -moz-user-select: none;
+}
+
+.fieldItemLabelTop .fieldLabel {
+  font-family: TOP_TEXT_FAMILY;
+  font-size: TOP_TEXT_SIZE;
+  font-weight: TOP_TEXT_WEIGHT;
+  color: TOP_TEXT_COLOR;
+  width: auto !important;
+  float: none !important;
+  clear: none;
+  position: static;
+  text-align: TOP_TEXT_ALIGN;
+  padding: TOP_LABEL_PADDING;
+}
+
+.fieldElement {
+  padding: FIELD_PADDING;
+}
+
+.fieldItemLabelTop .fieldElement {
+  padding: TOP_FIELD_PADDING;
+}
+
+.clearLeft {
+  clear: left;
+  font-size: 0;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+}

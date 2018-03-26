@@ -1,0 +1,104 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def UP_ICON url( value('upBtn.getSafeUri.asString', ''));
+@def ALL_RIGHT_ICON url( value('allRightBtn.getSafeUri.asString', ''));
+@def RIGHT_ICON url( value('rightBtn.getSafeUri.asString', ''));
+@def LEFT_ICON url( value('leftBtn.getSafeUri.asString', ''));
+@def ALL_LEFT_ICON url( value('allLeftBtn.getSafeUri.asString', ''));
+@def DOWN_ICON url( value('downBtn.getSafeUri.asString', ''));
+@def WIDTH value('upBtn.getWidth', 'px');
+@def HEIGHT value('upBtn.getHeight', 'px');
+@def BORDER_RADIUS value('theme.toolbar.buttonOverride.borderRadius', 'px');
+@def BORDER_COLOR value('theme.toolbar.buttonOverride.border.color');
+@def BORDER_STYLE value('theme.toolbar.buttonOverride.border.style');
+@def BORDER_WIDTH value('theme.toolbar.buttonOverride.border.toString');
+@def GRADIENT value('theme.toolbar.buttonOverride.gradient');
+
+.up, 
+.allRight, 
+.right, 
+.left, 
+.allLeft, 
+.down {
+  border-radius: BORDER_RADIUS;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  border-color: BORDER_COLOR;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-position: center center, left top;
+  width: WIDTH;
+  height: HEIGHT;
+}
+
+.up {
+  background-image: UP_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: UP_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: UP_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.allRight {
+  background-image: ALL_RIGHT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_RIGHT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_RIGHT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.right {
+  background-image: RIGHT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: RIGHT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: RIGHT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.left {
+  background-image: LEFT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: LEFT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: LEFT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.allLeft {
+  background-image: ALL_LEFT_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_LEFT_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: ALL_LEFT_ICON, linear-gradient(to bottom, GRADIENT);
+}
+
+.down {
+  background-image: DOWN_ICON, -webkit-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: DOWN_ICON, -ms-linear-gradient(top, GRADIENT);
+  /* @alternate */ background-image: DOWN_ICON, linear-gradient(to bottom, GRADIENT);
+}

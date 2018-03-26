@@ -1,0 +1,136 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def SPLIT_BAR_DRAG_COLOR value('theme.splitbar.dragColor');
+@def SPLIT_BAR_HANDLE_OPACITY value('theme.splitbar.handleOpacity');
+@def IE_FILTER_OPACITY eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.opacityToIe8Filter(theme().splitbar().handleOpacity())');
+@def HANDLE_WIDTH value('theme.splitbar.handleWidth', 'px');
+@def HALF_HANDLE_IMAGE_HEIGHT eval('"-"+theme().splitbar().handleHeight()/2+"px"');
+
+.bar {
+  position: absolute;
+  z-index: 3;
+}
+
+.horizontalBar {
+  cursor: s-resize;
+  /* @alternate */ cursor: row-resize;
+  font-size: 1px;
+  line-height: 1px;
+  overflow: hidden;
+}
+
+.verticalBar {
+  cursor: e-resize;
+  /* @alternate */ cursor: col-resize;
+  overflow: hidden;
+}
+
+.proxy {
+  position: absolute;
+  background-color: SPLIT_BAR_DRAG_COLOR;
+  font-size: 1px;
+  line-height: 1px;
+  z-index: 200;
+}
+
+.mini {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  cursor: pointer;
+  border: 0 none;
+}
+
+@if (is("user.agent", "ie8")) {
+  .mini {
+    -ms-filter: IE_FILTER_OPACITY;
+  }
+}
+@else  {
+  .mini {
+    opacity: SPLIT_BAR_HANDLE_OPACITY;
+  }
+}
+
+.miniOver {
+  opacity: 1;
+  filter: none;
+}
+
+@if (is("user.agent", "ie8")) {
+  .miniOver {
+    filter: none;
+  }
+}
+@else  {
+  .miniOver {
+    opacity: 1;
+  }
+}
+
+.miniRight {
+  gwt-sprite: "miniRight";
+}
+
+.miniLeft {
+  gwt-sprite: "miniLeft";
+}
+
+.miniTop {
+  gwt-sprite: "miniTop";
+}
+
+.miniBottom {
+  gwt-sprite: "miniBottom";
+}
+
+.miniTop, 
+.miniBottom {
+  height: HANDLE_WIDTH;
+  left: 50%;
+  margin-left: HALF_HANDLE_IMAGE_HEIGHT;
+}
+
+.miniLeft, 
+.miniRight {
+  padding: 0;
+  width: HANDLE_WIDTH;
+  top: 50%;
+  margin-top: HALF_HANDLE_IMAGE_HEIGHT;
+}

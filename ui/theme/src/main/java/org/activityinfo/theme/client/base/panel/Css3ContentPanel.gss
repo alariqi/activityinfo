@@ -1,0 +1,75 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def BACKGROUND_COLOR value('theme.panel.backgroundColor');
+@def BORDER_COLOR value('theme.panel.border.color');
+@def BORDER_STYLE value('theme.panel.border.style');
+@def BORDER_WIDTH value('theme.panel.border.toString');
+@def TEXT_COLOR value('theme.panel.textColor');
+@def HEADER_BACKGROUND_COLOR value('theme.panel.headerBackgroundColor');
+@def HEADER_GRADIENT value('theme.panel.headerGradient');
+@def PADDING value('theme.panel.headerPadding.toString');
+
+.panel {
+  outline: 0 none;
+  border-style: BORDER_STYLE;
+  border-width: BORDER_WIDTH;
+  border-color: BORDER_COLOR;
+}
+
+.body {
+  background-color: BACKGROUND_COLOR;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  position: relative;
+  background: HEADER_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, HEADER_GRADIENT);
+  padding: PADDING;
+}
+
+.footer {
+  position: relative;
+}
+
+.bodyWrap {
+}

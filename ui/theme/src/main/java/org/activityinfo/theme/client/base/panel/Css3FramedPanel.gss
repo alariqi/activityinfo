@@ -1,0 +1,88 @@
+/**
+ * Sencha GXT 4.0.0 - Sencha for GWT
+ * Copyright (c) 2006-2015, Sencha Inc.
+ *
+ * licensing@sencha.com
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * ================================================================================
+ * Open Source License
+ * ================================================================================
+ * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
+ * license. You may use this license only if you are prepared to distribute and
+ * share the source code of your application under the GPL v3 license:
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * If you are NOT prepared to distribute and share the source code of your
+ * application under the GPL v3 license, other commercial and oem licenses
+ * are available for an alternate download of Sencha GXT.
+ *
+ * Please see the Sencha GXT Licensing page at:
+ * http://www.sencha.com/products/gxt/license/
+ *
+ * For clarification or additional options, please contact:
+ * licensing@sencha.com
+ * ================================================================================
+ *
+ *
+ * ================================================================================
+ * Disclaimer
+ * ================================================================================
+ * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
+ * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
+ * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
+ * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
+ * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
+ * ================================================================================
+ */
+@def BORDER_RADIUS value('theme.framedPanel.borderRadius', 'px');
+@def BORDER_WIDTH value('theme.framedPanel.border');
+@def BORDER_COLOR value('theme.framedPanel.border.color');
+@def BORDER_STYLE value('theme.framedPanel.border.style');
+@def HEADER_BACKGROUND_COLOR value('theme.framedPanel.headerBackgroundColor');
+@def HEADER_GRADIENT value('theme.framedPanel.headerGradient');
+@def HEADER_PADDING value('theme.framedPanel.headerPadding.toString');
+@def BACKGROUND_COLOR value('theme.framedPanel.backgroundColor');
+@def BODY_WRAP_TOP_PADDING eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.framePaddingCalc(theme().framedPanel().borderRadius(),theme().framedPanel().border().top())');
+@def BODY_WRAP_RIGHT_PADDING eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.framePaddingCalc(theme().framedPanel().borderRadius(),theme().framedPanel().border().right())');
+@def BODY_WRAP_BOTTOM_PADDING eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.framePaddingCalc(theme().framedPanel().borderRadius(),theme().framedPanel().border().bottom())');
+@def BODY_WRAP_LEFT_PADDING eval('com.sencha.gxt.themebuilder.base.client.CssResourceThemeUtils.framePaddingCalc(theme().framedPanel().borderRadius(),theme().framedPanel().border().left())');
+
+.panel {
+  border-radius: BORDER_RADIUS;
+  border-width: BORDER_WIDTH;
+  border-style: BORDER_STYLE;
+  background-color: BACKGROUND_COLOR;
+  border-color: BORDER_COLOR;
+  padding: 0;
+  overflow: hidden;
+}
+
+.body {
+  border: none;
+}
+
+.noHeader {
+}
+
+.header {
+  background: HEADER_BACKGROUND_COLOR;
+  /* @alternate */ background: -webkit-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: -ms-linear-gradient(top, HEADER_GRADIENT);
+  /* @alternate */ background: linear-gradient(to bottom, HEADER_GRADIENT);
+  padding: HEADER_PADDING;
+}
+
+.body {
+}
+
+.footer {
+}
+
+.bodyWrap {
+  position: relative;
+  padding-top: BODY_WRAP_TOP_PADDING;
+  padding-right: BODY_WRAP_RIGHT_PADDING;
+  padding-bottom: BODY_WRAP_BOTTOM_PADDING;
+  padding-left: BODY_WRAP_LEFT_PADDING;
+}

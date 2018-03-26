@@ -23,7 +23,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
-import com.sencha.gxt.theme.triton.client.base.field.Css3DateCellAppearance;
 import com.sencha.gxt.widget.core.client.Component;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
@@ -35,6 +34,7 @@ import org.activityinfo.model.type.time.LocalDate;
 import org.activityinfo.model.type.time.Month;
 import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.model.type.time.PeriodValue;
+import org.activityinfo.theme.client.base.field.Css3DateCellAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
 import java.util.ArrayList;

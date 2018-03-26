@@ -1,5 +1,5 @@
 package org.activityinfo.theme.client;
 
 public enum Icon {
-    DATABASE
+    REPORTS, TASKS, SETTINGS, DATABASES, ADD
 }

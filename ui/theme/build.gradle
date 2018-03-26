@@ -1,8 +1,4 @@
 
-plugins {
-    id "java"
-}
-
 ext {
     themeOutputDir = "$buildDir/theme"
     outputDir = "$buildDir/gwt-out"
@@ -25,27 +21,9 @@ dependencies {
     compile group: 'com.sencha.gxt', name: 'gxt-chart', version: '4.0.0'
 
     gwtSdk "com.google.gwt:gwt-dev:2.8.0"
-    gwtSdk "com.sencha.gxt:gxt-themebuilder:4.0.0"
+    compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
 }
 
-task generateTheme(type: JavaExec) {
-
-    def themeFile = project.file('src/main/theme/theme.groovy')
-
-    inputs.file themeFile
-    outputs.dir themeOutputDir
-
-    classpath configurations.gwtSdk
-
-    main = 'com.sencha.gxt.themebuilder.ThemeBuilder'
-
-    args '-gen', themeOutputDir
-    args '-slicedDisabled', 'true'
-    args '-sourcesOnly', 'true'
-
-    args themeFile
-
-}
 
 task devMode(type: JavaExec) {
 
