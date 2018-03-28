@@ -72,7 +72,15 @@ task appengineDevMode(type: JavaExec) {
     classpath project(":ui:app2").configurations.gwtSdk
 
     // Java sources first, so that changes get picked up on refresh
-    def sourceProjects = [":ui:app", ":ui:app2", ":ui:theme", ":i18n", ":clients:gwtrest", ":tools:json", ":model"];
+    def sourceProjects = [
+            ":ui:app",
+            ":ui:app2",
+            ":ui:theme",
+            ":i18n",
+            ":clients:gwtrest",
+            ":tools:json",
+            ":model",
+            ":analysis"];
     for(sourceProject in sourceProjects) {
         classpath project(sourceProject).sourceSets.main.java.srcDirs
         classpath project(sourceProject).sourceSets.main.resources.srcDirs
@@ -120,7 +128,7 @@ task appengineDevMode(type: JavaExec) {
         jvmArgs "-Dactivityinfo.config=${configFile}"
         jvmArgs "-Xdebug"
         jvmArgs "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000"
-        jvmArgs "-verbose:class"
+
         for(File classpathEntry : classpath) {
             logger.lifecycle("Classpath: " + classpathEntry)
         }
