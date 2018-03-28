@@ -4,7 +4,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.Header;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 
 public class Frame implements AcceptsOneWidget, IsWidget {
@@ -13,15 +12,26 @@ public class Frame implements AcceptsOneWidget, IsWidget {
     private Widget currentPageWidget;
 
     public Frame() {
-        container.add(new Header(), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        container.add(new Header(), new VerticalLayoutContainer.VerticalLayoutData(1, 40));
     }
 
     @Override
     public void setWidget(IsWidget w) {
-        Widget newWidget = w.asWidget();
+
+        Widget newWidget;
+        if(w == null) {
+            newWidget = null;
+        } else {
+            newWidget = w.asWidget();
+        }
+
         if(newWidget != currentPageWidget) {
-            container.remove(newWidget);
-            container.add(newWidget, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+            if(currentPageWidget != null) {
+                container.remove(currentPageWidget);
+            }
+            if(newWidget != null) {
+                container.add(newWidget, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+            }
             currentPageWidget = newWidget;
 
             Scheduler.get().scheduleFinally(container::forceLayout);

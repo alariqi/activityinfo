@@ -11,6 +11,9 @@ public class HeaderSearchBox implements IsWidget {
     public HeaderSearchBox() {
         comboBox = new SimpleComboBox<>(item -> item);
         comboBox.setEmptyText("Database name, form name...");
+        comboBox.getStore().add("CHMP Database");
+        comboBox.getStore().add("Iraq IDP Response 2018");
+        comboBox.getStore().add("Cluster NFI");
     }
 
     @Override

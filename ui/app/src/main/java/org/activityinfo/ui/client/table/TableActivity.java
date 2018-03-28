@@ -31,7 +31,6 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.storage.LocalStorage;
 import org.activityinfo.ui.client.store.FormStore;
-import org.activityinfo.ui.client.table.view.TableView;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +41,6 @@ public class TableActivity extends AbstractActivity {
 
     private FormStore formStore;
     private TablePlace place;
-    private TableView view;
 
     private LocalStorage storage;
     private Subscription modelSubscription;
@@ -56,10 +54,11 @@ public class TableActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         TableViewModel tableViewModel = new TableViewModel(formStore, initialModel(place.getFormId()));
-        view = new TableView(formStore, tableViewModel);
-        panel.setWidget(view);
 
-        modelSubscription = view.getTableModel().subscribe(this::saveModel);
+        TablePage tablePage = new TablePage(formStore, tableViewModel);
+        panel.setWidget(tablePage);
+
+        modelSubscription = tableViewModel.getTableModel().subscribe(this::saveModel);
     }
 
 
@@ -76,7 +75,6 @@ public class TableActivity extends AbstractActivity {
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Failed to deserialize saved model: ", e);
             }
-
         }
         return ImmutableTableModel
                 .builder()
@@ -93,7 +91,6 @@ public class TableActivity extends AbstractActivity {
     @Override
     public void onStop() {
         super.onStop();
-        view.stop();
         modelSubscription.unsubscribe();
     }
 }

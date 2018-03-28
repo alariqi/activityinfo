@@ -22,13 +22,11 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
@@ -36,10 +34,12 @@ import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.chrome.HasTitle;
 import org.activityinfo.ui.client.store.FormStore;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Displays a Form as a Table
+ * Displays a Form as a Table.
+ *
  */
 public class TableView implements IsWidget, HasTitle {
 
@@ -47,25 +47,20 @@ public class TableView implements IsWidget, HasTitle {
 
     private static final Logger LOGGER = Logger.getLogger(TableView.class.getName());
 
-    private TableViewModel viewModel;
-    private ContentPanel panel;
-    private final BorderLayoutContainer container;
+    private final TableViewModel viewModel;
 
     private TableGrid grid;
-
-    private IsWidget errorWidget;
-
-    private VerticalLayoutContainer center;
-
-    private SubscriptionSet subscriptions = new SubscriptionSet();
-
-    private FormStore formStore;
-    private final SidePanel sidePanel;
     private SubFormPane subFormPane;
+
+    private final VerticalLayoutContainer center;
+
+    private final SidePanel sidePanel;
+    private final BorderLayoutContainer container;
+
+    private final SubscriptionSet subscriptions = new SubscriptionSet();
 
 
     public TableView(FormStore formStore, final TableViewModel viewModel) {
-        this.formStore = formStore;
 
         TableBundle.INSTANCE.style().ensureInjected();
 
@@ -76,54 +71,31 @@ public class TableView implements IsWidget, HasTitle {
         center = new VerticalLayoutContainer();
         center.add(toolBar, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        this.container = new BorderLayoutContainer();
-
         sidePanel = new SidePanel(formStore, viewModel);
         BorderLayoutContainer.BorderLayoutData sidePaneLayout = new BorderLayoutContainer.BorderLayoutData(.3);
         sidePaneLayout.setSplit(true);
         sidePaneLayout.setMargins(new Margins(0, 0, 0, MARGINS));
+        sidePaneLayout.setCollapsible(true);
+        sidePaneLayout.setCollapsed(true);
 
-
+        this.container = new BorderLayoutContainer();
         this.container.setEastWidget(sidePanel, sidePaneLayout);
         this.container.setCenterWidget(center);
 
-        this.panel = new ContentPanel() {
-
-            @Override
-            protected void onAttach() {
-                super.onAttach();
-                LOGGER.info("TableView attaching...");
-                subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
-                subscriptions.add(viewModel.getFormTree().subscribe(tree -> formTreeChanged(tree)));
-            }
-
-            @Override
-            protected void onDetach() {
-                super.onDetach();
-                LOGGER.info("TableView detaching...");
-                subscriptions.unsubscribeAll();
-            }
-        };
-        this.panel.setHeading(I18N.CONSTANTS.loading());
-        this.panel.setHeaderVisible(false);
-        this.panel.add(container);
+        subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
+        subscriptions.add(viewModel.getFormTree().subscribe(tree -> formTreeChanged(tree)));
     }
-
-    public Observable<TableModel> getTableModel() {
-        return this.viewModel.getTableModel();
-    }
-
 
     @Override
     public Widget asWidget() {
-        return panel;
+        return container;
     }
 
     private void effectiveModelChanged() {
         if(viewModel.getEffectiveTable().isLoading()) {
-            this.panel.mask();
+            this.container.mask();
         } else {
-            this.panel.unmask();
+            this.container.unmask();
 
 
             switch (viewModel.getEffectiveTable().get().getRootFormState()) {
@@ -161,18 +133,18 @@ public class TableView implements IsWidget, HasTitle {
     }
 
     private void showErrorState(FormTree.State rootFormState) {
-        errorWidget = new ForbiddenWidget();
-
-        panel.setWidget(errorWidget);
-        panel.forceLayout();
+//        errorWidget = new ForbiddenWidget();
+//
+//        pageContainer.setWidget(errorWidget);
+//        pageContainer.forceLayout();
     }
 
     private void updateGrid(EffectiveTableModel effectiveTableModel) {
 
-        panel.setHeading(effectiveTableModel.getFormLabel());
+        LOGGER.log(Level.INFO, "updating grid");
 
         // If the grid is already displayed, try to update without
-        // destorying everything
+        // destroying everything
         if(grid != null && grid.updateView(effectiveTableModel)) {
             return;
         }
@@ -191,18 +163,7 @@ public class TableView implements IsWidget, HasTitle {
         center.add(grid, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
         center.forceLayout();
 
-
-        // If we are transitioning from an error state, make the container with the
-        // grid and sidebars is set
-        if(!container.isAttached()) {
-            panel.setWidget(container);
-        }
-        panel.forceLayout();
-    }
-
-    public void stop() {
-
-
+        container.forceLayout();
     }
 
     @Override

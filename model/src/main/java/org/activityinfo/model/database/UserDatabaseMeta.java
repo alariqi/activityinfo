@@ -4,6 +4,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonArrays;
+import org.activityinfo.json.JsonSerializable;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.legacy.CuidAdapter;
 import org.activityinfo.model.resource.ResourceId;
@@ -14,7 +15,7 @@ import java.util.*;
  * Describes a single user's view of database, including the folders, forms,
  * and locks visible to the user, as well as their own permissions within this database.
  */
-public class UserDatabaseMeta {
+public class UserDatabaseMeta implements JsonSerializable {
     private ResourceId databaseId;
     private int userId;
     private String label;
@@ -58,6 +59,10 @@ public class UserDatabaseMeta {
         return locks.values();
     }
 
+    public Optional<Resource> getResource(ResourceId id) {
+        return Optional.ofNullable(resources.get(id));
+    }
+
     public RecordLockSet getEffectiveLocks(ResourceId resourceId) {
         List<RecordLock> effective = new ArrayList<>();
         do {
@@ -77,6 +82,7 @@ public class UserDatabaseMeta {
         return version;
     }
 
+    @Override
     public JsonValue toJson() {
         JsonValue object = Json.createObject();
         object.put("id", databaseId.asString());

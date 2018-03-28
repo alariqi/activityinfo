@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.databases;
+package org.activityinfo.ui.client.database;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,28 +13,25 @@ import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.form.CatalogEntry;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.*;
 import org.activityinfo.ui.client.header.BreadcrumbBar;
-import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.header.BreadcrumbViewModel;
 
-import java.util.List;
-
-public class DatabaseListPage implements IsWidget {
+public class DatabasePage implements IsWidget {
 
     private final VerticalLayoutContainer container;
     private final BreadcrumbBar breadcrumbs;
     private final ListStore<NavListItem> listStore;
+    private final PageHeader pageHeader;
 
-    public DatabaseListPage() {
+    public DatabasePage() {
 
         breadcrumbs = new BreadcrumbBar();
-        PageHeader pageHeader = new PageHeader(I18N.CONSTANTS.database());
+        pageHeader = new PageHeader(I18N.CONSTANTS.loading());
 
-        ListToolBarButton newDatabaseButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newDatabase());
+        ListToolBarButton newFormButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newForm());
+        ListToolBarButton newFolderButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newFolder());
 
         Menu sortMenu = new Menu();
         sortMenu.add(new MenuItem("Sort by recent use (recent first)"));
@@ -45,7 +42,8 @@ public class DatabaseListPage implements IsWidget {
         sortButton.setMenu(sortMenu);
 
         ToolBar toolBar = new ToolBar();
-        toolBar.add(newDatabaseButton);
+        toolBar.add(newFormButton);
+        toolBar.add(newFolderButton);
         toolBar.add(new FillToolItem());
         toolBar.add(sortButton);
 
@@ -68,11 +66,12 @@ public class DatabaseListPage implements IsWidget {
         container.add(listView, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
     }
 
-    public void updateView(Observable<List<NavListItem>> databases) {
-        if(databases.isLoaded()) {
-            listStore.replaceAll(databases.get());
-        } else {
-            listStore.clear();
+    public void updateView(Observable<DatabaseViewModel> viewModel) {
+        if(viewModel.isLoaded()) {
+            pageHeader.setHeading(viewModel.get().getLabel());
+            breadcrumbs.updateView(BreadcrumbViewModel.forDatabase(viewModel.get().getDatabase()));
+
+            listStore.replaceAll(viewModel.get().getFormLinks());
         }
     }
 

@@ -1,5 +1,6 @@
 package org.activityinfo.theme.client;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.HTML;
@@ -16,6 +17,13 @@ public class PageHeader implements IsWidget {
 
     public PageHeader(String heading) {
         this(heading, UriUtils.fromSafeConstant("#"), "");
+    }
+
+    public void setHeading(String heading) {
+        Element div = html.getElement().getFirstChildElement();
+        Element h1 = div.getFirstChildElement();
+        Element span = h1.getFirstChildElement();
+        span.setInnerText(heading);
     }
 
     @Override

@@ -45,6 +45,11 @@ public class RecordPlace extends Place {
         return new RecordRef(formId, recordId);
     }
 
+    @Override
+    public String toString() {
+        return "record/" + formId.asString() + "/" + recordId.asString();
+    }
+
     public static class Tokenizer implements PlaceTokenizer<RecordPlace> {
         @Override
         public RecordPlace getPlace(String token) {

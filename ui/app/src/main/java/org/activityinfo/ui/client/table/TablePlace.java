@@ -37,6 +37,11 @@ public class TablePlace extends Place {
         return formId;
     }
 
+    @Override
+    public String toString() {
+        return "table/" + formId.asString();
+    }
+
     public static class Tokenizer implements PlaceTokenizer<TablePlace> {
         @Override
         public TablePlace getPlace(String token) {

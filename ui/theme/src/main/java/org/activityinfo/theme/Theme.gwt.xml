@@ -54,4 +54,5 @@
 
   <!-- Default is Sliced+Css3.  use slicedDisabled flag to use only Css3 version -->
   <inherits name="org.activityinfo.theme.Css3" />
+    <inherits name="com.google.gwt.place.Place"/>
 </module>

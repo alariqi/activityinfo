@@ -26,6 +26,8 @@ import org.activityinfo.ui.client.analysis.AnalysisActivity;
 import org.activityinfo.ui.client.analysis.AnalysisPlace;
 import org.activityinfo.ui.client.catalog.CatalogActivity;
 import org.activityinfo.ui.client.catalog.CatalogPlace;
+import org.activityinfo.ui.client.database.DatabaseActivity;
+import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.databases.DatabaseListActivity;
 import org.activityinfo.ui.client.databases.DatabaseListPlace;
 import org.activityinfo.ui.client.input.RecordActivity;
@@ -64,7 +66,11 @@ public class AppActivityMapper implements ActivityMapper {
         }
 
         if (place instanceof DatabaseListPlace) {
-            return new DatabaseListActivity();
+            return new DatabaseListActivity(formStore);
+        }
+
+        if (place instanceof DatabasePlace) {
+            return new DatabaseActivity(formStore, ((DatabasePlace) place));
         }
 
         return null;

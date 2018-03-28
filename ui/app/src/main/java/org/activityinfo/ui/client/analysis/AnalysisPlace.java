@@ -19,7 +19,8 @@
 package org.activityinfo.ui.client.analysis;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceTokenizer;
+
+import java.util.Objects;
 
 public class AnalysisPlace extends Place {
 
@@ -33,4 +34,25 @@ public class AnalysisPlace extends Place {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return "analysis/" + id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        AnalysisPlace that = (AnalysisPlace) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

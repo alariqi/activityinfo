@@ -37,6 +37,15 @@ public class CatalogPlace extends Place {
     }
 
     @Override
+    public String toString() {
+        if(parentId.isPresent()) {
+            return "catalog/" + parentId.get();
+        } else {
+            return "catalog";
+        }
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

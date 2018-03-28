@@ -9,11 +9,20 @@ public interface Templates extends XTemplates {
 
     Templates TEMPLATES = GWT.create(Templates.class);
 
+    @XTemplate(source = "Breadcrumb.html")
+    SafeHtml breadcrumb(String label, SafeUri href);
+
+    @XTemplate(source = "BreadcrumbSeparator.html")
+    SafeHtml breadcrumbSeparator();
+
     @XTemplate(source = "HeaderLogo.html")
     SafeHtml headerLogo();
 
     @XTemplate(source = "HeaderNavLinkButton.html")
     SafeHtml headerNavLinkButton(SafeUri uri, String label);
+
+    @XTemplate(source = "NavListItem.html")
+    SafeHtml navListItem(NavListItem item);
 
     @XTemplate(source = "PageHeader.html")
     SafeHtml pageHeader(String heading, SafeUri settingsUri, String settingsLabel);
