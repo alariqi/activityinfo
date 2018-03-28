@@ -1,8 +1,4 @@
 
-ext {
-    themeOutputDir = "$buildDir/theme"
-    outputDir = "$buildDir/gwt-out"
-}
 
 configurations {
     gwtSdk
@@ -24,6 +20,10 @@ dependencies {
     compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
 }
 
+jar {
+    from project.sourceSets.main.allSource
+    from project.sourceSets.main.output
+}
 
 task devMode(type: JavaExec) {
 
