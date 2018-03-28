@@ -33,8 +33,9 @@ public class SidePanel extends ContentPanel {
     public SidePanel(FormStore formStore, TableViewModel viewModel) {
         setHeading("Side Panel");
         TabPanel tabPanel = new TabPanel();
-        tabPanel.add(new DetailsPane(viewModel), new TabItemConfig("Details"));
+        tabPanel.add(new DetailsPane(viewModel), new TabItemConfig(I18N.CONSTANTS.details()));
         tabPanel.add(new HistoryPane(formStore, viewModel), new TabItemConfig(I18N.CONSTANTS.history()));
+        tabPanel.add(new ApiPane(viewModel), new TabItemConfig("API"));
         add(tabPanel);
     }
 
