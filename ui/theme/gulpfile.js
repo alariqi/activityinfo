@@ -39,7 +39,7 @@ const sourcemaps = require('gulp-sourcemaps');
 
 // Paths
 const paths = {
-    build: `${__dirname}/build/assets/org/activityinfo/theme/client`,
+    build: `${__dirname}/src/main/java/org/activityinfo/theme/dev/public`,
     src: `${__dirname}/src`,
     modules: `${__dirname}/node_modules`
 };

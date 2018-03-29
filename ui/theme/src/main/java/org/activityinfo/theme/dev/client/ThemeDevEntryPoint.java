@@ -22,14 +22,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.container.Viewport;
-import org.activityinfo.theme.client.Theme;
 
 public class ThemeDevEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
         DevBundle.RESOURCES.style().ensureInjected();
-        Theme.injectStyles();
 
         TabPanel tabPanel = new TabPanel();
         tabPanel.add(new ButtonsPanel(), "Buttons");

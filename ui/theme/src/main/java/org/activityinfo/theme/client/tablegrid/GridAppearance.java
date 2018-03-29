@@ -93,7 +93,7 @@ public class GridAppearance implements GridView.GridAppearance {
 
         @Override
         public String empty() {
-            return "tablegrid__empty";
+            return "tablegrid--empty";
         }
 
         @Override
