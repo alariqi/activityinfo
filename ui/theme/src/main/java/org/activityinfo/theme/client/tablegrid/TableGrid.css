@@ -42,6 +42,7 @@ $CELL_ALT_BACKGROUND_COLOR: white;
     position: relative;
     overflow: hidden;
     outline: 0 none;
+    background: yellow;
 }
 
 .tablegrid__scroller {

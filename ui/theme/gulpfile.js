@@ -96,7 +96,15 @@ function styles() {
         .pipe(gulp.dest(paths.build));
 }
 
+
+// Watch
+function watch() {
+    gulp.watch([`${paths.src}/**/*.css`, `!${paths.src}/main/java/org/activityinfo/theme/dev/public/*.css`], styles);
+}
+
+
 gulp.task('build', gulp.parallel(vectors, styles));
+gulp.task('watch', watch);
 
 
 
