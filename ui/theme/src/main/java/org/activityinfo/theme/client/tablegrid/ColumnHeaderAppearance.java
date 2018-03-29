@@ -110,7 +110,7 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
     @Override
     public String columnsWrapSelector() {
-        return ".tablegrid__column-wrap";
+        return ".tablegrid__header-inner";
     }
 
     @Override

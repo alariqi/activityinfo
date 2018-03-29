@@ -147,7 +147,10 @@ public class GridPanel implements IsWidget {
         for (int i = 0; i < 100; i++) {
             store.add(new DummyModel(i));
         }
-        grid = new Grid<>(store, columnModel, new GridView<>(new GridAppearance()));
+        GridView<DummyModel> gridView = new GridView<>(new GridAppearance());
+        gridView.setTrackMouseOver(false);
+
+        grid = new Grid<>(store, columnModel, gridView);
     }
 
     @Override

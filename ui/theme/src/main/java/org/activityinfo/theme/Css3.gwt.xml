@@ -231,47 +231,6 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3ColumnHeaderAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.ColumnHeader.ColumnHeaderAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3GridAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.GridView.GridAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3CheckBoxColumnAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel.CheckBoxColumnAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3RowNumbererAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.RowNumberer.RowNumbererAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3RowExpanderAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.RowExpander.RowExpanderAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3RowEditorAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.editing.GridRowEditing.RowEditorAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3GroupingViewAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.GroupingView.GroupingViewAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.theme.client.base.grid.Css3GroupSummaryViewAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.grid.GroupSummaryView.GroupSummaryViewAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-
   <replace-with class="org.activityinfo.theme.client.base.slider.Css3HorizontalSliderAppearance">
     <any>
       <when-type-is class="com.sencha.gxt.cell.core.client.SliderCell.SliderAppearance"/>

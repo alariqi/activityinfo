@@ -45,7 +45,7 @@ jar {
 
 
 
-task devMode(type: JavaExec) {
+task themeDevMode(type: JavaExec) {
 
     dependsOn 'compileJava'
     dependsOn 'gulp_build'
@@ -61,9 +61,9 @@ task devMode(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.gwtSdk
 
-    args '-logLevel', 'INFO'
+    args '-logLevel', 'DEBUG'
     args '-war', "${buildDir}/devMode"
-    args '-startupUrl', '/dev.html'
+    args '-startupUrl', '/ThemeDev/dev.html'
     args 'org.activityinfo.theme.dev.ThemeDev'
 
     doFirst {

@@ -9,11 +9,11 @@ import org.activityinfo.theme.client.HeaderNavLinkButton;
 import org.activityinfo.theme.client.Icon;
 import org.activityinfo.theme.client.ListToolBarButton;
 
-public class ButtonsPanel implements IsWidget {
+public class ButtonsPage implements IsWidget {
 
     private FlowLayoutContainer container = new FlowLayoutContainer();
 
-    public ButtonsPanel() {
+    public ButtonsPage() {
         container.add(new ComponentPanel("HeaderLogo", new HeaderLogo()));
         container.add(new ComponentPanel("HeaderNavLinkButton",
                 new HeaderNavLinkButton(Icon.DATABASE, UriUtils.fromSafeConstant("#"), "Databases")));
