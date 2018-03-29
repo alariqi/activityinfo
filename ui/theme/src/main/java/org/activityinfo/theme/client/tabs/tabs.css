@@ -1,0 +1,15 @@
+
+.tab__strip {
+    display: flex;
+    flex-direction: row;
+}
+
+.tab__item {
+    display: block;
+    border: 1px solid black;
+    padding-right: 5px;
+}
+
+.tab__item--active {
+    font-weight: bold;
+}

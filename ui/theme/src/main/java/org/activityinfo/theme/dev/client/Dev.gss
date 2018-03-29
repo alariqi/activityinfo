@@ -1,0 +1,15 @@
+
+
+.component {
+
+    margin-top: 5px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+
+}
+
+.component h2 {
+    margin-bottom: 1em;
+    margin-top: 2em;
+}

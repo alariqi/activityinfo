@@ -19,12 +19,25 @@
 package org.activityinfo.theme.dev.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.sencha.gxt.widget.core.client.TabPanel;
+import com.sencha.gxt.widget.core.client.container.Viewport;
+import org.activityinfo.theme.client.Theme;
 
 public class ThemeDevEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
-        RootPanel.get().add(new Label("foobar"));
+
+        DevBundle.RESOURCES.style().ensureInjected();
+        Theme.injectStyles();
+
+        TabPanel tabPanel = new TabPanel();
+        tabPanel.add(new ButtonsPanel(), "Buttons");
+        tabPanel.add(new GridPanel(), "Grid");
+
+        Viewport viewport = new Viewport();
+        viewport.add(tabPanel);
+
+        RootPanel.get().add(viewport);
     }
 }

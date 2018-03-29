@@ -1,0 +1,6 @@
+
+$spacing 		: calc(1.3 * 1rem);
+
+$spacing-half	: calc($spacing * 0.5rem);
+
+$spacing-double	: calc($spacing * 2rem);

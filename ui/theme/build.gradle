@@ -1,3 +1,22 @@
+plugins {
+    id "com.moowork.gulp" version "1.2.0"
+}
+
+node {
+    // Version of node to use.
+    version = '8.11.0'
+    npmVersion = '2.1.5'
+
+    // Enabled the automatic download. False is the default (for now).
+    download = true
+}
+
+
+// run npm install
+gulp_default.dependsOn 'npmInstall'
+
+// run gulp install
+gulp_default.dependsOn 'installGulp'
 
 
 configurations {
@@ -25,11 +44,16 @@ jar {
     from project.sourceSets.main.output
 }
 
+
+
 task devMode(type: JavaExec) {
 
     dependsOn 'compileJava'
 
     main = 'com.google.gwt.dev.DevMode'
+
+    // Compiled assets
+    classpath "$buildDir/assets"
 
     // Compiled java classes and libraries second
     classpath sourceSets.main.java.srcDirs
@@ -37,7 +61,7 @@ task devMode(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.gwtSdk
 
-    args '-logLevel', 'DEBUG'
+    args '-logLevel', 'INFO'
     args '-war', "${buildDir}/devMode"
     args '-startupUrl', '/dev.html'
     args 'org.activityinfo.theme.dev.ThemeDev'

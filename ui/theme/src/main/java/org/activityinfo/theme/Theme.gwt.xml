@@ -43,13 +43,13 @@
 <module>
   <inherits name="com.sencha.gxt.themebuilder.base.ThemeBase"/>
 
-  <extend-property name="gxt.theme" values="activitynfo"/>
-  <set-property name="gxt.theme" value="activitynfo"/>
+  <extend-property name="gxt.theme" values="activityinfo"/>
+  <set-property name="gxt.theme" value="activityinfo"/>
 
   <!-- Constants decl - generated instance used to build theme -->
   <replace-with class="org.activityinfo.theme.client.ThemeDetailsImpl">
     <when-type-is class="com.sencha.gxt.themebuilder.base.client.config.ThemeDetails"/>
-    <when-property-is name="gxt.theme" value="activitynfo"/>
+    <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
   <!-- Default is Sliced+Css3.  use slicedDisabled flag to use only Css3 version -->

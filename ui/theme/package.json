@@ -1,0 +1,65 @@
+{
+  "name": "activityinfo-theme",
+  "version": "2016.0.0",
+  "description": "ActivityInfo Theme CSS",
+  "scripts": {
+    "build": "node_modules/.bin/gulp build"
+  },
+  "browserslist": [
+    ">2%"
+  ],
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "font-range"
+          ]
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "autoprefixer": "^7.1.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-latest": "^6.24.0",
+    "cssnano": "^4.0.0-rc.2",
+    "del": "^3.0.0",
+    "fontfaceobserver": "^2.0.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-imagemin": "^4.0.0",
+    "gulp-postcss": "^7.0.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-util": "^3.0.0",
+    "markdown-it": "^8.0.0",
+    "markdown-it-abbr": "^1.0.0",
+    "markdown-it-footnote": "^3.0.0",
+    "postcss-apply": "^0.8.0",
+    "postcss-assets": "^5.0.0",
+    "postcss-color-function": "^4.0.0",
+    "postcss-custom-media": "^6.0.0",
+    "postcss-custom-properties": "^6.2.0",
+    "postcss-easy-import": "^3.0.0",
+    "postcss-map": "^0.9.0",
+    "postcss-media-minmax": "^3.0.0",
+    "postcss-nested": "^2.1.0",
+    "postcss-responsive-type": "^1.0.0",
+    "postcss-simple-vars": "^4.1.0",
+    "prismjs": "^1.8.0"
+  },
+  "devDependencies": {
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^7.0.1",
+    "gulp-svg-sprites": "^4.1.2",
+    "postcss-calc": "^6.0.1",
+    "postcss-rgb": "^1.0.0",
+    "postcss-scss": "^1.0.2",
+    "stylelint": "^8.2.0",
+    "stylelint-config-standard": "^17.0.0",
+    "xo": "^0.18.0"
+  }
+}

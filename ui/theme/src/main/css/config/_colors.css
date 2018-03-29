@@ -1,0 +1,51 @@
+/* =====================================================
+   colour sets and color paletts
+   ===================================================== */
+
+
+/* grey colour palette */
+$anthracite-dark      :   #454047;
+$anthracite           :   #4A4A4A;
+$anthracite-light     :   #615C62;
+
+/* green colour palette */
+$green-dark           :   #758C7C;
+$green                :   #94B097;
+$green-light          :   #96B4AA;
+$green-lightest		  :   #ECF1EF;
+
+/* blue colour palette */
+$blue-dark            :   #6F8EBD;
+$blue                 :   #7295CD;
+$blue-light           :   #8EABD7;
+
+/* orange colour palette */
+$orange-dark          :   #E0854B;
+$orange               :   #F6985B;
+
+/* aqua colour palette */
+$aqua-dark            :   #72C9CD;
+$aqua                 :   #3ACFDF;
+
+/* grey colour palette */
+$grey-darkest         :   #E0E7E4;
+$grey-darkblue		  :   #65747F;
+$grey                 :   #ECF1EF;
+$grey-lightblue		  :   #C5D1DA;
+$grey-light           :   #F1F5F3;
+$grey-lightest        :   #F8FAF9;
+
+
+$white                :   #ECF1EF;
+
+
+$color-text-primary   :   $anthracite;
+
+$color-border         :    #435664;
+
+$color-header-sidebar :    $aqua-dark;
+
+$input-label          :    $blue-dark;
+
+$color-active         :    $blue-dark;
+$color-inactie        :    $grey;
