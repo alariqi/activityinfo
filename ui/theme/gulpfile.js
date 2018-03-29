@@ -39,7 +39,7 @@ const sourcemaps = require('gulp-sourcemaps');
 
 // Paths
 const paths = {
-    build: `${__dirname}/src/main/java/org/activityinfo/theme/dev/public`,
+    build: `${__dirname}/build/dev-assets/org/activityinfo/theme/dev/public`,
     src: `${__dirname}/src`,
     modules: `${__dirname}/node_modules`
 };
@@ -99,7 +99,7 @@ function styles() {
 
 // Watch
 function watch() {
-    gulp.watch([`${paths.src}/**/*.css`, `!${paths.src}/main/java/org/activityinfo/theme/dev/public/*.css`], styles);
+    gulp.watch(`${paths.src}/**/*.css`, styles);
 }
 
 

@@ -53,7 +53,7 @@ task devMode(type: JavaExec) {
     main = 'com.google.gwt.dev.DevMode'
 
     // Compiled assets
-    classpath "$buildDir/assets"
+    classpath "$buildDir/dev-assets"
 
     // Compiled java classes and libraries second
     classpath sourceSets.main.java.srcDirs
