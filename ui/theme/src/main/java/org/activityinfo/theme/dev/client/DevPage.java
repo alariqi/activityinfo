@@ -14,6 +14,12 @@ public enum DevPage {
         public IsWidget createWidget() {
             return new GridPanel();
         }
+    },
+    SEARCH {
+        @Override
+        public IsWidget createWidget() {
+            return new SearchPanel();
+        }
     };
 
     public abstract IsWidget createWidget();
