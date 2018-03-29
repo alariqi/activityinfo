@@ -61,7 +61,7 @@ task themeDevMode(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.gwtSdk
 
-    args '-logLevel', 'DEBUG'
+    args '-logLevel', 'INFO'
     args '-war', "${buildDir}/devMode"
     args '-startupUrl', '/ThemeDev/dev.html'
     args 'org.activityinfo.theme.dev.ThemeDev'
