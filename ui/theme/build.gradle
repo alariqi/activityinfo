@@ -4,7 +4,7 @@ apply plugin: 'com.moowork.gulp'
 node {
     // Version of node to use.
     version = '8.11.0'
-    npmVersion = '2.1.5'
+    npmVersion = '5.8.0'
 
     // Enabled the automatic download. False is the default (for now).
     download = true
@@ -12,10 +12,10 @@ node {
 
 
 // run npm install
-gulp_default.dependsOn 'npmInstall'
+gulp_build.dependsOn 'npmInstall'
 
 // run gulp install
-gulp_default.dependsOn 'installGulp'
+gulp_build.dependsOn 'installGulp'
 
 
 configurations {
@@ -48,6 +48,7 @@ jar {
 task devMode(type: JavaExec) {
 
     dependsOn 'compileJava'
+    dependsOn 'gulp_build'
 
     main = 'com.google.gwt.dev.DevMode'
 
