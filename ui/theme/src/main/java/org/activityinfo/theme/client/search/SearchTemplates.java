@@ -14,5 +14,5 @@ interface SearchTemplates extends XTemplates {
     SafeHtml searchList();
 
     @XTemplate(source = "SearchItem.html")
-    SafeHtml searchItem(SafeHtml content);
+    SafeHtml searchItem(SearchResult result);
 }

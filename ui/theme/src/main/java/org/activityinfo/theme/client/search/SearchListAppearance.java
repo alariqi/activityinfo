@@ -21,7 +21,7 @@ public class SearchListAppearance implements ListView.ListViewAppearance<SearchR
 
     @Override
     public void renderItem(SafeHtmlBuilder builder, SafeHtml content) {
-        builder.append(SearchTemplates.TEMPLATES.searchItem(content));
+        builder.append(content);
     }
 
     @Override
