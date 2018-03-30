@@ -9,8 +9,16 @@ class SearchComboBoxCell extends ComboBoxCell<SearchResult> {
 
     SearchComboBoxCell(ListStore<SearchResult> store) {
         super(store, m -> m.getLabel(),
-                new ListView<>(store, new IdentityValueProvider<>(), new SearchListAppearance()),
+                createListView(store),
                 new SearchBoxAppearance());
+    }
+
+    private static ListView<SearchResult, SearchResult> createListView(ListStore<SearchResult> store) {
+        ListView<SearchResult, SearchResult> listView = new ListView<>(store,
+                new IdentityValueProvider<>(),
+                new SearchListAppearance());
+        listView.setCell(new SearchResultListCell());
+        return listView;
     }
 
     @Override
