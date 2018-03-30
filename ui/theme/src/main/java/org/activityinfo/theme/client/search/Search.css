@@ -22,7 +22,6 @@
 
   &:focus {
     border: 1px solid $green;
-    box-shadow: 0 2px 10px 1px $shadow;
   }
 }
 
@@ -43,11 +42,4 @@
 
 input:focus ~ .search__icon {
   opacity: 1;
-}
-
-.search__list {
-  background-color: red;
-}
-
-.search__item {
 }

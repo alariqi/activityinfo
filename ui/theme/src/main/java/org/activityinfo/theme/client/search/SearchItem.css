@@ -1,0 +1,21 @@
+.search__item {
+  position: relative;
+  display: block;
+  padding: 1rem;
+  font-size: 1.25rem;
+  color: $blue;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    content: '';
+    width: calc(100% - 2rem);
+    height: 1px;
+    border-bottom: 1px solid $border;
+  }
+
+  &:last-child:after {
+    display: none;
+  }
+}
