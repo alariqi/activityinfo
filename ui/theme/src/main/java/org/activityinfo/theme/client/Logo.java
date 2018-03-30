@@ -6,12 +6,12 @@ import com.google.gwt.user.client.ui.Widget;
 /**
  * ActivityInfo Corner Logo
  */
-public final class HeaderLogo implements IsWidget {
+public final class Logo implements IsWidget {
 
     private final StaticHtml html;
 
-    public HeaderLogo() {
-        html = new StaticHtml(Templates.TEMPLATES.headerLogo());
+    public Logo() {
+        html = new StaticHtml(Templates.TEMPLATES.logo());
     }
 
     @Override

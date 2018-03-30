@@ -9,12 +9,6 @@ public enum DevPage {
             return new IndexPage();
         }
     },
-    BUTTON {
-        @Override
-        public IsWidget createWidget() {
-            return new ButtonsPage();
-        }
-    },
     TABLEGRID {
         @Override
         public IsWidget createWidget() {
