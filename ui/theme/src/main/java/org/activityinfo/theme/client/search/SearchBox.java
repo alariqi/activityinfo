@@ -11,7 +11,7 @@ public class SearchBox implements IsWidget {
 
     public SearchBox(ListStore<SearchResult> store) {
         comboBox = new ComboBox<>(new SearchComboBoxCell(store));
-        comboBox.setEmptyText("Database, Form....");
+        comboBox.setEmptyText("Search for a database, folder or form...");
         comboBox.addStyleName("search");
         comboBox.setWidth(-1);
     }

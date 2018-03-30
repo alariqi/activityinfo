@@ -1,13 +1,10 @@
-
 /* Main application navigation header */
 
-.header {
-    display: flex;
-    flex-direction: row;
+header {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid $border;
+  box-shadow: 0 10px 10px -10px #689591;
 }
-
-.header .search {
-    flex-grow: 1;
-}
-
-

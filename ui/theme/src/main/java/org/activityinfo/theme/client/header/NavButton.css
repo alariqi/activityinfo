@@ -1,0 +1,45 @@
+.nav__button {
+  transition: color 0.3s ease,
+              opacity 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 0 5.5rem;
+  width: 5.5rem;
+  height: 100%;
+  padding: 1rem 0.5rem 0.5rem;
+  text-align: center;
+  font-size: 1.1rem;
+  opacity: 0.6;
+
+  &:before {
+    z-index: -1;
+    transition: opacity 0.3s ease,
+                transform 0.3s ease;
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: $background;
+    opacity: 0;
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:hover:before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.nav__button--active {
+  /* background-color: red; */
+}

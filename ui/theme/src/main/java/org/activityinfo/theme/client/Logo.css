@@ -1,0 +1,24 @@
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.logo svg {
+  margin-right: 1rem;
+}
+
+.logo__name {
+  padding: 0.1em 0.4em;
+  font-family: $gretasemibold;
+  font-size: 1.5rem;
+  background-color: rgba($teal, 0.1);
+}
+
+.logo svg path {
+  transition: fill 0.3s ease;
+}
+
+.logo:hover svg path {
+  fill: $black;
+}

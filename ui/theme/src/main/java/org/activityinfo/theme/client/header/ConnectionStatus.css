@@ -1,5 +1,16 @@
+.connectionstatus {
+  display: block;
+  background-image: linear-gradient(to bottom right, $green, $teal);
+}
 
+.connectionstatus--offline {
+  background-image: linear-gradient(to bottom right, $negative, $negative-alt);
+}
 
-.connection-status {
-    background-color: green;
+.inner {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 75rem;
+  padding: 0.5rem;
 }
