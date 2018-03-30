@@ -25,6 +25,12 @@
     <!-- This is the base theme generated from theme.groovy -->
     <inherits name="org.activityinfo.theme.Theme"/>
 
+    <replace-with class="org.activityinfo.theme.client.ThemeAppearance">
+        <when-type-is class="com.sencha.gxt.core.client.resources.ThemeStyles.ThemeAppearance"/>
+        <when-property-is name="gxt.theme" value="activityinfo"/>
+    </replace-with>
+
+
     <replace-with class="org.activityinfo.theme.client.container.ViewportAppearance">
         <when-type-is class="com.sencha.gxt.widget.core.client.container.Viewport.ViewportAppearance"/>
         <when-property-is name="gxt.theme" value="activityinfo"/>

@@ -44,10 +44,6 @@
 
   <!-- Shared appearances that are both for css3 and sliced -->
   <!-- Contains constants and reusable css classes -->
-  <replace-with class="org.activityinfo.theme.client.base.Css3ThemeAppearance">
-    <when-type-is class="com.sencha.gxt.core.client.resources.ThemeStyles.ThemeAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
 
 
 
