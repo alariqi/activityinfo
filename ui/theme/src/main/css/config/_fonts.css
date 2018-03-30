@@ -1,0 +1,16 @@
+/* =====================================================
+   FONTS
+   ===================================================== */
+
+/* font families */
+$gretalight: 'Greta Sans Light', Helvetica, Arial, Tahoma, sans-serif;
+$gretasemibold: 'Greta Sans Semibold', Helvetica, Arial, Tahoma, sans-serif;
+
+/* font sizes */
+$fontsize-s: 0.8rem;
+$fontsize-m: 1rem;
+$fontsize-l: 1.2rem;
+$fontsize-xl: 1.4rem;
+
+/* default line height */
+$lineheight: 1.3;

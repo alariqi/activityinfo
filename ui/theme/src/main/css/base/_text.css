@@ -9,8 +9,8 @@
 a {
   background-color: transparent; /* 1 */
   text-decoration: none;
-  text-decoration-color: color($color-link a(33%));
-  // color: $color-link;
+  text-decoration-color: red;
+  color: $neutral;
   transition: all 0.2s ease;
 }
 
@@ -19,14 +19,14 @@ a {
 */
 a:active,
 a:hover {
-  color: $color-link--hover;
-  text-decoration-color: color($color-link--hover a(33%));
+  color: $neutral-alt;
+  text-decoration-color: red;
   outline: 0; /* 1 */
 }
 
 a:active {
-  color: $color-link--active;
-  text-decoration-color: color($color-link--active a(33%));
+  color: $neutral-alt;
+  text-decoration-color: red;
 }
 
 /* Any element that has an anchor link in it should have display block behaviour */
@@ -35,7 +35,7 @@ a:active {
 }
 
 p {
-  font-size: $font-size-m;
+  /*font-size: $font-size-m;*/
 }
 
 @media print {
@@ -51,7 +51,7 @@ small {
 }
 
 abbr[title] {
-  text-decoration: underline dotted rgba(0, 0, 0, 0.33);
+  text-decoration: underline dotted red;
 
   &:hover {
     cursor: help;
@@ -64,12 +64,12 @@ abbr[title] {
  */
 code,
 samp {
-  font-family: map(fonts, family-monospace); /* 1 */
+  font-family: monospace; /* 1 */
   font-size: 0.875em; /* 2 */
 }
 
 kbd {
-  font-family: map(fonts, family-system);
+  font-family: $gretalight;
 }
 
 /**

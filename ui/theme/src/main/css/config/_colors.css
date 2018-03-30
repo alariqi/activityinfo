@@ -1,51 +1,31 @@
 /* =====================================================
-   colour sets and color paletts
+   COLOURS
    ===================================================== */
 
+/* global colour palette */
+$white: #FFFFFF;
+$black: #243233;
 
-/* grey colour palette */
-$anthracite-dark      :   #454047;
-$anthracite           :   #4A4A4A;
-$anthracite-light     :   #615C62;
+$green: #00CF79;
+$teal: #00CFCD;
+$blue: #006FC3;
 
-/* green colour palette */
-$green-dark           :   #758C7C;
-$green                :   #94B097;
-$green-light          :   #96B4AA;
-$green-lightest		  :   #ECF1EF;
+$red: #F45443;
+$red-alt: #C11F43;
 
-/* blue colour palette */
-$blue-dark            :   #6F8EBD;
-$blue                 :   #7295CD;
-$blue-light           :   #8EABD7;
+$grey-medium: #A8AdAE;
+$grey-dark: #667070;
 
-/* orange colour palette */
-$orange-dark          :   #E0854B;
-$orange               :   #F6985B;
+/* use specific colour palette */
+$background: #F2F7F7;
+$border: #D3E4DD;
+$shadow: rgba(#689591, 0.2);
 
-/* aqua colour palette */
-$aqua-dark            :   #72C9CD;
-$aqua                 :   #3ACFDF;
+/* interaction colour palette */
+$positive: $blue;
+$positive-alt: darken($blue, 5%);
+$neutral: $black;
+$neutral-alt: lighten($black, 5%);
+$negative: $red;
+$negative-alt: $red-alt;
 
-/* grey colour palette */
-$grey-darkest         :   #E0E7E4;
-$grey-darkblue		  :   #65747F;
-$grey                 :   #ECF1EF;
-$grey-lightblue		  :   #C5D1DA;
-$grey-light           :   #F1F5F3;
-$grey-lightest        :   #F8FAF9;
-
-
-$white                :   #ECF1EF;
-
-
-$color-text-primary   :   $anthracite;
-
-$color-border         :    #435664;
-
-$color-header-sidebar :    $aqua-dark;
-
-$input-label          :    $blue-dark;
-
-$color-active         :    $blue-dark;
-$color-inactie        :    $grey;

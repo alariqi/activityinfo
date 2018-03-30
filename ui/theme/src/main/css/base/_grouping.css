@@ -11,7 +11,7 @@ hr {
   box-sizing: content-box; /* 1 */
   height: 0; /* 1 */
   overflow: visible; /* 2 */
-  border-top: 1px solid $grey-lightblue;
+  border-top: 1px solid red;
   margin: 1.5rem 0;
 }
 
@@ -51,8 +51,8 @@ figcaption {
  */
 ol,
 ul {
-  //padding: 0;
-  //list-style: none;
+  padding: 0;
+  list-style: none;
 }
 
 /**
