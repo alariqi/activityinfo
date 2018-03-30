@@ -1,5 +1,6 @@
 package org.activityinfo.theme.dev.client;
 
+import com.sencha.gxt.data.shared.ListStore;
 import org.activityinfo.theme.client.search.SearchResult;
 
 import java.util.Arrays;
@@ -369,4 +370,10 @@ public class SearchResults {
             new SearchResult("a0654147359", "Cluster Response"),
             new SearchResult("a1094105937", "Caseload")
     );
+
+    public static ListStore<SearchResult> createStore() {
+        ListStore<SearchResult> store = new ListStore<>(SearchResult::getId);
+        store.addAll(SearchResults.LIST);
+        return store;
+    }
 }

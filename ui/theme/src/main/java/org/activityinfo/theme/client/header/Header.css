@@ -1,0 +1,13 @@
+
+/* Main application navigation header */
+
+.header {
+    display: flex;
+    flex-direction: row;
+}
+
+.header .search {
+    flex-grow: 1;
+}
+
+

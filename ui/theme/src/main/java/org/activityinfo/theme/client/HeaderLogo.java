@@ -1,6 +1,5 @@
 package org.activityinfo.theme.client;
 
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -9,10 +8,10 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public final class HeaderLogo implements IsWidget {
 
-    private final HTML html;
+    private final StaticHtml html;
 
     public HeaderLogo() {
-        html = new HTML(Templates.TEMPLATES.headerLogo());
+        html = new StaticHtml(Templates.TEMPLATES.headerLogo());
     }
 
     @Override
