@@ -1,6 +1,4 @@
 .search__list {
-  top: 3.5rem !important; /* REMOVE */
-  width: 46.5rem !important; /* REMOVE */
   background-color: $white;
   border: 1px solid $green !important; /*THIS IS OVERWRITTEN BY JS*/
   border-top: 0 none !important; /*THIS IS OVERWRITTEN BY JS*/
