@@ -27,6 +27,7 @@ const nested = require('postcss-nested');
 const responsiveType = require('postcss-responsive-type');
 const simpleVars = require('postcss-simple-vars');
 const svgSprite = require('gulp-svg-sprites');
+const generateSource = require('./generate.js');
 
 // Misc
 const imagemin = require('gulp-imagemin');
@@ -34,7 +35,8 @@ const sourcemaps = require('gulp-sourcemaps');
 
 
 // --------------------------------------------------------
-// Configuration
+// Our own post-css plugin to generate Java source files with
+// class names so that the compiler can check our names
 // --------------------------------------------------------
 
 // Paths
@@ -72,6 +74,7 @@ const processors = [
     mediaMinMax,
     nested,
     responsiveType,
+    generateSource,
     autoprefixer
  //   nano
 ];

@@ -18,6 +18,14 @@ gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'installGulp'
 
 
+sourceSets {
+    generatedStyles {
+        java {
+            srcDir "$buildDir/generated-styles"
+        }
+    }
+}
+
 configurations {
     gwtSdk
 }
@@ -36,6 +44,13 @@ dependencies {
 
     gwtSdk "com.google.gwt:gwt-dev:2.8.0"
     compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
+
+    compile sourceSets.generatedStyles.output
+
+}
+
+compileGeneratedStylesJava {
+    dependsOn 'gulp_build'
 }
 
 jar {
@@ -43,12 +58,9 @@ jar {
     from project.sourceSets.main.output
 }
 
-
-
 task themeDevMode(type: JavaExec) {
 
     dependsOn 'compileJava'
-    dependsOn 'gulp_build'
 
     main = 'com.google.gwt.dev.DevMode'
 

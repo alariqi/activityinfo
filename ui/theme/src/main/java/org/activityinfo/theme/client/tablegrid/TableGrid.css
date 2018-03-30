@@ -63,13 +63,13 @@ $CELL_ALT_BACKGROUND_COLOR: white;
 .tablegrid__row--highlight {
 }
 
-.tablegrid_dataTable {
+.tablegrid_data-table {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
 }
 
-.tablegrid__headerRow {
+.tablegrid__header-row {
 }
 
 .tablegrid__row {

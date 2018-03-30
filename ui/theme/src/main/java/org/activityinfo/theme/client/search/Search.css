@@ -48,3 +48,6 @@ input:focus ~ .search__icon {
 .search__list {
   background-color: red;
 }
+
+.search__item {
+}

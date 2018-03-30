@@ -11,6 +11,7 @@ import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.core.client.util.Util;
 import com.sencha.gxt.widget.core.client.grid.GridView;
+import org.activityinfo.theme.client.ClassNames;
 
 public class GridAppearance implements GridView.GridAppearance {
 
@@ -23,87 +24,88 @@ public class GridAppearance implements GridView.GridAppearance {
 
         @Override
         public String cell() {
-            return "tablegrid__cell";
+            return ClassNames.TABLEGRID__CELL;
         }
 
         @Override
         public String cellDirty() {
-            return "tablegrid__cell--dirty";
+            return ClassNames.TABLEGRID__CELL__DIRTY;
         }
 
         @Override
         public String cellInner() {
-            return "tablegrid__cell-inner";
+            return ClassNames.TABLEGRID__CELL_INNER;
+
         }
 
         @Override
         public String noPadding() {
-            return "tablegrid--no-padding";
+            return ClassNames.NOPADDING;
         }
 
         @Override
         public String columnLines() {
-            return "tablegrid__column-lines";
+            return ClassNames.TABLEGRID__COLUMN_LINES;
         }
 
         @Override
         public String dataTable() {
-            return "tablegrid__data-table";
+            return ClassNames.TABLEGRID_DATA_TABLE;
         }
 
         @Override
         public String headerRow() {
-            return "tablegrid__header-row";
+            return ClassNames.TABLEGRID__HEADER_ROW;
         }
 
         @Override
         public String row() {
-            return "tablegrid__row";
+            return ClassNames.TABLEGRID__ROW;
         }
 
         @Override
         public String rowAlt() {
-            return "tablegrid__row--alt";
+            return ClassNames.TABLEGRID__ROW__ALT;
         }
 
         @Override
         public String rowBody() {
-            return "tablegrid__row-body";
+            return ClassNames.TABLEGRID__ROW_BODY;
         }
 
         @Override
         public String rowDirty() {
-            return "tablegrid__row--dirty";
+            return ClassNames.TABLEGRID__ROW__DIRTY;
         }
 
         @Override
         public String rowHighlight() {
-            return "tablegrid__row--highlight";
+            return ClassNames.TABLEGRID__ROW__HIGHLIGHT;
         }
 
         @Override
         public String rowOver() {
-            return "tablegrid__row--over";
+            return ClassNames.TABLEGRID__ROW__OVER;
         }
 
         @Override
         public String rowWrap() {
-            return "tablegrid__row-wrap";
+            return ClassNames.TABLEGRID__ROW_WRAP;
         }
 
         @Override
         public String empty() {
-            return "tablegrid--empty";
+            return ClassNames.TABLEGRID__EMPTY;
         }
 
         @Override
         public String footer() {
-            return "tablegrid__footer";
+            return ClassNames.TABLEGRID__FOOTER;
         }
 
         @Override
         public String grid() {
-            return "tablegrid";
+            return ClassNames.TABLEGRID;
         }
 
         @Override

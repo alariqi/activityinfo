@@ -4,6 +4,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
+import org.activityinfo.theme.client.ClassNames;
 
 public class SearchBox implements IsWidget {
 
@@ -12,7 +13,7 @@ public class SearchBox implements IsWidget {
     public SearchBox(ListStore<SearchResult> store) {
         comboBox = new ComboBox<>(new SearchComboBoxCell(store));
         comboBox.setEmptyText("Search for a database, folder or form...");
-        comboBox.addStyleName("search");
+        comboBox.addStyleName(ClassNames.SEARCH);
         comboBox.setWidth(-1);
     }
 
