@@ -4,7 +4,10 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import org.activityinfo.theme.client.header.Header;
+import org.activityinfo.theme.client.search.SearchResult;
 
 public class Frame implements AcceptsOneWidget, IsWidget {
 
@@ -12,7 +15,8 @@ public class Frame implements AcceptsOneWidget, IsWidget {
     private Widget currentPageWidget;
 
     public Frame() {
-        container.add(new Header(), new VerticalLayoutContainer.VerticalLayoutData(1, 40));
+        container.add(new Header(new ListStore<>(SearchResult::getId)),
+                new VerticalLayoutContainer.VerticalLayoutData(1, 40));
     }
 
     @Override

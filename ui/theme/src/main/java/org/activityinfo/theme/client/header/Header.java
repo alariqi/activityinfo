@@ -4,7 +4,7 @@ import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import org.activityinfo.theme.client.CssLayoutContainer;
 import org.activityinfo.theme.client.Icon;
 import org.activityinfo.theme.client.Logo;
 import org.activityinfo.theme.client.search.SearchBox;
@@ -12,15 +12,19 @@ import org.activityinfo.theme.client.search.SearchResult;
 
 public class Header implements IsWidget {
 
-    private FlowLayoutContainer container = new FlowLayoutContainer();
+    private CssLayoutContainer container = new CssLayoutContainer("header");
 
     public Header(ListStore<SearchResult> store) {
         container.addStyleName("header");
         container.add(new Logo());
         container.add(new SearchBox(store));
-        container.add(new NavButton(Icon.REPORTS, UriUtils.fromSafeConstant("#"), "My reports"));
-        container.add(new NavButton(Icon.TASKS, UriUtils.fromSafeConstant("#"), "Tasks"));
-        container.add(new NavButton(Icon.SETTINGS, UriUtils.fromSafeConstant("#"), "Settings"));
+
+        CssLayoutContainer navContainer = new CssLayoutContainer("nav");
+        navContainer.add(new NavButton(Icon.REPORTS, UriUtils.fromSafeConstant("#"), "My reports"));
+        navContainer.add(new NavButton(Icon.TASKS, UriUtils.fromSafeConstant("#"), "Tasks"));
+        navContainer.add(new NavButton(Icon.SETTINGS, UriUtils.fromSafeConstant("#"), "Settings"));
+
+        container.add(navContainer);
     }
 
     @Override
