@@ -12,7 +12,7 @@ public enum DevPage {
     TABLEGRID {
         @Override
         public IsWidget createWidget() {
-            return new GridPanel();
+            return new TableMockup();
         }
     },
     SEARCH {
