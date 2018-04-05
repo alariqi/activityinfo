@@ -30,11 +30,11 @@
     transform-origin: 50% 100%;
   }
 
-  &:hover {
+  &:hover, &:focus {
     opacity: 1;
   }
 
-  &:hover:before {
+  &:hover:before, &:focus:before {
     opacity: 1;
     transform: scaleY(1);
   }
