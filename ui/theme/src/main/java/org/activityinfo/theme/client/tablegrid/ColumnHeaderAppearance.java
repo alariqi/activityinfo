@@ -111,7 +111,7 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
     @Override
     public String columnsWrapSelector() {
-        return ClassNames.TABLEGRID__HEAD_INNER;
+        return "." + ClassNames.TABLEGRID__HEAD_INNER;
     }
 
     @Override
