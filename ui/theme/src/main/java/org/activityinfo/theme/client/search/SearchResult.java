@@ -35,7 +35,7 @@ public class SearchResult {
     }
 
     public String getType() {
-        if(id.startsWith("d")) {
+        if(id.endsWith("d")) {
             return "database";
         } else if(id.startsWith("f")) {
             return "folder";

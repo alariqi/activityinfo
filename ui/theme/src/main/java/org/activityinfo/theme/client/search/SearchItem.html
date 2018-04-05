@@ -1,3 +1,8 @@
 <div class="search__item search__item--{result.type}">
-  <span class="search__type">{result.typeName}</span> {result.label} in {result.database}
+  <tpl if="result.type == 'database'">
+    Database !
+  </tpl>
+  <tpl if="result.type != 'database'">
+    <span class="search__type">{result.typeName}</span> {result.label} in {result.database}
+  </tpl>
 </div>
