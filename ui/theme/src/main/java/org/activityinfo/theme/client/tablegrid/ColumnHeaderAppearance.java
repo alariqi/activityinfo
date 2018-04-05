@@ -6,7 +6,6 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.widget.core.client.grid.ColumnHeader;
-import org.activityinfo.theme.client.ClassNames;
 
 public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearance {
 
@@ -14,67 +13,67 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
         @Override
         public String columnMoveBottom() {
-            return ClassNames.TABLEGRID__COLUMN_MOVE_BOTTOM;
+            return "columnheader__move-bottom";
         }
 
         @Override
         public String columnMoveTop() {
-            return ClassNames.TABLEGRID__COLUMN_MOVE_TOP;
+            return "columnheader__move-top";
         }
 
         @Override
         public String head() {
-            return ClassNames.TABLEGRID__HEAD;
+            return "columnheader__head";
         }
 
         @Override
         public String headButton() {
-            return ClassNames.TABLEGRID__HEAD_BUTTON;
+            return "columnheader__head-button";
         }
 
         @Override
         public String header() {
-            return ClassNames.TABLEGRID__HEADER;
+            return "columnheader__header";
         }
 
         @Override
         public String headerInner() {
-            return ClassNames.TABLEGRID__HEADER_INNER;
+            return "columnheader__header-inner";
         }
 
         @Override
         public String headInner() {
-            return ClassNames.TABLEGRID__HEAD_INNER;
+            return "columnheader__head-inner";
         }
 
         @Override
         public String headMenuOpen() {
-            return ClassNames.TABLEGRID__HEAD_MENU__OPEN;
+            return "columnheader__-menu-open";
         }
 
         @Override
         public String headOver() {
-            return ClassNames.TABLEGRID__HEAD__OVER;
+            return "columnheader__-over";
         }
 
         @Override
         public String headRow() {
-            return ClassNames.TABLEGRID__HEAD_ROW;
+            return "columnheader__head-row";
         }
 
         @Override
         public String sortAsc() {
-            return ClassNames.TABLEGRID__SORT__ASC;
+            return "columnheader__sort-asc";
         }
 
         @Override
         public String sortDesc() {
-            return ClassNames.TABLEGRID__SORT__DESC;
+            return "columnheader__sort-desc";
         }
 
         @Override
         public String sortIcon() {
-            return ClassNames.TABLEGRID__SORT_ICON;
+            return "columnheader__sort-icon";
         }
 
         @Override
@@ -111,7 +110,7 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
     @Override
     public String columnsWrapSelector() {
-        return "." + ClassNames.TABLEGRID__HEAD_INNER;
+        return ".columheader__header-inner";
     }
 
     @Override
