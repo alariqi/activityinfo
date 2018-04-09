@@ -1,5 +1,15 @@
 
 
+apply plugin: 'com.moowork.gulp'
+
+node {
+    // Version of node to use.
+    version = '8.11.0'
+    npmVersion = '5.8.0'
+
+    // Enabled the automatic download. False is the default (for now).
+    download = true
+}
 
 ext {
     outputDir = "$buildDir/gwt-out"
@@ -65,7 +75,7 @@ dependencies {
 
     compile group: 'com.sencha.gxt', name: 'gxt', version: '4.0.0'
     compile group: 'com.sencha.gxt', name: 'gxt-chart', version: '4.0.0'
-    compile project(':ui:theme')
+    compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
 
     testCompile libraries.gwt.servlet
     testCompile project(':store:testing')
@@ -84,7 +94,45 @@ dependencies {
 }
 
 
+// run npm install
+gulp_build.dependsOn 'npmInstall'
+
+// run gulp install
+gulp_build.dependsOn 'installGulp'
+
+
+
+task themeDevMode(type: JavaExec) {
+
+    dependsOn 'compileJava', 'gulp_build'
+
+    main = 'com.google.gwt.dev.DevMode'
+
+
+    // Compiled java classes and libraries second
+    classpath new File(buildDir, "assets")
+    classpath sourceSets.main.java.srcDirs
+    classpath sourceSets.main.resources.srcDirs
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.gwtSdk
+
+    args '-logLevel', 'INFO'
+    args '-war', "${buildDir}/devMode"
+    args '-startupUrl', '/ThemeDev/dev.html'
+    args '-bindAddress', '0.0.0.0'
+    args 'org.activityinfo.theme.dev.ThemeDev'
+
+    doFirst {
+        for(cp in classpath) {
+            logger.lifecycle("classpath: " + cp)
+        }
+
+    }
+}
+
 task compileApp(type: JavaExec) {
+
+    dependsOn 'gulp_build'
 
     outputs.dir outputDir
     inputs.dir sourceSets.main.allSource.srcDirs

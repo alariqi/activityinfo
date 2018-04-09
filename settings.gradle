@@ -33,6 +33,5 @@ include 'ui:icons'
 include 'ui:app'
 include 'ui:app2'
 include 'ui:geoadmin'
-include 'ui:theme'
 
 include 'tests'
