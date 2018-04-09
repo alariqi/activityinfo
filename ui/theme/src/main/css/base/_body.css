@@ -54,9 +54,7 @@ input:focus::placeholder {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: $green;
-  width: calc(100% - 0.2rem);
-  margin: 0.1rem;
+  background-image: linear-gradient(to bottom right, $green, $teal);
 }
 
 @media print {

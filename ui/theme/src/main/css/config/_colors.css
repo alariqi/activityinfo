@@ -4,22 +4,24 @@
 
 /* global colour palette */
 $white: #FFFFFF;
+$grey-medium: #A8AdAE;
+$grey-dark: #364a4a;
+$grey-deep: #2a3b3c;
 $black: #243233;
 
 $green: #00CF79;
+$green-light: #61F2B6;
 $teal: #00CFCD;
 $blue: #006FC3;
 
 $red: #F45443;
 $red-alt: #C11F43;
 
-$grey-medium: #A8AdAE;
-$grey-dark: #667070;
 
 /* use specific colour palette */
 $background: #F2F7F7;
 $border: #D3E4DD;
-$shadow: rgba(#689591, 0.2);
+$shadow: rgba($grey-deep, 0.2);
 
 /* interaction colour palette */
 $positive: $blue;

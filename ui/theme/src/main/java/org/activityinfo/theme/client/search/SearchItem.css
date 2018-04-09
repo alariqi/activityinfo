@@ -2,8 +2,18 @@
   position: relative;
   display: block;
   padding: 1rem;
-  font-size: 1.5rem;
-  color: $green;
+  padding-left: 3rem;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: $white;
+
+  &:before {
+    content: '';
+    background-image: url('icon_header_search-white.svg');
+    background-position: 1.5rem 50%;
+    background-size: 1rem;
+    background-repeat: no-repeat;
+  }
 
   &:after {
     position: absolute;
@@ -12,10 +22,35 @@
     content: '';
     width: calc(100% - 2rem);
     height: 1px;
-    border-bottom: 1px solid rgba($white, 0.2);
+    border-bottom: 1px solid $grey-dark;
   }
 
   &:last-child:after {
     display: none;
   }
+
+  &:hover {
+    background-color: $grey-deep;
+  }
+}
+
+.search__item--folder {
+
+}
+
+.search__item--form {
+}
+
+.search__item--folder {
+}
+
+.search__type {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  color: $grey-medium;
+}
+
+.search__item:hover .search__type {
+  color: $white;
 }
