@@ -137,6 +137,8 @@ task compileApp(type: JavaExec) {
     outputs.dir outputDir
     inputs.dir sourceSets.main.allSource.srcDirs
 
+    classpath new File(buildDir, "assets")
+
     // Compiled java classes and libraries second
     classpath sourceSets.main.java.srcDirs
     classpath sourceSets.main.resources.srcDirs
