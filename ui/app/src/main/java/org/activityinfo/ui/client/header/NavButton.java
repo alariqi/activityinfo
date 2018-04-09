@@ -14,7 +14,7 @@ public class NavButton implements IsWidget {
 
     interface Templates extends XTemplates {
         @XTemplate(source = "NavButton.html")
-        SafeHtml render(SafeUri uri, String label);
+        SafeHtml render(SafeUri uri, String label, String iconHref);
     }
 
     private static final Templates TEMPLATES = GWT.create(Templates.class);
@@ -22,7 +22,7 @@ public class NavButton implements IsWidget {
     private StaticHtml html;
 
     public NavButton(Icon icon, SafeUri uri, String label) {
-        html = new StaticHtml(TEMPLATES.render(uri, label));
+        html = new StaticHtml(TEMPLATES.render(uri, label, icon.href()));
     }
 
     @Override

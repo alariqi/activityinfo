@@ -41,7 +41,7 @@ const sourcemaps = require('gulp-sourcemaps');
 
 // Paths
 const paths = {
-    build: `${__dirname}/build/assets/org/activityinfo/theme/public`,
+    build: `${__dirname}/build/assets/org/activityinfo/theme`,
     src: `${__dirname}/src`,
     modules: `${__dirname}/node_modules`
 };
@@ -84,19 +84,36 @@ const processors = [
 // --------------------------------------------------------
 
 
-// Vectors
-function vectors() {
-    return gulp.src(`${paths.src}/main/vectors/**/*`)
-        .pipe(gulp.dest(`${paths.build}/vectors`));
-}
 
 // Styles
+// Write to the /public section for now so that we
+// can benefit from sourcemaps
 function styles() {
     return gulp.src(`${paths.src}/main/css/*.css`)
         .pipe(sourcemaps.init())
         .pipe(postcss(processors))
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(paths.build));
+        .pipe(gulp.dest(`${paths.build}/public`));
+}
+
+function sprites() {
+    // return gulp.src('assets/svg/*.svg')
+    return gulp.src(`${paths.src}/main/icons/*.svg`)
+        .pipe(svgSprite({
+
+            // Set prefix for every svg
+            selector        : "%f",
+            // Set mode for the sprites
+            mode            : "symbols",
+            // css file for the svgs
+            // cssFile         : false,
+            //turned off preview, because it generates a different html file
+            // preview         : {symbols:  "icons.html"},
+            preview         : false,
+            svg             : {symbols: "icons.svg"}
+
+        }))
+        .pipe(gulp.dest(`${paths.build}/client`));
 }
 
 
@@ -106,7 +123,7 @@ function watch() {
 }
 
 
-gulp.task('build', gulp.parallel(vectors, styles));
+gulp.task('build', gulp.parallel(sprites, styles));
 gulp.task('watch', watch);
 
 

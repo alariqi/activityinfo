@@ -22,6 +22,9 @@ import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -34,6 +37,7 @@ import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
+import org.activityinfo.theme.client.ThemeBundle;
 import org.activityinfo.ui.client.databases.DatabaseListPlace;
 import org.activityinfo.ui.client.header.Frame;
 import org.activityinfo.ui.client.store.FormStore;
@@ -42,7 +46,6 @@ import org.activityinfo.ui.client.store.http.ConnectionListener;
 import org.activityinfo.ui.client.store.http.HttpStore;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.RecordSynchronizer;
-import org.activityinfo.ui.icons.Icons;
 
 import java.util.logging.Logger;
 
@@ -63,7 +66,10 @@ public class AppEntryPoint implements EntryPoint {
         LOGGER.info("gxt.user.agent = " + System.getProperty("gxt.user.agent"));
         LOGGER.info("gxt.device = " + System.getProperty("gxt.device"));
 
-        Icons.INSTANCE.ensureInjected();
+        DivElement divElement = Document.get().createDivElement();
+        divElement.setInnerHTML(ThemeBundle.INSTANCE.icons().getText());
+        Element svgElement = divElement.getFirstChildElement();
+        Document.get().getBody().insertFirst(svgElement);
 
         AppCache appCache = new AppCache();
         AppCacheMonitor3 monitor = new AppCacheMonitor3(appCache);
