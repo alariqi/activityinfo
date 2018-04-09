@@ -1,4 +1,4 @@
-package org.activityinfo.theme.client.search;
+package org.activityinfo.ui.client.search;
 
 import com.google.gwt.cell.client.ValueUpdater;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;

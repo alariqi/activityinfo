@@ -3,8 +3,8 @@ package org.activityinfo.theme.dev.client;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import org.activityinfo.theme.client.header.ConnectionStatus;
-import org.activityinfo.theme.client.header.Header;
+import org.activityinfo.ui.client.header.ConnectionStatus;
+import org.activityinfo.ui.client.header.Header;
 
 public class TableMockup implements IsWidget {
 

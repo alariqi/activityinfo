@@ -6,8 +6,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import org.activityinfo.theme.client.header.Header;
-import org.activityinfo.theme.client.search.SearchResult;
+import org.activityinfo.ui.client.search.SearchResult;
 
 public class Frame implements AcceptsOneWidget, IsWidget {
 
@@ -16,7 +15,7 @@ public class Frame implements AcceptsOneWidget, IsWidget {
 
     public Frame() {
         container.add(new Header(new ListStore<>(SearchResult::getId)),
-                new VerticalLayoutContainer.VerticalLayoutData(1, 40));
+                new VerticalLayoutContainer.VerticalLayoutData(1, -1));
     }
 
     @Override

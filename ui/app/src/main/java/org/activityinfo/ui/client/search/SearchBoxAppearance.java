@@ -1,4 +1,4 @@
-package org.activityinfo.theme.client.search;
+package org.activityinfo.ui.client.search;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;

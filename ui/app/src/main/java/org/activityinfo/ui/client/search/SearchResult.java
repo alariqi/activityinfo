@@ -1,4 +1,4 @@
-package org.activityinfo.theme.client.search;
+package org.activityinfo.ui.client.search;
 
 import java.util.Arrays;
 import java.util.List;

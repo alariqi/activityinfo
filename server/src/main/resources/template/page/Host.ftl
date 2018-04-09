@@ -40,8 +40,8 @@
     <title>${domain.title}</title>
 
     <#if newUI>
-
-    <link rel="stylesheet" type="text/css" href="App/reset.css" />
+    <link rel="stylesheet" href="https://fonts.typotheque.com/WF-028542-010274.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="App/app.css">
 
     <#else>
     <style type="text/css">

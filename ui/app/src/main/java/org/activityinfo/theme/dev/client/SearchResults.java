@@ -1,7 +1,7 @@
 package org.activityinfo.theme.dev.client;
 
 import com.sencha.gxt.data.shared.ListStore;
-import org.activityinfo.theme.client.search.SearchResult;
+import org.activityinfo.ui.client.search.SearchResult;
 
 import java.util.Arrays;
 import java.util.List;

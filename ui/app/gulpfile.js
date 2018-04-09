@@ -27,6 +27,7 @@ const nested = require('postcss-nested');
 const responsiveType = require('postcss-responsive-type');
 const simpleVars = require('postcss-simple-vars');
 const svgSprite = require('gulp-svg-sprites');
+const svgInline = require('postcss-inline-svg');
 
 // Misc
 const imagemin = require('gulp-imagemin');
@@ -40,7 +41,7 @@ const sourcemaps = require('gulp-sourcemaps');
 
 // Paths
 const paths = {
-    build: `${__dirname}/build/assets/org/activityinfo/theme/dev/public`,
+    build: `${__dirname}/build/assets/org/activityinfo/theme/public`,
     src: `${__dirname}/src`,
     modules: `${__dirname}/node_modules`
 };
@@ -65,6 +66,7 @@ const processors = [
     //     loadPaths: [`${paths.src}/assets/vectors`]
     // }),
     simpleVars,
+    svgInline,
     apply,
     calc,
     customMedia,

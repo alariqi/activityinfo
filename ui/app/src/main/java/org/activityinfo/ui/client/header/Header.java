@@ -1,4 +1,4 @@
-package org.activityinfo.theme.client.header;
+package org.activityinfo.ui.client.header;
 
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -6,9 +6,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import org.activityinfo.theme.client.CssLayoutContainer;
 import org.activityinfo.theme.client.Icon;
-import org.activityinfo.theme.client.Logo;
-import org.activityinfo.theme.client.search.SearchBox;
-import org.activityinfo.theme.client.search.SearchResult;
+import org.activityinfo.ui.client.search.SearchBox;
+import org.activityinfo.ui.client.search.SearchResult;
 
 public class Header implements IsWidget {
 

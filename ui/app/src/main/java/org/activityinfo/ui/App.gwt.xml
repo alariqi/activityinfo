@@ -20,7 +20,33 @@
 -->
 <module>
 
-  <inherits name='org.activityinfo.ui.AppCore' />
+
+  <inherits name='com.google.gwt.user.User' />
+  <inherits name='com.google.gwt.activity.Activity'/>
+  <inherits name='com.google.gwt.place.Place'/>
+
+  <inherits name='com.sencha.gxt.ui.GXT' />
+
+  <inherits name='org.activityinfo.theme.ActivityInfoTheme' />
+
+  <inherits name="org.activityinfo.model.Model"/>
+  <inherits name="org.activityinfo.io.Match"/>
+  <inherits name="org.activityinfo.store.query.Query"/>
+  <inherits name="org.activityinfo.Analysis"/>
+  <inherits name="org.activityinfo.api.ApiClient"/>
+
+  <!-- Avoid unsupported RTL layout even when using RTL text -->
+  <inherits name="org.activityinfo.i18n.ArabicLTR"/>
+
+  <inherits name="org.activityinfo.ui.Icons"/>
+  <set-configuration-property name="CssResource.conversionMode" value="strict" />
+
+  <inherits name="org.activityinfo.IndexedDB"/>
+  <inherits name="org.activityinfo.Storage"/>
+
+  <inherits name="org.activityinfo.ui.codemirror.CodeMirror"/>
+
+  <inherits name="com.bedatadriven.rebar.appcache.AppCache"/>
 
   <set-property name="gwt.logging.logLevel" value="FINEST"/>
   <set-property name="gwt.logging.enabled" value="TRUE"/>

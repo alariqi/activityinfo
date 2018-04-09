@@ -15,9 +15,6 @@ public interface Templates extends XTemplates {
     @XTemplate(source = "BreadcrumbSeparator.html")
     SafeHtml breadcrumbSeparator();
 
-    @XTemplate(source = "Logo.html")
-    SafeHtml logo();
-
     @XTemplate(source = "NavListItem.html")
     SafeHtml navListItem(NavListItem item);
 

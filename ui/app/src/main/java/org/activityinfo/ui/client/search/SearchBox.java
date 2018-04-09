@@ -1,4 +1,4 @@
-package org.activityinfo.theme.client.search;
+package org.activityinfo.ui.client.search;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
