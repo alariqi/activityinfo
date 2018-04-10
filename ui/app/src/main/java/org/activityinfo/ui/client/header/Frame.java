@@ -15,6 +15,7 @@ public class Frame implements AcceptsOneWidget, IsWidget {
     public Frame(FormStore formStore) {
         container.add(new Header(formStore),
                 new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        container.add(new ConnectionStatus());
     }
 
     @Override

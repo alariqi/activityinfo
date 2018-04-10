@@ -1855,4 +1855,13 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Search for a database, folder or form...")
     String searchPlaceholder();
 
+    @DefaultStringValue("Settings")
+    String settings();
+
+    @DefaultStringValue("My Reports")
+    String myReports();
+
+    @DefaultStringValue("Notifications")
+    String notifications();
+
 }

@@ -14,7 +14,11 @@ import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.*;
+import org.activityinfo.theme.client.Icon;
+import org.activityinfo.theme.client.ListToolBarButton;
+import org.activityinfo.theme.client.PageHeader;
+import org.activityinfo.ui.client.databases.ListItem;
+import org.activityinfo.ui.client.databases.ListItemCell;
 import org.activityinfo.ui.client.header.BreadcrumbBar;
 import org.activityinfo.ui.client.header.BreadcrumbViewModel;
 
@@ -22,7 +26,7 @@ public class DatabasePage implements IsWidget {
 
     private final VerticalLayoutContainer container;
     private final BreadcrumbBar breadcrumbs;
-    private final ListStore<NavListItem> listStore;
+    private final ListStore<ListItem> listStore;
     private final PageHeader pageHeader;
 
     public DatabasePage() {
@@ -47,14 +51,14 @@ public class DatabasePage implements IsWidget {
         toolBar.add(new FillToolItem());
         toolBar.add(sortButton);
 
-        listStore = new ListStore<>(NavListItem::getId);
+        listStore = new ListStore<>(ListItem::getId);
 
-        ListViewSelectionModel<NavListItem> selectionModel = new ListViewSelectionModel<>();
+        ListViewSelectionModel<ListItem> selectionModel = new ListViewSelectionModel<>();
         selectionModel.setLocked(true);
 
-        ListView<NavListItem, NavListItem> listView = new ListView<>(listStore,
+        ListView<ListItem, ListItem> listView = new ListView<>(listStore,
                 new IdentityValueProvider<>(),
-                new NavListItemCell());
+                new ListItemCell());
 
         listView.setSelectionModel(selectionModel);
         listView.setTrackMouseOver(false);

@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.sencha.gxt.core.client.XTemplates;
+import org.activityinfo.ui.client.databases.ListItem;
 
 public interface Templates extends XTemplates {
 
@@ -16,7 +17,7 @@ public interface Templates extends XTemplates {
     SafeHtml breadcrumbSeparator();
 
     @XTemplate(source = "NavListItem.html")
-    SafeHtml navListItem(NavListItem item);
+    SafeHtml navListItem(ListItem item);
 
     @XTemplate(source = "PageHeader.html")
     SafeHtml pageHeader(String heading, SafeUri settingsUri, String settingsLabel);

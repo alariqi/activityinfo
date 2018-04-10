@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
-import org.activityinfo.theme.client.NavListItem;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.List;
@@ -15,14 +14,14 @@ import java.util.stream.Collectors;
 
 public class DatabaseListActivity implements Activity {
 
-    private final Observable<List<NavListItem>> databaseList;
+    private final Observable<List<ListItem>> databaseList;
     private final SubscriptionSet subscriptions = new SubscriptionSet();
 
     public DatabaseListActivity(FormStore formStore) {
         this.databaseList = formStore.getCatalogChildren(ResourceId.valueOf("databases"))
                 .transform(entries ->
                     entries.stream().map(entry ->
-                        new NavListItem(entry.getId(), entry.getLabel(),
+                        new ListItem(entry.getId(), entry.getLabel(),
                                 UriUtils.fromSafeConstant("#database/" + entry.getId())))
                         .collect(Collectors.toList())
                 );

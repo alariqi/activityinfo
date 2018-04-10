@@ -1,0 +1,34 @@
+
+.listpage__header {
+    background-color: white;
+}
+
+.listpage__header h2 {
+    font-size: 2em;
+    font-family: $gretasemibold;
+    max-width: $maxwidth;
+    margin: 1em auto;
+}
+
+.listpage__body {
+    background-color: $background;
+}
+
+.listpage__inner {
+    max-width: $maxwidth;
+    margin: 0 auto;
+}
+
+.listpage__item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $fontsize-l;
+    background: $white;
+    border: 1px solid $border;
+}
+
+.listpage__item-label {
+    flex-grow: 1;
+}

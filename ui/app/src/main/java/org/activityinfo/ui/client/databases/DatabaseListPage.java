@@ -7,28 +7,29 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.*;
-import org.activityinfo.ui.client.header.BreadcrumbBar;
+import org.activityinfo.theme.client.CssLayoutContainer;
+import org.activityinfo.theme.client.Icon;
+import org.activityinfo.theme.client.ListToolBarButton;
+import org.activityinfo.theme.client.StaticHtml;
 
 import java.util.List;
 
 public class DatabaseListPage implements IsWidget {
 
-    private final VerticalLayoutContainer container;
-    private final BreadcrumbBar breadcrumbs;
-    private final ListStore<NavListItem> listStore;
+    private final CssLayoutContainer outer;
+    private final CssLayoutContainer body;
+    private final CssLayoutContainer inner;
+    private final ListStore<ListItem> listStore;
 
     public DatabaseListPage() {
 
-        breadcrumbs = new BreadcrumbBar();
-        PageHeader pageHeader = new PageHeader(I18N.CONSTANTS.databases());
+        StaticHtml pageHeader = new StaticHtml(DatabaseTemplates.TEMPLATES.pageHeader(I18N.CONSTANTS.databases()));
 
         ListToolBarButton newDatabaseButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newDatabase());
 
@@ -45,26 +46,34 @@ public class DatabaseListPage implements IsWidget {
         toolBar.add(new FillToolItem());
         toolBar.add(sortButton);
 
-        listStore = new ListStore<>(NavListItem::getId);
+        listStore = new ListStore<>(ListItem::getId);
 
-        ListViewSelectionModel<NavListItem> selectionModel = new ListViewSelectionModel<>();
+        ListViewSelectionModel<ListItem> selectionModel = new ListViewSelectionModel<>();
         selectionModel.setLocked(true);
 
-        ListView<NavListItem, NavListItem> listView = new ListView<>(listStore,
+        ListView<ListItem, ListItem> listView = new ListView<>(listStore,
                 new IdentityValueProvider<>(),
-                new NavListItemCell());
+                new ListItemCell());
 
         listView.setSelectionModel(selectionModel);
         listView.setTrackMouseOver(false);
 
-        container = new VerticalLayoutContainer();
-        container.add(breadcrumbs, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(pageHeader, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(toolBar, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(listView, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+        inner = new CssLayoutContainer();
+        inner.getElement().addClassName("listpage__inner");
+        inner.add(toolBar);
+        inner.add(listView);
+
+        body = new CssLayoutContainer();
+        body.getElement().addClassName("listpage__body");
+        body.add(inner);
+
+        outer = new CssLayoutContainer();
+        outer.getElement().addClassName("listpage");
+        outer.add(pageHeader);
+        outer.add(body);
     }
 
-    public void updateView(Observable<List<NavListItem>> databases) {
+    public void updateView(Observable<List<ListItem>> databases) {
         if(databases.isLoaded()) {
             listStore.replaceAll(databases.get());
         } else {
@@ -74,6 +83,6 @@ public class DatabaseListPage implements IsWidget {
 
     @Override
     public Widget asWidget() {
-        return container;
+        return outer;
     }
 }

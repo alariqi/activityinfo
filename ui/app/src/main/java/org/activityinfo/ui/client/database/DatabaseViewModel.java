@@ -3,8 +3,8 @@ package org.activityinfo.ui.client.database;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.theme.client.NavListItem;
 import org.activityinfo.ui.client.PlaceLinks;
+import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.table.TablePlace;
 
 import java.util.ArrayList;
@@ -26,12 +26,12 @@ public class DatabaseViewModel {
         return database;
     }
 
-    public List<NavListItem> getFormLinks() {
-        List<NavListItem> items = new ArrayList<>();
+    public List<ListItem> getFormLinks() {
+        List<ListItem> items = new ArrayList<>();
         for (Resource resource : database.getResources()) {
             if(resource.getType() == ResourceType.FORM &&
                     resource.getParentId().equals(database.getDatabaseId())) {
-                items.add(new NavListItem(
+                items.add(new ListItem(
                         resource.getId().asString(),
                         resource.getLabel(),
                         PlaceLinks.toUri(new TablePlace(resource.getId()))));
