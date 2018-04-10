@@ -4,17 +4,16 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import org.activityinfo.ui.client.search.SearchResult;
+import org.activityinfo.ui.client.store.FormStore;
 
 public class Frame implements AcceptsOneWidget, IsWidget {
 
     private final VerticalLayoutContainer container = new VerticalLayoutContainer();
     private Widget currentPageWidget;
 
-    public Frame() {
-        container.add(new Header(new ListStore<>(SearchResult::getId)),
+    public Frame(FormStore formStore) {
+        container.add(new Header(formStore),
                 new VerticalLayoutContainer.VerticalLayoutData(1, -1));
     }
 

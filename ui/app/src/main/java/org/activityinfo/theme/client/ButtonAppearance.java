@@ -10,7 +10,9 @@ public class ButtonAppearance<M> implements ButtonCell.ButtonCellAppearance<M> {
     @Override
     public void render(ButtonCell<M> cell, Cell.Context context, M value, SafeHtmlBuilder sb) {
         sb.appendHtmlConstant("<button type=\"button\" class=\"button\">");
-        sb.appendEscaped(value.toString());
+        if(value != null) {
+            sb.appendEscaped(value.toString());
+        }
         sb.appendHtmlConstant("</button>");
     }
 

@@ -28,6 +28,7 @@ import org.activityinfo.json.JsonParser;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormClassProvider;
@@ -45,6 +46,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +88,28 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     @Override
     public Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
         return get(baseUrl + "/database/" + CuidAdapter.getLegacyIdFromCuid(databaseId), UserDatabaseMeta::fromJson);
+    }
+
+    @Override
+    public Promise<List<DatabaseHeader>> getDatabases() {
+        return get(baseUrl + "/databases", input -> {
+            List<DatabaseHeader> databases = new ArrayList<>();
+            if (input.isJsonArray()) {
+                for (int i = 0; i < input.length(); i++) {
+                    JsonValue databaseObject = input.get(i);
+                    ResourceId databaseId;
+                    if(databaseObject.get("id").isNumber()) {
+                        databaseId = CuidAdapter.databaseId((int)databaseObject.getNumber("id"));
+                    } else {
+                        databaseId = ResourceId.valueOf(databaseObject.getString("id"));
+                    }
+                    databases.add(new DatabaseHeader(databaseId,
+                            databaseObject.getString("name"),
+                            "0"));
+                }
+            }
+            return databases;
+        });
     }
 
     /**

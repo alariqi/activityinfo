@@ -20,6 +20,7 @@ package org.activityinfo.api.client;
 
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormTree;
@@ -39,6 +40,11 @@ public interface ActivityInfoClientAsync {
 
 
     Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId);
+
+    /**
+     * @return a list of the databases owned by or shared with the current user.
+     */
+    Promise<List<DatabaseHeader>> getDatabases();
 
     /**
      * Get a List of Forms

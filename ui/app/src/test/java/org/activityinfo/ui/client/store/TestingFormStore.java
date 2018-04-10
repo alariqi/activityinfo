@@ -105,6 +105,11 @@ public class TestingFormStore implements FormStore {
     }
 
     @Override
+    public Observable<List<UserDatabaseMeta>> getDatabases() {
+        throw new UnsupportedOperationException("TODO");
+    }
+
+    @Override
     public Observable<FormMetadata> getFormMetadata(ResourceId formId) {
         return maybeExecute(() -> fetchFormMetadata(formId));
     }

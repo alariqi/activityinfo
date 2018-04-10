@@ -21,10 +21,12 @@ package org.activityinfo.ui.client;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.LinkElement;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -66,10 +68,8 @@ public class AppEntryPoint implements EntryPoint {
         LOGGER.info("gxt.user.agent = " + System.getProperty("gxt.user.agent"));
         LOGGER.info("gxt.device = " + System.getProperty("gxt.device"));
 
-        DivElement divElement = Document.get().createDivElement();
-        divElement.setInnerHTML(ThemeBundle.INSTANCE.icons().getText());
-        Element svgElement = divElement.getFirstChildElement();
-        Document.get().getBody().insertFirst(svgElement);
+        injectStyle();
+        injectIcons();
 
         AppCache appCache = new AppCache();
         AppCacheMonitor3 monitor = new AppCacheMonitor3(appCache);
@@ -90,7 +90,7 @@ public class AppEntryPoint implements EntryPoint {
         LocalStorage storage = LocalStorage.create();
 
         Viewport viewport = new Viewport();
-        Frame frame = new Frame();
+        Frame frame = new Frame(formStore);
 
         ActivityMapper activityMapper = new AppActivityMapper(formStore, storage);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
@@ -108,6 +108,24 @@ public class AppEntryPoint implements EntryPoint {
         RootLayoutPanel.get().add(viewport);
 
         historyHandler.handleCurrentHistory();
+
+    }
+
+    private void injectStyle() {
+        //     <link rel="stylesheet" type="text/css" href="App/app.css">
+        LinkElement link = Document.get().createLinkElement();
+        link.setRel("stylesheet");
+        link.setType("text/css");
+        link.setHref(GWT.getModuleBaseForStaticFiles() + "app.css");
+
+        Document.get().getHead().appendChild(link);
+    }
+
+    private void injectIcons() {
+        DivElement divElement = Document.get().createDivElement();
+        divElement.setInnerHTML(ThemeBundle.INSTANCE.icons().getText());
+        Element svgElement = divElement.getFirstChildElement();
+        Document.get().getBody().insertFirst(svgElement);
     }
 
     private String findServerUrl() {

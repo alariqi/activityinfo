@@ -1,13 +1,6 @@
-<div class="search__item search__item--{result.type}">
-  <tpl if="result.type == 'database'">
-    <span class="search__type">
-      <strong>Database</strong>
-    </span>
-  </tpl>
-  <tpl if="result.type != 'database'">
-    <span class="search__type">
-      <strong>{result.typeName}</strong> in database <strong>{result.database}</strong>
-    </span>
-  </tpl>
-  {result.database}
+<div class="search__item search__item--{result.typeClassName}">
+  <span class="search__type">
+    {result.typeLabel}
+  </span>
+  {result.label}
 </div>

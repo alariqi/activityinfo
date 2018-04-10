@@ -35,11 +35,9 @@ public class SearchBoxAppearance implements TriggerFieldCell.TriggerFieldAppeara
     public void onTriggerOver(XElement parent, boolean over) {
     }
 
-
     @Override
     public void setEditable(XElement parent, boolean editable) {
     }
-
 
     @Override
     public void onEmpty(Element parent, boolean empty) {

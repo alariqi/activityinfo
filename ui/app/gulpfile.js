@@ -119,7 +119,7 @@ function sprites() {
 
 // Watch
 function watch() {
-    gulp.watch(`${paths.src}/**/*.css`, styles);
+    gulp.watch(`${paths.src}/main/**/*.css`, styles);
 }
 
 

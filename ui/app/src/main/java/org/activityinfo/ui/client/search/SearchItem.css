@@ -44,6 +44,15 @@
 .search__item--folder {
 }
 
+/* The .x-view-highlightrow is applied to
+ * rows selected by the user via the keyboard.
+ */
+
+.search__list .x-view-highlightrow {
+  /* TODO(adrian): distinguish from hover style? */
+  background-color: $grey-deep;
+}
+
 .search__type {
   display: block;
   margin-bottom: 0.25rem;

@@ -43,6 +43,8 @@ public interface FormStore extends FormSource {
 
     Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId);
 
+    Observable<List<UserDatabaseMeta>> getDatabases();
+
     Observable<FormMetadata> getFormMetadata(ResourceId formId);
 
     Observable<Maybe<RecordTree>> getRecordTree(RecordRef rootRecordId);

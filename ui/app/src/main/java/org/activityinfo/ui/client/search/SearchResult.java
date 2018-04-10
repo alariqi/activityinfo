@@ -1,55 +1,82 @@
 package org.activityinfo.ui.client.search;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.database.Resource;
+import org.activityinfo.model.database.ResourceType;
+import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.resource.ResourceId;
 
 public class SearchResult {
-    private String id;
+    private ResourceId id;
     private String label;
-    private final List<String> parents;
+    private ResourceType resourceType;
+    private String databaseName;
 
-    public SearchResult(String id, String label, String... parents) {
+    public SearchResult(ResourceId id, String label, ResourceType type, String databaseName) {
         this.id = id;
         this.label = label;
-        this.parents = Arrays.asList(parents);
+        resourceType = type;
+        this.databaseName = databaseName;
     }
 
-    public String getId() {
+    public SearchResult(UserDatabaseMeta database) {
+        this.id = database.getDatabaseId();
+        this.resourceType = ResourceType.DATABASE;
+        this.label = database.getLabel();
+        this.databaseName = database.getLabel();
+    }
+
+    public SearchResult(UserDatabaseMeta database, Resource resource) {
+        this.id = resource.getId();
+        this.resourceType = resource.getType();
+        this.label = resource.getLabel();
+        this.databaseName = database.getLabel();
+    }
+
+    public ResourceId getId() {
         return id;
+    }
+
+    public String getKey() {
+        return id.asString();
     }
 
     public String getLabel() {
         return label;
     }
 
-    public List<String> getParents() {
-        return parents;
-    }
-
     public String getDatabase() {
-        if(parents.isEmpty()) {
-            return label;
-        } else {
-            return parents.get(0);
-        }
+        return databaseName;
     }
 
-    public String getType() {
-        if(id.endsWith("d")) {
-            return "database";
-        } else if(id.startsWith("f")) {
-            return "folder";
-        } else {
-            return "form";
-        }
+    public ResourceType getResourceType() {
+        return resourceType;
     }
 
-    public String getTypeName() {
-        return getType().substring(0, 1).toUpperCase() + getType().substring(1);
+    /**
+     * @return the CSS class name to use for this result
+     */
+    public String getTypeClassName() {
+        return resourceType.name().toLowerCase();
+    }
+
+    public SafeHtml getTypeLabel() {
+        switch (resourceType) {
+            case DATABASE:
+                return SearchTemplates.TEMPLATES.databaseLabel(I18N.CONSTANTS.database());
+            case FORM:
+                return I18N.MESSAGES.formDatabaseLabel(databaseName);
+            case FOLDER:
+                return I18N.MESSAGES.folderDatabaseLabel(databaseName);
+        }
+        return SafeHtmlUtils.EMPTY_SAFE_HTML;
     }
 
     @Override
     public String toString() {
         return label;
     }
+
 }

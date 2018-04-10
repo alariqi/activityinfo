@@ -27,6 +27,7 @@ import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormTree;
@@ -139,6 +140,11 @@ public class ActivityInfoClientAsyncStub implements ActivityInfoClientAsync {
 
     @Override
     public Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
+        return Promise.rejected(new UnsupportedOperationException("TODO"));
+    }
+
+    @Override
+    public Promise<List<DatabaseHeader>> getDatabases() {
         return Promise.rejected(new UnsupportedOperationException("TODO"));
     }
 

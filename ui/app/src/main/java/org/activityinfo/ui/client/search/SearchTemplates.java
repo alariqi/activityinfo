@@ -15,4 +15,7 @@ interface SearchTemplates extends XTemplates {
 
     @XTemplate(source = "SearchItem.html")
     SafeHtml searchItem(SearchResult result);
+
+    @XTemplate("<strong>{database}</strong>")
+    SafeHtml databaseLabel(String database);
 }

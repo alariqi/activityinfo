@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.gwt.core.client.Scheduler;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.FormMetadata;
@@ -42,14 +43,12 @@ import org.activityinfo.observable.ObservableTree;
 import org.activityinfo.promise.Function2;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.ui.client.store.http.CatalogRequest;
-import org.activityinfo.ui.client.store.http.DatabaseRequest;
-import org.activityinfo.ui.client.store.http.HttpStore;
-import org.activityinfo.ui.client.store.http.SubRecordsRequest;
+import org.activityinfo.ui.client.store.http.*;
 import org.activityinfo.ui.client.store.offline.FormOfflineStatus;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.SnapshotStatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +61,8 @@ public class FormStoreImpl implements FormStore {
     private final Scheduler scheduler;
 
     private final Map<ResourceId, Observable<FormTree>> formTreeCache = new HashMap<>();
+
+    private Observable<List<UserDatabaseMeta>> cachedDatabaseList;
 
     public FormStoreImpl(HttpStore httpStore, OfflineStore offlineStore, Scheduler scheduler) {
         this.httpStore = httpStore;
@@ -102,6 +103,20 @@ public class FormStoreImpl implements FormStore {
     @Override
     public Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
         return httpStore.get(new DatabaseRequest(databaseId));
+    }
+
+    @Override
+    public Observable<List<UserDatabaseMeta>> getDatabases() {
+        if(cachedDatabaseList == null) {
+            cachedDatabaseList = httpStore.get(new DatabaseListRequest()).join(list -> {
+                List<Observable<UserDatabaseMeta>> databases = new ArrayList<>();
+                for (DatabaseHeader header : list) {
+                    databases.add(getDatabase(header.getDatabaseId()));
+                }
+                return Observable.flatten(databases);
+            });
+        }
+        return cachedDatabaseList;
     }
 
     @Override
