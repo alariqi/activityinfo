@@ -72,6 +72,10 @@ public class HostController {
 
         HostPageModel model = new HostPageModel(appUri);
 
+        // Default to new ui
+        if(Strings.isNullOrEmpty(ui)) {
+            ui = "3";
+        }
 
         User authenticatedUser = entityManager.get().find(User.class, authProvider.get().getUserId());
         model.setFeatureFlags(authenticatedUser.getFeatures());
