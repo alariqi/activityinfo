@@ -24,6 +24,7 @@ import org.activityinfo.api.client.FormRecordUpdateBuilder;
 import org.activityinfo.api.client.NewFormRecordBuilder;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.RecordLockSet;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.*;
@@ -72,6 +73,11 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
 
     @Override
     public Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
+        return Promise.rejected(new UnsupportedOperationException());
+    }
+
+    @Override
+    public Promise<List<DatabaseHeader>> getDatabases() {
         return Promise.rejected(new UnsupportedOperationException());
     }
 
