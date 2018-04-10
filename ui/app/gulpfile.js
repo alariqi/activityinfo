@@ -49,7 +49,8 @@ const paths = {
 // PostCSS plugins
 const processors = [
     importer({
-        glob: true
+        glob: true,
+        extensions: [ ".css", ".scss"]
     }),
     // mapper({
     //     maps: [
