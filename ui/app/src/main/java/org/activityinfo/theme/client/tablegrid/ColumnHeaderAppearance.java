@@ -6,75 +6,88 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.widget.core.client.grid.ColumnHeader;
-import org.activityinfo.theme.client.ClassNames;
 
 public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearance {
 
+    public static final String TABLEGRID__COLUMN_MOVE_BOTTOM = "columnheader__column-move-bottom";
+    public static final String TABLEGRID__COLUMN_MOVE_TOP = "columnheader__column-move-top";
+    public static final String TABLEGRID__HEAD = "columnheader__head";
+    public static final String TABLEGRID__HEAD__OVER = "columnheader__head--over";
+    public static final String TABLEGRID__HEAD_BUTTON = "columnheader__head-button";
+    public static final String TABLEGRID__HEAD_INNER = "columnheader__head-inner";
+    public static final String TABLEGRID__HEAD_MENU__OPEN = "columnheader__head-menu--open";
+    public static final String TABLEGRID__HEAD_ROW = "columnheader__head-row";
+    public static final String TABLEGRID__HEADER = "columnheader__header";
+    public static final String TABLEGRID__HEADER_INNER = "columnheader__header-inner";
+    public static final String TABLEGRID__SORT__ASC = "columnheader__sort--asc";
+    public static final String TABLEGRID__SORT__DESC = "columnheader__sort--desc";
+    public static final String TABLEGRID__SORT_ICON = "columnheader__sort-icon";
+    
     public static class Styles implements ColumnHeader.ColumnHeaderStyles {
 
         @Override
         public String columnMoveBottom() {
-            return ClassNames.TABLEGRID__COLUMN_MOVE_BOTTOM;
+            return TABLEGRID__COLUMN_MOVE_BOTTOM;
         }
 
         @Override
         public String columnMoveTop() {
-            return ClassNames.TABLEGRID__COLUMN_MOVE_TOP;
+            return TABLEGRID__COLUMN_MOVE_TOP;
         }
 
         @Override
         public String head() {
-            return ClassNames.TABLEGRID__HEAD;
+            return TABLEGRID__HEAD;
         }
 
         @Override
         public String headButton() {
-            return ClassNames.TABLEGRID__HEAD_BUTTON;
+            return TABLEGRID__HEAD_BUTTON;
         }
 
         @Override
         public String header() {
-            return ClassNames.TABLEGRID__HEADER;
+            return TABLEGRID__HEADER;
         }
 
         @Override
         public String headerInner() {
-            return ClassNames.TABLEGRID__HEADER_INNER;
+            return TABLEGRID__HEADER_INNER;
         }
 
         @Override
         public String headInner() {
-            return ClassNames.TABLEGRID__HEAD_INNER;
+            return TABLEGRID__HEAD_INNER;
         }
 
         @Override
         public String headMenuOpen() {
-            return ClassNames.TABLEGRID__HEAD_MENU__OPEN;
+            return TABLEGRID__HEAD_MENU__OPEN;
         }
 
         @Override
         public String headOver() {
-            return ClassNames.TABLEGRID__HEAD__OVER;
+            return TABLEGRID__HEAD__OVER;
         }
 
         @Override
         public String headRow() {
-            return ClassNames.TABLEGRID__HEAD_ROW;
+            return TABLEGRID__HEAD_ROW;
         }
 
         @Override
         public String sortAsc() {
-            return ClassNames.TABLEGRID__SORT__ASC;
+            return TABLEGRID__SORT__ASC;
         }
 
         @Override
         public String sortDesc() {
-            return ClassNames.TABLEGRID__SORT__DESC;
+            return TABLEGRID__SORT__DESC;
         }
 
         @Override
         public String sortIcon() {
-            return ClassNames.TABLEGRID__SORT_ICON;
+            return TABLEGRID__SORT_ICON;
         }
 
         @Override
@@ -111,7 +124,7 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
     @Override
     public String columnsWrapSelector() {
-        return "." + ClassNames.TABLEGRID__HEAD_INNER;
+        return "." + TABLEGRID__HEAD_INNER;
     }
 
     @Override

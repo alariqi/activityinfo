@@ -108,19 +108,19 @@ task themeDevMode(type: JavaExec) {
 
     main = 'com.google.gwt.dev.DevMode'
 
-
     // Compiled java classes and libraries second
     classpath new File(buildDir, "assets")
     classpath sourceSets.main.java.srcDirs
     classpath sourceSets.main.resources.srcDirs
     classpath sourceSets.main.runtimeClasspath
+    classpath configurations.gwt
     classpath configurations.gwtSdk
 
     args '-logLevel', 'INFO'
     args '-war', "${buildDir}/devMode"
     args '-startupUrl', '/ThemeDev/dev.html'
     args '-bindAddress', '0.0.0.0'
-    args 'org.activityinfo.theme.dev.ThemeDev'
+    args 'org.activityinfo.dev.ThemeDev'
 
     doFirst {
         for(cp in classpath) {

@@ -1,8 +1,8 @@
 
-.tablegrid__header-inner {
+.columnheader__header-inner {
 }
 
-.tablegrid__header {
+.columnheader__header {
     cursor: default;
     padding: 0 0 0 0;
     overflow: hidden;
@@ -12,7 +12,7 @@
     /*border-color: BORDER_COLOR;*/
 }
 
-.tablegrid__head-row .tablegrid__head {
+.columnheader__head-row .columnheader__head {
     line-height: 18px;
     vertical-align: top;
     -moz-outline: none;
@@ -27,7 +27,7 @@
     /*border-width: 0 BORDER_WIDTH BORDER_WIDTH 0;*/
 }
 
-.tablegrid__head-inner {
+.columnheader__head-inner {
     overflow: hidden;
     zoom: 1;
     padding: 3px;
@@ -40,13 +40,13 @@
     white-space: nowrap;
 }
 
-.tablegrid__head {
+.columnheader__head {
     -moz-user-select: none;
     -khtml-user-select: none;
     -webkit-user-select: ignore;
 }
 
-.tablegrid__head-button {
+.columnheader__head-button {
     background: greenyellow;
     border: 1px solid red;
     display: none;
@@ -59,32 +59,32 @@
     outline: none;
 }
 
-.tablegrid__head--over .tablegrid__head-button,
-.tablegrid__head-menu--open .tablegrid__head-button {
+.columnheader__head--over .columnheader__head-button,
+.columnheader__head-menu--open .columnheader__head-button {
     display: block;
 }
 
-.tablegrid__head--over .tablegrid__head-button {
+.columnheader__head--over .columnheader__head-button {
     /*border-width: MENU_HOVER_BORDER_WIDTH;*/
     /*border-style: MENU_HOVER_BORDER_STYLE;*/
     /*border-color: MENU_HOVER_BORDER_COLOR;*/
 }
 
-.tablegrid__head-menu--open .tablegrid__head-button {
+.columnheader__head-menu--open .columnheader__head-button {
     /*border-width: MENU_ACTIVE_BORDER_WIDTH;*/
     /*border-style: MENU_ACTIVE_BORDER_STYLE;*/
     /*border-color: MENU_ACTIVE_BORDER_COLOR;*/
 }
 
-.tablegrid__head--over  .tablegrid__head-inner,
-.tablegrid__head-menu--open .tablegrid__head-inner {
+.columnheader__head--over  .columnheader__head-inner,
+.columnheader__head-menu--open .columnheader__head-inner {
     /*background: OVER_BACKGROUND_COLOR;*/
     /*!* @alternate *! background: -webkit-linear-gradient(top, OVER_GRADIENT);*/
     /*!* @alternate *! background: -ms-linear-gradient(top, OVER_GRADIENT);*/
     /*!* @alternate *! background: linear-gradient(to bottom, OVER_GRADIENT);*/
 }
 
-.tablegrid__sort-icon {
+.columnheader__sort-icon {
     background-repeat: no-repeat;
     display: none;
     /*height: MAX;*/
@@ -92,19 +92,19 @@
     vertical-align: middle;
 }
 
-.tablegrid__sort--asc .tablegrid__sort-icon,
-.tablegrid__sort--desc .tablegrid__sort-icon {
+.columnheader__sort--asc .columnheader__sort-icon,
+.columnheader__sort--desc .columnheader__sort-icon {
     display: inline;
 }
 
-.tablegrid__sort--asc .tablegrid__sort-icon {
+.columnheader__sort--asc .columnheader__sort-icon {
 }
 
-.tablegrid__sort--desc .tablegrid__sort-icon {
+.columnheader__sort--desc .columnheader__sort-icon {
 }
 
-.tablegrid__column-move-bottom {
+.columnheader__column-move-bottom {
 }
 
-.tablegrid__column-move-top {
+.columnheader__column-move-top {
 }

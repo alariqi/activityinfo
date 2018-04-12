@@ -26,7 +26,8 @@
 
     <inherits name="com.google.gwt.user.User" />
     <inherits name="org.activityinfo.theme.ActivityInfoTheme"/>
+    <inherits name="org.activityinfo.ui.AppComponents"/>
 
-    <entry-point class="org.activityinfo.theme.dev.client.DevEntryPoint"/>
+    <entry-point class="org.activityinfo.dev.client.DevEntryPoint"/>
 
 </module>

@@ -1,4 +1,4 @@
-package org.activityinfo.theme.dev.client;
+package org.activityinfo.dev.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
