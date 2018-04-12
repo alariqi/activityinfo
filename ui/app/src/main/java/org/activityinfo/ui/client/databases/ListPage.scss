@@ -27,6 +27,23 @@
   display: block;
 }
 
+.listpage__toolbar {
+  display: flex;
+  flex-direction: row;
+}
+
+.listpage__toolbar div {
+  margin-left: 1em;
+}
+
+.listpage__toolbar div:first-child {
+  margin-left: 0;
+}
+
+.listpage__toolbar div:last-child {
+  align-self: flex-end;
+}
+
 .listpage__body {
   background-color: $background;
   padding-bottom: 4rem;

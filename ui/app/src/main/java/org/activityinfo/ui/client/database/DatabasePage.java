@@ -12,8 +12,6 @@ import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.H
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
-import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
-import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.Icon;
@@ -39,12 +37,6 @@ public class DatabasePage implements IsWidget {
         TextButton sortButton = new TextButton("Sort by recent use (recent first)");
         sortButton.setMenu(sortMenu);
 
-        ToolBar toolBar = new ToolBar();
-        toolBar.add(newFormButton);
-        toolBar.add(newFolderButton);
-        toolBar.add(new FillToolItem());
-        toolBar.add(sortButton);
-
         listStore = new ListStore<>(ListItem::getId);
 
         ListViewSelectionModel<ListItem> selectionModel = new ListViewSelectionModel<>();
@@ -58,7 +50,9 @@ public class DatabasePage implements IsWidget {
         listView.setTrackMouseOver(false);
 
         container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
-        container.add(toolBar, new HtmlData(".listpage__body-inner"));
+        container.add(newFormButton, new HtmlData(".listpage__toolbar"));
+        container.add(newFolderButton, new HtmlData(".listpage__toolbar"));
+        container.add(sortButton, new HtmlData(".listpage__toolbar"));
         container.add(listView, new HtmlData(".listpage__body-inner"));
     }
 
