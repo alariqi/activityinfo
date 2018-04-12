@@ -3,11 +3,13 @@ package org.activityinfo.ui.client.database;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.IdentityValueProvider;
+import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
+import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
@@ -16,23 +18,15 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.Icon;
 import org.activityinfo.theme.client.ListToolBarButton;
-import org.activityinfo.theme.client.PageHeader;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.databases.ListItemCell;
-import org.activityinfo.ui.client.header.BreadcrumbBar;
-import org.activityinfo.ui.client.header.BreadcrumbViewModel;
 
 public class DatabasePage implements IsWidget {
 
-    private final VerticalLayoutContainer container;
-    private final BreadcrumbBar breadcrumbs;
+    private final HtmlLayoutContainer container;
     private final ListStore<ListItem> listStore;
-    private final PageHeader pageHeader;
 
     public DatabasePage() {
-
-        breadcrumbs = new BreadcrumbBar();
-        pageHeader = new PageHeader(I18N.CONSTANTS.loading());
 
         ListToolBarButton newFormButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newForm());
         ListToolBarButton newFolderButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newFolder());
@@ -63,19 +57,22 @@ public class DatabasePage implements IsWidget {
         listView.setSelectionModel(selectionModel);
         listView.setTrackMouseOver(false);
 
-        container = new VerticalLayoutContainer();
-        container.add(breadcrumbs, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(pageHeader, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(toolBar, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        container.add(listView, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+        container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
+        container.add(toolBar, new HtmlData(".listpage__body-inner"));
+        container.add(listView, new HtmlData(".listpage__body-inner"));
     }
 
     public void updateView(Observable<DatabaseViewModel> viewModel) {
         if(viewModel.isLoaded()) {
-            pageHeader.setHeading(viewModel.get().getLabel());
-            breadcrumbs.updateView(BreadcrumbViewModel.forDatabase(viewModel.get().getDatabase()));
+            // Update header
+            container.getElement().getElementsByTagName("h2").getItem(0).setInnerText(viewModel.get().getLabel());
 
+            // Update list of forms
             listStore.replaceAll(viewModel.get().getFormLinks());
+
+
+            // Update breadcrumbs
+            XElement breadcrumbContainer = container.getElement().selectNode(".breadcrumbs");
         }
     }
 

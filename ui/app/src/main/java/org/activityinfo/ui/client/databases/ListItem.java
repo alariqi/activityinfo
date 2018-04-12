@@ -9,11 +9,13 @@ public class ListItem {
     private String id;
     private String label;
     private SafeUri href;
+    private String iconHref;
 
-    public ListItem(String id, String label, SafeUri href) {
+    public ListItem(String id, String label, SafeUri href, String iconHref) {
         this.id = id;
         this.label = label;
         this.href = href;
+        this.iconHref = iconHref;
     }
 
     public String getId() {
@@ -27,4 +29,9 @@ public class ListItem {
     public SafeUri getHref() {
         return href;
     }
+
+    public String iconHref() {
+        return iconHref;
+    }
+
 }

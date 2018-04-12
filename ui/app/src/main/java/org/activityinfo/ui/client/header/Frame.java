@@ -1,13 +1,12 @@
 package org.activityinfo.ui.client.header;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.theme.client.CssLayoutContainer;
 import org.activityinfo.ui.client.search.SearchResult;
 import org.activityinfo.ui.client.store.FormStore;
 
@@ -16,12 +15,11 @@ import java.util.List;
 
 public class Frame implements AcceptsOneWidget, IsWidget {
 
-    private final VerticalLayoutContainer container = new VerticalLayoutContainer();
+    private final CssLayoutContainer container = new CssLayoutContainer();
     private Widget currentPageWidget;
 
     public Frame(FormStore formStore) {
-        container.add(new Header(resourceList(formStore)),
-                new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        container.add(new Header(resourceList(formStore)));
         container.add(new ConnectionStatus());
     }
 
@@ -53,11 +51,9 @@ public class Frame implements AcceptsOneWidget, IsWidget {
                 container.remove(currentPageWidget);
             }
             if(newWidget != null) {
-                container.add(newWidget, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
+                container.add(newWidget);
             }
             currentPageWidget = newWidget;
-
-            Scheduler.get().scheduleFinally(container::forceLayout);
         }
     }
 

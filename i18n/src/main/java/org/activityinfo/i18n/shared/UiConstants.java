@@ -55,6 +55,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Form")
     String form();
 
+    @DefaultStringValue("Forms")
+    String forms();
+
     @DefaultStringValue("Add")
     String add();
 
@@ -312,6 +315,9 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Databases")
     String databases();
+
+    @DefaultStringValue("Database Settings")
+    String databaseSettings();
 
     @DefaultStringValue("Date")
     String date();

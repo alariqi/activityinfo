@@ -26,6 +26,12 @@ public enum DevPage {
         public IsWidget createWidget() {
             return new DatabasesMockup();
         }
+    },
+    DATABASE_PAGE {
+        @Override
+        public IsWidget createWidget() {
+            return new DatabaseMockup();
+        }
     };
 
     public abstract IsWidget createWidget();

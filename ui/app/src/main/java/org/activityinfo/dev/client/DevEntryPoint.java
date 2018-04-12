@@ -21,7 +21,6 @@ package org.activityinfo.dev.client;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -29,7 +28,6 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
-import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.activityinfo.ui.client.AppEntryPoint;
 
 public class DevEntryPoint implements EntryPoint {
@@ -44,13 +42,13 @@ public class DevEntryPoint implements EntryPoint {
         EventBus eventBus = new SimpleEventBus();
         PlaceController placeController = new PlaceController(eventBus);
 
-        Viewport viewport = new Viewport();
-
         ActivityMapper activityMapper = place -> new DevActivity((DevPlace) place);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
         activityManager.setDisplay(child -> {
-            viewport.setWidget(child);
-            Scheduler.get().scheduleFinally(() -> viewport.forceLayout());
+            RootPanel.get().clear();
+            if(child != null) {
+                RootPanel.get().add(child);
+            }
         });
 
         PlaceHistoryMapper historyMapper = new PlaceHistoryMapper() {
@@ -66,8 +64,6 @@ public class DevEntryPoint implements EntryPoint {
         };
         PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
         historyHandler.register(placeController, eventBus, new DevPlace(DevPage.INDEX));
-
-        RootPanel.get().add(viewport);
 
         historyHandler.handleCurrentHistory();
     }

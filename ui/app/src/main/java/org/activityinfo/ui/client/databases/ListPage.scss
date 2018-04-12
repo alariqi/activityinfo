@@ -6,11 +6,25 @@
   background-color: white;
 }
 
+.listpage__header-content {
+  flex-grow: 1.0;
+}
+
 .listpage__header h2 {
   font-size: 2em;
   font-family: $gretasemibold;
+}
+
+.listpage__header-inner {
   max-width: $maxwidth;
-  margin: 1em auto;
+  margin: 2em auto;
+  display: flex;
+  flex-direction: row;
+  flex-content: flex-start;
+}
+
+.listpage__header-inner a {
+  display: block;
 }
 
 .listpage__body {
@@ -18,9 +32,15 @@
   padding-bottom: 4rem;
 }
 
-.listpage__inner {
+.listpage__body-inner {
   max-width: $maxwidth;
   margin: 0 auto;
+}
+
+.listpage__body h3 {
+  font-family: $gretasemibold;
+  font-size: 1.5em;
+  padding: 1em 0;
 }
 
 .listpage__item {

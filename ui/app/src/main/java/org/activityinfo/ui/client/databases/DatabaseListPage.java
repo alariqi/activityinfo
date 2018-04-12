@@ -59,7 +59,7 @@ public class DatabaseListPage implements IsWidget {
         listView.setTrackMouseOver(false);
 
         inner = new CssLayoutContainer();
-        inner.getElement().addClassName("listpage__inner");
+        inner.getElement().addClassName("listpage__body-inner");
         inner.add(toolBar);
         inner.add(listView);
 

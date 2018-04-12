@@ -34,7 +34,8 @@ public class DatabaseViewModel {
                 items.add(new ListItem(
                         resource.getId().asString(),
                         resource.getLabel(),
-                        PlaceLinks.toUri(new TablePlace(resource.getId()))));
+                        PlaceLinks.toUri(new TablePlace(resource.getId())),
+                        "#forms"));
             }
         }
         return items;

@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.theme.client.CssLayoutContainer;
 import org.activityinfo.ui.client.databases.DatabaseListPage;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.header.ConnectionStatus;
@@ -15,14 +15,14 @@ import java.util.List;
 
 public class DatabasesMockup implements IsWidget {
 
-    private FlowLayoutContainer container;
+    private CssLayoutContainer container;
 
     public DatabasesMockup() {
 
         DatabaseListPage page = new DatabaseListPage();
         page.updateView(Observable.just(databaseList()));
 
-        this.container = new FlowLayoutContainer();
+        this.container = new CssLayoutContainer();
         this.container.add(new Header(SearchResults.getResourceList()));
         this.container.add(new ConnectionStatus());
         this.container.add(page);
@@ -42,7 +42,7 @@ public class DatabasesMockup implements IsWidget {
     }
 
     private ListItem result(String id, String name) {
-        return new ListItem(id, name, UriUtils.fromSafeConstant("#"));
+        return new ListItem(id, name, UriUtils.fromSafeConstant("#" + DevPage.DATABASE_PAGE.name()), "#database");
     }
 
     @Override
