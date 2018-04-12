@@ -11,7 +11,7 @@ public class SearchPanel implements IsWidget {
     public SearchPanel() {
 
 
-        panel = new ComponentPanel("Search", new SearchBox(SearchResults.createStore()));
+        panel = new ComponentPanel("Search", new SearchBox(SearchResults.getResourceList()));
     }
 
     @Override
