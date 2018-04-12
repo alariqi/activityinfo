@@ -113,6 +113,7 @@ task themeDevMode(type: JavaExec) {
     classpath sourceSets.main.java.srcDirs
     classpath sourceSets.main.resources.srcDirs
     classpath sourceSets.main.runtimeClasspath
+    classpath sourceSets.main.output.generatedSourcesDir
     classpath configurations.gwt
     classpath configurations.gwtSdk
 

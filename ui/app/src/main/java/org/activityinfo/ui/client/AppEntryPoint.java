@@ -111,7 +111,7 @@ public class AppEntryPoint implements EntryPoint {
 
     }
 
-    private void injectStyle() {
+    public static void injectStyle() {
         //     <link rel="stylesheet" type="text/css" href="App/app.css">
         LinkElement link = Document.get().createLinkElement();
         link.setRel("stylesheet");
@@ -121,7 +121,7 @@ public class AppEntryPoint implements EntryPoint {
         Document.get().getHead().appendChild(link);
     }
 
-    private void injectIcons() {
+    public static void injectIcons() {
         DivElement divElement = Document.get().createDivElement();
         divElement.setInnerHTML(ThemeBundle.INSTANCE.icons().getText());
         Element svgElement = divElement.getFirstChildElement();

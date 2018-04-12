@@ -1,5 +1,6 @@
 package org.activityinfo.dev.client;
 
+import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.search.SearchResult;
 import org.activityinfo.ui.client.store.FormStore;
 
@@ -373,6 +374,10 @@ public class SearchResults {
 
     private static SearchResult result(String id, String label, String... parents) {
         return null;
+    }
+
+    public static Observable<List<SearchResult>> getResourceList() {
+        return Observable.just(LIST);
     }
 
     public static FormStore createStore() {

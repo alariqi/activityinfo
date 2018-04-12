@@ -13,7 +13,7 @@ public class TableMockup implements IsWidget {
 
     public TableMockup() {
         this.container = new VerticalLayoutContainer();
-        this.container.add(new Header(SearchResults.createStore()), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        this.container.add(new Header(SearchResults.getResourceList()), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         this.container.add(new ConnectionStatus(), new VerticalLayoutContainer.VerticalLayoutData(1, 16));
         this.container.add(new PageHeaderDummy(), new VerticalLayoutContainer.VerticalLayoutData(1, 150));
         this.container.add(new GridPanel(), new VerticalLayoutContainer.VerticalLayoutData(1, 1));

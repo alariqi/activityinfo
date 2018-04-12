@@ -6,16 +6,12 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.database.Resource;
-import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.ClassNames;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.folder.FolderPlace;
-import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchBox implements IsWidget {
@@ -24,7 +20,7 @@ public class SearchBox implements IsWidget {
     private final ListStore<SearchResult> store;
 
 
-    public SearchBox(FormStore formStore) {
+    public SearchBox(Observable<List<SearchResult>> resourceList) {
         store = new ListStore<>(SearchResult::getKey);
 
         comboBox = new ComboBox<>(new SearchComboBoxCell(store));
@@ -39,20 +35,11 @@ public class SearchBox implements IsWidget {
         });
 
         // Keep the list of search options ready at all times
-        formStore.getDatabases().subscribe(observable -> indexForms(observable));
-    }
-
-    private void indexForms(Observable<List<UserDatabaseMeta>> observable) {
-        if(observable.isLoaded()) {
-            List<SearchResult> results = new ArrayList<>();
-            for (UserDatabaseMeta database : observable.get()) {
-                results.add(new SearchResult(database));
-                for (Resource resource : database.getResources()) {
-                    results.add(new SearchResult(database, resource));
-                }
+        resourceList.subscribe(observable -> {
+            if(observable.isLoaded()) {
+                store.replaceAll(observable.get());
             }
-            store.replaceAll(results);
-        }
+        });
     }
 
     private void navigate(SearchResult item) {

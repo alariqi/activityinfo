@@ -30,12 +30,16 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.sencha.gxt.widget.core.client.container.Viewport;
+import org.activityinfo.ui.client.AppEntryPoint;
 
 public class DevEntryPoint implements EntryPoint {
     @Override
     public void onModuleLoad() {
 
         DevBundle.RESOURCES.style().ensureInjected();
+
+        AppEntryPoint.injectStyle();
+        AppEntryPoint.injectIcons();
 
         EventBus eventBus = new SimpleEventBus();
         PlaceController placeController = new PlaceController(eventBus);
