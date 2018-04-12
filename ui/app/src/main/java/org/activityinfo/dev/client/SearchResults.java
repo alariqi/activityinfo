@@ -1,4 +1,4 @@
-package org.activityinfo.theme.dev.client;
+package org.activityinfo.dev.client;
 
 import org.activityinfo.ui.client.search.SearchResult;
 import org.activityinfo.ui.client.store.FormStore;
@@ -376,6 +376,6 @@ public class SearchResults {
     }
 
     public static FormStore createStore() {
-        throw new UnsupportedOperationException("TODO");
+        return new DevFormStore();
     }
 }
