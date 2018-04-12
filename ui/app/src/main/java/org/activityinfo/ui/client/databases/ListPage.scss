@@ -1,3 +1,7 @@
+.listview {
+    box-shadow: 0 2px 6px $shadow;
+}
+
 
 .listpage__header {
     background-color: white;
@@ -12,6 +16,7 @@
 
 .listpage__body {
     background-color: $background;
+    padding-bottom: 4rem;
 }
 
 .listpage__inner {
@@ -26,9 +31,11 @@
     align-items: center;
     font-size: $fontsize-l;
     background: $white;
-    border: 1px solid $border;
+    border-bottom: 1px solid $border;
+    padding: .5rem;
 }
 
 .listpage__item-label {
     flex-grow: 1;
+    padding: .5rem;
 }

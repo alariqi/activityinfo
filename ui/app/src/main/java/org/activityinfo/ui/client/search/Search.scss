@@ -1,7 +1,8 @@
 .search {
   display: block;
   flex-grow: 1;
-  max-width: $maxwidth;
+  //flex-shrink: 1;
+  //max-width: $maxwidth;
   margin: 0 auto;
   padding: 0.5rem;
 }
