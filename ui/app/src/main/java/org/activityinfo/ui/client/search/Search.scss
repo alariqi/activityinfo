@@ -1,8 +1,6 @@
 .search {
   display: block;
   flex-grow: 1;
-  //flex-shrink: 1;
-  //max-width: $maxwidth;
   margin: 0 auto;
   padding: 0.5rem;
 }
@@ -28,7 +26,16 @@
   height: 100%;
 }
 
-.search input[type="search"] {
+.icon--search {
+  z-index: 1;
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+}
+
+.search__input {
   transition: border 0.3s ease;
   display: block;
   padding: 0.5rem 1rem 0.5rem 3rem;
@@ -40,10 +47,6 @@
   box-shadow: 0 0.1rem 1rem 0.1rem $shadow;
   color: $black;
   font-size: 1.25rem;
-  background-image: svg-load('SearchIcon.svg');
-  background-position: 1.5rem 50%;
-  background-size: 1rem;
-  background-repeat: no-repeat;
 
   &:focus {
     border: 1px solid $green;

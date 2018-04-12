@@ -2,10 +2,11 @@
   position: relative;
   display: block;
   padding: 1rem;
-  padding-left: 3rem;
+  padding-left: 3.5rem;
   font-size: 1.25rem;
   line-height: 1.1;
   color: $white;
+  border: 1px solid transparent;
 
   &:before {
     content: '';
@@ -28,28 +29,21 @@
   &:last-child:after {
     display: none;
   }
-
-  &:hover {
-    background-color: $grey-deep;
-  }
 }
 
-.search__item--folder {
-
-}
-
-.search__item--form {
-}
-
-.search__item--folder {
+.icon--searchlist {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  width: 2rem;
+  transform: translateY(-50%);
 }
 
 /* The .x-view-highlightrow is applied to
  * rows selected by the user via the keyboard.
  */
-
 .search__list .x-view-highlightrow {
-  /* TODO(adrian): distinguish from hover style? */
+  border: 1px solid $green;
   background-color: $grey-deep;
 }
 
@@ -60,6 +54,6 @@
   color: $grey-medium;
 }
 
-.search__item:hover .search__type {
+.x-view-highlightrow .search__type {
   color: $white;
 }
