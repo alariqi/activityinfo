@@ -30,6 +30,14 @@ class SearchComboBoxCell extends ComboBoxCell<SearchResult> {
 
     @Override
     public void expand(Context context, XElement parent, ValueUpdater<SearchResult> updater, SearchResult value) {
+
+        // Sencha's implementation sets the list width to the width of (search__wrapper - borders - padding)
+        // Override this behavior before expanding by setting the minListWidth to the full width of the element
+        XElement wrapper = parent.getFirstChildElement().cast();
+        int width = wrapper.getWidth(false);
+        int bordersPadding = 4;
+        setMinListWidth(width + bordersPadding);
+
         super.expand(context, parent, updater, value);
         parent.addClassName("search--expanded");
     }
