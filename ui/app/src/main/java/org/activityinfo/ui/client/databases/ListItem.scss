@@ -26,8 +26,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex-grow: 1;
   padding: 1rem;
+  flex-grow: 1;
 
   &:after {
     transition: opacity 0.3s ease;
@@ -57,14 +57,14 @@
   }
 }
 
-.listpage__item__icon {
+.listpage__item__avatar {
   position: relative;
   flex: 0 0 3rem;
   width: 3rem;
   margin-right: 1rem;
 }
 
-.listpage__item--offline .listpage__item__icon {
+.listpage__item--offline .listpage__item__avatar {
   &:before {
     content: '';
     display: block;
@@ -80,6 +80,7 @@
 }
 
 .listpage__item__title {
+  flex-grow: 1;
   font-family: $gretasemibold;
   font-size: 1rem;
 }
@@ -127,7 +128,7 @@
   opacity: 1;
 }
 
-.listpage__item__icon svg {
+.listpage__item__avatar .avatar {
   display: block;
   width: 3rem;
   height: 3rem;
