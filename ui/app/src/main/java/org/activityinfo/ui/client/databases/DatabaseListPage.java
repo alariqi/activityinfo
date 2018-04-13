@@ -6,17 +6,15 @@ import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
-import com.sencha.gxt.widget.core.client.toolbar.FillToolItem;
-import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.CssLayoutContainer;
 import org.activityinfo.theme.client.Icon;
-import org.activityinfo.theme.client.ListToolBarButton;
 import org.activityinfo.theme.client.StaticHtml;
+import org.activityinfo.theme.client.base.button.IconButton;
+import org.activityinfo.theme.client.base.button.MenuButton;
 
 import java.util.List;
 
@@ -31,19 +29,18 @@ public class DatabaseListPage implements IsWidget {
 
         StaticHtml pageHeader = new StaticHtml(DatabaseTemplates.TEMPLATES.pageHeader(I18N.CONSTANTS.databases()));
 
-        ListToolBarButton newDatabaseButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newDatabase());
+        IconButton newDatabaseButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newDatabase());
 
         Menu sortMenu = new Menu();
         sortMenu.add(new MenuItem("Sort by recent use (recent first)"));
         sortMenu.add(new MenuItem("Sort alphabetically"));
         sortMenu.add(new MenuItem("Sort offline first"));
 
-        TextButton sortButton = new TextButton("Sort by recent use (recent first)");
-        sortButton.setMenu(sortMenu);
+        MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
 
-        ToolBar toolBar = new ToolBar();
+        CssLayoutContainer toolBar = new CssLayoutContainer();
+        toolBar.addStyleName(".listpage__toolbar");
         toolBar.add(newDatabaseButton);
-        toolBar.add(new FillToolItem());
         toolBar.add(sortButton);
 
         listStore = new ListStore<>(ListItem::getId);

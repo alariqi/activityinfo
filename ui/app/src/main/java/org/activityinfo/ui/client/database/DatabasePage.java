@@ -7,7 +7,6 @@ import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
@@ -15,7 +14,8 @@ import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.Icon;
-import org.activityinfo.theme.client.ListToolBarButton;
+import org.activityinfo.theme.client.base.button.IconButton;
+import org.activityinfo.theme.client.base.button.MenuButton;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.databases.ListItemCell;
 
@@ -26,16 +26,15 @@ public class DatabasePage implements IsWidget {
 
     public DatabasePage() {
 
-        ListToolBarButton newFormButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newForm());
-        ListToolBarButton newFolderButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newFolder());
+        IconButton newFormButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newForm());
+        IconButton newFolderButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newFolder());
 
         Menu sortMenu = new Menu();
         sortMenu.add(new MenuItem("Sonrt by recent use (recent first)"));
         sortMenu.add(new MenuItem("Sort alphabetically"));
         sortMenu.add(new MenuItem("Sort offline first"));
 
-        TextButton sortButton = new TextButton("Sort by recent use (recent first)");
-        sortButton.setMenu(sortMenu);
+        MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
 
         listStore = new ListStore<>(ListItem::getId);
 
