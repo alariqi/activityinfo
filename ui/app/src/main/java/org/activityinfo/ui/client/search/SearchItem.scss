@@ -1,42 +1,12 @@
 .search__item {
   position: relative;
   display: block;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   padding-left: 3.5rem;
   font-size: 1.25rem;
   line-height: 1.1;
   color: $white;
   border: 1px solid transparent;
-
-  &:before {
-    content: '';
-    background-image: url('icon_header_search-white.svg');
-    background-position: 1.5rem 50%;
-    background-size: 1rem;
-    background-repeat: no-repeat;
-  }
-
-  &:after {
-    position: absolute;
-    bottom: 0;
-    display: block;
-    content: '';
-    width: calc(100% - 2rem);
-    height: 1px;
-    border-bottom: 1px solid $grey-dark;
-  }
-
-  &:last-child:after {
-    display: none;
-  }
-}
-
-.icon--searchlist {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  width: 2rem;
-  transform: translateY(-50%);
 }
 
 /* The .x-view-highlightrow is applied to
