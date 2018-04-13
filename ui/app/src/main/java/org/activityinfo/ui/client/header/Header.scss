@@ -3,6 +3,7 @@ header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  background-color: $white;
   border-bottom: 1px solid $border;
   box-shadow: 0 1rem 1rem -1rem $grey-medium;
 }
