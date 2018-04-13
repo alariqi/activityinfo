@@ -23,6 +23,7 @@ const importer = require('postcss-easy-import');
 const mapper = require('postcss-map');
 const mediaMinMax = require('postcss-media-minmax');
 const nano = require('cssnano');
+const mixins = require('postcss-sassy-mixins');
 const nested = require('postcss-nested');
 const responsiveType = require('postcss-responsive-type');
 const simpleVars = require('postcss-simple-vars');
@@ -66,6 +67,7 @@ const processors = [
     // assets({
     //     loadPaths: [`${paths.src}/assets/vectors`]
     // }),
+    mixins,
     simpleVars,
     svgInline,
     apply,
