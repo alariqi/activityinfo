@@ -1,0 +1,14 @@
+{
+  "name": "ActivityInfo",
+  "short_name": "ActivityInfo",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#F2F7F7",
+  "description": "Monitoring & Evaluation Software for Humanitarian Relief",
+  "icons": [{
+    "src": "/about/assets/images/logo-activityinfo.png",
+    "sizes": "72x72",
+    "type": "image/png"
+  }
+  ]
+}

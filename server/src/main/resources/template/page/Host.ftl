@@ -34,6 +34,7 @@
     <link rel="icon" href="/about/assets/images/logo-activityinfo.png">
 
     <#if newUI>
+    <link rel="manifest" href="/activityinfo.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     </#if>
 
