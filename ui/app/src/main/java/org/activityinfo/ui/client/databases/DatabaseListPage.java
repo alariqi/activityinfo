@@ -39,7 +39,7 @@ public class DatabaseListPage implements IsWidget {
         MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
 
         CssLayoutContainer toolBar = new CssLayoutContainer();
-        toolBar.addStyleName(".listpage__toolbar");
+        toolBar.addStyleName("listpage__toolbar");
         toolBar.add(newDatabaseButton);
         toolBar.add(sortButton);
 
