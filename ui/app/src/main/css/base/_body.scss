@@ -44,7 +44,8 @@ input:focus::placeholder {
   background-color: rgba($teal, 0.4);
 }
 
-::-webkit-scrollbar {
+/* Temporary disabled for review */
+/* ::-webkit-scrollbar {
   width: 0.5rem;
   height: 0.5rem;
 }
@@ -55,7 +56,7 @@ input:focus::placeholder {
 
 ::-webkit-scrollbar-thumb {
   background-image: linear-gradient(to bottom right, $green, $teal);
-}
+} */
 
 @media print {
   @page {
