@@ -2,10 +2,6 @@ package org.activityinfo.ui.client.databases;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.IdentityValueProvider;
-import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.ListView;
-import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
@@ -23,7 +19,7 @@ public class DatabaseListPage implements IsWidget {
     private final CssLayoutContainer outer;
     private final CssLayoutContainer body;
     private final CssLayoutContainer inner;
-    private final ListStore<ListItem> listStore;
+    private final StaticListView<ListItem> listView;
 
     public DatabaseListPage() {
 
@@ -43,17 +39,8 @@ public class DatabaseListPage implements IsWidget {
         toolBar.add(newDatabaseButton);
         toolBar.add(sortButton);
 
-        listStore = new ListStore<>(ListItem::getId);
 
-        ListViewSelectionModel<ListItem> selectionModel = new ListViewSelectionModel<>();
-        selectionModel.setLocked(true);
-
-        ListView<ListItem, ListItem> listView = new ListView<>(listStore,
-                new IdentityValueProvider<>(),
-                new ListItemCell());
-
-        listView.setSelectionModel(selectionModel);
-        listView.setTrackMouseOver(false);
+        listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
 
         inner = new CssLayoutContainer();
         inner.getElement().addClassName("listpage__body-inner");
@@ -72,9 +59,9 @@ public class DatabaseListPage implements IsWidget {
 
     public void updateView(Observable<List<ListItem>> databases) {
         if(databases.isLoaded()) {
-            listStore.replaceAll(databases.get());
+            listView.updateView(databases.get());
         } else {
-            listStore.clear();
+            listView.clear();
         }
     }
 

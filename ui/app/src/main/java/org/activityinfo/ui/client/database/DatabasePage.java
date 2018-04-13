@@ -2,11 +2,6 @@ package org.activityinfo.ui.client.database;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.IdentityValueProvider;
-import com.sencha.gxt.core.client.dom.XElement;
-import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.ListView;
-import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
 import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.menu.Menu;
@@ -18,11 +13,12 @@ import org.activityinfo.theme.client.base.button.IconButton;
 import org.activityinfo.theme.client.base.button.MenuButton;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.databases.ListItemCell;
+import org.activityinfo.ui.client.databases.StaticListView;
 
 public class DatabasePage implements IsWidget {
 
     private final HtmlLayoutContainer container;
-    private final ListStore<ListItem> listStore;
+    private final StaticListView<ListItem> listView;
 
     public DatabasePage() {
 
@@ -36,17 +32,7 @@ public class DatabasePage implements IsWidget {
 
         MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
 
-        listStore = new ListStore<>(ListItem::getId);
-
-        ListViewSelectionModel<ListItem> selectionModel = new ListViewSelectionModel<>();
-        selectionModel.setLocked(true);
-
-        ListView<ListItem, ListItem> listView = new ListView<>(listStore,
-                new IdentityValueProvider<>(),
-                new ListItemCell());
-
-        listView.setSelectionModel(selectionModel);
-        listView.setTrackMouseOver(false);
+        listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
 
         container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
         container.add(newFormButton, new HtmlData(".listpage__toolbar"));
@@ -61,11 +47,8 @@ public class DatabasePage implements IsWidget {
             container.getElement().getElementsByTagName("h2").getItem(0).setInnerText(viewModel.get().getLabel());
 
             // Update list of forms
-            listStore.replaceAll(viewModel.get().getFormLinks());
+            listView.updateView(viewModel.get().getFormLinks());
 
-
-            // Update breadcrumbs
-            XElement breadcrumbContainer = container.getElement().selectNode(".breadcrumbs");
         }
     }
 
