@@ -2,13 +2,14 @@
 /* ICONS */
 /* ===== */
 
+/* global bubble icon */
 .icon {
   display: inline-block;
   width: 1rem;
   height: 1rem;
 }
 
-/* THIS IS UNCHECKED */
+/* WARN this is untested styling */
 .button .icon {
   position: absolute;
   left: 1rem;
@@ -16,7 +17,22 @@
   trasnform: translateY(-50%);
 }
 
+.button--icon--behind .icon {
+  left: initial;
+  right: 1rem;
+}
+
+
+/* item type icon */
 .icon--type {
-  width: 1rem;
-  height: 1rem;
+  width: 1.5rem;
+  height: 2.25rem;
+  border: 1px solid red;
+}
+
+.search__list .icon--type {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
