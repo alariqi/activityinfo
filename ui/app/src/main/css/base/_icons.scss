@@ -1,0 +1,22 @@
+/* ===== */
+/* ICONS */
+/* ===== */
+
+.icon {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* THIS IS UNCHECKED */
+.button .icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  trasnform: translateY(-50%);
+}
+
+.icon--type {
+  width: 1rem;
+  height: 1rem;
+}
