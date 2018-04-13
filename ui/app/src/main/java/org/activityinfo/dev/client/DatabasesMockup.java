@@ -42,7 +42,7 @@ public class DatabasesMockup implements IsWidget {
     }
 
     private ListItem result(String id, String name) {
-        return new ListItem(id, name, UriUtils.fromSafeConstant("#" + DevPage.DATABASE_PAGE.name()), "#database");
+        return new ListItem(id, name, UriUtils.fromSafeConstant("#" + DevPage.DATABASE_PAGE.name()), "#type_database");
     }
 
     @Override
