@@ -3,10 +3,11 @@
   display: block;
   padding: 0.75rem 1rem;
   padding-left: 3.25rem;
-  font-size: 1.25rem;
-  line-height: 1.1;
-  color: $white;
   border: 1px solid transparent;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  font-family: $gretasemibold;
+  color: $white;
 }
 
 /* The .x-view-highlightrow is applied to
@@ -19,11 +20,12 @@
 
 .search__type {
   display: block;
-  margin-bottom: 0.25rem;
-  font-size: 1rem;
-  color: $grey-medium;
+  font-size: 0.8rem;
+  color: $white;
+  font-family: $gretalight;
+  opacity: 0.8;
 }
 
 .x-view-highlightrow .search__type {
-  color: $white;
+  opacity: 1;
 }
