@@ -149,26 +149,25 @@
   transition: opacity 0.3s 0s ease;
   position: relative;
   display: none;
-  font-family: $gretalight;
-  font-size: 0.8rem;
   padding: 0.2rem 0.5rem;
   padding-left: 1.5rem;
   margin: 0.2rem 1rem;
   background-color: $background;
   border-radius: 1rem;
   opacity: 0;
+  font-family: $gretasemibold;
+  font-size: 0.8rem;
 
   &:before {
     content: '';
     display: block;
     position: absolute;
-    left: 0.2rem;
+    left: 0.3rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
+    width: 0.8rem;
+    height: 0.8rem;
     background-color: $green;
-    border: 2px solid $white;
     border-radius: 50%;
   }
 }
@@ -188,12 +187,12 @@
   display: block;
   width: 3rem;
   height: 3rem;
-  background-color: red;
+  background-color: $background;
   border-radius: 50%;
   overflow: hidden;
 }
 
-.listpage__item-options {
+.listpage__item--options {
   padding: 1rem;
 
   &:after {
