@@ -2,6 +2,24 @@
 /* MIXINS */
 /* ====== */
 
+/* triangle mixin */
+@mixin triangle($color: 'red', $position: 50%) {
+  position: relative;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -0.5rem;
+    left: $position;
+    transform: translateX(-50%);
+    border-bottom: 0.5rem solid $color;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+  }
+}
+
+
 /*
 :root {
   --hidden: {
