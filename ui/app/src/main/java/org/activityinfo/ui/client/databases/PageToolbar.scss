@@ -1,16 +1,13 @@
 .listpage__toolbar {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0 0.5rem;
+  margin: 0 -0.25rem;
+  width: calc(100% + 0.5rem);
 }
 
 .listpage__toolbar div {
-  margin-left: 1em;
-}
-
-.listpage__toolbar div:first-child {
-  margin-left: 0;
-}
-
-.listpage__toolbar div:last-child {
-  align-self: flex-end;
+  margin: 0.5rem 0.25rem;;
 }

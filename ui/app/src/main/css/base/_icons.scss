@@ -9,15 +9,7 @@
   height: 1rem;
 }
 
-/* WARN this is untested styling */
-.button .icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  trasnform: translateY(-50%);
-}
-
-.button--icon--behind .icon {
+.button--dropdown .icon {
   left: initial;
   right: 1rem;
 }

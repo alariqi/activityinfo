@@ -1,5 +1,35 @@
+/* ======= */
+/* BUTTONS */
+/* ======= */
 
+/*
+- button with bg without icon
+- button without bg without icon
+- button with bg with icon right
+- button without bg with icon right
+- button with bg with icon left
+- button without bg with icon left
+*/
 
-.button {
+.listpage__toolbar .button {
+  @include button();
+  @include button--icon();
+}
 
+.button--primary {
+/*  @include button($green-light);*/
+  @include button();
+  @include button--icon();
+}
+
+.button--secondary {
+
+}
+
+.button--delete {
+  background-color: $red;
+}
+
+.button--dropdown {
+  padding-right: 2rem;
 }
