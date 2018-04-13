@@ -2,48 +2,6 @@
   box-shadow: 0 0.1rem 1rem 0 $shadow;
 }
 
-.listpage__header {
-  background-color: white;
-}
-
-.listpage__header-content {
-  flex-grow: 1.0;
-}
-
-.listpage__header h2 {
-  font-size: 2em;
-  font-family: $gretasemibold;
-}
-
-.listpage__header-inner {
-  max-width: $maxwidth;
-  margin: 2em auto;
-  display: flex;
-  flex-direction: row;
-  flex-content: flex-start;
-}
-
-.listpage__header-inner a {
-  display: block;
-}
-
-.listpage__toolbar {
-  display: flex;
-  flex-direction: row;
-}
-
-.listpage__toolbar div {
-  margin-left: 1em;
-}
-
-.listpage__toolbar div:first-child {
-  margin-left: 0;
-}
-
-.listpage__toolbar div:last-child {
-  align-self: flex-end;
-}
-
 .listpage__body {
   background-color: $background;
   padding-bottom: 4rem;
@@ -60,167 +18,109 @@
   padding: 1em 0;
 }
 
-.listpage__item {
+/* JUST TESTING THIS HAS TO MOVE */
+/* JUST TESTING THIS HAS TO BE RENAMED */
+/* JUST TESTING THIS HAS OVERFLOW ISSUE */
+/* DROPDOWN NEEDS PROPER CHECKBOXES AND BUTTONS INSTEAD OF DIVS AND IMGS */
+.org-activityinfo-theme-client-base-menu-Css3MenuAppearance-Css3MenuStyle-menu {
   position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  font-size: $fontsize-l;
-  background: $white;
+  overflow: initial !important;
+  border: 0 none !important;
+  outline: 0 none !important;
+  padding: 0.5rem !important;
+  color: $white !important;
+  background: $black !important;
+  box-shadow: 0 0.1rem 1rem 0.1rem $shadow;
 
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    border-bottom: 1px solid $border;
-  }
-
-  &:hover {
-    z-index: 1;
-  }
-}
-
-.listpage__item__label {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-grow: 1;
-  padding: 1rem;
-
-  &:after {
-    transition: opacity 0.3s ease;
-    z-index: 1;
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 1px solid $green;
-    box-shadow: 0 0 0.5rem 0 $green;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  &:hover,
-  &:focus {
-    border: 0 none;
-    outline: 0 none;
-  }
-
-  &:hover:after,
-  &:focus:after {
-    opacity: 1;
-  }
-}
-
-.listpage__item__icon {
-  position: relative;
-  flex: 0 0 3rem;
-  width: 3rem;
-  margin-right: 1rem;
-}
-
-.listpage__item--offline .listpage__item__icon {
   &:before {
-    content: '';
+    content: "";
     display: block;
     position: absolute;
-    bottom: 0;
+    top: -0.5rem;
     right: 0;
-    width: 1rem;
-    height: 1rem;
-    background-color: $green;
-    border: 2px solid $white;
-    border-radius: 50%;
+    transform: translateX(-50%);
+    border-bottom: 0.5rem solid $black;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
   }
 }
 
-.listpage__item__title {
+/* JUST TESTING THIS HAS TO MOVE */
+/* JUST TESTING THIS HAS TO BE RENAMED */
+.testcheck {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 2rem;
+}
+
+.testcheck svg {
+  transition: opacity 0.2s ease,
+              transform 0.2s ease;
+  z-index: 1;
+  position: absolute;
+  left: 0.25rem;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  transform: translateY(-50%) rotate(-20deg) scale(0.8);
+  transform-origin: 50% 100%;
+}
+
+.testcheck input[type="checkbox"]:checked ~ svg {
+  transition: opacity 0.2s 0.1s ease,
+              transform 0.2s 0.15s ease;
+  opacity: 1;
+  transform: translateY(-50%) rotate(0) scale(1);
+}
+
+.testcheck input[type="checkbox"]{
+  position: absolute;
+  visibility: hidden;
+}
+
+.testcheck label {
   font-family: $gretasemibold;
 }
 
-.listpage__item__offlineindicator {
-  transition: opacity 0.3s 0s ease;
-  position: relative;
-  display: none;
-  padding: 0.2rem 0.5rem;
-  padding-left: 1.5rem;
-  margin: 0.2rem 1rem;
-  background-color: $background;
-  border-radius: 1rem;
-  opacity: 0;
-  font-family: $gretasemibold;
-  font-size: 0.8rem;
+.testcheck input[type="checkbox"]:checked ~ label {
+  color: $black;
+}
 
-  &:before {
+.testcheck input[type="checkbox"]:focus ~ label {
+  box-shadow: 0 0 20px 0 rgba($green, 1);
+}
+
+.testcheck label {
+  &:before,
+  &:after {
     content: '';
-    display: block;
     position: absolute;
-    left: 0.3rem;
+    left: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 0.8rem;
-    height: 0.8rem;
-    background-color: $green;
-    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
   }
-}
 
-.listpage__item--offline .listpage__item__offlineindicator {
-  display: inline-block;
-}
-
-.listpage__item:hover .listpage__item__offlineindicator,
-.listpage__item__label:hover .listpage__item__offlineindicator,
-.listpage__item__label:focus .listpage__item__offlineindicator {
-  transition: opacity 0.3s 0.2s ease;
-  opacity: 1;
-}
-
-.listpage__item__icon svg {
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  background-color: $background;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.listpage__item__options {
-  padding: 1rem;
+  &:before {
+    transition: opacity 0.2s 0.1s ease,
+                transform 0.2s 0.1s ease;
+    background-color: $green-light;
+    opacity: 0;
+    transform: translateY(-50%) scaleY(0);
+    transform-origin: 0% 100%;
+  }
 
   &:after {
-    transition: opacity 0.3s ease;
-    z-index: 1;
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     border: 1px solid $green;
-    box-shadow: 0 0 0.5rem 0 $green;
-    opacity: 0;
-    pointer-events: none;
   }
+}
 
-  &:hover:after,
-  &:focus:after {
-    opacity: 1;
-  }
-
-  &:hover,
-  &:focus,
-  &:active {
-    border: 0 none;
-    outline: 0 none;
-    background-color: $background;
-  }
+.testcheck input[type="checkbox"]:checked ~ label:before {
+  transition: opacity 0.2s ease,
+              transform 0.2s ease;
+  opacity: 1;
+  transform: translateY(-50%) scaleY(1);
 }
