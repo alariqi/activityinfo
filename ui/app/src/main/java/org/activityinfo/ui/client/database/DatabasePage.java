@@ -30,7 +30,7 @@ public class DatabasePage implements IsWidget {
         ListToolBarButton newFolderButton = new ListToolBarButton(Icon.ADD, I18N.CONSTANTS.newFolder());
 
         Menu sortMenu = new Menu();
-        sortMenu.add(new MenuItem("Sort by recent use (recent first)"));
+        sortMenu.add(new MenuItem("Sonrt by recent use (recent first)"));
         sortMenu.add(new MenuItem("Sort alphabetically"));
         sortMenu.add(new MenuItem("Sort offline first"));
 

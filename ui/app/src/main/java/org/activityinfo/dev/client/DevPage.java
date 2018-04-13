@@ -21,6 +21,12 @@ public enum DevPage {
             return new SearchPanel();
         }
     },
+    MENU {
+        @Override
+        public IsWidget createWidget() {
+            return new MenuPage();
+        }
+    },
     DATABASES_PAGE {
         @Override
         public IsWidget createWidget() {

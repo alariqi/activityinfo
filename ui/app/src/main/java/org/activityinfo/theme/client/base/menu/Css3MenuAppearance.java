@@ -1,74 +1,93 @@
-/**
- * Sencha GXT 4.0.0 - Sencha for GWT
- * Copyright (c) 2006-2015, Sencha Inc.
- *
- * licensing@sencha.com
- * http://www.sencha.com/products/gxt/license/
- *
- * ================================================================================
- * Open Source License
- * ================================================================================
- * This version of Sencha GXT is licensed under the terms of the Open Source GPL v3
- * license. You may use this license only if you are prepared to distribute and
- * share the source code of your application under the GPL v3 license:
- * http://www.gnu.org/licenses/gpl.html
- *
- * If you are NOT prepared to distribute and share the source code of your
- * application under the GPL v3 license, other commercial and oem licenses
- * are available for an alternate download of Sencha GXT.
- *
- * Please see the Sencha GXT Licensing page at:
- * http://www.sencha.com/products/gxt/license/
- *
- * For clarification or additional options, please contact:
- * licensing@sencha.com
- * ================================================================================
- *
- *
- * ================================================================================
- * Disclaimer
- * ================================================================================
- * THIS SOFTWARE IS DISTRIBUTED "AS-IS" WITHOUT ANY WARRANTIES, CONDITIONS AND
- * REPRESENTATIONS WHETHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE
- * IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY,
- * FITNESS FOR A PARTICULAR PURPOSE, DURABILITY, NON-INFRINGEMENT, PERFORMANCE AND
- * THOSE ARISING BY STATUTE OR FROM CUSTOM OR USAGE OF TRADE OR COURSE OF DEALING.
- * ================================================================================
- */
 package org.activityinfo.theme.client.base.menu;
 
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.ImageResource;
 import com.sencha.gxt.theme.base.client.menu.MenuBaseAppearance;
-import com.sencha.gxt.themebuilder.base.client.config.ThemeDetails;
 
 public class Css3MenuAppearance extends MenuBaseAppearance {
-  public interface Css3MenuResources extends MenuResources, ClientBundle {
+
+  private static class Style implements MenuBaseAppearance.MenuStyle {
+
     @Override
-    @Source("Css3Menu.gss")
-    Css3MenuStyle style();
+    public String dateMenu() {
+      return "menu--date";
+    }
 
-    ImageResource miniTop();
+    @Override
+    public String menu() {
+      return "menu";
+    }
 
-    ImageResource miniBottom();
+    @Override
+    public String menuList() {
+      return "menu__list";
+    }
 
-    ThemeDetails theme();
+    @Override
+    public String menuListItemIndent() {
+      return "menu__list__item--indent";
+    }
+
+    @Override
+    public String menuRadioGroup() {
+      return "menu__radio-group";
+    }
+
+    @Override
+    public String menuScroller() {
+      return "menu__scroller";
+    }
+
+    @Override
+    public String menuScrollerActive() {
+      return "menu__scroller--active";
+    }
+
+    @Override
+    public String menuScrollerBottom() {
+      return "menu__scroller__bottom";
+    }
+
+    @Override
+    public String menuScrollerTop() {
+      return "menu__scroller__top";
+    }
+
+    @Override
+    public String noSeparator() {
+      return "menu--no-separator";
+    }
+
+    @Override
+    public String plain() {
+      return "menu--plain";
+    }
+
+    @Override
+    public boolean ensureInjected() {
+      return false;
+    }
+
+    @Override
+    public String getText() {
+      return "";
+    }
+
+    @Override
+    public String getName() {
+      return "menu";
+    }
   }
 
-  public interface Css3MenuStyle extends MenuStyle {
+  private static final Style BLACK_STYLE = new Style();
 
+  private static class Resources implements MenuBaseAppearance.MenuResources {
+
+    @Override
+    public MenuBaseAppearance.MenuStyle style() {
+      return BLACK_STYLE;
+    }
   }
 
   public Css3MenuAppearance() {
-    this(GWT.<Css3MenuResources>create(Css3MenuResources.class));
-  }
-
-  public Css3MenuAppearance(Css3MenuResources resources) {
-    this(resources, GWT.<BaseMenuTemplate>create(MenuBaseAppearance.BaseMenuTemplate.class));
-  }
-
-  public Css3MenuAppearance(Css3MenuResources resources, BaseMenuTemplate template) {
-    super(resources, template);
+    super(new Resources(), com.google.gwt.core.client.GWT.create(MenuBaseAppearance.BaseMenuTemplate.class));
   }
 }

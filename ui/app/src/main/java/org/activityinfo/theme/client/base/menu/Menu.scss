@@ -1,0 +1,142 @@
+
+
+
+.menu {
+  outline: 0 none;
+  background: $black;
+}
+
+/*
+@if (is("user.agent", "gecko1_8") || is("user.agent", "gecko")) {
+.menu {
+  -moz-outline: none;
+}
+}
+
+@if (is("user.agent", "ie8")) {
+  .menu {
+    zoom: 1;
+    overflow: hidden;
+  }
+}
+
+.menu a {
+  text-decoration: none !important;
+}
+*/
+
+.menu__list {
+  background: transparent;
+  border: 0 none;
+  overflow: hidden;
+  overflow-y: hidden;
+  -ms-touch-action: none;
+  touch-action: none;
+}
+
+/*
+@if (is("user.agent", "ie8")) {
+  .menuList {
+    position: relative;
+  }
+}
+*/
+
+.menu--date {
+  padding: 0 !important;
+}
+
+.menu--date .menu__list {
+  padding: 0;
+}
+
+.menu__list__item--indent {
+  padding-left: 27px !important;
+}
+
+.menu__radio-group {
+}
+
+.menu--no-separator {
+  background-image: none;
+}
+
+.menu--plain {
+  background-color: #fff !important;
+}
+
+.menu__scroller__top {
+}
+
+.menu__scroller__bottom {
+}
+
+.menu__scroller {
+  margin: 0;
+  width: 100%;
+  background-position: center;
+  height: 10px;
+  line-height: 8px;
+  cursor: pointer;
+  padding: 0;
+  border-width: 1px 0;
+}
+
+.menu__scroller--active {
+  height: 6px;
+  line-height: 6px;
+}
+
+
+/*
+@if (is("user.agent", "gecko") || is("user.agent", "gecko1_8")) {
+.menuItem {
+  outline-color: -moz-use-text-color;
+}
+}
+*/
+
+.menu__item {
+  display: block;
+  outline-style: none;
+  outline-width: 0;
+  position: relative;
+
+  text-decoration: none;
+  white-space: nowrap;
+  padding-left: 3.5rem;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: $white;
+}
+
+.menu__list__item {
+  white-space: nowrap;
+  display: block;
+  cursor: pointer;
+}
+
+.menu__item--check {
+
+}
+
+.menu__item--check svg {
+  transition: opacity 0.2s ease,
+  transform 0.2s ease;
+  z-index: 1;
+  position: absolute;
+  left: 0.25rem;
+  top: 50%;
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  transform: translateY(-50%) rotate(-20deg) scale(0.8);
+  transform-origin: 50% 100%;
+}
+
+.menu__item--checked svg {
+  transition: opacity 0.2s 0.1s ease,
+  transform 0.2s 0.15s ease;
+  opacity: 1;
+  transform: translateY(-50%) rotate(0) scale(1);
+}
