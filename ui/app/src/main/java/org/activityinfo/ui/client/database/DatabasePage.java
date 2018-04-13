@@ -10,6 +10,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.theme.client.Icon;
 import org.activityinfo.theme.client.base.button.IconButton;
+import org.activityinfo.theme.client.base.button.IconButtonStyle;
 import org.activityinfo.theme.client.base.button.MenuButton;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.databases.ListItemCell;
@@ -22,7 +23,7 @@ public class DatabasePage implements IsWidget {
 
     public DatabasePage() {
 
-        IconButton newFormButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newForm());
+        IconButton newFormButton = new IconButton(Icon.BUBBLE_ADD, IconButtonStyle.PRIMARY, I18N.CONSTANTS.newForm());
         IconButton newFolderButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newFolder());
 
         Menu sortMenu = new Menu();

@@ -9,14 +9,17 @@ import org.activityinfo.theme.client.Icon;
 public class IconButtonAppearance implements ButtonCell.ButtonCellAppearance<String> {
 
     private Icon icon;
+    private final IconButtonStyle style;
 
-    public IconButtonAppearance(Icon icon) {
+    public IconButtonAppearance(Icon icon, IconButtonStyle style) {
         this.icon = icon;
+        this.style = style;
     }
 
     @Override
     public void render(ButtonCell<String> cell, Cell.Context context, String value, SafeHtmlBuilder sb) {
-        sb.append(ButtonTemplates.TEMPLATES.iconButton(icon.href(), value));
+        sb.append(ButtonTemplates.TEMPLATES.iconButton(icon.href(), value,
+                style == IconButtonStyle.PRIMARY ? "button--primary" : ""));
     }
 
     @Override
