@@ -6,7 +6,11 @@ import org.activityinfo.theme.client.Icon;
 
 public class IconButton extends CellButtonBase<String> {
 
+    public IconButton(Icon icon, IconButtonStyle style, String text) {
+        super(new ButtonCell<>(new IconButtonAppearance(icon, style)), text);
+    }
+
     public IconButton(Icon icon, String text) {
-        super(new ButtonCell<>(new IconButtonAppearance(icon)), text);
+        this(icon, IconButtonStyle.SECONDARY, text);
     }
 }

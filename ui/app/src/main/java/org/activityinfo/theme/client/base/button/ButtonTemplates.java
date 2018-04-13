@@ -9,7 +9,7 @@ public interface ButtonTemplates extends XTemplates {
     ButtonTemplates TEMPLATES = GWT.create(ButtonTemplates.class);
 
     @XTemplate(source = "IconButton.html")
-    SafeHtml iconButton(String iconHref, String label);
+    SafeHtml iconButton(String iconHref, String label, String styleNames);
 
     @XTemplate(source = "MenuButton.html")
     SafeHtml menuButton(String label);
