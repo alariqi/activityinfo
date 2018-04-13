@@ -59,13 +59,32 @@
 
 .listpage__item__avatar {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   flex: 0 0 3rem;
   width: 3rem;
+  height: 3rem;
   margin-right: 1rem;
+
+  &:after {
+    z-index: 0;
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: $background;
+  }
 }
 
 .listpage__item--offline .listpage__item__avatar {
   &:before {
+    z-index: 2;
     content: '';
     display: block;
     position: absolute;
@@ -73,10 +92,17 @@
     right: 0;
     width: 1rem;
     height: 1rem;
+    border-radius: 50%;
     background-color: $green;
     border: 2px solid $white;
-    border-radius: 50%;
   }
+}
+
+.listpage__item__avatar .avatar {
+  z-index: 1;
+  display: block;
+  width: 1.5rem;
+  height: 2.25rem;
 }
 
 .listpage__item__title {
@@ -128,14 +154,6 @@
   opacity: 1;
 }
 
-.listpage__item__avatar .avatar {
-  display: block;
-  width: 3rem;
-  height: 3rem;
-  background-color: $background;
-  border-radius: 50%;
-  overflow: hidden;
-}
 
 .listpage__item__options {
   padding: 1rem;
