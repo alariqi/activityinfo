@@ -84,7 +84,7 @@
   }
 }
 
-.listpage__item--label {
+.listpage__item__label {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -119,14 +119,14 @@
   }
 }
 
-.listpage__item--icon {
+.listpage__item__icon {
   position: relative;
   flex: 0 0 3rem;
   width: 3rem;
   margin-right: 1rem;
 }
 
-.listpage__item--offline .listpage__item--icon {
+.listpage__item--offline .listpage__item__icon {
   &:before {
     content: '';
     display: block;
@@ -141,11 +141,11 @@
   }
 }
 
-.listpage__item--title {
+.listpage__item__title {
   font-family: $gretasemibold;
 }
 
-.listpage__item--offlineindicator {
+.listpage__item__offlineindicator {
   transition: opacity 0.3s 0s ease;
   position: relative;
   display: none;
@@ -172,18 +172,18 @@
   }
 }
 
-.listpage__item--offline .listpage__item--offlineindicator {
+.listpage__item--offline .listpage__item__offlineindicator {
   display: inline-block;
 }
 
-.listpage__item:hover .listpage__item--offlineindicator,
-.listpage__item--label:hover .listpage__item--offlineindicator,
-.listpage__item--label:focus .listpage__item--offlineindicator {
+.listpage__item:hover .listpage__item__offlineindicator,
+.listpage__item__label:hover .listpage__item__offlineindicator,
+.listpage__item__label:focus .listpage__item__offlineindicator {
   transition: opacity 0.3s 0.2s ease;
   opacity: 1;
 }
 
-.listpage__item--icon svg {
+.listpage__item__icon svg {
   display: block;
   width: 3rem;
   height: 3rem;
@@ -192,7 +192,7 @@
   overflow: hidden;
 }
 
-.listpage__item--options {
+.listpage__item__options {
   padding: 1rem;
 
   &:after {
