@@ -1,31 +1,35 @@
 .logo {
+  transition: padding 0.2s ease;
   display: flex;
   align-items: center;
-  padding: 1rem;
-  
+  padding: 0.5rem;
 
-  @media only screen and (max-width: 50em) {
+  @media only screen and (min-width: $bp-medium) {
+    padding: 1rem;
     margin-right: 2rem;
   }
 }
 
 .logo svg {
-  margin-right: 1rem;
+  @media only screen and (min-width: $bp-medium) {
+    margin-right: 1rem;
+  }
 }
 
 .logo__name {
+  display: none;
   padding: 0.1em 0.4em;
   font-family: $gretasemibold;
   font-size: 1.5rem;
   background-color: rgba($teal, 0.1);
 
-  @media only screen and (max-width: 50em) {
-    display: none;
+  @media only screen and (min-width: $bp-medium) {
+    display: block;
   }
 }
 
 .logo svg path {
-  transition: fill 0.3s ease;
+  transition: fill 0.2s ease;
 }
 
 .logo:hover svg path {
