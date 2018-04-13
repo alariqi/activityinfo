@@ -4,14 +4,14 @@
   align-items: center;
   padding: 0.5rem;
 
-  @media only screen and (min-width: $bp-medium) {
+  @media only screen and (min-width: $breakpoint-m) {
     padding: 1rem;
     margin-right: 2rem;
   }
 }
 
 .logo svg {
-  @media only screen and (min-width: $bp-medium) {
+  @media only screen and (min-width: $breakpoint-m) {
     margin-right: 1rem;
   }
 }
@@ -23,7 +23,7 @@
   font-size: 1.5rem;
   background-color: rgba($teal, 0.1);
 
-  @media only screen and (min-width: $bp-medium) {
+  @media only screen and (min-width: $breakpoint-m) {
     display: block;
   }
 }
