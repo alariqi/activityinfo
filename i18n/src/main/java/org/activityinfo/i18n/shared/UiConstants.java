@@ -1324,7 +1324,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Or")
     String or();
 
-    @DefaultStringValue("Try the new data entry page (BETA)")
+    @DefaultStringValue("Open in the new data entry page")
     String tryNewDataEntryInterface();
 
     @DefaultStringValue("Always applicable")
@@ -1798,7 +1798,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Not Found")
     String notFound();
 
-    @DefaultStringValue("Please use our new and much improved data entry interface for adding or updating this form's records.")
+    @DefaultStringValue("Please use our new and much improved data entry interface for viewing, adding or updating this form's records.")
     String pleaseUseNewDataEntry();
 
     @DefaultStringValue("Copied")
