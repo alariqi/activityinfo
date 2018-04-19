@@ -1,9 +1,8 @@
-
-
-
 .menu {
+  @include triangle($black);
   outline: 0 none;
-  background: $black;
+  background-color: $black;
+  overflow: visible !important;
 }
 
 /*
@@ -26,10 +25,6 @@
 */
 
 .menu__list {
-  background: transparent;
-  border: 0 none;
-  overflow: hidden;
-  overflow-y: hidden;
   -ms-touch-action: none;
   touch-action: none;
 }
@@ -98,14 +93,8 @@
 
 .menu__item {
   display: block;
-  outline-style: none;
-  outline-width: 0;
-  position: relative;
-
-  text-decoration: none;
-  white-space: nowrap;
-  padding-left: 3.5rem;
-  font-size: 1.25rem;
+  font-size: 0.8rem;
+  font-family: $gretasemibold;
   line-height: 1.1;
   color: $white;
 }
@@ -114,10 +103,12 @@
   white-space: nowrap;
   display: block;
   cursor: pointer;
+  padding: 0.75rem;
 }
 
-.menu__item--check {
+/* CAN WE REMOVE BLIND DIVS ? */
 
+.menu__item--check {
 }
 
 .menu__item--check svg {
