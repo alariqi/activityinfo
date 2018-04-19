@@ -11,16 +11,18 @@ import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.header.ConnectionStatus;
 import org.activityinfo.ui.client.header.Header;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DatabasesMockup implements IsWidget {
 
     private CssLayoutContainer container;
 
-    public DatabasesMockup() {
+    private DatabasesMockup(List<ListItem> items) {
 
         DatabaseListPage page = new DatabaseListPage();
-        page.updateView(Observable.just(databaseList()));
+        page.updateView(Observable.just(items));
 
         this.container = new CssLayoutContainer();
         this.container.add(new Header(SearchResults.getResourceList()));
@@ -28,8 +30,8 @@ public class DatabasesMockup implements IsWidget {
         this.container.add(page);
     }
 
-    private List<ListItem> databaseList() {
-        return Lists.newArrayList(
+    public static DatabasesMockup smallList() {
+        ArrayList<ListItem> dbs = Lists.newArrayList(
                 result("7003010d", ".Development Database - Iraq"),
                 result("2355010d", "2015: IRQ Internally Displaced Persons (IDPs)"),
                 result("5131010d", "2016: IRQ Internally Displaced Persons (IDPs)"),
@@ -39,10 +41,17 @@ public class DatabasesMockup implements IsWidget {
                 result("8810010d", "2018: WASH Training"),
                 result("9064010d", "2018: WHO Medical Technology"),
                 result("8089010d", "IRAQ-2018-Reference"));
+
+        return new DatabasesMockup(dbs);
     }
 
-    private ListItem result(String id, String name) {
-        return new ListItem(id, name, UriUtils.fromSafeConstant("#" + DevPage.DATABASE_PAGE.name()), "#type_database", id.startsWith("8"));
+    public static DatabasesMockup emptyList() {
+        return new DatabasesMockup(Collections.emptyList());
+    }
+
+    private static ListItem result(String id, String name) {
+        return new ListItem(id, name, UriUtils.fromSafeConstant("#" + DevPage.DATABASE_PAGE.name()),
+                "#type_database", name.contains("2018"));
     }
 
     @Override

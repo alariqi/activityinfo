@@ -42,6 +42,11 @@ public class StaticListView<M> extends Widget {
 
         modelMap.clear();
 
+        if(models.isEmpty()) {
+            getElement().setInnerSafeHtml(DatabaseTemplates.TEMPLATES.emptyList());
+            return;
+        }
+
         SafeHtmlBuilder sb = new SafeHtmlBuilder();
         for (int i = 0; i < models.size(); i++) {
             M model = models.get(i);

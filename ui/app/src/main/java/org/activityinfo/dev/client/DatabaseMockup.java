@@ -20,9 +20,9 @@ public class DatabaseMockup implements IsWidget {
 
     private CssLayoutContainer container;
 
-    public DatabaseMockup() {
+    private DatabaseMockup(DatabaseViewModel databaseViewModel) {
         DatabasePage page = new DatabasePage();
-        page.updateView(Observable.just(databaseViewModel()));
+        page.updateView(Observable.just(databaseViewModel));
         this.container = new CssLayoutContainer();
         this.container.add(new Header(SearchResults.getResourceList()));
         this.container.add(new ConnectionStatus());
@@ -30,7 +30,7 @@ public class DatabaseMockup implements IsWidget {
 
     }
 
-    private DatabaseViewModel databaseViewModel() {
+    public static DatabaseMockup iraq() {
 
         UserDatabaseMeta database = new UserDatabaseMeta.Builder()
             .setOwner(true)
@@ -47,10 +47,22 @@ public class DatabaseMockup implements IsWidget {
 
         DatabaseViewModel databaseViewModel = new DatabaseViewModel(database);
 
-        return databaseViewModel;
+        return new DatabaseMockup(databaseViewModel);
     }
 
-    private Resource form(String id, String label) {
+    public static DatabaseMockup empty() {
+
+        UserDatabaseMeta database = new UserDatabaseMeta.Builder()
+                .setOwner(true)
+                .setDatabaseId(DATABASE_ID)
+                .setLabel("2018: IRAQ IDP")
+                .build();
+
+        return new DatabaseMockup(new DatabaseViewModel(database));
+
+    }
+
+    private static Resource form(String id, String label) {
         return new ResourceBuilder()
                 .setId(ResourceId.valueOf(id))
                 .setLabel(label)
