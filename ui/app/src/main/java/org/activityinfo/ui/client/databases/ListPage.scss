@@ -1,53 +1,47 @@
-.listview {
-  box-shadow: 0 0.1rem 1rem 0 $shadow;
-}
-
+/* listpage body styles */
 .listpage__body {
   background-color: $background;
-  padding-bottom: 4rem;
+  padding: 2rem 1rem;
+
+  @media only screen and (min-width: $breakpoint-l) {
+    padding: 2rem 0;
+  }
 }
 
-.listpage__body-inner {
+.listpage__body__inner {
   max-width: $maxwidth;
   margin: 0 auto;
 }
 
-.listpage__body h3 {
-  font-family: $gretasemibold;
-  font-size: 1.5em;
-  padding: 1em 0;
+/* listview */
+.listview {
+  box-shadow: 0 0.1rem 1rem 0 $shadow;
 }
-
-
-
-
-
-
 
 
 /* JUST TESTING THIS HAS TO MOVE */
 /* JUST TESTING THIS HAS TO BE RENAMED */
 /* JUST TESTING THIS HAS OVERFLOW ISSUE */
 /* DROPDOWN NEEDS PROPER CHECKBOXES AND BUTTONS INSTEAD OF DIVS AND IMGS */
-.org-activityinfo-theme-client-base-menu-Css3MenuAppearance-Css3MenuStyle-menu {
-  position: relative;
-  overflow: initial !important;
-  border: 0 none !important;
-  outline: 0 none !important;
-  padding: 0.5rem !important;
-  color: $white !important;
-  background: $black !important;
-  box-shadow: 0 0.1rem 1rem 0.1rem $shadow;
+// .org-activityinfo-theme-client-base-menu-Css3MenuAppearance-Css3MenuStyle-menu {
+//   position: relative;
+//   overflow: initial !important;
+//   border: 0 none !important;
+//   outline: 0 none !important;
+//   padding: 0.5rem !important;
+//   color: $white !important;
+//   background: $black !important;
+//   box-shadow: 0 0.1rem 1rem 0.1rem $shadow;
 
-  &:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -0.5rem;
-    right: 0;
-    transform: translateX(-50%);
-    border-bottom: 0.5rem solid $black;
-    border-left: 0.5rem solid transparent;
-    border-right: 0.5rem solid transparent;
-  }
-}
+//   &:before {
+//     content: "";
+//     display: block;
+//     position: absolute;
+//     top: -0.5rem;
+//     right: 0;
+//     transform: translateX(-50%);
+//     border-bottom: 0.5rem solid $black;
+//     border-left: 0.5rem solid transparent;
+//     border-right: 0.5rem solid transparent;
+//   }
+// }

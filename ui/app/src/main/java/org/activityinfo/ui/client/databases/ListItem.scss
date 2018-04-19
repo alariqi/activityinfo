@@ -85,6 +85,12 @@
   }
 }
 
+.listview--forms .listpage__item__avatar {
+  &:after {
+    display: none;
+  }
+}
+
 .listpage__item--offline .listpage__item__avatar {
   &:before {
     z-index: 2;
@@ -106,6 +112,11 @@
   display: block;
   width: 1.5rem;
   height: 2.25rem;
+}
+
+.listview--forms .listpage__item__avatar .avatar {
+  width: 1rem;
+  height: 1.5rem;
 }
 
 .listpage__item__title {
@@ -156,7 +167,6 @@
   transition: opacity 0.3s 0.2s ease;
   opacity: 1;
 }
-
 
 .listpage__item__options {
   padding: 1rem;
