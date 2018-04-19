@@ -4,9 +4,12 @@
 
 /* global colour palette */
 $white: #FFFFFF;
-$grey-medium: #A8AdAE;
-$grey-dark: #364A4A;
-$grey-deep: #2A3B3C;
+$grey-1: #F2F7F7;
+$grey-2: #C2CBCC;
+$grey-3: #8A9799;
+$grey-4: #526466;
+$grey-5: #2F4142;
+$grey-6: #2A3B3C;
 $black: #243233;
 
 $green: #00CF79;
@@ -20,9 +23,9 @@ $red: #F45443;
 $red-alt: #C11F43;
 
 /* use specific colour palette */
-$background: #F2F7F7;
+$background: $grey-1;
 $border: #D3E4DD;
-$shadow: rgba($grey-deep, 0.2);
+$shadow: rgba($grey-6, 0.2);
 
 /* interaction colour palette */
 $positive: $blue;
