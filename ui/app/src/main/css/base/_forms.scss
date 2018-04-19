@@ -1,6 +1,13 @@
 /* ===== */
 /* FORMS */
 /* ===== */
+/* fieldset */
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0 none;
+}
+
 /* global inputs */
 input {
   font-family: $gretalight;
