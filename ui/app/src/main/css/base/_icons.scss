@@ -4,16 +4,38 @@
 
 /* global bubble icon */
 .icon {
+  transition: transform 0.6s ease;
   display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  transform-origin: 50% 50%;
+}
+
+.button .icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
   width: 1rem;
   height: 1rem;
 }
 
 .button--dropdown .icon {
   left: initial;
-  right: 1rem;
+  right: 0.75rem;
 }
 
+.button--dropdown.button--active  .icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.nav__button .icon {
+  z-index: 2;
+  position: relative;
+  margin-top: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
 
 /* item type icon */
 .icon--type {

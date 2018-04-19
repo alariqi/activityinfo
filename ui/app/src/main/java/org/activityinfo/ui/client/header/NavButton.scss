@@ -55,13 +55,6 @@
   position: relative;
 }
 
-.nav__button .icon {
-  z-index: 2;
-  position: relative;
-  margin-top: 0.5rem;
-  width: 1.25rem;
-  height: 1.25rem;
-}
 
 .nav__button span:before {
   transition: background-color 0.3s ease,
