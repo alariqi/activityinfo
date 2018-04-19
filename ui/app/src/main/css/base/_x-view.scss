@@ -4,7 +4,7 @@
 
 
 /* not sure why it needs the !important, figure this out */
-.x-view-highlightrow {
-  border: 1px solid $green !important;
+.x-view-highlightrow.x-view-highlightrow {
+  border: 1px solid $green;
   background-color: $grey-5;
 }
