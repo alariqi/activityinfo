@@ -1,25 +1,50 @@
 <div class="listpage">
-    <div class="listpage__header">
-        <div class="listpage__header-inner">
-            <div class="listpage__header-content">
-                <ul class="breadcrumbs">
-                    <li><a href="#">{i18n.databases}</a></li>
-                </ul>
-                <h2></h2>
-            </div>
-            <div class="listpage__header-actions">
-                <button>{i18n.availableOffline}</button>
-                <a href="#">{i18n.databaseSettings}</a>
-            </div>
+  <div class="listpage__header">
+    <div class="listpage__header-inner">
+
+      <div class="listpage__header__content">
+        <div class="listpage__header__avatar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="27px" viewBox="0 0 18 27" class="avatar" preserveAspectRatio="xMinYMin meet">
+            <use xlink:href="#type_database"></use>
+          </svg>
         </div>
-    </div>
-    <div class="listpage__body">
-        <div class="listpage__body-inner">
-            <h3>{i18n.forms}</h3>
-            <div class="listpage__toolbar">
-                <div class="listpage__toolbar__actions">
-                </div>
-            </div>
+
+        <div class="listpage__header__titles">
+          <ul class="breadcrumbs">
+            <li><a href="#">{i18n.databases}</a></li>
+          </ul>
+          <h1></h1>
         </div>
+      </div>
+
+      <div class="listpage__header-actions">
+        <fieldset class="fieldset__checkbox">
+          <input id="availableOffline" type="checkbox" checked>
+          <label for="availableOffline">{i18n.availableOffline}</label>
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 21 17" class="icon" preserveAspectRatio="xMinYMin meet">
+            <use xlink:href="#checkmark"></use>
+          </svg>
+        </fieldset>
+
+        <a href="#" class="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" class="icon">
+            <circle cx="6" cy="6" r="6"/>
+            <path fill="#FFF" d="M7.172 9.614s-.374-1.082-1.173-1.041c-.799.041-1.174 1.039-1.174 1.039L2.926 8.231s.829-.683.626-1.437c-.202-.754-1.351-.795-1.351-.795l.726-2.233s1.008.591 1.562.152c.57-.453.339-1.531.339-1.531h2.349s-.199 1.135.338 1.532c.537.396 1.561-.151 1.561-.151L9.799 6s-1.154.001-1.352.795c-.197.796.625 1.438.625 1.438l-1.9 1.381z"/>
+            <circle cx="6" cy="6" r="1.246"/>
+          </svg>
+          <span class="button__label">
+            {i18n.databaseSettings}
+          </span>
+        </a>
+      </div>
     </div>
+  </div>
+  <div class="listpage__body">
+    <div class="listpage__body-inner">
+      <h2>{i18n.forms}</h2>
+      <div class="listpage__toolbar">
+        <div class="listpage__toolbar__actions"></div>
+      </div>
+    </div>
+  </div>
 </div>

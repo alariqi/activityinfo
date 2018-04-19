@@ -3,11 +3,11 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 0 0.5rem;
-  margin: 0 -0.25rem;
+  padding: 0;
+  margin: 0 -0.25rem 0.5rem;
   width: calc(100% + 0.5rem);
 }
 
-.listpage__toolbar div {
-  margin: 0.5rem 0.25rem;;
+.listpage__toolbar__actions div {
+  margin: 0.5rem 0.25rem;
 }

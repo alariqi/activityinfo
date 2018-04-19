@@ -27,7 +27,7 @@ public class DatabasePage implements IsWidget {
         IconButton newFolderButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newFolder());
 
         Menu sortMenu = new Menu();
-        sortMenu.add(new MenuItem("Sonrt by recent use (recent first)"));
+        sortMenu.add(new MenuItem("Sort by recent use (recent first)"));
         sortMenu.add(new MenuItem("Sort alphabetically"));
         sortMenu.add(new MenuItem("Sort offline first"));
 
@@ -46,7 +46,7 @@ public class DatabasePage implements IsWidget {
     public void updateView(Observable<DatabaseViewModel> viewModel) {
         if(viewModel.isLoaded()) {
             // Update header
-            container.getElement().getElementsByTagName("h2").getItem(0).setInnerText(viewModel.get().getLabel());
+            container.getElement().getElementsByTagName("h1").getItem(0).setInnerText(viewModel.get().getLabel());
 
             // Update list of forms
             listView.updateView(viewModel.get().getFormLinks());

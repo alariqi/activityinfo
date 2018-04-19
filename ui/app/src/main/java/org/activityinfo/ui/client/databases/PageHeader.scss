@@ -1,18 +1,31 @@
+/* listpage header styles */
 .listpage__header {
   background-color: white;
 }
 
-.listpage__header-content {
-  flex-grow: 1.0;
+.listpage__header-actions {
+  border-left: 1px solid $grey-2;
+  padding-left: 0.5rem;
+}
+
+.listpage__header__content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .listpage__header-inner {
   max-width: $maxwidth;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-content: flex-start;
+
+  @media only screen and (min-width: $breakpoint-l) {
+    padding: 2rem 0;
+  }
 }
 
 .listpage__header-inner a {
