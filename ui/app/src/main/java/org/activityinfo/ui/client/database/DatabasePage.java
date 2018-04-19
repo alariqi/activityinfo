@@ -34,6 +34,7 @@ public class DatabasePage implements IsWidget {
         MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
 
         listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
+        listView.addStyleName("listview--forms");
 
         container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
         container.add(newFormButton, new HtmlData(".listpage__toolbar__actions"));

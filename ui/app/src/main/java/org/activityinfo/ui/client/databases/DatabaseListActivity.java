@@ -22,7 +22,7 @@ public class DatabaseListActivity implements Activity {
                 .transform(entries ->
                     entries.stream().map(entry ->
                         new ListItem(entry.getId(), entry.getLabel(),
-                                UriUtils.fromSafeConstant("#database/" + entry.getId()), "#type_database"))
+                                UriUtils.fromSafeConstant("#database/" + entry.getId()), "#type_database", false))
                         .collect(Collectors.toList())
                 );
     }

@@ -10,12 +10,14 @@ public class ListItem {
     private String label;
     private SafeUri href;
     private String avatarHref;
+    private boolean availableOffline;
 
-    public ListItem(String id, String label, SafeUri href, String avatarHref) {
+    public ListItem(String id, String label, SafeUri href, String avatarHref, boolean availableOffline) {
         this.id = id;
         this.label = label;
         this.href = href;
         this.avatarHref = avatarHref;
+        this.availableOffline = availableOffline;
     }
 
     public String getId() {
@@ -34,4 +36,16 @@ public class ListItem {
         return avatarHref;
     }
 
+
+    public boolean isAvailableOffline() {
+        return availableOffline;
+    }
+
+    public String getOfflineClass() {
+        if(isAvailableOffline()) {
+            return "listpage__item--offline";
+        } else {
+            return "";
+        }
+    }
 }
