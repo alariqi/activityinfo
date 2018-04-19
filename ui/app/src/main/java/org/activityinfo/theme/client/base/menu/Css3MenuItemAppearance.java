@@ -48,7 +48,7 @@ public class Css3MenuItemAppearance implements MenuItem.MenuItemAppearance {
 
     @Override
     public void onDeactivate(XElement parent) {
-        parent.removeClassName("x-view-hightlightrow");
+        parent.removeClassName("x-view-highlightrow");
     }
 
 }
