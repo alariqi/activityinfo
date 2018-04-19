@@ -27,6 +27,9 @@
 .menu__list {
   -ms-touch-action: none;
   touch-action: none;
+  padding: 0.5rem;
+  padding-bottom: 0.25rem;
+  height: auto !important; /* this needs fixing in java */
 }
 
 /*
@@ -104,6 +107,8 @@
   display: block;
   cursor: pointer;
   padding: 0.75rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid transparent;
 }
 
 /* CAN WE REMOVE BLIND DIVS ? */
