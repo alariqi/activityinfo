@@ -3,7 +3,7 @@
   background-color: white;
 }
 
-.listpage__header-actions {
+.listpage__header__actions {
   border-left: 1px solid $grey-2;
   padding-left: 0.5rem;
 }
@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-.listpage__header-inner {
+.listpage__header__inner {
   max-width: $maxwidth;
   padding: 2rem 1rem;
   margin: 0 auto;
@@ -28,6 +28,6 @@
   }
 }
 
-.listpage__header-inner a {
+.listpage__header__inner a {
   display: block;
 }

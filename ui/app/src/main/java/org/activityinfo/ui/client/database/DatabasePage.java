@@ -40,7 +40,7 @@ public class DatabasePage implements IsWidget {
         container.add(newFormButton, new HtmlData(".listpage__toolbar__actions"));
         container.add(newFolderButton, new HtmlData(".listpage__toolbar__actions"));
         container.add(sortButton, new HtmlData(".listpage__toolbar"));
-        container.add(listView, new HtmlData(".listpage__body-inner"));
+        container.add(listView, new HtmlData(".listpage__body__inner"));
     }
 
     public void updateView(Observable<DatabaseViewModel> viewModel) {
