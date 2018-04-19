@@ -1,4 +1,4 @@
-.listpage__item {
+.page__item {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -22,7 +22,7 @@
   }
 }
 
-.listpage__item__label {
+.page__item__label {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -60,7 +60,7 @@
   }
 }
 
-.listpage__item__avatar {
+.page__item__avatar {
   position: relative;
   display: flex;
   align-items: center;
@@ -85,13 +85,13 @@
   }
 }
 
-.listview--forms .listpage__item__avatar {
+.listview--forms .page__item__avatar {
   &:after {
     display: none;
   }
 }
 
-.listpage__item--offline .listpage__item__avatar {
+.page__item--offline .page__item__avatar {
   &:before {
     z-index: 2;
     content: '';
@@ -107,25 +107,25 @@
   }
 }
 
-.listpage__item__avatar .avatar {
+.page__item__avatar .avatar {
   z-index: 1;
   display: block;
   width: 1.5rem;
   height: 2.25rem;
 }
 
-.listview--forms .listpage__item__avatar .avatar {
+.listview--forms .page__item__avatar .avatar {
   width: 1rem;
   height: 1.5rem;
 }
 
-.listpage__item__title {
+.page__item__title {
   flex-grow: 1;
   font-family: $gretasemibold;
   font-size: 1rem;
 }
 
-.listpage__item__offlineindicator {
+.page__item__offlineindicator {
   transition: opacity 0.3s 0s ease;
   position: relative;
   display: none;
@@ -157,18 +157,18 @@
   }
 }
 
-.listpage__item--offline .listpage__item__offlineindicator {
+.page__item--offline .page__item__offlineindicator {
   display: inline-block;
 }
 
-.listpage__item:hover .listpage__item__offlineindicator,
-.listpage__item__label:hover .listpage__item__offlineindicator,
-.listpage__item__label:focus .listpage__item__offlineindicator {
+.page__item:hover .page__item__offlineindicator,
+.page__item__label:hover .page__item__offlineindicator,
+.page__item__label:focus .page__item__offlineindicator {
   transition: opacity 0.3s 0.2s ease;
   opacity: 1;
 }
 
-.listpage__item__options {
+.page__item__options {
   padding: 1rem;
   font-size: 0;
 

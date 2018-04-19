@@ -43,7 +43,7 @@ public class ListItem {
 
     public String getOfflineClass() {
         if(isAvailableOffline()) {
-            return "listpage__item--offline";
+            return "page__item--offline";
         } else {
             return "";
         }

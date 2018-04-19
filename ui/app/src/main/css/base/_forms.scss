@@ -21,7 +21,7 @@ input {
   padding-left: 2rem;
 }
 
-.listpage__header__actions .fieldset__checkbox {
+.page__header__actions .fieldset__checkbox {
   padding: 0.75rem;
 }
 
@@ -39,7 +39,7 @@ input {
   transform-origin: 50% 100%;
 }
 
-.listpage__header__actions .fieldset__checkbox svg {
+.page__header__actions .fieldset__checkbox svg {
   left: 0.75rem;
 }
 
@@ -59,7 +59,7 @@ input {
   font-family: $gretasemibold;
 }
 
-.listpage__header__actions .fieldset__checkbox label {
+.page__header__actions .fieldset__checkbox label {
    padding-left: 1.5rem;
 }
 
@@ -100,7 +100,7 @@ input {
   }
 }
 
-.listpage__header__actions .fieldset__checkbox label {
+.page__header__actions .fieldset__checkbox label {
   &:before,
   &:after {
     content: '';

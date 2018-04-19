@@ -34,9 +34,9 @@ public class DatabaseListPage implements IsWidget {
         listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
 
         container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
-        container.add(newDatabaseButton, new HtmlData(".listpage__toolbar__actions"));
-        container.add(sortButton, new HtmlData(".listpage__toolbar"));
-        container.add(listView, new HtmlData(".listpage__body__inner"));
+        container.add(newDatabaseButton, new HtmlData(".page__toolbar__actions"));
+        container.add(sortButton, new HtmlData(".page__toolbar"));
+        container.add(listView, new HtmlData(".page__body__inner"));
     }
 
     public void updateView(Observable<List<ListItem>> databases) {

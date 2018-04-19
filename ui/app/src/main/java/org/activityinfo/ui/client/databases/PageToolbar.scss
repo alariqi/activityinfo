@@ -1,4 +1,4 @@
-.listpage__toolbar {
+.page__toolbar {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -8,6 +8,6 @@
   width: calc(100% + 0.5rem);
 }
 
-.listpage__toolbar__actions div {
+.page__toolbar__actions div {
   margin: 0.5rem 0.25rem;
 }

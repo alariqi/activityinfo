@@ -37,10 +37,10 @@ public class DatabasePage implements IsWidget {
         listView.addStyleName("listview--forms");
 
         container = new HtmlLayoutContainer(DatabaseTemplates.TEMPLATES.page(I18N.CONSTANTS));
-        container.add(newFormButton, new HtmlData(".listpage__toolbar__actions"));
-        container.add(newFolderButton, new HtmlData(".listpage__toolbar__actions"));
-        container.add(sortButton, new HtmlData(".listpage__toolbar"));
-        container.add(listView, new HtmlData(".listpage__body__inner"));
+        container.add(newFormButton, new HtmlData(".page__toolbar__actions"));
+        container.add(newFolderButton, new HtmlData(".page__toolbar__actions"));
+        container.add(sortButton, new HtmlData(".page__toolbar"));
+        container.add(listView, new HtmlData(".page__body__inner"));
     }
 
     public void updateView(Observable<DatabaseViewModel> viewModel) {

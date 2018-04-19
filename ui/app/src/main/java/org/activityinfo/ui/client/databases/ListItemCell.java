@@ -44,7 +44,7 @@ public class ListItemCell extends AbstractCell<ListItem> {
 
         if (BrowserEvents.CLICK.equals(event.getType())) {
             Element element = event.getEventTarget().cast();
-            Element options = withinClass(element, "listpage__item__options", 5);
+            Element options = withinClass(element, "page__item__options", 5);
             if(options != null) {
                 LOGGER.info("Options clicked!");
                 optionsMenu.show(options, new Style.AnchorAlignment(Style.Anchor.TOP, Style.Anchor.BOTTOM));

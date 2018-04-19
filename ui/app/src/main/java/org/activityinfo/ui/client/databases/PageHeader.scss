@@ -1,22 +1,22 @@
-/* listpage header styles */
-.listpage__header {
+/* page header styles */
+.page__header {
   background-color: white;
 }
 
-.listpage__header__content {
+.page__header__content {
   display: flex;
   align-items: center;
   flex-grow: 1;
 }
 
-.listpage__header__titles {
+.page__header__titles {
   display: flex;
   flex-direction: column;
   justify-content: center;
   flex-grow: 1;
 }
 
-.listpage__header__inner {
+.page__header__inner {
   max-width: $maxwidth;
   padding: 2rem 1rem;
   margin: 0 auto;
@@ -29,11 +29,11 @@
   }
 }
 
-.listpage__header__inner a {
+.page__header__inner a {
   display: block;
 }
 
-.listpage__header__avatar {
+.page__header__avatar {
   position: relative;
   display: flex;
   align-items: center;
@@ -58,7 +58,7 @@
   }
 }
 
-.listpage--offline .listpage__header__avatar {
+.page--offline .page__header__avatar {
   &:before {
     z-index: 2;
     content: '';
@@ -74,14 +74,14 @@
   }
 }
 
-.listpage__header__avatar .avatar {
+.page__header__avatar .avatar {
   z-index: 1;
   display: block;
   width: 1.5rem;
   height: 2.25rem;
 }
 
-.listpage__header__actions {
+.page__header__actions {
   flex-shrink: 0;
   border-left: 1px solid $grey-2;
   padding-left: 0.5rem;

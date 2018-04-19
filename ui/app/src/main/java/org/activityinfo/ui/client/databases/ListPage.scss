@@ -1,5 +1,5 @@
-/* listpage body styles */
-.listpage__body {
+/* page body styles */
+.page__body {
   background-color: $background;
   padding: 2rem 1rem;
 
@@ -8,7 +8,7 @@
   }
 }
 
-.listpage__body__inner {
+.page__body__inner {
   max-width: $maxwidth;
   margin: 0 auto;
 }
