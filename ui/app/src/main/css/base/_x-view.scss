@@ -1,0 +1,10 @@
+/* ====== */
+/* X VIEW */
+/* ====== */
+
+
+/* not sure why it needs the !important, figure this out */
+.x-view-highlightrow {
+  border: 1px solid $green !important;
+  background-color: $grey-5;
+}
