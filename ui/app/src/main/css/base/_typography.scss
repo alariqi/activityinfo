@@ -2,24 +2,47 @@
 /* TYPOGRAPHY */
 /* ========== */
 
-p {
+/* headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0.25em;
+  text-rendering: optimizeLegibility;
+  font-family: $gretasemibold;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: 1;
 
-}
-
-i {
-
-}
-
-strong {
-
-}
-
-blockquote {
   @media print {
-    page-break-inside: avoid;
+    page-break-after: avoid;
   }
 }
 
-cite {
+h1 {
+  font-size: 2.5rem; /* fallback */
+  font-size: calc(1.5rem + 1.5vw);
+}
 
+h2 {
+  font-size: 2rem; /* fallback */
+  font-size: calc(1.25rem + 1vw);
+}
+
+/* paragraphs */
+p {
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* semibold */
+strong {
+  font-family: $gretasemibold;
 }
