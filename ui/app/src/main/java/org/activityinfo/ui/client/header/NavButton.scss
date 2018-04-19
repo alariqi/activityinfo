@@ -50,13 +50,12 @@
   opacity: 1;
 }
 
-.nav__button span {
+.nav__button .button__label {
   z-index: 1;
   position: relative;
 }
 
-
-.nav__button span:before {
+.nav__button .button__label:before {
   transition: background-color 0.3s ease,
               transform 0.3s ease;
   content: '';
@@ -71,10 +70,10 @@
   background-color: $green-light;
 }
 
-.nav__button--active span:before {
+.nav__button--active .button__label:before {
   transform: translateX(-50%) scale(1);
 }
 
-.nav__button--active:hover span:before {
+.nav__button--active:hover .button__label:before {
   background-color: $white;
 }

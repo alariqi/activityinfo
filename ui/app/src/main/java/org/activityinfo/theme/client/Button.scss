@@ -1,7 +1,6 @@
 /* ======= */
 /* BUTTONS */
 /* ======= */
-
 .button {
   transition: background-color 0.3s ease,
               color 0.3s ease,
@@ -69,12 +68,11 @@
   background-color: $white;
 }
 
-
-.button .icon ~ span {
+.button .icon ~ .button__label {
   padding-left: 1.5rem;
 }
 
-.button--dropdown .icon ~ span {
+.button--dropdown .icon ~ .button__label {
   padding-left: 0;
   padding-right: 1.5rem;
 }
