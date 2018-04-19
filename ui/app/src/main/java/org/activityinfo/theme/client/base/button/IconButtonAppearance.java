@@ -19,7 +19,7 @@ public class IconButtonAppearance implements ButtonCell.ButtonCellAppearance<Str
     @Override
     public void render(ButtonCell<String> cell, Cell.Context context, String value, SafeHtmlBuilder sb) {
         sb.append(ButtonTemplates.TEMPLATES.iconButton(icon.href(), value,
-                style == IconButtonStyle.PRIMARY ? "button--primary" : ""));
+                style == IconButtonStyle.PRIMARY ? "button button--primary" : ""));
     }
 
     @Override
