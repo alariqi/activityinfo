@@ -22,9 +22,9 @@ public class Header implements IsWidget {
         container.add(new SearchBox(resourceList));
 
         CssLayoutContainer navContainer = new CssLayoutContainer("nav");
-        navContainer.add(new NavButton(Icon.REPORTS, UriUtils.fromSafeConstant("#"), "Reports"));
-        navContainer.add(new NavButton(Icon.TASKS, UriUtils.fromSafeConstant("#"), I18N.CONSTANTS.notifications()   ));
-        navContainer.add(new NavButton(Icon.SETTINGS, UriUtils.fromSafeConstant("#"), I18N.CONSTANTS.settings()));
+        navContainer.add(new NavButton(Icon.HEADER_REPORTS, UriUtils.fromSafeConstant("#"), "Reports"));
+        navContainer.add(new NavButton(Icon.HEADER_NOTIFICATION, UriUtils.fromSafeConstant("#"), I18N.CONSTANTS.notifications()   ));
+        navContainer.add(new NavButton(Icon.HEADER_SETTINGS, UriUtils.fromSafeConstant("#"), I18N.CONSTANTS.settings()));
 
         container.add(navContainer);
     }
