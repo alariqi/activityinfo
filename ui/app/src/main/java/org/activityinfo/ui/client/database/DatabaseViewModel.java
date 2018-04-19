@@ -40,4 +40,8 @@ public class DatabaseViewModel {
         }
         return items;
     }
+
+    public String getAvatarHref() {
+        return "#type_database";
+    }
 }
