@@ -24,6 +24,12 @@ public enum DevPage {
             return new SearchPanel();
         }
     },
+    FORMS {
+        @Override
+        public IsWidget createWidget() {
+            return new FormMockup();
+        }
+    },
     MENU {
         @Override
         public IsWidget createWidget() {
