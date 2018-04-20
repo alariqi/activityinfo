@@ -6,6 +6,7 @@ import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.XTemplates;
+import com.sencha.gxt.core.client.dom.XElement;
 import org.activityinfo.theme.client.Icon;
 import org.activityinfo.theme.client.StaticHtml;
 
@@ -23,6 +24,14 @@ public class NavButton implements IsWidget {
 
     public NavButton(Icon icon, SafeUri uri, String label) {
         html = new StaticHtml(TEMPLATES.render(uri, label, icon.href()));
+    }
+
+    private XElement getElement() {
+        return html.getElement().cast();
+    }
+
+    public void setActive(boolean active) {
+        getElement().setClassName("nav__button--active", active);
     }
 
     @Override

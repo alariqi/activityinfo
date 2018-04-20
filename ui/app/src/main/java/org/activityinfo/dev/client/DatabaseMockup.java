@@ -21,10 +21,14 @@ public class DatabaseMockup implements IsWidget {
     private CssLayoutContainer container;
 
     private DatabaseMockup(DatabaseViewModel databaseViewModel) {
+        Header header = new Header(SearchResults.getResourceList());
         DatabasePage page = new DatabasePage();
         page.updateView(Observable.just(databaseViewModel));
+
+        header.setSettingsActive(true);
+
         this.container = new CssLayoutContainer();
-        this.container.add(new Header(SearchResults.getResourceList()));
+        this.container.add(header);
         this.container.add(new ConnectionStatus());
         this.container.add(page);
 
