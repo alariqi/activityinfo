@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.nonideal;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import org.activityinfo.theme.client.StaticHtml;
+import org.activityinfo.ui.client.base.container.StaticHtml;
 
 public class NotFoundPage implements IsWidget {
 

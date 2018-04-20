@@ -38,7 +38,6 @@ import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
-import org.activityinfo.theme.client.ThemeBundle;
 import org.activityinfo.ui.client.databases.DatabaseListPlace;
 import org.activityinfo.ui.client.header.Frame;
 import org.activityinfo.ui.client.store.FormStore;

@@ -7,8 +7,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.core.client.dom.XElement;
-import org.activityinfo.theme.client.Icon;
-import org.activityinfo.theme.client.StaticHtml;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.container.StaticHtml;
 
 
 public class NavButton implements IsWidget {

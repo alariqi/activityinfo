@@ -7,7 +7,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.ClassNames;
+import org.activityinfo.ui.client.base.ClassNames;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.folder.FolderPlace;
 import org.activityinfo.ui.client.table.TablePlace;

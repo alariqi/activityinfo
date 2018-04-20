@@ -27,7 +27,7 @@
 
     <inherits name='com.sencha.gxt.ui.GXT' />
 
-    <inherits name='org.activityinfo.theme.ActivityInfoTheme' />
+    <inherits name='org.activityinfo.ui.ActivityInfoTheme' />
 
     <inherits name="org.activityinfo.model.Model"/>
     <inherits name="org.activityinfo.io.Match"/>

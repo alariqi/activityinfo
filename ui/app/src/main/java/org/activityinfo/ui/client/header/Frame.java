@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.search.SearchResult;
 import org.activityinfo.ui.client.store.FormStore;
 

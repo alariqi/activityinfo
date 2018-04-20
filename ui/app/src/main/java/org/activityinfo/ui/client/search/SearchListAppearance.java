@@ -6,7 +6,6 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.widget.core.client.ListView;
-import org.activityinfo.theme.client.ClassNames;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +32,11 @@ public class SearchListAppearance implements ListView.ListViewAppearance<SearchR
     }
 
     public Element findElement(XElement child) {
-        return child.findParentElement("." + ClassNames.SEARCH__ITEM, 20);
+        return child.findParentElement(".search__item", 20);
     }
 
     public List<Element> findElements(XElement parent) {
-        NodeList<Element> nodes = parent.select("." + ClassNames.SEARCH__ITEM);
+        NodeList<Element> nodes = parent.select(".search__item");
         List<Element> list = new ArrayList<>();
         for(int i = 0; i < nodes.getLength(); ++i) {
             list.add(nodes.getItem(i));

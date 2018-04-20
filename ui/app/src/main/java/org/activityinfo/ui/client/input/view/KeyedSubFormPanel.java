@@ -203,7 +203,7 @@ public class KeyedSubFormPanel implements IsWidget {
         return true;
     }
 
-    private class KeyedSubFormBarAppearance extends org.activityinfo.theme.client.base.toolbar.Css3ToolBarAppearance {
+    private class KeyedSubFormBarAppearance extends org.activityinfo.ui.client.base.toolbar.Css3ToolBarAppearance {
 
         @Override
         public String toolBarClassName() {

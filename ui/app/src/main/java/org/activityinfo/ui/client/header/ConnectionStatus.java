@@ -5,7 +5,7 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.XTemplates;
-import org.activityinfo.theme.client.StaticHtml;
+import org.activityinfo.ui.client.base.container.StaticHtml;
 
 public class ConnectionStatus implements IsWidget {
 

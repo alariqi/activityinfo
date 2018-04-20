@@ -3,7 +3,7 @@ package org.activityinfo.dev.client;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.form.CheckBox;
-import org.activityinfo.theme.client.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 
 public class FormMockup implements IsWidget {
 

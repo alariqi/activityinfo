@@ -9,7 +9,7 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GridView;
-import org.activityinfo.theme.client.tablegrid.GridAppearance;
+import org.activityinfo.ui.client.base.tablegrid.GridAppearance;
 
 import java.util.ArrayList;
 import java.util.List;

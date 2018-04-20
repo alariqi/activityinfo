@@ -5,7 +5,7 @@ import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.databases.DatabaseListPage;
 import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.header.ConnectionStatus;

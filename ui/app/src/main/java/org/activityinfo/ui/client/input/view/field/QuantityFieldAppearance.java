@@ -27,8 +27,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.sencha.gxt.cell.core.client.form.FieldCell;
 import com.sencha.gxt.cell.core.client.form.TwinTriggerFieldCell;
 import com.sencha.gxt.core.client.dom.XElement;
-import org.activityinfo.theme.client.base.field.Css3TriggerFieldAppearance;
-import org.activityinfo.theme.client.base.field.Css3ValueBaseFieldAppearance;
+import org.activityinfo.ui.client.base.field.Css3TriggerFieldAppearance;
+import org.activityinfo.ui.client.base.field.Css3ValueBaseFieldAppearance;
 import org.activityinfo.ui.client.input.view.InputResources;
 
 public class QuantityFieldAppearance extends Css3ValueBaseFieldAppearance implements TwinTriggerFieldCell.TwinTriggerFieldAppearance {

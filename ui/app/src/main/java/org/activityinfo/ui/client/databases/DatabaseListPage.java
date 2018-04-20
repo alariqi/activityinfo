@@ -8,10 +8,10 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.Icon;
-import org.activityinfo.theme.client.base.button.IconButton;
-import org.activityinfo.theme.client.base.button.IconButtonStyle;
-import org.activityinfo.theme.client.base.button.MenuButton;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.button.IconButton;
+import org.activityinfo.ui.client.base.button.IconButtonStyle;
+import org.activityinfo.ui.client.base.button.MenuButton;
 
 import java.util.List;
 

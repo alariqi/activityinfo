@@ -34,7 +34,7 @@ import org.activityinfo.model.type.time.LocalDate;
 import org.activityinfo.model.type.time.Month;
 import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.model.type.time.PeriodValue;
-import org.activityinfo.theme.client.base.field.Css3DateCellAppearance;
+import org.activityinfo.ui.client.base.field.Css3DateCellAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
 import java.util.ArrayList;

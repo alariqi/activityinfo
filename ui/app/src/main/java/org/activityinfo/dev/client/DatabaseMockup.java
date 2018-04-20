@@ -8,7 +8,7 @@ import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.theme.client.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.database.DatabasePage;
 import org.activityinfo.ui.client.database.DatabaseViewModel;
 import org.activityinfo.ui.client.header.ConnectionStatus;

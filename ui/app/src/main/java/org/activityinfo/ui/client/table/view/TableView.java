@@ -31,7 +31,7 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
-import org.activityinfo.ui.client.chrome.HasTitle;
+import org.activityinfo.ui.client.HasTitle;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.logging.Level;
