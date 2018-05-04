@@ -316,9 +316,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Databases")
     String databases();
 
-    @DefaultStringValue("Database Settings")
-    String databaseSettings();
-
     @DefaultStringValue("Date")
     String date();
 
@@ -1863,6 +1860,10 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Current Filter")
     String currentFilter();
+
+    @DefaultStringValue("Export Column Limit Exceeded")
+    String columnLimit();
+
 
     @DefaultStringValue("Search for a database, folder or form...")
     String searchPlaceholder();
