@@ -1861,7 +1861,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Current Filter")
     String currentFilter();
 
-    @DefaultStringValue("Current column length {0} exceeds Column Export Limitation of {1} for Export Type {2}")
+    @DefaultStringValue("Export Column Limit Exceeded")
     String columnLimit();
 
 
