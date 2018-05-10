@@ -6,31 +6,27 @@
     cursor: default;
     padding: 0 0 0 0;
     overflow: hidden;
-    background: white;
-    /*border-style: BORDER_STYLE;*/
-    /*border-width: BORDER_WIDTH 0 0;*/
-    /*border-color: BORDER_COLOR;*/
+    background: $grey-1;
+    border-style: none;
 }
 
 .columnheader__head-row .columnheader__head {
-    line-height: 18px;
     vertical-align: top;
     -moz-outline: none;
     -moz-user-focus: normal;
     outline: 0 none;
-    /*font-family: FONT_FAMILY;*/
-    /*font-size: FONT_SIZE;*/
-    /*font-weight: FONT_WEIGHT;*/
-    /*color: TEXT_COLOR;*/
-    /*border-style: BORDER_STYLE;*/
-    /*border-color: BORDER_COLOR;*/
-    /*border-width: 0 BORDER_WIDTH BORDER_WIDTH 0;*/
+    font-family: $gretasemibold;
+    font-size: 1rem;
+    color: $grey-4;
+    border-style: solid;
+    border-color: $border;
+    border-width: 0 1px 1px 0;
 }
 
 .columnheader__head-inner {
     overflow: hidden;
     zoom: 1;
-    padding: 3px;
+    padding: 12px 16px 12px 8px;
     cursor: inherit;
     position: relative;
     vertical-align: middle;
@@ -46,42 +42,9 @@
     -webkit-user-select: ignore;
 }
 
+// We cannot suppress the header menu button, but we can hide it.
 .columnheader__head-button {
-    background: greenyellow;
-    border: 1px solid red;
     display: none;
-    position: absolute;
-    /*width: MENU_WIDTH;*/
-    right: 0;
-    top: 0;
-    z-index: 2;
-    cursor: pointer;
-    outline: none;
-}
-
-.columnheader__head--over .columnheader__head-button,
-.columnheader__head-menu--open .columnheader__head-button {
-    display: block;
-}
-
-.columnheader__head--over .columnheader__head-button {
-    /*border-width: MENU_HOVER_BORDER_WIDTH;*/
-    /*border-style: MENU_HOVER_BORDER_STYLE;*/
-    /*border-color: MENU_HOVER_BORDER_COLOR;*/
-}
-
-.columnheader__head-menu--open .columnheader__head-button {
-    /*border-width: MENU_ACTIVE_BORDER_WIDTH;*/
-    /*border-style: MENU_ACTIVE_BORDER_STYLE;*/
-    /*border-color: MENU_ACTIVE_BORDER_COLOR;*/
-}
-
-.columnheader__head--over  .columnheader__head-inner,
-.columnheader__head-menu--open .columnheader__head-inner {
-    /*background: OVER_BACKGROUND_COLOR;*/
-    /*!* @alternate *! background: -webkit-linear-gradient(top, OVER_GRADIENT);*/
-    /*!* @alternate *! background: -ms-linear-gradient(top, OVER_GRADIENT);*/
-    /*!* @alternate *! background: linear-gradient(to bottom, OVER_GRADIENT);*/
 }
 
 .columnheader__sort-icon {

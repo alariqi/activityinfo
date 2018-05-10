@@ -2,47 +2,22 @@
 $BODY_BORDER_COLOR: black;
 $BODY_BORDER_WIDTH: 1px;
 $BODY_BORDER_STYLE: solid;
-$CELL_PADDING: 12px 16px 12px 8px;
-/*$CELL_FAMILY value('theme.grid.tablegrid__cellText.family');*/
-/*$CELL_WEIGHT value('theme.grid.tablegrid__cellText.weight');*/
-/*$CELL_SIZE value('theme.grid.tablegrid__cellText.size');*/
-$CELL_COLOR: black;
+
 $CELL_LINE_HEIGHT: 18.2px;
-$CELL_V_BORDER_COLOR: gray;
-$CELL_H_BORDER_COLOR: gray;
-$CELL_BORDER_WIDTH: 1;
-$CELL_BACKGROUND_COLOR: #e2eff8;
-$CELL_ALT_BACKGROUND_COLOR: white;
-/*$CELL_OVER_V_BORDER_COLOR value('theme.grid.tablegrid__cellOverVBorderColor');*/
-/*$CELL_OVER_V_BORDER_STYLE value('theme.grid.tablegrid__cellOverVBorderStyle');*/
-/*$CELL_OVER_H_BORDER_COLOR value('theme.grid.tablegrid__cellOverHBorderColor');*/
-/*$CELL_OVER_H_BORDER_STYLE value('theme.grid.tablegrid__cellOverHBorderStyle');*/
-/*$CELL_OVER_BACKGROUND_COLOR value('theme.grid.tablegrid__cellOverBackgroundColor');*/
-/*$CELL_SELECTED_V_BORDER_COLOR value('theme.grid.tablegrid__cellSelectedVBorderColor');*/
-/*$CELL_SELECTED_V_BORDER_STYLE value('theme.grid.tablegrid__cellSelectedVBorderStyle');*/
-/*$CELL_SELECTED_H_BORDER_COLOR value('theme.grid.tablegrid__cellSelectedHBorderColor');*/
-/*$CELL_SELECTED_H_BORDER_STYLE value('theme.grid.tablegrid__cellSelectedHBorderStyle');*/
-/*$CELL_SELECTED_BACKGROUND_COLOR value('theme.grid.tablegrid__cellSelectedBackgroundColor');*/
-/*$FOOTER_BACKGROUND_COLOR value('theme.grid.tablegrid__footer.backgroundColor');*/
-/*$FOOTER_BORDER_WIDTH value('theme.grid.tablegrid__footer.tablegrid__cellBorder.toString');*/
-/*$FOOTER_BORDER_COLOR value('theme.grid.tablegrid__footer.tablegrid__cellBorder.color');*/
-/*$FOOTER_BORDER_STYLE value('theme.grid.tablegrid__footer.tablegrid__cellBorder.style');*/
-/*$DIRTY eval('com.sencha.gxt.core.client.util.ImageHelper.createModuleBasedUrl("base/images/grid/dirty.gif")');*/
-/*$INVALID_LINE eval('com.sencha.gxt.core.client.util.ImageHelper.createModuleBasedUrl("base/images/grid/invalid_line.gif")');*/
-
-
-/*$cellPadding = {*/
-/*left = 8*/
-/*right = 16*/
-/*top = 12*/
-/*bottom = 12*/
-/*}*/
+$cell-bg-color: $white;
+$cell-bg-color-alt: #f6f9f9;
+$row-line-width: 2px;
+$column-line-color: $border;
 
 .tablegrid {
     position: relative;
     overflow: hidden;
     outline: 0 none;
     background: yellow;
+
+    // Override our base styles to meet Sencha's assumptions
+    box-sizing: content-box;
+
 }
 
 .tablegrid__scroller {
@@ -52,6 +27,8 @@ $CELL_ALT_BACKGROUND_COLOR: white;
     background-color: white;
     -ms-touch-action: none;
     touch-action: none;
+    box-shadow: 0 2px 6px rgba(36, 50, 51, 0.2);
+
 }
 
 .tablegrid__body {
@@ -60,10 +37,7 @@ $CELL_ALT_BACKGROUND_COLOR: white;
     /*border-width: BODY_BORDER_WIDTH;*/
 }
 
-.tablegrid__row--highlight {
-}
-
-.tablegrid_data-table {
+.tablegrid_data-table table {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
@@ -80,32 +54,40 @@ $CELL_ALT_BACKGROUND_COLOR: white;
 
 .tablegrid__cell {
     background-color: white;
-    border-color: $CELL_BACKGROUND_COLOR $CELL_V_BORDER_COLOR $CELL_H_BORDER_COLOR;
+    border-top-color: $cell-bg-color;
+    border-right-color: $column-line-color;
+    border-left-color: $column-line-color;
+    border-bottom-color: $cell-bg-color;
     border-style: solid;
-    border-width: $CELL_BORDER_WIDTH 0;
+    border-width: $row-line-width 0;
     border-right-style: none;
-    /*font-family: CELL_FAMILY;*/
-    /*font-size: CELL_SIZE;*/
-    /*color: CELL_COLOR;*/
-    /*font-weight: CELL_WEIGHT;*/
+    border-bottom-style: none;
+    color: $black;
     overflow: hidden;
+    outline: 0;
 }
 
 .tablegrid__row--alt .tablegrid__cell {
-    background-color: $CELL_ALT_BACKGROUND_COLOR;
-    border-top-color: $CELL_ALT_BACKGROUND_COLOR;
+    background-color: $cell-bg-color-alt;
+    border-top-color: $cell-bg-color-alt;
+}
+
+.tablegrid__row--highlight .tablegrid__cell {
+    border-style: solid;
+    border-top-color: $green;
+    border-bottom-color: $green;
+    font-family: $gretasemibold;
 }
 
 .tablegrid__row-wrap {
-    border-color: $CELL_BACKGROUND_COLOR $CELL_V_BORDER_COLOR $CELL_H_BORDER_COLOR;
+    border-color: $cell-bg-color $column-line-color $cell-bg-color;
     border-style: solid;
-    border-right-style: none;
-    border-width: $CELL_BORDER_WIDTH 0;
+    border-width: $row-line-width 0;
     overflow: hidden;
 }
 
 .tablegrid__row--alt .tablegrid__row-wrap {
-    border-top-color: $CELL_ALT_BACKGROUND_COLOR;
+    border-top-color: $cell-bg-color-alt;
 }
 
 .tablegrid__row-wrap .tablegrid__cell,
@@ -113,36 +95,20 @@ $CELL_ALT_BACKGROUND_COLOR: white;
     border-style: none;
 }
 
-.tablegrid__row--over .tablegrid__cell,
-.tablegrid__row--over .tablegrid__row-wrap {
-    /*background-color: $CELL_OVER_BACKGROUND_COLOR;*/
-    /*border-style: solid $CELL_OVER_V_BORDER_STYLE $CELL_OVER_H_BORDER_STYLE;*/
-    /*border-color: $CELL_OVER_BACKGROUND_COLOR $CELL_OVER_V_BORDER_COLOR $CELL_OVER_H_BORDER_COLOR;*/
-}
-
-.tablegrid__row--selected .tablegrid__cell,
-.tablegrid__row--selected .tablegrid__row-wrap,
-.tablegrid__row .tablegrid__cell--selected {
-    /*background-color: $CELL_SELECTED_BACKGROUND_COLOR !important;*/
-    /*border-style: solid $CELL_SELECTED_V_BORDER_STYLE $CELL_SELECTED_H_BORDER_STYLE;*/
-    /*border-color: $CELL_SELECTED_BACKGROUND_COLOR $CELL_SELECTED_V_BORDER_COLOR $CELL_SELECTED_H_BORDER_COLOR;*/
-}
 
 .tablegrid__column-lines .tablegrid__cell {
-    border-right: $CELL_BORDER_WIDTH solid $CELL_V_BORDER_COLOR;
+    border-right: 1px solid $column-line-color;
 }
 
 .tablegrid__row--dirty {
 }
 
 .tablegrid__cell--dirty {
-    /*background: transparent no-repeat 0 0;*/
-    /*background-image: DIRTY;*/
 }
 
 .tablegrid__cell-inner {
     overflow: hidden;
-    padding: $CELL_PADDING;
+    padding: 12px 16px 12px 8px;
     line-height: $CELL_LINE_HEIGHT;
     white-space: nowrap;
     -o-text-overflow: ellipsis;
@@ -157,31 +123,12 @@ $CELL_ALT_BACKGROUND_COLOR: white;
 .tablegrid--empty {
     padding: 10px;
     color: gray;
-    font: normal 11px tahoma, arial, helvetica, sans-serif;
 }
 
 .tablegrid__row-body {
-    font: 11px/ 13px tahoma, arial, verdana, sans-serif;
     padding: 4px;
 }
 
-.tablegrid__footer {
-    background: white none repeat scroll 0 0;
-    /*border-width: $FOOTER_BORDER_WIDTH;*/
-    /*border-style: $FOOTER_BORDER_STYLE;*/
-    /*border-color: $FOOTER_BORDER_COLOR;*/
-    display: block;
-    overflow: hidden;
-    position: relative;
-}
-
-.tablegrid__footer .tablegrid__cell {
-    background: none;
-    /*font-family: FOOTER_TEXT_FAMILY;*/
-    /*font-size: FOOTER_TEXT_SIZE;*/
-    /*font-weight: FOOTER_TEXT_WEIGHT;*/
-    /*color: FOOTER_TEXT_COLOR;*/
-}
 
 .x-treegrid .x-treegrid-column .tablegrid__cell-inner {
     padding: 0 !important;

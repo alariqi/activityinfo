@@ -124,7 +124,7 @@ public class ColumnHeaderAppearance implements ColumnHeader.ColumnHeaderAppearan
 
     @Override
     public String columnsWrapSelector() {
-        return "." + TABLEGRID__HEAD_INNER;
+        return ".columnheader__header-inner";
     }
 
     @Override

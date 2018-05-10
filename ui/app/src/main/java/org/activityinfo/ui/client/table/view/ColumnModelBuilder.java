@@ -137,6 +137,7 @@ public class ColumnModelBuilder {
         ColumnConfig<Integer, Date> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
         config.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
+        config.setMenuDisabled(true);
         columnConfigs.add(config);
     }
 

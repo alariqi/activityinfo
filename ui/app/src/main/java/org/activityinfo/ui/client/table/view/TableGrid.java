@@ -28,10 +28,9 @@ import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
-import com.sencha.gxt.widget.core.client.grid.CellSelectionModel;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.selection.CellSelectionChangedEvent;
+import com.sencha.gxt.widget.core.client.grid.GridSelectionModel;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
@@ -60,7 +59,6 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
     private final PagingLoader<PagingLoadConfig, PagingLoadResult<Integer>> loader;
 
     private final EventBus eventBus = new SimpleEventBus();
-//    private final TableGridFilters filters;
 
     public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet, TableUpdater tableUpdater) {
 
@@ -84,10 +82,11 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         LiveRecordGridView gridView = new LiveRecordGridView();
         gridView.setColumnLines(true);
         gridView.setTrackMouseOver(false);
+        gridView.setStripeRows(true);
         gridView.addColumnResizeHandler(this::changeColumnWidth);
 
-        CellSelectionModel<Integer> sm = new CellSelectionModel<>();
-        sm.addCellSelectionChangedHandler(this::changeRowSelection);
+        GridSelectionModel<Integer> sm = new GridSelectionModel<>();
+        sm.addSelectionChangedHandler(this::changeRowSelection);
 
         grid = new Grid<Integer>(store, columns.buildColumnModel()) {
             @Override
@@ -108,17 +107,6 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         grid.setView(gridView);
         grid.setSelectionModel(sm);
         grid.addSortChangeHandler(this::changeSort);
-
-        // Setup grid filters
-//        filters = new TableGridFilters(tableUpdater);
-//        filters.initPlugin(grid);
-//
-//        if( !initialTableModel.isSubTable()) {
-//            for (ColumnView filter : columns.getFilters()) {
-//                filters.addFilter(filter);
-//            }
-//            filters.updateView(tableModel.getFilter());
-//        }
     }
 
     private void changeColumnWidth(ColumnResizeEvent e) {
@@ -132,11 +120,12 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
 
     /**
      * Changes the current row selection to the user's new selection
+     * @param event
      */
-    private void changeRowSelection(CellSelectionChangedEvent<Integer> event) {
+    private void changeRowSelection(SelectionChangedEvent<Integer> event) {
         if(proxy.isLoaded()) {
             if(!event.getSelection().isEmpty()) {
-                int rowIndex = event.getSelection().get(0).getModel();
+                int rowIndex = event.getSelection().get(0);
                 RecordRef selectedRef = new RecordRef(initialTableModel.getFormId(), proxy.getRecordId(rowIndex));
                 eventBus.fireEvent(new SelectionChangedEvent<>(Collections.singletonList(selectedRef)));
             }
@@ -157,8 +146,6 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             LOGGER.info("Columns have changed, rebuild required.");
             return false;
         }
-
-//        filters.updateView(tableModel.getFilter());
 
         return true;
     }
