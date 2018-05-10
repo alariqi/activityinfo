@@ -47,10 +47,10 @@
 
 
 
-  <replace-with class="org.activityinfo.ui.client.base.button.Css3ButtonGroupAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.button.ButtonGroup.ButtonGroupAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
+  <!--<replace-with class="org.activityinfo.ui.client.base.button.Css3ButtonGroupAppearance">-->
+    <!--<when-type-is class="com.sencha.gxt.widget.core.client.button.ButtonGroup.ButtonGroupAppearance"/>-->
+    <!--<when-property-is name="gxt.theme" value="activityinfo"/>-->
+  <!--</replace-with>-->
 
   <!-- Tool icons, currently generated at compile time for css3 and sliced alike -->
   <replace-with class="org.activityinfo.ui.client.base.tools.Css3Tools">
@@ -58,10 +58,10 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.button.Css3IconButtonAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.button.IconButton.IconButtonAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
+  <!--<replace-with class="org.activityinfo.ui.client.base.button.Css3IconButtonAppearance">-->
+    <!--<when-type-is class="com.sencha.gxt.widget.core.client.button.IconButton.IconButtonAppearance"/>-->
+    <!--<when-property-is name="gxt.theme" value="activityinfo"/>-->
+  <!--</replace-with>-->
 
   <!-- PagingToolbar appearance only deals with icons, generated at compile time -->
   <replace-with class="org.activityinfo.ui.client.base.toolbar.Css3PagingToolBarAppearance">

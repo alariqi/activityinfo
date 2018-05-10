@@ -12,6 +12,7 @@ import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
 import org.activityinfo.ui.client.page.PageContainer;
+import org.activityinfo.ui.client.page.PageStyle;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class DatabaseListPage implements IsWidget {
 
         listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
 
-        container = new PageContainer();
+        container = new PageContainer(PageStyle.PADDED);
         container.getHeader().setHeading(I18N.CONSTANTS.databases());
         container.addBodyWidget(toolbar);
         container.addBodyWidget(listView);

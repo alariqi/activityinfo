@@ -316,6 +316,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Databases")
     String databases();
 
+    @DefaultStringValue("Database Settings")
+    String databaseSettings();
+
     @DefaultStringValue("Date")
     String date();
 
@@ -1876,4 +1879,7 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Notifications")
     String notifications();
+
+    @DefaultStringValue("New record")
+    String newRecord();
 }

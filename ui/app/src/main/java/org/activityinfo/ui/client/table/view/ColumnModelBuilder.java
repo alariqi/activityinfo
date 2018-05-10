@@ -23,19 +23,11 @@ import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.sencha.gxt.core.client.ValueProvider;
-import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.HeaderGroupConfig;
-import com.sencha.gxt.widget.core.client.grid.filters.DateFilter;
-import com.sencha.gxt.widget.core.client.grid.filters.ListFilter;
-import com.sencha.gxt.widget.core.client.grid.filters.NumericFilter;
-import com.sencha.gxt.widget.core.client.grid.filters.StringFilter;
 import org.activityinfo.analysis.table.*;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.type.enumerated.EnumItem;
-import org.activityinfo.model.type.enumerated.EnumType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,17 +103,12 @@ public class ColumnModelBuilder {
         }
     }
 
-
-
     private void addTextColumn(EffectiveTableColumn tableColumn, TextFormat textFormat) {
         ValueProvider<Integer, String> valueProvider = proxy.getValueProvider(textFormat);
 
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
-
-        StringFilter<Integer> filter = new StringFilter<>(valueProvider);
-        filters.add(new ColumnView(tableColumn.getFormula(), filter));
     }
 
 
@@ -132,11 +119,6 @@ public class ColumnModelBuilder {
         config.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
-
-        NumericFilter<Integer, Double> filter = new NumericFilter<>(valueProvider,
-                new NumberPropertyEditor.DoublePropertyEditor());
-
-        filters.add(new ColumnView(tableColumn.getFormula(), filter));
     }
 
     private void addEnumType(EffectiveTableColumn tableColumn, SingleEnumFormat format) {
@@ -147,19 +129,6 @@ public class ColumnModelBuilder {
         config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
 
-        addEnumFilter(valueProvider.getPath(), tableColumn, (EnumType) tableColumn.getType());
-    }
-
-    private void addEnumFilter(String path, EffectiveTableColumn columnModel, EnumType enumType) {
-        ListStore<EnumItemViewModel> store = new ListStore<>(x -> x.getId());
-        for (EnumItem enumItem : enumType.getValues()) {
-            store.add(new EnumItemViewModel(enumItem));
-        }
-
-        ListFilter<Integer, EnumItemViewModel> filter = new ListFilter<>(new NullValueProvider<>(path), store);
-        filter.setUseStoreKeys(true);
-
-        filters.add(new ColumnView(columnModel.getFormula(), filter));
     }
 
     private void addDateColumn(EffectiveTableColumn tableColumn, DateFormat dateFormat) {
@@ -169,9 +138,6 @@ public class ColumnModelBuilder {
         config.setHeader(tableColumn.getLabel());
         config.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
         columnConfigs.add(config);
-
-        DateFilter<Integer> filter = new DateFilter<>(valueProvider);
-        filters.add(new ColumnView(tableColumn.getFormula(), filter));
     }
 
 
@@ -182,8 +148,6 @@ public class ColumnModelBuilder {
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
-
-        addEnumFilter(valueProvider.getPath(), tableColumn, (EnumType) tableColumn.getType());
     }
 
     private void addGeoPointColumn(EffectiveTableColumn columnModel, GeoPointFormat format) {
@@ -234,9 +198,6 @@ public class ColumnModelBuilder {
         config.setCell(new ErrorCell());
         config.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LOCALE_END);
         columnConfigs.add(config);
-
-        StringFilter<Integer> filter = new StringFilter<>(valueProvider);
-        filters.add(new ColumnView(tableColumn.getFormula(), filter));
     }
 
 
@@ -250,54 +211,4 @@ public class ColumnModelBuilder {
         return cm;
     }
 
-    public List<ColumnView> getFilters() {
-        return filters;
-    }
-
-    private static class NullValueProvider<T, V> implements ValueProvider<T, V> {
-
-        private String path;
-
-        public NullValueProvider(String path) {
-            this.path = path;
-        }
-
-        @Override
-        public V getValue(T object) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public void setValue(T object, V value) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String getPath() {
-            return path;
-        }
-    }
-
-    /**
-     * We need this instead of EnumItem, because {@link com.sencha.gxt.widget.core.client.grid.filters.ListMenu}
-     * calls toString() to get the text for the menu.
-     */
-    private static class EnumItemViewModel {
-        private String id;
-        private String label;
-
-        public EnumItemViewModel(EnumItem item) {
-            id = item.getId().asString();
-            label = item.getLabel();
-        }
-
-        public String getId() {
-            return id;
-        }
-
-        @Override
-        public String toString() {
-            return label;
-        }
-    }
 }

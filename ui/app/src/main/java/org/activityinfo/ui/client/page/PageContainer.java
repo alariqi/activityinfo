@@ -11,7 +11,7 @@ public class PageContainer implements IsWidget {
     private final CssLayoutContainer body;
     private final CssLayoutContainer bodyInner;
 
-    public PageContainer() {
+    public PageContainer(PageStyle pageStyle) {
 
         header = new PageHeader();
 
@@ -19,11 +19,14 @@ public class PageContainer implements IsWidget {
         bodyInner.addStyleName("page__body__inner");
 
         body = new CssLayoutContainer();
-        bodyInner.addStyleName("page__body");
+        body.addStyleName("page__body");
         body.add(bodyInner);
 
         container = new CssLayoutContainer();
         container.addStyleName("page");
+        if(pageStyle == PageStyle.PADDED) {
+            container.addStyleName("page--padded");
+        }
         container.add(header);
         container.add(body);
     }

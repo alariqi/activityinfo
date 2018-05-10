@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
@@ -31,6 +30,10 @@ import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.HasTitle;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.page.GenericAvatar;
+import org.activityinfo.ui.client.page.PageContainer;
+import org.activityinfo.ui.client.page.PageStyle;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.logging.Level;
@@ -49,10 +52,9 @@ public class TableView implements IsWidget, HasTitle {
 
     private TableGrid grid;
 
-    private final VerticalLayoutContainer center;
-
     private final SidePanel sidePanel;
-    private final BorderLayoutContainer container;
+    private final PageContainer container;
+    private final CssLayoutContainer gridContainer;
 
     private final SubscriptionSet subscriptions = new SubscriptionSet();
 
@@ -65,8 +67,8 @@ public class TableView implements IsWidget, HasTitle {
 
         TableToolBar toolBar = new TableToolBar(formStore, viewModel);
 
-        center = new VerticalLayoutContainer();
-        center.add(toolBar, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        gridContainer = new CssLayoutContainer();
+        gridContainer.addStyleName("formtable__gridcontainer");
 
         sidePanel = new SidePanel(formStore, viewModel);
         BorderLayoutContainer.BorderLayoutData sidePaneLayout = new BorderLayoutContainer.BorderLayoutData(.3);
@@ -75,24 +77,24 @@ public class TableView implements IsWidget, HasTitle {
         sidePaneLayout.setCollapsible(true);
         sidePaneLayout.setCollapsed(true);
 
-        this.container = new BorderLayoutContainer();
-        this.container.setEastWidget(sidePanel, sidePaneLayout);
-        this.container.setCenterWidget(center);
+        this.container = new PageContainer(PageStyle.FULLWIDTH);
+        this.container.getHeader().setAvatar(GenericAvatar.FORM);
+        this.container.addBodyWidget(toolBar);
+        this.container.addBodyWidget(gridContainer);
 
         subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
     }
 
     @Override
     public Widget asWidget() {
-        return container;
+        return container.asWidget();
     }
 
     private void effectiveModelChanged() {
         if(viewModel.getEffectiveTable().isLoading()) {
-            this.container.mask();
+//            this.container.mask();
         } else {
-            this.container.unmask();
-
+//            this.container.unmask();
 
             switch (viewModel.getEffectiveTable().get().getRootFormState()) {
                 case FORBIDDEN:
@@ -114,6 +116,9 @@ public class TableView implements IsWidget, HasTitle {
 
         LOGGER.log(Level.INFO, "updating grid");
 
+        container.getHeader().setHeading(effectiveTableModel.getFormLabel());
+
+
         // If the grid is already displayed, try to update without
         // destroying everything
         if(grid != null && grid.updateView(effectiveTableModel)) {
@@ -121,7 +126,7 @@ public class TableView implements IsWidget, HasTitle {
         }
 
         if(grid != null) {
-            center.remove(grid);
+//            gridContainer.remove(grid);
         }
 
         grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
@@ -131,10 +136,7 @@ public class TableView implements IsWidget, HasTitle {
                 viewModel.select(ref);
             }
         });
-        center.add(grid, new VerticalLayoutContainer.VerticalLayoutData(1, 1));
-        center.forceLayout();
-
-        container.forceLayout();
+//        gridContainer.add(grid);
     }
 
     @Override

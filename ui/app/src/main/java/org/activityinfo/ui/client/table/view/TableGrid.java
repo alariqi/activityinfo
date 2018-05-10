@@ -60,7 +60,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
     private final PagingLoader<PagingLoadConfig, PagingLoadResult<Integer>> loader;
 
     private final EventBus eventBus = new SimpleEventBus();
-    private final TableGridFilters filters;
+//    private final TableGridFilters filters;
 
     public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet, TableUpdater tableUpdater) {
 
@@ -110,15 +110,15 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         grid.addSortChangeHandler(this::changeSort);
 
         // Setup grid filters
-        filters = new TableGridFilters(tableUpdater);
-        filters.initPlugin(grid);
-
-        if( !initialTableModel.isSubTable()) {
-            for (ColumnView filter : columns.getFilters()) {
-                filters.addFilter(filter);
-            }
-            filters.updateView(tableModel.getFilter());
-        }
+//        filters = new TableGridFilters(tableUpdater);
+//        filters.initPlugin(grid);
+//
+//        if( !initialTableModel.isSubTable()) {
+//            for (ColumnView filter : columns.getFilters()) {
+//                filters.addFilter(filter);
+//            }
+//            filters.updateView(tableModel.getFilter());
+//        }
     }
 
     private void changeColumnWidth(ColumnResizeEvent e) {
@@ -158,7 +158,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             return false;
         }
 
-        filters.updateView(tableModel.getFilter());
+//        filters.updateView(tableModel.getFilter());
 
         return true;
     }

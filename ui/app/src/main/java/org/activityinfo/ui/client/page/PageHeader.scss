@@ -17,16 +17,23 @@
 }
 
 .page__header__inner {
-  max-width: $maxwidth;
   padding: 2rem 1rem;
-  margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-content: flex-start;
+}
+
+.page--padded .page__header__inner {
+  max-width: $maxwidth;
+  margin: 0 auto;
 
   @media only screen and (min-width: $breakpoint-l) {
     padding: 2rem 0;
   }
+}
+
+.page--fullwidth .page__header__inner {
+  padding: 2rem 0;
 }
 
 .page__header__inner a {

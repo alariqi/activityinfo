@@ -31,6 +31,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.storage.LocalStorage;
 import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.table.view.TableView;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,7 +56,7 @@ public class TableActivity extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         TableViewModel tableViewModel = new TableViewModel(formStore, initialModel(place.getFormId()));
 
-        TablePage tablePage = new TablePage(formStore, tableViewModel);
+        TableView tablePage = new TableView(formStore, tableViewModel);
         panel.setWidget(tablePage);
 
         modelSubscription = tableViewModel.getTableModel().subscribe(this::saveModel);
