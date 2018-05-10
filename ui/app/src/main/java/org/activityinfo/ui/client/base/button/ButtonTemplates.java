@@ -11,6 +11,10 @@ public interface ButtonTemplates extends XTemplates {
     @XTemplate(source = "IconButton.html")
     SafeHtml iconButton(String iconHref, String label, String styleNames);
 
+
+    @XTemplate(source = "IconLinkButton.html")
+    SafeHtml iconLinkButton(String iconHref, String label);
+
     @XTemplate(source = "MenuButton.html")
     SafeHtml menuButton(String label);
 

@@ -107,10 +107,7 @@ public class TableView implements IsWidget, HasTitle {
     }
 
     private void showErrorState(FormTree.State rootFormState) {
-//        errorWidget = new ForbiddenWidget();
-//
-//        pageContainer.setWidget(errorWidget);
-//        pageContainer.forceLayout();
+
     }
 
     private void updateGrid(EffectiveTableModel effectiveTableModel) {

@@ -1,4 +1,4 @@
-.page__toolbar {
+.toolbar {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -8,6 +8,6 @@
   width: calc(100% + 0.5rem);
 }
 
-.page__toolbar__actions div {
+.toolbar__actions div {
   margin: 0.5rem 0.25rem;
 }

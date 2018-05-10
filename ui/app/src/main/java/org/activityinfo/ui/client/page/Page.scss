@@ -1,0 +1,14 @@
+/* page body styles */
+.page__body {
+  background-color: $background;
+  padding: 2rem 1rem;
+
+  @media only screen and (min-width: $breakpoint-l) {
+    padding: 2rem 0;
+  }
+}
+
+.page__body__inner {
+  max-width: $maxwidth;
+  margin: 0 auto;
+}
