@@ -42,21 +42,6 @@ class SearchComboBoxCell extends ComboBoxCell<SearchResult> {
         parent.addClassName("search--expanded");
     }
 
-//    @Override
-//    protected void onSelect(SearchResult item) {
-//        switch (item.getResourceType()) {
-//            case FORM:
-//                History.newItem(new TablePlace(item.getId()).toString());
-//                break;
-//            case DATABASE:
-//                History.newItem(new DatabasePlace(item.getId()).toString());
-//                break;
-//            case FOLDER:
-//                History.newItem(new FolderPlace(item.getId()).toString());
-//                break;
-//        }
-//    }
-
     @Override
     public void collapse(Context context, XElement parent) {
         super.collapse(context, parent);
