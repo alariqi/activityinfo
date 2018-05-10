@@ -31,7 +31,6 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formula.CompoundExpr;
 import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.query.ColumnModel;
-import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Connection;
@@ -45,7 +44,7 @@ import org.activityinfo.ui.client.table.view.DeleteRecordAction;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import static org.activityinfo.observable.ObservableTesting.connect;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -88,7 +87,7 @@ public class TableViewModelTest {
 
         viewModel.update(ImmutableTableModel.builder()
             .from(tableModel)
-            .columns(Arrays.asList(updatedColumn))
+            .columns(Collections.singletonList(updatedColumn))
             .build());
 
         setup.runScheduled();
@@ -187,42 +186,6 @@ public class TableViewModelTest {
 
         assertThat(effectiveTableModel.getFormTree().getRootState(), equalTo(FormTree.State.DELETED));
 
-    }
-
-    @Test
-    public void testSubFormPane() {
-
-        IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
-
-        TableModel tableModel = ImmutableTableModel.builder().formId(incidentForm.getFormId()).build();
-        TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
-
-        Connection<EffectiveTableModel> subTableView = setup.connect(viewModel.getEffectiveSubTable(ReferralSubForm.FORM_ID));
-        Connection<ColumnSet> subTable = setup.connect(subTableView.assertLoaded().getColumnSet());
-
-
-        // The sub table should not include parent forms
-        for (EffectiveTableColumn subColumn : subTableView.assertLoaded().getColumns()) {
-            if(subColumn.getLabel().equals(incidentForm.getUrgencyField().getLabel())) {
-                throw new AssertionError("Sub table should not include parent fields");
-            }
-        }
-
-        // Initially there should be no rows because there is no selection
-        assertThat(subTable.assertLoaded().getNumRows(), equalTo(0));
-
-
-        // Once we make a selection, then the column set should update to show the sub records of the selected
-        // parent record
-
-        subTable.resetChangeCounter();
-
-        viewModel.select(incidentForm.getRecordRef(0));
-        setup.runScheduled();
-
-        subTable.assertChanged();
-
-        assertThat(subTable.assertLoaded().getNumRows(), equalTo(4));
     }
 
     @Test

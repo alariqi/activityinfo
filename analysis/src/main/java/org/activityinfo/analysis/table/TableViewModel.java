@@ -40,9 +40,7 @@ import org.activityinfo.store.query.shared.FormSource;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -58,9 +56,6 @@ public class TableViewModel implements TableUpdater {
     private StatefulValue<TableModel> tableModel;
     private Observable<EffectiveTableModel> effectiveTable;
     private Observable<ColumnSet> columnSet;
-
-
-    private Map<ResourceId, Observable<EffectiveTableModel>> effectiveSubTables = new HashMap<>();
 
     private StatefulValue<Optional<RecordRef>> selectedRecordRef = new StatefulValue<>(Optional.absent());
     private final Observable<Optional<SelectionViewModel>> selectionViewModel;
@@ -127,22 +122,15 @@ public class TableViewModel implements TableUpdater {
         return columnSet;
     }
 
-    public Observable<EffectiveTableModel> getEffectiveSubTable(final ResourceId subFormId) {
-        Observable<EffectiveTableModel> effectiveSubTable = effectiveSubTables.get(subFormId);
-        if(effectiveSubTable == null) {
-            final TableModel subModel = ImmutableTableModel.builder()
-                    .formId(subFormId)
-                    .build();
+    private Observable<EffectiveTableModel> getEffectiveSubTable(final ResourceId subFormId) {
+        final TableModel subModel = ImmutableTableModel.builder()
+                .formId(subFormId)
+                .build();
 
-            effectiveSubTable = formTree
-                    .transform(tree -> tree.subTree(subFormId))
-                    .transform(subTree -> new EffectiveTableModel(formStore, subTree, subModel, Optional.of(getSelectedRecordRef())));
-
-            effectiveSubTables.put(subFormId, effectiveSubTable);
-        }
-        return effectiveSubTable;
+        return formTree
+                .transform(tree -> tree.subTree(subFormId))
+                .transform(subTree -> new EffectiveTableModel(formStore, subTree, subModel, Optional.of(getSelectedRecordRef())));
     }
-
 
     public ResourceId getFormId() {
         return formId;

@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.util.Margins;
@@ -39,7 +38,6 @@ import java.util.logging.Logger;
 
 /**
  * Displays a Form as a Table.
- *
  */
 public class TableView implements IsWidget, HasTitle {
 
@@ -50,7 +48,6 @@ public class TableView implements IsWidget, HasTitle {
     private final TableViewModel viewModel;
 
     private TableGrid grid;
-    private SubFormPane subFormPane;
 
     private final VerticalLayoutContainer center;
 
@@ -83,7 +80,6 @@ public class TableView implements IsWidget, HasTitle {
         this.container.setCenterWidget(center);
 
         subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
-        subscriptions.add(viewModel.getFormTree().subscribe(tree -> formTreeChanged(tree)));
     }
 
     @Override
@@ -106,28 +102,6 @@ public class TableView implements IsWidget, HasTitle {
                 case VALID:
                     updateGrid(viewModel.getEffectiveTable().get());
                     break;
-            }
-        }
-    }
-
-    private void formTreeChanged(Observable<FormTree> tree) {
-        if(tree.isLoaded()) {
-            if (tree.get().hasVisibleSubForms()) {
-                if(subFormPane == null) {
-                    subFormPane = new SubFormPane(viewModel, tree.get());
-                    BorderLayoutContainer.BorderLayoutData subFormPaneLayout = new BorderLayoutContainer.BorderLayoutData(0.3);
-                    subFormPaneLayout.setSplit(true);
-                    subFormPaneLayout.setMargins(new Margins(0, 0, 0, MARGINS));
-
-                    this.container.setSouthWidget(subFormPane, subFormPaneLayout);
-                    Scheduler.get().scheduleFinally(() -> container.forceLayout());
-                }
-            } else {
-                if(subFormPane != null) {
-                    this.container.remove(subFormPane);
-                    Scheduler.get().scheduleFinally(() -> container.forceLayout());
-                    subFormPane = null;
-                }
             }
         }
     }
