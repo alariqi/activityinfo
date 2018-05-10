@@ -1,27 +1,33 @@
 
+.formtable {
+  display: flex;
+  flex-direction: column;
+}
 
 .formtable__gridcontainer {
   background-color: red;
+  flex-grow: 1;
+}
+
+.formtable aside {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 15rem;
+  background-color: $black;
+  color: $white;
+  overflow: scroll;
+  font-size: 0.9rem;
+  box-shadow: -0.2rem 0 0.5rem 0 rgba(black, 0.2);
+
+  aside.is-collapsed {
+    width: 4rem;
+  }
 
 }
-//
-//aside {
-//  position: absolute;
-//  right: 0;
-//  top: 0;
-//  bottom: 0;
-//  width: 15rem;
-//  background-color: $black;
-//  color: white;
-//  overflow: scroll;
-//  font-size: 0.9rem;
-//  box-shadow: -0.2rem 0 0.5rem 0 rgba(black, 0.2);
-//}
-//
-//aside.is-collapsed {
-//  width: 4rem;
-//}
-//
+
+
 //aside .detailscontainer--selected {
 //  display: none;
 //}

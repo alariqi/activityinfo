@@ -34,12 +34,13 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
 import org.activityinfo.ui.client.databases.DatabaseListPlace;
-import org.activityinfo.ui.client.header.Frame;
+import org.activityinfo.ui.client.header.AppFrame;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.ConnectionListener;
@@ -87,7 +88,7 @@ public class AppEntryPoint implements EntryPoint {
         FormStore formStore = new FormStoreImpl(httpStore, offlineStore, Scheduler.get());
         LocalStorage storage = LocalStorage.create();
 
-        Frame frame = new Frame(formStore);
+        AppFrame frame = new AppFrame(formStore);
 
         ActivityMapper activityMapper = new AppActivityMapper(formStore, storage);
         ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
@@ -100,8 +101,10 @@ public class AppEntryPoint implements EntryPoint {
         // Start synchronizer...
         RecordSynchronizer synchronizer = new RecordSynchronizer(httpStore, offlineStore);
 
+        Viewport viewport = new Viewport();
+        viewport.add(frame);
 
-        RootPanel.get().add(frame);
+        RootPanel.get().add(viewport);
 
         historyHandler.handleCurrentHistory();
 

@@ -31,6 +31,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.HasTitle;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.header.HasFixedHeight;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.page.PageContainer;
 import org.activityinfo.ui.client.page.PageStyle;
@@ -42,7 +43,7 @@ import java.util.logging.Logger;
 /**
  * Displays a Form as a Table.
  */
-public class TableView implements IsWidget, HasTitle {
+public class TableView implements IsWidget, HasTitle, HasFixedHeight {
 
     public static final int MARGINS = 8;
 
@@ -78,6 +79,7 @@ public class TableView implements IsWidget, HasTitle {
         sidePaneLayout.setCollapsed(true);
 
         this.container = new PageContainer(PageStyle.FULLWIDTH);
+        this.container.addBodyStyleName("formtable");
         this.container.getHeader().setAvatar(GenericAvatar.FORM);
         this.container.addBodyWidget(toolBar);
         this.container.addBodyWidget(gridContainer);
@@ -126,7 +128,7 @@ public class TableView implements IsWidget, HasTitle {
         }
 
         if(grid != null) {
-//            gridContainer.remove(grid);
+            gridContainer.remove(grid);
         }
 
         grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
@@ -136,7 +138,8 @@ public class TableView implements IsWidget, HasTitle {
                 viewModel.select(ref);
             }
         });
-//        gridContainer.add(grid);
+        gridContainer.add(grid);
+        grid.setPixelSize(gridContainer.getOffsetWidth(), gridContainer.getOffsetHeight());
     }
 
     @Override

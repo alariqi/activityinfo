@@ -1,4 +1,9 @@
 /* page body styles */
+
+.page {
+  flex-grow: 1;
+}
+
 .page__body {
   background-color: $background;
   padding: 2rem 1rem;
@@ -11,5 +16,24 @@
 
   @media only screen and (min-width: $breakpoint-l) {
     padding: 2rem 0;
+  }
+}
+
+.appframe--fixed {
+
+  .page {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page__body {
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page__body__inner {
+    flex-grow: 1;
   }
 }

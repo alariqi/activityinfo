@@ -39,6 +39,13 @@ public class PageContainer implements IsWidget {
         bodyInner.add(widget);
     }
 
+    /**
+     * Adds a CSS class name to the {@code page__body__inner} div.
+     */
+    public void addBodyStyleName(String className) {
+        bodyInner.addStyleName(className);
+    }
+
     @Override
     public Widget asWidget() {
         return container;

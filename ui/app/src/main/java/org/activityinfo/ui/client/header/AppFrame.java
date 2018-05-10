@@ -13,14 +13,20 @@ import org.activityinfo.ui.client.store.FormStore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Frame implements AcceptsOneWidget, IsWidget {
+/**
+ * The outer container for the application.
+ */
+public class AppFrame implements AcceptsOneWidget, IsWidget {
 
-    private final CssLayoutContainer container = new CssLayoutContainer();
+    private final CssLayoutContainer container;
+
     private Widget currentPageWidget;
 
-    public Frame(FormStore formStore) {
+    public AppFrame(FormStore formStore) {
+        container = new CssLayoutContainer();
         container.add(new Header(resourceList(formStore)));
         container.add(new ConnectionStatus());
+        container.addStyleName("appframe");
     }
 
     private Observable<List<SearchResult>> resourceList(FormStore formStore) {
@@ -54,6 +60,7 @@ public class Frame implements AcceptsOneWidget, IsWidget {
                 container.add(newWidget);
             }
             currentPageWidget = newWidget;
+            container.setStyleName("appframe--fixed", w instanceof HasFixedHeight);
         }
     }
 

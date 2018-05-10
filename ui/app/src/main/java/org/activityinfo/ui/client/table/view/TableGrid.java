@@ -202,4 +202,8 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
     public HandlerRegistration addSelectionChangedHandler(SelectionChangedEvent.SelectionChangedHandler<RecordRef> handler) {
         return eventBus.addHandler(SelectionChangedEvent.getType(), handler);
     }
+
+    public void setPixelSize(int width, int height) {
+        grid.setPixelSize(width, height);
+    }
 }

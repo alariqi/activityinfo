@@ -13,4 +13,8 @@ public class CssLayoutContainer extends Container {
         setElement(Document.get().createElement(tagName));
     }
 
+    @Override
+    public void setPixelSize(int width, int height) {
+        // Do not set pixel size, layout controlled by CSS.
+    }
 }

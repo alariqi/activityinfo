@@ -18,25 +18,24 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.TabItemConfig;
-import com.sencha.gxt.widget.core.client.TabPanel;
 import org.activityinfo.analysis.table.TableViewModel;
-import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.store.FormStore;
 
 /**
  * Sidebar panel containing details, history, etc.
  */
-public class SidePanel extends ContentPanel {
+public class SidePanel {
+
+    private CssLayoutContainer container = new CssLayoutContainer();
 
     public SidePanel(FormStore formStore, TableViewModel viewModel) {
-        setHeading("Side Panel");
-        TabPanel tabPanel = new TabPanel();
-        tabPanel.add(new DetailsPane(viewModel), new TabItemConfig(I18N.CONSTANTS.details()));
-        tabPanel.add(new HistoryPane(formStore, viewModel), new TabItemConfig(I18N.CONSTANTS.history()));
-        tabPanel.add(new ApiPane(viewModel), new TabItemConfig("API"));
-        add(tabPanel);
-    }
+        container = new CssLayoutContainer("aside");
 
+//        TabPanel tabPanel = new TabPanel();
+//        tabPanel.add(new DetailsPane(viewModel), new TabItemConfig(I18N.CONSTANTS.details()));
+//        tabPanel.add(new HistoryPane(formStore, viewModel), new TabItemConfig(I18N.CONSTANTS.history()));
+//        tabPanel.add(new ApiPane(viewModel), new TabItemConfig("API"));
+//        add(tabPanel);
+    }
 }

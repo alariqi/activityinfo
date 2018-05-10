@@ -1,0 +1,10 @@
+
+.appframe {
+  overflow-y: scroll;
+}
+
+.appframe--fixed {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
