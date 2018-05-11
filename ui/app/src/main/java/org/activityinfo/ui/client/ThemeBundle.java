@@ -10,4 +10,7 @@ public interface ThemeBundle extends ClientBundle {
 
     @Source("icons.svg")
     TextResource icons();
+
+    @Source("app.css")
+    TextResource stylesheet();
 }

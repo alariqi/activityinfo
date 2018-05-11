@@ -30,7 +30,6 @@ import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.HasTitle;
-import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.header.HasFixedHeight;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.page.PageContainer;
@@ -55,7 +54,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
 
     private final SidePanel sidePanel;
     private final PageContainer container;
-    private final CssLayoutContainer gridContainer;
+    private final GridContainer gridContainer;
 
     private final SubscriptionSet subscriptions = new SubscriptionSet();
 
@@ -68,7 +67,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
 
         TableToolBar toolBar = new TableToolBar(formStore, viewModel);
 
-        gridContainer = new CssLayoutContainer();
+        gridContainer = new GridContainer();
         gridContainer.addStyleName("formtable__gridcontainer");
 
         sidePanel = new SidePanel(formStore, viewModel);
@@ -127,10 +126,6 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
             return;
         }
 
-        if(grid != null) {
-            gridContainer.remove(grid);
-        }
-
         grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
         grid.addSelectionChangedHandler(event -> {
             if(!event.getSelection().isEmpty()) {
@@ -138,8 +133,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
                 viewModel.select(ref);
             }
         });
-        gridContainer.add(grid);
-        grid.setPixelSize(gridContainer.getOffsetWidth(), gridContainer.getOffsetHeight());
+        gridContainer.setGrid(grid);
     }
 
     @Override

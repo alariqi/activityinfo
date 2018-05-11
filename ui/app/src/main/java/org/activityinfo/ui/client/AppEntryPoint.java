@@ -21,12 +21,11 @@ package org.activityinfo.ui.client;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.LinkElement;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
@@ -109,15 +108,8 @@ public class AppEntryPoint implements EntryPoint {
         historyHandler.handleCurrentHistory();
 
     }
-
     public static void injectStyle() {
-        //     <link rel="stylesheet" type="text/css" href="App/app.css">
-        LinkElement link = Document.get().createLinkElement();
-        link.setRel("stylesheet");
-        link.setType("text/css");
-        link.setHref(GWT.getModuleBaseForStaticFiles() + "app.css");
-
-        Document.get().getHead().appendChild(link);
+        StyleInjector.inject(ThemeBundle.INSTANCE.stylesheet().getText(), true);
     }
 
     public static void injectIcons() {

@@ -50,7 +50,7 @@ function styles() {
         //.pipe(sourcemaps.init())
         .pipe(sass.sync().on('error', sass.logError))
      //   .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest(`${paths.build}/public`));
+        .pipe(gulp.dest(`${paths.build}/client`));
 }
 
 function sprites() {
