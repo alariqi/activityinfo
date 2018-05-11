@@ -20,8 +20,6 @@ package org.activityinfo.ui.client.table.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
@@ -31,9 +29,8 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.HasTitle;
 import org.activityinfo.ui.client.header.HasFixedHeight;
+import org.activityinfo.ui.client.page.FullWidthPageContainer;
 import org.activityinfo.ui.client.page.GenericAvatar;
-import org.activityinfo.ui.client.page.PageContainer;
-import org.activityinfo.ui.client.page.PageStyle;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.logging.Level;
@@ -53,7 +50,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
     private TableGrid grid;
 
     private final SidePanel sidePanel;
-    private final PageContainer container;
+    private final FullWidthPageContainer container;
     private final GridContainer gridContainer;
 
     private final SubscriptionSet subscriptions = new SubscriptionSet();
@@ -71,17 +68,13 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         gridContainer.addStyleName("formtable__gridcontainer");
 
         sidePanel = new SidePanel(formStore, viewModel);
-        BorderLayoutContainer.BorderLayoutData sidePaneLayout = new BorderLayoutContainer.BorderLayoutData(.3);
-        sidePaneLayout.setSplit(true);
-        sidePaneLayout.setMargins(new Margins(0, 0, 0, MARGINS));
-        sidePaneLayout.setCollapsible(true);
-        sidePaneLayout.setCollapsed(true);
 
-        this.container = new PageContainer(PageStyle.FULLWIDTH);
+        this.container = new FullWidthPageContainer();
         this.container.addBodyStyleName("formtable");
         this.container.getHeader().setAvatar(GenericAvatar.FORM);
         this.container.addBodyWidget(toolBar);
         this.container.addBodyWidget(gridContainer);
+        this.container.addBodyWidget(sidePanel);
 
         subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
     }

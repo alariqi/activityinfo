@@ -7,9 +7,19 @@ import com.sencha.gxt.core.client.dom.XElement;
 
 public class ButtonAppearance<M> implements ButtonCell.ButtonCellAppearance<M> {
 
+    private final String classNames;
+
+    public ButtonAppearance() {
+        this("button");
+    }
+
+    public ButtonAppearance(String classNames) {
+        this.classNames = classNames;
+    }
+
     @Override
     public void render(ButtonCell<M> cell, Cell.Context context, M value, SafeHtmlBuilder sb) {
-        sb.appendHtmlConstant("<button type=\"button\" class=\"button\">");
+        sb.appendHtmlConstant("<button type=\"button\" class=\"" + classNames + "\">");
         if(value != null) {
             sb.appendEscaped(value.toString());
         }

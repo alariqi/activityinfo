@@ -1,0 +1,139 @@
+
+.formtable {
+
+  aside {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 15rem;
+    background-color: $black;
+    color: $white;
+    overflow-y: scroll;
+    font-size: 0.9rem;
+    box-shadow: -0.2rem 0 0.5rem 0 rgba(black, 0.2);
+    z-index: 1000;
+  }
+
+  aside.is-collapsed {
+    width: 4rem;
+  }
+
+  //aside .detailscontainer--selected {
+  //  display: none;
+  //}
+  //
+  //aside.is-selected .detailscontainer--empty {
+  //  display: none;
+  //}
+  //
+  //aside.is-selected .detailscontainer--selected {
+  //  display: block;
+  //}
+  //
+  //aside.is-collapsed .detailscontainer {
+  //  display: none;
+  //}
+  //
+  //.detailscontainer {
+  //  padding: 1rem;
+  //}
+  //
+  //.parentrecords {
+  //  margin-bottom: 1rem;
+  //}
+  //
+  //.subforms {
+  //  margin-bottom: 1rem;
+  //}
+  //
+
+  aside button {
+    display: inline-block;
+    text-align: left;
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    border: 0 none;
+    border-radius: 0.2rem;
+  }
+
+  aside button strong {
+    display: inline-block;
+    max-width: 20ch;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: bottom;
+  }
+
+  //
+  //aside button {
+  //  display: block;
+  //  width: 100%;
+  //}
+  //
+  //.parentrecords button {
+  //  background-color: initial;
+  //  color: white;
+  //  border: 1px solid #91F2CA;
+  //}
+  //
+  //.subforms button {
+  //  background-color: #91F2CA;
+  //  border: 0 none;
+  //}
+  //
+  //.button--back {
+  //  display: inline-block;
+  //  background-color: #91F2CA;
+  //  border: 0 none;
+  //}
+  //
+  //.button--collapse {
+  //  position: relative;
+  //  font-size: 0.8rem;
+  //  border: 0 none;
+  //  color: white;
+  //  padding: 1rem;
+  //  background-color: initial;
+  //  border-bottom: 1px solid white;
+  //
+  //  &::before {
+  //    content: 'X';
+  //    position: relative;
+  //    top: 0.15rem;
+  //    margin-right: 0.5rem;
+  //    font-size: 1.2rem;
+  //  }
+  //}
+  //
+  //aside.is-collapsed .button--collapse {
+  //  display: none;
+  //}
+  //
+  aside .button--expand {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    padding: 1rem;
+    width: 8rem;
+    background-color: initial;
+    border: 0 none;
+    transform-origin: left top;
+    transform: rotate(-90deg);
+    font-size: 0.8rem;
+    color: white;
+    white-space: nowrap;
+  }
+
+  aside.is-collapsed .button--expand {
+    display: block;
+  }
+  //
+  //aside h4 {
+  //  margin-bottom: 0;
+  //}
+
+}
+

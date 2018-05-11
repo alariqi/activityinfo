@@ -32,10 +32,6 @@
   }
 }
 
-.page--fullwidth .page__header__inner {
-  padding: 2rem 0;
-}
-
 .page__header__inner a {
   display: block;
 }
@@ -92,4 +88,18 @@
   flex-shrink: 0;
   border-left: 1px solid $grey-2;
   padding-left: 0.5rem;
+}
+
+// Condense font-sizes for full width pages
+
+.page--fullwidth {
+
+  .page__header {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+  .page__header__inner {
+    padding: 0.5rem 1rem;
+  }
 }

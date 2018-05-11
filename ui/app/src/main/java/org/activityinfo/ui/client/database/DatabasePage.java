@@ -17,7 +17,6 @@ import org.activityinfo.ui.client.databases.ListItemCell;
 import org.activityinfo.ui.client.databases.StaticListView;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.page.PageContainer;
-import org.activityinfo.ui.client.page.PageStyle;
 
 public class DatabasePage implements IsWidget {
 
@@ -45,7 +44,7 @@ public class DatabasePage implements IsWidget {
         listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
         listView.addStyleName("listview--forms");
 
-        container = new PageContainer(PageStyle.PADDED);
+        container = new PageContainer();
         container.getHeader().setAvatar(GenericAvatar.DATABASE);
         container.addBodyWidget(new StaticHtml(DatabaseTemplates.TEMPLATES.header(I18N.CONSTANTS.forms())));
         container.addBodyWidget(toolbar);

@@ -4,27 +4,22 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 
-public class PageContainer implements IsWidget {
+public class FullWidthPageContainer implements IsWidget {
 
     private final CssLayoutContainer container;
     private final PageHeader header;
     private final CssLayoutContainer body;
-    private final CssLayoutContainer bodyInner;
 
-    public PageContainer() {
+    public FullWidthPageContainer() {
 
         header = new PageHeader();
 
-        bodyInner = new CssLayoutContainer();
-        bodyInner.addStyleName("page__body__inner");
-
         body = new CssLayoutContainer();
         body.addStyleName("page__body");
-        body.add(bodyInner);
 
         container = new CssLayoutContainer();
         container.addStyleName("page");
-        container.addStyleName("page--padded");
+        container.addStyleName("page--fullwidth");
         container.add(header);
         container.add(body);
     }
@@ -34,14 +29,14 @@ public class PageContainer implements IsWidget {
     }
 
     public void addBodyWidget(IsWidget widget) {
-        bodyInner.add(widget);
+        body.add(widget);
     }
 
     /**
      * Adds a CSS class name to the {@code page__body__inner} div.
      */
     public void addBodyStyleName(String className) {
-        bodyInner.addStyleName(className);
+        body.addStyleName(className);
     }
 
     @Override
