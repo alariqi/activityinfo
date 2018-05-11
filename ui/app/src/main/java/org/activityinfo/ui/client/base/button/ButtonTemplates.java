@@ -18,4 +18,6 @@ public interface ButtonTemplates extends XTemplates {
     @XTemplate(source = "MenuButton.html")
     SafeHtml menuButton(String label);
 
+    @XTemplate(source = "ButtonGroup.html")
+    SafeHtml buttonGroup();
 }
