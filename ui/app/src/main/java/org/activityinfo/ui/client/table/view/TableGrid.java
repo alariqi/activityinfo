@@ -93,7 +93,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             protected void onAttach() {
                 super.onAttach();
                 subscription = columnSet.subscribe(observable -> updateColumnView(observable));
-                loader.load(0, gridView.getCacheSize());
+                TableGrid.this.loader.load(0, gridView.getCacheSize());
             }
 
             @Override
