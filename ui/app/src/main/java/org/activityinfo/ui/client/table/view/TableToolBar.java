@@ -72,7 +72,7 @@ public class TableToolBar implements IsWidget {
         TextButton exportButton = new TextButton(I18N.CONSTANTS.export());
         exportButton.addSelectHandler(this::onExport);
 
-        TextButton columnsButton = new TextButton(I18N.CONSTANTS.chooseColumns());
+        IconButton columnsButton = new IconButton(Icon.BUBBLE_COLUMNS, I18N.CONSTANTS.chooseColumns());
         columnsButton.addSelectHandler(this::onChooseColumnsSelected);
 
         toolbar = new Toolbar();

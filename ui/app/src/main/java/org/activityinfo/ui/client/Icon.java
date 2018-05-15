@@ -11,8 +11,9 @@ public enum Icon {
     BUBBLE_ARROWLEFT,
     BUBBLE_ARROWRIGHT,
     BUBBLE_CLOSE,
-    EXPAND_DOWN,
+    BUBBLE_COLUMNS,
 
+    EXPAND_DOWN,
     EXPAND_UP;
 
     public String href() {
