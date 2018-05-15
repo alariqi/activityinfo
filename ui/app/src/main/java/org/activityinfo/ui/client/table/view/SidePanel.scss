@@ -9,7 +9,7 @@
     color: $white;
     overflow-y: auto;
     font-size: 0.9rem;
-    box-shadow: -0.2rem 0 0.5rem 0 rgba(BLACK, 0.2);
+    box-shadow: -0.2rem 0 0.5rem 0 rgba($black, 0.2);
     z-index: 1000;
     padding: 1rem;
 }
@@ -75,7 +75,11 @@
         margin-top: 1rem;
         font-size: 1rem;
     }
+}
 
+.sidepanel__details--loading .sidepanel__details__value {
+    color: transparent;
+    text-shadow: 0 0 5px rgba($white, 0.5)
 }
 
 .sidepanel--collapsed .sidepanel__collapse,

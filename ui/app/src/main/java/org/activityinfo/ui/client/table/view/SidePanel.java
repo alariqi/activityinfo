@@ -82,9 +82,13 @@ public class SidePanel implements IsWidget {
         pair.subscribe(new Observer<DetailUpdater>() {
             @Override
             public void onChange(Observable<DetailUpdater> pair) {
+                if(pair.isLoading()) {
+                    detailsContainer.addStyleName("sidepanel__details--loading");
+                }
                 pair.ifLoaded(new Consumer<DetailUpdater>() {
                     @Override
                     public void accept(DetailUpdater detailUpdater) {
+                        detailsContainer.removeStyleName("sidepanel__details--loading");
                         detailUpdater.update(detailsContainer.getElement().cast());
                     }
                 });
