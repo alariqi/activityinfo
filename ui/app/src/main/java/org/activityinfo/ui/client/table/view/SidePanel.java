@@ -44,7 +44,7 @@ public class SidePanel implements IsWidget {
 
     public SidePanel(FormStore formStore, TableViewModel viewModel) {
 
-        PlainTextButton expandButton = new PlainTextButton("Details & History");
+        PlainTextButton expandButton = new PlainTextButton("Details & History ▲");
         expandButton.addStyleName("sidepanel__expand");
         expandButton.addSelectHandler(e -> expandPanel());
 

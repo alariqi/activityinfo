@@ -48,6 +48,10 @@ public class PageContainer implements IsWidget {
         container.setVisible(visible);
     }
 
+    public void setBreadcrumbs(Breadcrumb... breadcrumbs) {
+        header.setBreadcrumbs(breadcrumbs);
+    }
+
     @Override
     public Widget asWidget() {
         return container;

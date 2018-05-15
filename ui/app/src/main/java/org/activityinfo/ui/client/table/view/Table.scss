@@ -8,4 +8,6 @@
 .formtable__gridcontainer {
   background-color: red;
   flex-grow: 1;
+  position: relative;
+  width: calc(100% - #{$sidepanel-collapsed-width});
 }

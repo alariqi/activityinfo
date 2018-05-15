@@ -20,7 +20,9 @@ package org.activityinfo.store.query.server;
 
 import com.google.common.base.Optional;
 import org.activityinfo.model.analysis.Analysis;
+import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.FormMetadata;
+import org.activityinfo.model.form.FormPermissions;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.formTree.FormMetadataProvider;
 import org.activityinfo.model.formTree.FormTree;
@@ -35,9 +37,8 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormScanCache;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.store.query.shared.NullFormScanCache;
-import org.activityinfo.store.spi.FormStorageProvider;
-import org.activityinfo.model.form.FormPermissions;
 import org.activityinfo.store.spi.FormStorage;
+import org.activityinfo.store.spi.FormStorageProvider;
 
 /**
  * Synchronous implementation of the {@link FormSource} interface, that
@@ -86,6 +87,11 @@ public class FormSourceSyncImpl implements FormSource {
             }
         });
         return Observable.just(builder.queryTree(formId));
+    }
+
+    @Override
+    public Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
+        throw new UnsupportedOperationException("TODO");
     }
 
     @Override

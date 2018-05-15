@@ -5,12 +5,14 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.PlaceLinks;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
 import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
 import org.activityinfo.ui.client.nonideal.ViewWidget;
+import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.page.PageContainer;
 
@@ -45,6 +47,7 @@ public class DatabasePage implements ViewWidget<DatabaseViewModel> {
         container.addBodyWidget(new StaticHtml(DatabaseTemplates.TEMPLATES.header(I18N.CONSTANTS.forms())));
         container.addBodyWidget(toolbar);
         container.addBodyWidget(listView);
+        container.setBreadcrumbs(new Breadcrumb(I18N.CONSTANTS.databases(), PlaceLinks.toUri(new DatabaseListPlace())));
     }
 
     @Override

@@ -1,4 +1,6 @@
 
+$sidepanel-collapsed-width: 1.875rem;
+
 .sidepanel {
     position: absolute;
     right: 0;
@@ -19,13 +21,11 @@
     display: none;
     position: absolute;
     left: 0;
-    top: 50%;
-    padding: 1rem;
-    width: 8rem;
+    padding-top: 0.4375rem;
     background-color: initial;
     border: 0 none;
     transform-origin: left top;
-    transform: rotate(-90deg);
+    transform: rotate(-90deg) translateX(-100%);
 }
 
 .sidepanel__scrollto button {
@@ -41,8 +41,7 @@
 
 
 .sidepanel--collapsed {
-    width: 1.5rem;
-    overflow: hidden;
+    width: $sidepanel-collapsed-width;
 }
 
 .sidepanel--collapsed .sidepanel__expand {
@@ -52,7 +51,7 @@
 .sidepanel__expand button {
     color: $white;
     white-space: nowrap;
-    font-size: 0.8rem;
+    font-size: 1rem;
 }
 
 .sidepanel button:focus {

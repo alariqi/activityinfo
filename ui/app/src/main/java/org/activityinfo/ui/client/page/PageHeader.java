@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.page;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.XElement;
@@ -16,6 +17,14 @@ public class PageHeader implements IsWidget {
 
     public void setHeading(String text) {
         this.container.getElement().selectNode("h1").setInnerText(text);
+    }
+
+    public void setBreadcrumbs(Breadcrumb... breadcrumbs) {
+        SafeHtmlBuilder html = new SafeHtmlBuilder();
+        for (Breadcrumb breadcrumb : breadcrumbs) {
+            breadcrumb.renderTo(html);
+        }
+        container.getElement().selectNode(".breadcrumbs").setInnerSafeHtml(html.toSafeHtml());
     }
 
     public void setAvatar(Avatar avatar) {

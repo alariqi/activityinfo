@@ -19,6 +19,7 @@
 package org.activityinfo.store.query.shared;
 
 import org.activityinfo.model.analysis.Analysis;
+import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
@@ -35,6 +36,8 @@ import org.activityinfo.promise.Maybe;
 public interface FormSource {
 
     Observable<FormTree> getFormTree(ResourceId formId);
+
+    Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId);
 
     Observable<Maybe<RecordTree>> getRecordTree(RecordRef recordRef);
 
