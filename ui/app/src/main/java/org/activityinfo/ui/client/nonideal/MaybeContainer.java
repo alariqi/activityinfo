@@ -29,7 +29,7 @@ public class MaybeContainer<T> implements IsWidget {
         this.view = view;
         this.loading = new StaticHtml(NonIdealTemplates.TEMPLATES.loading());
         this.notFound = new StaticHtml(NonIdealTemplates.TEMPLATES.notFound(I18N.CONSTANTS));
-        this.forbidden = new StaticHtml(NonIdealTemplates.TEMPLATES.permissionDenied());
+        this.forbidden = new StaticHtml(NonIdealTemplates.TEMPLATES.forbidden(I18N.CONSTANTS));
 
         container = new CssLayoutContainer();
         container.add(loading);

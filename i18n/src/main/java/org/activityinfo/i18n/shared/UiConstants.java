@@ -1892,4 +1892,16 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("We couldn’t find the data you’re looking for.")
     String dataNotFound();
 
+    @DefaultStringValue("Permission denied.")
+    String permissionDeniedHeading();
+
+    @DefaultStringValue("It appears you do not have the right permission to access this data.")
+    String permissionDenied();
+
+    @DefaultStringValue("Go back to database overview")
+    String goBackToDatabaseOverview();
+
+    @DefaultStringValue("Switch accounts")
+    String switchAccounts();
+
 }

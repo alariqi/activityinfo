@@ -12,8 +12,8 @@ public interface NonIdealTemplates extends XTemplates {
     @XTemplate(source = "NotFound.html")
     SafeHtml notFound(UiConstants i18n);
 
-    @XTemplate(source = "PermissionDenied.html")
-    SafeHtml permissionDenied();
+    @XTemplate(source = "Forbidden.html")
+    SafeHtml forbidden(UiConstants i18n);
 
     @XTemplate(source = "Loading.html")
     SafeHtml loading();
