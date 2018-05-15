@@ -37,7 +37,6 @@ public class UserDatabaseMeta implements JsonSerializable {
     private ResourceId databaseId;
     private int userId;
     private String label;
-    private boolean visible;
     private boolean owner;
     private String version;
 
@@ -58,7 +57,7 @@ public class UserDatabaseMeta implements JsonSerializable {
     }
 
     public boolean isVisible() {
-        return visible;
+        return owner || !grants.isEmpty();
     }
 
     public boolean isOwner() {
@@ -106,7 +105,6 @@ public class UserDatabaseMeta implements JsonSerializable {
         object.put("id", databaseId.asString());
         object.put("version", version);
         object.put("label", label);
-        object.put("visible", visible);
         object.put("owner", owner);
         object.put("userId", userId);
         object.put("resources", JsonArrays.toJsonArray(resources.values()));
@@ -121,7 +119,6 @@ public class UserDatabaseMeta implements JsonSerializable {
         meta.userId = (int) object.getNumber("userId");
         meta.version = object.getString("version");
         meta.label = object.getString("label");
-        meta.visible = object.getBoolean("visible");
         meta.owner = object.getBoolean("owner");
 
         JsonValue resourceArray = object.get("resources");
@@ -178,7 +175,6 @@ public class UserDatabaseMeta implements JsonSerializable {
 
         public Builder setOwner(boolean owner) {
             meta.owner = owner;
-            meta.visible = true;
             return this;
         }
 
@@ -214,7 +210,7 @@ public class UserDatabaseMeta implements JsonSerializable {
         }
 
         public boolean isVisible() {
-            return meta.owner || !meta.grants.isEmpty();
+            return meta.isVisible();
         }
 
         public UserDatabaseMeta build() {
