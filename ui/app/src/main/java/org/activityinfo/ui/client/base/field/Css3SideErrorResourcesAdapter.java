@@ -40,7 +40,6 @@ package org.activityinfo.ui.client.base.field;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
-import com.sencha.gxt.widget.core.client.form.error.SideErrorHandler;
 import com.sencha.gxt.widget.core.client.form.error.SideErrorHandler.SideErrorResources;
 
 public class Css3SideErrorResourcesAdapter implements SideErrorResources {
@@ -55,36 +54,6 @@ public class Css3SideErrorResourcesAdapter implements SideErrorResources {
 
   public Css3SideErrorResourcesAdapter() {
     this.resources = GWT.create(Css3SideErrorResources.class);
-  }
-
-  /* @Override */
-  public SideErrorHandler.SideErrorStyle css() {
-    return new SideErrorHandler.SideErrorStyle() {
-      @Override
-      public String focus() {
-        return "sideerror--focused";
-      }
-
-      @Override
-      public String invalid() {
-        return "sideerror--focused";
-      }
-
-      @Override
-      public boolean ensureInjected() {
-        return false;
-      }
-
-      @Override
-      public String getText() {
-        return "";
-      }
-
-      @Override
-      public String getName() {
-        return "";
-      }
-    };
   }
 
   public ImageResource errorIcon() {

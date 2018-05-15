@@ -27,19 +27,7 @@ buildscript {
 allprojects {
   repositories {
     mavenLocal()
-    if(project.hasProperty("nexusUsername")) {
-      maven {
-        url "https://nexus.bedatadriven.com/content/groups/activityinfo"
-        credentials {
-          username = project.property("nexusUsername")
-          password = project.property("nexusPassword")
-        }
-      }
-    } else {
-      maven {
-        url "https://nexus.bedatadriven.com/content/groups/public"
-      }
-    }
+    maven { url "https://nexus.bedatadriven.com/content/groups/public" }
   }
 }
 

@@ -117,8 +117,6 @@ public class Css3TreeAppearance implements TreeAppearance {
     String text();
 
     String tree();
-
-    String indent();
   }
 
   private final Css3TreeResources resources;
@@ -240,11 +238,6 @@ public class Css3TreeAppearance implements TreeAppearance {
   @Override
   public void onHover(XElement node, boolean over) {
     node.setClassName(style.over(), over);
-  }
-
-  /* @Override */
-  public XElement onIconChange(XElement node, XElement iconElement, ImageResource icon) {
-    return iconElement;
   }
 
   @Override

@@ -15,6 +15,10 @@ ext {
     outputDir = "$buildDir/gwt-out"
 }
 
+repositories {
+    maven { url 'https://maven.sencha.com/repo/gxt-gpl-release/' }
+}
+
 task explodedWar(type: Copy) {
     from 'src/main/webapp'
     into "$buildDir/exploded"
@@ -46,6 +50,8 @@ configurations {
     gwtSdk
 }
 
+
+
 dependencies {
 
     compile libraries.gwt.user
@@ -67,9 +73,9 @@ dependencies {
 
     compile libraries.rebar.appcache
 
-    compile libraries.sencha.gxt
-    compile libraries.sencha.chart
-    compile libraries.sencha.themebuilder
+    compile group: 'com.sencha.gxt', name: 'gxt', version: '4.0.0'
+    compile group: 'com.sencha.gxt', name: 'gxt-chart', version: '4.0.0'
+    compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
 
     testCompile libraries.gwt.servlet
     testCompile project(':store:testing')
