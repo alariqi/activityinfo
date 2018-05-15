@@ -9,7 +9,7 @@ import org.activityinfo.ui.client.Icon;
 public class IconButton extends CellComponent<String> implements SelectEvent.HasSelectHandlers {
 
     public IconButton(Icon icon, IconButtonStyle style, String text) {
-        super(new ButtonCell<>(new IconButtonAppearance(icon, style)), text, null, false);
+        super(new ButtonCell<>(new IconButtonAppearance(icon, style)), text, null, true);
     }
 
     public IconButton(Icon icon, String text) {
