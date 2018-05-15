@@ -18,35 +18,98 @@
  */
 package org.activityinfo.ui.client.table.view;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.cell.core.client.TextButtonCell;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import org.activityinfo.analysis.table.TableViewModel;
-import org.activityinfo.ui.client.base.button.ButtonAppearance;
+import org.activityinfo.observable.Observable;
+import org.activityinfo.observable.Observer;
+import org.activityinfo.ui.client.base.button.CloseButton;
+import org.activityinfo.ui.client.base.button.PlainTextButton;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.store.FormStore;
+
+import java.util.function.Consumer;
 
 /**
  * Sidebar panel containing details, history, etc.
  */
 public class SidePanel implements IsWidget {
 
-    private CssLayoutContainer container;
+
+    private final CssLayoutContainer container;
+    private final HTML detailsContainer;
+
+    private boolean collapsed = true;
 
     public SidePanel(FormStore formStore, TableViewModel viewModel) {
 
-        TextButton expandButton = new TextButton(new TextButtonCell(new ButtonAppearance<>("button--expand")),
-                "Details & History");
+        PlainTextButton expandButton = new PlainTextButton("Details & History");
+        expandButton.addStyleName("sidepanel__expand");
+        expandButton.addSelectHandler(e -> expandPanel());
+
+        PlainTextButton scrollButton = new PlainTextButton("Scroll to this record...");
+        scrollButton.addStyleName("sidepanel__scrollto");
+
+        CloseButton collapseButton = new CloseButton();
+        collapseButton.addStyleName("sidepanel__collapse");
+        collapseButton.addSelectHandler(e -> collapsePanel());
+
+        detailsContainer = new HTML();
+        detailsContainer.addStyleName("sidepanel__details");
+
 
         container = new CssLayoutContainer("aside");
-        container.addStyleName("is-collapsed");
+        container.addStyleName("sidepanel");
+        container.addStyleName("sidepanel--collapsed");
         container.add(expandButton);
+        container.add(scrollButton);
+        container.add(collapseButton);
+        container.add(detailsContainer);
+
+        Observable<DetailsRenderer> renderer = viewModel.getFormTree().transform(DetailsRenderer::new);
+        renderer.subscribe(new Observer<DetailsRenderer>() {
+            @Override
+            public void onChange(Observable<DetailsRenderer> observable) {
+                observable.ifLoaded(r -> {
+                    detailsContainer.setHTML(r.renderSkeleton());
+                });
+            }
+        });
+        Observable<DetailUpdater> pair = Observable.transform(renderer, viewModel.getSelectedRecordTree(), (r, t) -> {
+            return new DetailUpdater(r, t);
+        });
+        pair.subscribe(new Observer<DetailUpdater>() {
+            @Override
+            public void onChange(Observable<DetailUpdater> pair) {
+                pair.ifLoaded(new Consumer<DetailUpdater>() {
+                    @Override
+                    public void accept(DetailUpdater detailUpdater) {
+                        detailUpdater.update(detailsContainer.getElement().cast());
+                    }
+                });
+            }
+        });
+
+
 //        TabPanel tabPanel = new TabPanel();
 //        tabPanel.add(new DetailsPane(viewModel), new TabItemConfig(I18N.CONSTANTS.details()));
 //        tabPanel.add(new HistoryPane(formStore, viewModel), new TabItemConfig(I18N.CONSTANTS.history()));
 //        tabPanel.add(new ApiPane(viewModel), new TabItemConfig("API"));
 //        add(tabPanel);
+    }
+
+
+    public void expandPanel() {
+        if(collapsed) {
+            container.removeStyleName("sidepanel--collapsed");
+            collapsed = false;
+        }
+    }
+
+    private void collapsePanel() {
+        container.addStyleName("sidepanel--collapsed");
+        collapsed = true;
     }
 
     @Override

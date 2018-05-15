@@ -1,7 +1,5 @@
 
-.formtable {
-
-  aside {
+.sidepanel {
     position: absolute;
     right: 0;
     top: 0;
@@ -9,109 +7,15 @@
     width: 15rem;
     background-color: $black;
     color: $white;
-    overflow-y: scroll;
+    overflow-y: auto;
     font-size: 0.9rem;
-    box-shadow: -0.2rem 0 0.5rem 0 rgba(black, 0.2);
+    box-shadow: -0.2rem 0 0.5rem 0 rgba(BLACK, 0.2);
     z-index: 1000;
-  }
+    padding: 1rem;
+}
 
-  aside.is-collapsed {
-    width: 4rem;
-  }
 
-  //aside .detailscontainer--selected {
-  //  display: none;
-  //}
-  //
-  //aside.is-selected .detailscontainer--empty {
-  //  display: none;
-  //}
-  //
-  //aside.is-selected .detailscontainer--selected {
-  //  display: block;
-  //}
-  //
-  //aside.is-collapsed .detailscontainer {
-  //  display: none;
-  //}
-  //
-  //.detailscontainer {
-  //  padding: 1rem;
-  //}
-  //
-  //.parentrecords {
-  //  margin-bottom: 1rem;
-  //}
-  //
-  //.subforms {
-  //  margin-bottom: 1rem;
-  //}
-  //
-
-  aside button {
-    display: inline-block;
-    text-align: left;
-    padding: 0.5rem;
-    margin-bottom: 0.25rem;
-    border: 0 none;
-    border-radius: 0.2rem;
-  }
-
-  aside button strong {
-    display: inline-block;
-    max-width: 20ch;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    vertical-align: bottom;
-  }
-
-  //
-  //aside button {
-  //  display: block;
-  //  width: 100%;
-  //}
-  //
-  //.parentrecords button {
-  //  background-color: initial;
-  //  color: white;
-  //  border: 1px solid #91F2CA;
-  //}
-  //
-  //.subforms button {
-  //  background-color: #91F2CA;
-  //  border: 0 none;
-  //}
-  //
-  //.button--back {
-  //  display: inline-block;
-  //  background-color: #91F2CA;
-  //  border: 0 none;
-  //}
-  //
-  //.button--collapse {
-  //  position: relative;
-  //  font-size: 0.8rem;
-  //  border: 0 none;
-  //  color: white;
-  //  padding: 1rem;
-  //  background-color: initial;
-  //  border-bottom: 1px solid white;
-  //
-  //  &::before {
-  //    content: 'X';
-  //    position: relative;
-  //    top: 0.15rem;
-  //    margin-right: 0.5rem;
-  //    font-size: 1.2rem;
-  //  }
-  //}
-  //
-  //aside.is-collapsed .button--collapse {
-  //  display: none;
-  //}
-  //
-  aside .button--expand {
+.sidepanel__expand {
     display: none;
     position: absolute;
     left: 0;
@@ -122,18 +26,143 @@
     border: 0 none;
     transform-origin: left top;
     transform: rotate(-90deg);
-    font-size: 0.8rem;
-    color: white;
-    white-space: nowrap;
-  }
+}
 
-  aside.is-collapsed .button--expand {
+.sidepanel__scrollto button {
+    font-size: 0.8rem;
+    color: $white;
+}
+
+.sidepanel__collapse {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+
+.sidepanel--collapsed {
+    width: 1.5rem;
+    overflow: hidden;
+}
+
+.sidepanel--collapsed .sidepanel__expand {
     display: block;
-  }
-  //
-  //aside h4 {
-  //  margin-bottom: 0;
-  //}
+}
+
+.sidepanel__expand button {
+    color: $white;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.sidepanel button:focus {
+    outline: none;
+}
+
+.sidepanel__details {
+
+    h2 {
+        margin-top: 1rem;
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    h4 {
+        margin-top: 1rem;
+        font-size: 1rem;
+    }
 
 }
+
+.sidepanel--collapsed .sidepanel__collapse,
+.sidepanel--collapsed .sidepanel__scrollto,
+.sidepanel--collapsed .sidepanel__details {
+    display: none;
+}
+
+
+
+
+  /*//aside .detailscontainer--selected {*/
+  /*//  display: none;*/
+  /*//}*/
+  /*//*/
+  /*//aside.is-selected .detailscontainer--empty {*/
+  /*//  display: none;*/
+  /*//}*/
+  /*//*/
+  /*//aside.is-selected .detailscontainer--selected {*/
+  /*//  display: block;*/
+  /*//}*/
+  /*//*/
+  /*//aside.is-collapsed .detailscontainer {*/
+  /*//  display: none;*/
+  /*//}*/
+  /*//*/
+  /*//.detailscontainer {*/
+  /*//  padding: 1rem;*/
+  /*//}*/
+  /*//*/
+  /*//.parentrecords {*/
+  /*//  margin-bottom: 1rem;*/
+  /*//}*/
+  /*//*/
+  /*//.subforms {*/
+  /*//  margin-bottom: 1rem;*/
+  /*//}*/
+  /*//*/
+
+  /*aside button {*/
+    /*display: inline-block;*/
+    /*text-align: left;*/
+    /*padding: 0.5rem;*/
+    /*margin-bottom: 0.25rem;*/
+    /*border: 0 none;*/
+    /*border-radius: 0.2rem;*/
+  /*}*/
+
+  /*aside button strong {*/
+    /*display: inline-block;*/
+    /*max-width: 20ch;*/
+    /*overflow: hidden;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*vertical-align: bottom;*/
+  /*}*/
+
+  /*//*/
+  /*//aside button {*/
+  /*//  display: block;*/
+  /*//  width: 100%;*/
+  /*//}*/
+  /*//*/
+  /*//.parentrecords button {*/
+  /*//  background-color: initial;*/
+  /*//  color: white;*/
+  /*//  border: 1px solid #91F2CA;*/
+  /*//}*/
+  /*//*/
+  /*//.subforms button {*/
+  /*//  background-color: #91F2CA;*/
+  /*//  border: 0 none;*/
+  /*//}*/
+  /*//*/
+  /*//.button--back {*/
+  /*//  display: inline-block;*/
+  /*//  background-color: #91F2CA;*/
+  /*//  border: 0 none;*/
+  /*//}*/
+  /*//*/
+
+
+  /*//*/
+  /*//aside h4 {*/
+  /*//  margin-bottom: 0;*/
+  /*//}*/
+
+/*}*/
 

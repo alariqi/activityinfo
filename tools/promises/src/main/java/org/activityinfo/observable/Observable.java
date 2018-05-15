@@ -31,6 +31,7 @@ import org.activityinfo.promise.Promise;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The Observable class that implements the Reactive Pattern.
@@ -59,6 +60,12 @@ public abstract class Observable<T> {
      * @throws java.lang.IllegalStateException if the value is currently loading
      */
     public abstract T get();
+
+    public final void ifLoaded(Consumer<? super T> consumer) {
+        if(isLoaded()) {
+            consumer.accept(get());
+        }
+    }
 
     public final Subscription subscribe(final Observer<T> observer) {
         if(observers.isEmpty()) {
@@ -348,4 +355,5 @@ public abstract class Observable<T> {
             return new DebouncedObservable<>(this, milliseconds);
         }
     }
+
 }

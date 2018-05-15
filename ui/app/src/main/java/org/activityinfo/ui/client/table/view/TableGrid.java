@@ -27,6 +27,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
+import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -109,6 +110,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         grid.addSortChangeHandler(this::changeSort);
     }
 
+
     private void changeColumnWidth(ColumnResizeEvent e) {
 
         ColumnConfig<Integer, Object> column = grid.getColumnModel().getColumn(e.getColumnIndex());
@@ -130,6 +132,10 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
                 eventBus.fireEvent(new SelectionChangedEvent<>(Collections.singletonList(selectedRef)));
             }
         }
+    }
+
+    public HandlerRegistration addRowClickHandler(RowClickEvent.RowClickHandler handler) {
+        return grid.addRowClickHandler(handler);
     }
 
     /**

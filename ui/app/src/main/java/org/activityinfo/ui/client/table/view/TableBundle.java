@@ -32,7 +32,9 @@ public interface TableBundle extends ClientBundle {
     @Source("Table.gss")
     Style style();
 
+
     interface Style extends CssResource {
+
         String detailPane();
     }
 

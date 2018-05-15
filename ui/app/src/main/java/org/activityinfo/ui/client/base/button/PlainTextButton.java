@@ -4,16 +4,14 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.widget.core.client.cell.CellComponent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import org.activityinfo.ui.client.Icon;
 
-public class IconButton extends CellComponent<String> implements SelectEvent.HasSelectHandlers {
+/**
+ * A simple button with text content and no additional styles.
+ */
+public class PlainTextButton extends CellComponent<String> implements SelectEvent.HasSelectHandlers {
 
-    public IconButton(Icon icon, IconButtonStyle style, String text) {
-        super(new ButtonCell<>(new IconButtonAppearance(icon, style)), text, null, false);
-    }
-
-    public IconButton(Icon icon, String text) {
-        this(icon, IconButtonStyle.SECONDARY, text);
+    public PlainTextButton(String text) {
+        super(new ButtonCell<>(new ButtonAppearance<>("")), text, null, false);
     }
 
     @Override

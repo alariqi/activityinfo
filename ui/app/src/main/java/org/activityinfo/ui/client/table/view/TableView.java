@@ -126,6 +126,9 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
                 viewModel.select(ref);
             }
         });
+        grid.addRowClickHandler(event -> {
+            sidePanel.expandPanel();
+        });
         gridContainer.setGrid(grid);
     }
 

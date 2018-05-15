@@ -107,7 +107,18 @@ class GridContainer extends Container {
     }
 
     private void applyGridSize() {
-        grid.setPixelSize(Window.getClientWidth()  - marginHorizontal,
+        grid.setPixelSize(Window.getClientWidth()  - marginHorizontal - sidePanelWidth(),
                           Window.getClientHeight() - marginVertical);
     }
+
+    private int sidePanelWidth() {
+        double rem = getRootFontSize();
+        int width = (int)(rem * 1.5);
+        LOGGER.info("rem = " + rem + "px, width = " + width);
+        return width;
+    }
+
+    private static native double getRootFontSize() /*-{
+        return parseFloat($wnd.getComputedStyle($wnd.document.body).fontSize);
+    }-*/;
 }

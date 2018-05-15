@@ -1874,12 +1874,19 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Settings")
     String settings();
 
-    @DefaultStringValue("My Reports")
-    String myReports();
+    @DefaultStringValue("My Reports:")
+    String subForms();
+
+    @DefaultStringValue("Record details")
+    String recordDetails();
+
+    @DefaultStringValue("Go back to:")
+    String goBackTo();
+
+    @DefaultStringValue("New record")
+    String newRecord();
 
     @DefaultStringValue("Notifications")
     String notifications();
 
-    @DefaultStringValue("New record")
-    String newRecord();
 }
