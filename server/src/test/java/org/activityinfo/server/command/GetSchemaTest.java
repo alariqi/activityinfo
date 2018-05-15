@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.activityinfo.promise.PromiseMatchers.resolvesTo;
 import static org.hamcrest.CoreMatchers.*;
@@ -134,9 +135,9 @@ public class GetSchemaTest extends CommandTestCase2 {
     @Test
     public void testDatabaseMetadata() {
         DatabaseProviderImpl impl = injector.getInstance(DatabaseProviderImpl.class);
-        UserDatabaseMeta metadata = impl.getDatabaseMetadata(CuidAdapter.databaseId(1), 1);
+        Optional<UserDatabaseMeta> metadata = impl.getDatabaseMetadata(CuidAdapter.databaseId(1), 1);
 
-        System.out.println(Json.stringify(metadata.toJson(), 4));
+        System.out.println(Json.stringify(metadata.get().toJson(), 4));
 
 
     }

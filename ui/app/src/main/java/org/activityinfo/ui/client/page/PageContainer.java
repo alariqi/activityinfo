@@ -44,6 +44,10 @@ public class PageContainer implements IsWidget {
         bodyInner.addStyleName(className);
     }
 
+    public void setVisible(boolean visible) {
+        container.setVisible(visible);
+    }
+
     @Override
     public Widget asWidget() {
         return container;

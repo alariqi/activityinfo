@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.databases;
+package org.activityinfo.ui.client.database;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;

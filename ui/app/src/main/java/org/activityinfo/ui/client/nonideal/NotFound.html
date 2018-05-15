@@ -1,7 +1,17 @@
-<div class="nonideal--notfound">
+<div class="nonideal nonideal--notfound">
 
-    <h2>Oh no!</h2>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 12" class="nonideal__illustration">
+        <use xlink:href="#nis_notfound"></use>
+    </svg>
 
-    <p>This resource has either been deleted or has never existed.</p>
+    <h1>{i18n.dataNotFound}</h1>
+    <p>This could be because:</p>
+    <ul>
+        <li>It has been deleted</li>
+        <li>There is a typo in the address</li>
+    </ul>
 
+    <div class="nonideal__links">
+        <a href="#">Go back to database overview</a>
+    </div>
 </div>

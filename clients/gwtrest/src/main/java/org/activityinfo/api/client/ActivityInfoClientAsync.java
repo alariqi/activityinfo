@@ -39,7 +39,7 @@ import java.util.List;
 public interface ActivityInfoClientAsync {
 
 
-    Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId);
+    Promise<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId);
 
     /**
      * @return a list of the databases owned by or shared with the current user.

@@ -1,24 +1,20 @@
 package org.activityinfo.ui.client.database;
 
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
 import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
-import org.activityinfo.ui.client.databases.ListItem;
-import org.activityinfo.ui.client.databases.ListItemCell;
-import org.activityinfo.ui.client.databases.StaticListView;
+import org.activityinfo.ui.client.nonideal.ViewWidget;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.page.PageContainer;
 
-public class DatabasePage implements IsWidget {
+public class DatabasePage implements ViewWidget<DatabaseViewModel> {
 
     private final PageContainer container;
     private final StaticListView<ListItem> listView;
@@ -51,14 +47,18 @@ public class DatabasePage implements IsWidget {
         container.addBodyWidget(listView);
     }
 
-    public void updateView(Observable<DatabaseViewModel> viewModel) {
-        if(viewModel.isLoaded()) {
-            // Update header
-            container.getHeader().setHeading(viewModel.get().getLabel());
+    @Override
+    public void updateView(DatabaseViewModel viewModel) {
+        // Update header
+        container.getHeader().setHeading(viewModel.getLabel());
 
-            // Update list of forms
-            listView.updateView(viewModel.get().getFormLinks());
-        }
+        // Update list of forms
+        listView.updateView(viewModel.getFormLinks());
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        container.setVisible(visible);
     }
 
     @Override

@@ -7,7 +7,6 @@ import org.activityinfo.model.database.ResourceBuilder;
 import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.database.DatabasePage;
 import org.activityinfo.ui.client.database.DatabaseViewModel;
@@ -23,7 +22,7 @@ public class DatabaseMockup implements IsWidget {
     private DatabaseMockup(DatabaseViewModel databaseViewModel) {
         Header header = new Header(SearchResults.getResourceList());
         DatabasePage page = new DatabasePage();
-        page.updateView(Observable.just(databaseViewModel));
+        page.updateView(databaseViewModel);
 
         header.setSettingsActive(true);
 
@@ -31,7 +30,6 @@ public class DatabaseMockup implements IsWidget {
         this.container.add(header);
         this.container.add(new ConnectionStatus());
         this.container.add(page);
-
     }
 
     public static DatabaseMockup iraq() {

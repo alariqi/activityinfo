@@ -41,7 +41,7 @@ import java.util.List;
 
 public interface FormStore extends FormSource {
 
-    Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId);
+    Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId);
 
     Observable<List<UserDatabaseMeta>> getDatabases();
 

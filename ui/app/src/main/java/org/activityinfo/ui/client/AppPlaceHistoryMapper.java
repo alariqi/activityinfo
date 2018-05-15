@@ -24,8 +24,8 @@ import com.google.gwt.place.shared.PlaceHistoryMapper;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.ui.client.analysis.AnalysisPlace;
 import org.activityinfo.ui.client.catalog.CatalogPlace;
+import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.databases.DatabaseListPlace;
 import org.activityinfo.ui.client.input.RecordPlace;
 import org.activityinfo.ui.client.table.TablePlace;
 

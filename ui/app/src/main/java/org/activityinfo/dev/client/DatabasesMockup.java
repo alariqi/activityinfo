@@ -6,8 +6,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
-import org.activityinfo.ui.client.databases.DatabaseListPage;
-import org.activityinfo.ui.client.databases.ListItem;
+import org.activityinfo.ui.client.database.DatabaseListPage;
+import org.activityinfo.ui.client.database.ListItem;
 import org.activityinfo.ui.client.header.ConnectionStatus;
 import org.activityinfo.ui.client.header.Header;
 

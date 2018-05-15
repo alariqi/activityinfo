@@ -101,7 +101,7 @@ public class FormStoreImpl implements FormStore {
     }
 
     @Override
-    public Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
+    public Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
         return httpStore.get(new DatabaseRequest(databaseId));
     }
 
@@ -109,11 +109,20 @@ public class FormStoreImpl implements FormStore {
     public Observable<List<UserDatabaseMeta>> getDatabases() {
         if(cachedDatabaseList == null) {
             cachedDatabaseList = httpStore.get(new DatabaseListRequest()).join(list -> {
-                List<Observable<UserDatabaseMeta>> databases = new ArrayList<>();
+                List<Observable<Maybe<UserDatabaseMeta>>> databases = new ArrayList<>();
                 for (DatabaseHeader header : list) {
                     databases.add(getDatabase(header.getDatabaseId()));
                 }
-                return Observable.flatten(databases);
+
+                return Observable.flatten(databases).transform(maybes -> {
+                   List<UserDatabaseMeta> result = new ArrayList<>();
+                    for (Maybe<UserDatabaseMeta> maybe : maybes) {
+                        if(maybe.isVisible()) {
+                            result.add(maybe.get());
+                        }
+                    }
+                    return result;
+                });
             });
         }
         return cachedDatabaseList;

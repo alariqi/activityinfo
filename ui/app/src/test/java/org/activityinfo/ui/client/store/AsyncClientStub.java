@@ -72,7 +72,7 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
+    public Promise<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
         return Promise.rejected(new UnsupportedOperationException());
     }
 

@@ -4,8 +4,12 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import org.activityinfo.observable.SubscriptionSet;
+import org.activityinfo.ui.client.nonideal.MaybeContainer;
 import org.activityinfo.ui.client.store.FormStore;
 
+/**
+ * Displays a list of forms within a database or folder
+ */
 public class DatabaseActivity implements Activity {
 
     private final SubscriptionSet subscriptionSet = new SubscriptionSet();
@@ -19,13 +23,16 @@ public class DatabaseActivity implements Activity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+
         DatabasePage page = new DatabasePage();
-        panel.setWidget(page);
+        MaybeContainer<DatabaseViewModel> maybeContainer = new MaybeContainer<>(page);
+
+        panel.setWidget(maybeContainer);
 
         subscriptionSet.add(formStore
                 .getDatabase(place.getDatabaseId())
-                .transform(DatabaseViewModel::new)
-                .subscribe(page::updateView));
+                .transform(m -> m.transform(DatabaseViewModel::new))
+                .subscribe(vm -> maybeContainer.updateView(vm)));
     }
 
     @Override

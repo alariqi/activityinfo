@@ -21,9 +21,10 @@ package org.activityinfo.ui.client.store.http;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 
-public class DatabaseRequest implements HttpRequest<UserDatabaseMeta> {
+public class DatabaseRequest implements HttpRequest<Maybe<UserDatabaseMeta>> {
 
     private final ResourceId databaseId;
 
@@ -32,13 +33,13 @@ public class DatabaseRequest implements HttpRequest<UserDatabaseMeta> {
     }
 
     @Override
-    public Promise<UserDatabaseMeta> execute(ActivityInfoClientAsync client) {
+    public Promise<Maybe<UserDatabaseMeta>> execute(ActivityInfoClientAsync client) {
         return client.getDatabase(databaseId);
     }
 
 
     @Override
-    public int refreshInterval(UserDatabaseMeta result) {
+    public int refreshInterval(Maybe<UserDatabaseMeta> result) {
         return -1;
     }
 }

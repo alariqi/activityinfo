@@ -86,8 +86,23 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
-        return get(baseUrl + "/database/" + CuidAdapter.getLegacyIdFromCuid(databaseId), UserDatabaseMeta::fromJson);
+    public Promise<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
+        return getRaw(databaseUrl(databaseId), response -> {
+            switch (response.getStatusCode()) {
+                case 200:
+                    return Maybe.of(UserDatabaseMeta.fromJson(JSON_PARSER.parse(response.getText())));
+                case 403:
+                    return Maybe.forbidden();
+                case 404:
+                    return Maybe.notFound();
+                default:
+                    throw new ApiException(response.getStatusCode());
+            }
+        });
+    }
+
+    private String databaseUrl(ResourceId databaseId) {
+        return baseUrl + "/database/" + CuidAdapter.getLegacyIdFromCuid(databaseId);
     }
 
     @Override

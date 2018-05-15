@@ -11,4 +11,9 @@ public interface DatabaseTemplates extends XTemplates {
     @XTemplate("<h2>{heading}</h2>")
     SafeHtml header(String heading);
 
+    @XTemplate(source = "ListItem.html")
+    SafeHtml listItem(ListItem item);
+
+    @XTemplate(source = "EmptyList.html")
+    SafeHtml emptyList();
 }

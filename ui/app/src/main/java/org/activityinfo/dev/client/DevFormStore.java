@@ -27,8 +27,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class DevFormStore implements FormStore {
+
     @Override
-    public Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
+    public Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
         throw new UnsupportedOperationException("TODO");
     }
 

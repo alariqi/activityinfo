@@ -45,9 +45,9 @@ public class DatabaseProviderImpl implements DatabaseProvider {
 
 
     @Override
-    public UserDatabaseMeta getDatabaseMetadata(ResourceId databaseId, int userId) {
+    public Optional<UserDatabaseMeta> getDatabaseMetadata(ResourceId databaseId, int userId) {
         if(databaseId.equals(GEODB_ID)) {
-            return queryGeoDb(userId);
+            return Optional.of(queryGeoDb(userId));
         } else {
             return queryMySQLDatabase(databaseId, userId);
         }
@@ -63,34 +63,35 @@ public class DatabaseProviderImpl implements DatabaseProvider {
                 .build();
     }
 
-    private UserDatabaseMeta queryMySQLDatabase(ResourceId databaseId, int userId) {
+    private Optional<UserDatabaseMeta> queryMySQLDatabase(ResourceId databaseId, int userId) {
+
+        Database database = entityManager.get().find(Database.class, CuidAdapter.getLegacyIdFromCuid(databaseId));
+        if(database == null) {
+            return Optional.empty();
+        }
+
         UserDatabaseMeta.Builder meta = new UserDatabaseMeta.Builder()
                 .setDatabaseId(databaseId)
                 .setUserId(userId);
 
-
-        Database database = entityManager.get().find(Database.class, CuidAdapter.getLegacyIdFromCuid(databaseId));
-        if(database != null) {
-
-            if (database.getOwner().getId() == userId) {
-                meta.setOwner(true);
-                meta.setVersion(Long.toString(database.getVersion()));
-            } else {
-                Optional<UserPermission> userPermission = getUserPermission(entityManager.get(), database, userId);
-                if(userPermission.isPresent()) {
-                    meta.addGrants(userPermission.get().getGrants());
-                    meta.setVersion(database.getVersion() + "#" + userPermission.get().getVersion());
-                }
-            }
-
-            if (meta.isVisible()) {
-                meta.setLabel(database.getName());
-                meta.addLocks(queryLocks(database));
-                meta.addResources(queryFolders(database));
-                meta.addResources(queryForms(database));
+        if (database.getOwner().getId() == userId) {
+            meta.setOwner(true);
+            meta.setVersion(Long.toString(database.getVersion()));
+        } else {
+            Optional<UserPermission> userPermission = getUserPermission(entityManager.get(), database, userId);
+            if(userPermission.isPresent()) {
+                meta.addGrants(userPermission.get().getGrants());
+                meta.setVersion(database.getVersion() + "#" + userPermission.get().getVersion());
             }
         }
-        return meta.build();
+
+        if (meta.isVisible()) {
+            meta.setLabel(database.getName());
+            meta.addLocks(queryLocks(database));
+            meta.addResources(queryFolders(database));
+            meta.addResources(queryForms(database));
+        }
+        return Optional.of(meta.build());
     }
 
 

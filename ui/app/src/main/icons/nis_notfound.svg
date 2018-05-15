@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="-5 -5 110 110">
+    <circle cx="50" cy="50" r="50" fill="#FFF"/>
+    <linearGradient id="a" x1="-167.244" x2="-90.756" y1="203.5" y2="203.5" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#c6d4d4"/>
+        <stop offset=".526" stop-color="#e6eded"/>
+        <stop offset=".825" stop-color="#f2f7f7"/>
+    </linearGradient>
+    <circle cx="50" cy="50" r="38.244" fill="url(#a)"/>
+    <linearGradient id="b" x1="-131.499" x2="-126.501" y1="202.138" y2="202.138" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#455c5c"/>
+        <stop offset="1"/>
+    </linearGradient>
+    <circle cx="50" cy="51.362" r="2.499" fill="url(#b)"/>
+    <linearGradient id="c" x1="-132.537" x2="-125.468" y1="245.277" y2="238.208" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#00cf79"/>
+        <stop offset="1" stop-color="#00cfcd"/>
+    </linearGradient>
+    <circle cx="49.998" cy="11.757" r="4.999" fill="url(#c)" opacity=".8"/>
+</svg>

@@ -38,7 +38,7 @@ import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
-import org.activityinfo.ui.client.databases.DatabaseListPlace;
+import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.header.AppFrame;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.FormStoreImpl;

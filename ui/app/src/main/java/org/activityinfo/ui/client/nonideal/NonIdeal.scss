@@ -1,0 +1,41 @@
+
+.nonideal {
+
+  text-align: center;
+
+  h1 {
+    font-size: 2.375rem;
+  }
+
+  p, li {
+    color: $black;
+    font-family: $gretalight;
+    font-size: 1.5rem;
+  }
+
+  ul {
+    list-style: circle inside;
+  }
+
+  a {
+    color: $black;
+    font-family: $gretasemibold;
+    font-size: 0.875rem;
+  }
+
+  a, a:hover, a:visited {
+    text-decoration: none;
+  }
+}
+
+.nonideal__illustration {
+  width: 18.75rem;
+  height: 18.75rem;
+  margin: 1.75rem auto;
+}
+
+.nonideal__links {
+  margin-top: 1.8rem;
+}
+
+

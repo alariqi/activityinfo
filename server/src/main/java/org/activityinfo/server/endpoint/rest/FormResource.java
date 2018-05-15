@@ -60,6 +60,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,7 +99,7 @@ public class FormResource {
 
         UserDatabaseMeta databaseMetadata;
         try {
-            databaseMetadata = databaseProvider.getDatabaseMetadata(databaseId, user.getUserId());
+            databaseMetadata = databaseProvider.getDatabaseMetadata(databaseId, user.getUserId()).get();
         } catch (Exception e) {
             // We are initially using this just for locks,
             // not actually permissions, so just log the warning for now.
@@ -222,7 +223,7 @@ public class FormResource {
         // Compute a predicate that will tell us whether a given
         // record should be visible to the user, based on their *current* permissions.
 
-        java.util.function.Predicate<ResourceId> visibilityPredicate = computeVisibilityPredicate();
+        Predicate<ResourceId> visibilityPredicate = computeVisibilityPredicate();
 
         FormSyncSet syncSet;
         if(collection instanceof VersionedFormStorage) {
@@ -236,7 +237,7 @@ public class FormResource {
     /**
      * Computes a record-level visibility predicate.
      */
-    private java.util.function.Predicate<ResourceId> computeVisibilityPredicate() {
+    private Predicate<ResourceId> computeVisibilityPredicate() {
         FormPermissions formPermissions = backend.getFormSupervisor().getFormPermissions(formId);
         if (!formPermissions.hasVisibilityFilter()) {
             return resourceId -> true;

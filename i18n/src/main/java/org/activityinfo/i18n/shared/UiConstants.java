@@ -1889,4 +1889,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Notifications")
     String notifications();
 
+    @DefaultStringValue("We couldn’t find the data you’re looking for.")
+    String dataNotFound();
+
 }

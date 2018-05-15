@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.databases;
+package org.activityinfo.ui.client.database;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.event.shared.EventBus;

@@ -42,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.util.Optional;
 
 public class DatabaseResource {
 
@@ -61,7 +62,14 @@ public class DatabaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public UserDatabaseMeta getDatabaseMetadata(@InjectParam AuthenticatedUser user) {
-        return databaseProvider.getDatabaseMetadata(CuidAdapter.databaseId(databaseId), user.getUserId());
+        Optional<UserDatabaseMeta> databaseMetadata = databaseProvider.getDatabaseMetadata(CuidAdapter.databaseId(databaseId), user.getUserId());
+        if(!databaseMetadata.isPresent()) {
+            throw new WebApplicationException(Response.Status.NOT_FOUND);
+        }
+        if(!databaseMetadata.get().isVisible()) {
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+        return databaseMetadata.get();
     }
 
     private UserDatabaseDTOWithForms getSchema() {

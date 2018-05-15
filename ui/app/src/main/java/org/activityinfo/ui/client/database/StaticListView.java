@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.databases;
+package org.activityinfo.ui.client.database;
 
 import com.google.common.base.Strings;
 import com.google.gwt.cell.client.Cell;

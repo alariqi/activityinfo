@@ -4,7 +4,6 @@ import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.ui.client.PlaceLinks;
-import org.activityinfo.ui.client.databases.ListItem;
 import org.activityinfo.ui.client.table.TablePlace;
 
 import java.util.ArrayList;

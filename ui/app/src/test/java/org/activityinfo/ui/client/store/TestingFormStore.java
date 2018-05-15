@@ -97,11 +97,11 @@ public class TestingFormStore implements FormStore {
     }
 
     @Override
-    public Observable<UserDatabaseMeta> getDatabase(ResourceId databaseId) {
-        return Observable.just(new UserDatabaseMeta.Builder()
+    public Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
+        return Observable.just(Maybe.of(new UserDatabaseMeta.Builder()
             .setUserId(1)
             .setLabel("Database " + databaseId)
-            .build());
+            .build()));
     }
 
     @Override

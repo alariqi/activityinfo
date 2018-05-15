@@ -2,8 +2,6 @@ package org.activityinfo.dev.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import org.activityinfo.ui.client.nonideal.LoadingPage;
-import org.activityinfo.ui.client.nonideal.NotFoundPage;
-import org.activityinfo.ui.client.nonideal.PermissionDeniedPage;
 
 public enum DevPage {
     INDEX {
@@ -59,18 +57,6 @@ public enum DevPage {
         @Override
         public IsWidget createWidget() {
             return DatabaseMockup.empty();
-        }
-    },
-    NOT_FOUND {
-        @Override
-        public IsWidget createWidget() {
-            return new NonIdealMockup(new NotFoundPage());
-        }
-    },
-    PERMISSION_DENIED {
-        @Override
-        public IsWidget createWidget() {
-            return new NonIdealMockup(new PermissionDeniedPage());
         }
     },
     LOADING {
