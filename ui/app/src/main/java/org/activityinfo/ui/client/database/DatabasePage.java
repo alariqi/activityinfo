@@ -5,7 +5,6 @@ import com.sencha.gxt.widget.core.client.menu.Menu;
 import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.ui.client.Icon;
-import org.activityinfo.ui.client.PlaceLinks;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
@@ -47,13 +46,14 @@ public class DatabasePage implements ViewWidget<DatabaseViewModel> {
         container.addBodyWidget(new StaticHtml(DatabaseTemplates.TEMPLATES.header(I18N.CONSTANTS.forms())));
         container.addBodyWidget(toolbar);
         container.addBodyWidget(listView);
-        container.setBreadcrumbs(new Breadcrumb(I18N.CONSTANTS.databases(), PlaceLinks.toUri(new DatabaseListPlace())));
+        container.setBreadcrumbs(Breadcrumb.DATABASES);
     }
 
     @Override
     public void updateView(DatabaseViewModel viewModel) {
         // Update header
         container.getHeader().setHeading(viewModel.getLabel());
+        container.getHeader().setBreadcrumbs(Breadcrumb.DATABASES, Breadcrumb.of(viewModel.getDatabase()));
 
         // Update list of forms
         listView.updateView(viewModel.getFormLinks());

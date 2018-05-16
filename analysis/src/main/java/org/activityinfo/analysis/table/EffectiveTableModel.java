@@ -229,6 +229,10 @@ public class EffectiveTableModel {
         return formTree;
     }
 
+    public ResourceId getDatabaseId() {
+        return formTree.getRootFormClass().getDatabaseId();
+    }
+
     public List<EffectiveTableColumn> getColumns() {
         return columns;
     }
@@ -244,4 +248,5 @@ public class EffectiveTableModel {
             return "";
         }
     }
+
 }

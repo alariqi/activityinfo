@@ -5,6 +5,23 @@ ul.breadcrumbs {
   font-size: 1rem;
   font-family: $gretasemibold;
   color: $black;
+  opacity: 0.6;
 
+  li {
+    display: inline;
 
+  }
+
+  li+li:before {
+    content: ' ';
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='10'%3E%3Cpath d='M1.6.02l4 4.53-3.95 4.47' stroke='%23243233' stroke-miterlimit='50' fill='none' /%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    display: inline-block;
+    width: 7px;
+    height: 10px;
+    margin-right: 0.875rem;
+    margin-left: 0.6875rem;
+  }
 }
+

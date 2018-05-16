@@ -23,12 +23,15 @@ import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
+import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.HasTitle;
 import org.activityinfo.ui.client.header.HasFixedHeight;
+import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.page.FullWidthPageContainer;
 import org.activityinfo.ui.client.page.GenericAvatar;
 import org.activityinfo.ui.client.store.FormStore;
@@ -75,8 +78,17 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         this.container.addBodyWidget(toolBar);
         this.container.addBodyWidget(gridContainer);
         this.container.addBodyWidget(sidePanel);
+        this.container.getHeader().setBreadcrumbs(Breadcrumb.DATABASES);
 
         subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
+        subscriptions.add(viewModel.getDatabase().subscribe(observable -> updateBreadcrumbs(observable)));
+    }
+
+    private void updateBreadcrumbs(Observable<Maybe<UserDatabaseMeta>> observable) {
+        if(observable.isLoaded() && observable.get().isVisible()) {
+            UserDatabaseMeta database = observable.get().get();
+            container.getHeader().setBreadcrumbs(Breadcrumb.hierarchy(database, viewModel.getFormId()));
+        }
     }
 
     @Override
@@ -111,7 +123,6 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         LOGGER.log(Level.INFO, "updating grid");
 
         container.getHeader().setHeading(effectiveTableModel.getFormLabel());
-
 
         // If the grid is already displayed, try to update without
         // destroying everything

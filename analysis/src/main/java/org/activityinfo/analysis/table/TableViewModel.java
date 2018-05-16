@@ -25,6 +25,7 @@ import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.ImmutableTableModel;
 import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.formula.CompoundExpr;
@@ -36,6 +37,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
+import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
 
 import javax.annotation.Nullable;
@@ -112,6 +114,10 @@ public class TableViewModel implements TableUpdater {
 
     public Observable<EffectiveTableModel> getEffectiveTable() {
         return effectiveTable;
+    }
+
+    public Observable<Maybe<UserDatabaseMeta>> getDatabase() {
+        return effectiveTable.join(t -> formStore.getDatabase(t.getDatabaseId()));
     }
 
     public Observable<ApiViewModel> getApiViewModel() {

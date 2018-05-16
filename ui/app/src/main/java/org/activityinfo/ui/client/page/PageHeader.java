@@ -7,6 +7,9 @@ import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class PageHeader implements IsWidget {
 
     private HtmlLayoutContainer container;
@@ -20,6 +23,10 @@ public class PageHeader implements IsWidget {
     }
 
     public void setBreadcrumbs(Breadcrumb... breadcrumbs) {
+        setBreadcrumbs(Arrays.asList(breadcrumbs));
+    }
+
+    public void setBreadcrumbs(List<Breadcrumb> breadcrumbs) {
         SafeHtmlBuilder html = new SafeHtmlBuilder();
         for (Breadcrumb breadcrumb : breadcrumbs) {
             breadcrumb.renderTo(html);
