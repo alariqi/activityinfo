@@ -19,6 +19,7 @@
 package org.activityinfo.ui.client.input.model;
 
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 
 import java.util.Collections;
@@ -72,6 +73,10 @@ public class FormInputModel {
         updatedInputs.put(fieldId, input);
 
         return new FormInputModel(this.recordRef, updatedInputs);
+    }
+
+    public FormInputModel update(ResourceId fieldId, FieldValue value) {
+        return update(fieldId, new FieldInput(value));
     }
 
 }
