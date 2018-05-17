@@ -12,6 +12,8 @@ public enum Icon {
     BUBBLE_ARROWRIGHT,
     BUBBLE_CLOSE,
     BUBBLE_COLUMNS,
+    BUBBLE_DOWN,
+    BUBBLE_DATE,
 
     EXPAND_DOWN,
     EXPAND_UP;

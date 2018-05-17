@@ -47,14 +47,12 @@ public class FormInputViewModel {
     FormInputModel inputModel;
     Map<ResourceId, FieldValue> existingValues;
     Map<ResourceId, FieldValue> fieldValueMap;
-    Map<ResourceId, SubFormViewModel> subFormMap;
     Set<ResourceId> relevant;
     Set<ResourceId> missing;
     Multimap<ResourceId, String> validationErrors;
     boolean valid;
     boolean locked;
     boolean dirty;
-    boolean placeholder;
 
     FormInputViewModel() {
     }
@@ -85,14 +83,6 @@ public class FormInputViewModel {
 
     public boolean isEmpty() {
         return fieldValueMap.isEmpty();
-    }
-
-    public boolean isPlaceholder() {
-        return placeholder;
-    }
-
-    public SubFormViewModel getSubForm(ResourceId fieldId) {
-        return subFormMap.get(fieldId);
     }
 
     public boolean isMissing(ResourceId fieldId) {
@@ -140,10 +130,6 @@ public class FormInputViewModel {
     public RecordTransaction buildTransaction() {
         RecordTransactionBuilder tx = new RecordTransactionBuilder();
         tx.add(buildUpdate(Optional.absent()));
-
-        for (SubFormViewModel subFormViewModel : subFormMap.values()) {
-            tx.add(subFormViewModel.buildUpdates(inputModel.getRecordRef()));
-        }
         return tx.build();
     }
 

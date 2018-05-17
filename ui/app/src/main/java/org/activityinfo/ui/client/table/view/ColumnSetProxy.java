@@ -36,8 +36,6 @@ import java.util.List;
 
 class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer>> {
 
-
-
     private class PendingRequest {
         PagingLoadConfig config;
         AsyncCallback<PagingLoadResult<Integer>> callback;

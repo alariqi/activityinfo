@@ -201,18 +201,8 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.field.Css3TwinTriggerFieldAppearance">
-    <when-type-is class="com.sencha.gxt.cell.core.client.form.TwinTriggerFieldCell.TwinTriggerFieldAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
   <replace-with class="org.activityinfo.ui.client.base.field.Css3DateCellAppearance">
     <when-type-is class="com.sencha.gxt.cell.core.client.form.DateCell.DateCellAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.ui.client.base.field.Css3SpinnerFieldAppearance">
-    <when-type-is class="com.sencha.gxt.cell.core.client.form.SpinnerFieldCell.SpinnerFieldAppearance"/>
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 

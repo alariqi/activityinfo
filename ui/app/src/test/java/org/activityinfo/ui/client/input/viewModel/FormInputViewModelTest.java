@@ -19,46 +19,32 @@
 package org.activityinfo.ui.client.input.viewModel;
 
 import net.lightoze.gwt.i18n.server.LocaleProxy;
-import org.activityinfo.model.database.RecordLockBuilder;
-import org.activityinfo.model.database.ResourceBuilder;
-import org.activityinfo.model.database.ResourceType;
-import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.form.FormClass;
-import org.activityinfo.model.form.FormMetadata;
-import org.activityinfo.model.form.FormPermissions;
-import org.activityinfo.model.formTree.FormMetadataProvider;
-import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.formTree.FormTreeBuilder;
 import org.activityinfo.model.resource.RecordTransaction;
 import org.activityinfo.model.resource.RecordUpdate;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.ReferenceValue;
 import org.activityinfo.model.type.SerialNumber;
 import org.activityinfo.model.type.enumerated.EnumValue;
 import org.activityinfo.model.type.number.Quantity;
-import org.activityinfo.model.type.primitive.TextType;
 import org.activityinfo.model.type.primitive.TextValue;
-import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.model.type.time.LocalDate;
-import org.activityinfo.model.type.time.LocalDateInterval;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.store.testing.*;
+import org.activityinfo.store.testing.IntakeForm;
+import org.activityinfo.store.testing.Survey;
+import org.activityinfo.store.testing.TestForm;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
-import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.activityinfo.ui.client.store.TestingFormStore;
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.arrayWithSize;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class FormInputViewModelTest {
 
@@ -125,7 +111,7 @@ public class FormInputViewModelTest {
         RecordRef recordRef = survey.getRecordRef(5);
 
         FormStructure stucture = fetchStructure(recordRef);
-        FormInputViewModelBuilder builder = new FormInputViewModelBuilder(store, stucture.getFormTree(), new TestingActivePeriodMemory());
+        FormInputViewModelBuilder builder = new FormInputViewModelBuilder(stucture.getFormTree());
 
         FormInputModel inputModel = new FormInputModel(new RecordRef(survey.getFormId(), ResourceId.generateId()));
 
@@ -143,7 +129,7 @@ public class FormInputViewModelTest {
         RecordRef recordRef = survey.getRecordRef(8);
 
         FormStructure structure = fetchStructure(recordRef);
-        FormInputViewModelBuilder builder = new FormInputViewModelBuilder(store, structure.getFormTree(), new TestingActivePeriodMemory());
+        FormInputViewModelBuilder builder = new FormInputViewModelBuilder(structure.getFormTree());
 
         FormInputModel inputModel = new FormInputModel(new RecordRef(survey.getFormId(), ResourceId.generateId()));
 
@@ -165,49 +151,6 @@ public class FormInputViewModelTest {
 
         RecordUpdate update = tx.getChanges().iterator().next();
         assertTrue(update.getFields().get(survey.getPregnantFieldId().asString()).isJsonNull());
-    }
-
-
-    @Test
-    public void testSubFormInput() {
-
-        FormInputViewModelBuilder builder =  builderFor(setup.getCatalog().getIncidentForm());
-        // Start with empty input
-        FormInputModel inputModel = new FormInputModel(new RecordRef(IncidentForm.FORM_ID, ResourceId.generateId()));
-
-        // Should see one (empty) sub form record
-        FormInputViewModel viewModel = builder.build(inputModel);
-        SubFormViewModel referralSubForm = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID);
-
-        assertThat(referralSubForm.getSubRecords(), hasSize(1));
-
-        // We can update this sub record
-        FormInputViewModel subRecord = referralSubForm.getSubRecords().get(0);
-        inputModel = inputModel.update(subRecord.getRecordRef(),
-                ReferralSubForm.ORGANIZATION_FIELD_ID,
-                new FieldInput(TextValue.valueOf("CRS")));
-        viewModel = builder.build(inputModel);
-        referralSubForm = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID);
-
-        assertThat(referralSubForm.getSubRecords(), hasSize(1));
-
-        // Now add a second record
-        inputModel = inputModel.addSubRecord(new RecordRef(ReferralSubForm.FORM_ID, ResourceId.generateId()));
-        viewModel = builder.build(inputModel);
-        referralSubForm = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID);
-
-        assertThat(referralSubForm.getSubRecords(), hasSize(2));
-
-        // Verify that the transaction is built is correctly
-        RecordTransaction tx = viewModel.buildTransaction();
-        RecordUpdate[] changes = tx.getChangeArray();
-        assertThat(changes.length, equalTo(3));
-
-        RecordUpdate parentChange = changes[0];
-        RecordUpdate subFormChange = changes[1];
-
-        assertThat(parentChange.getRecordRef(), equalTo(inputModel.getRecordRef()));
-        assertThat(subFormChange.getParentRecordId(), equalTo(parentChange.getRecordId().asString()));
     }
 
     @Test
@@ -267,40 +210,6 @@ public class FormInputViewModelTest {
         assertThat(completed.getState(), equalTo(Promise.State.FULFILLED));
     }
 
-
-    @Test
-    public void editRecordWithSubRecords() {
-
-        IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
-
-        RecordRef rootRecordRef = incidentForm.getRecordRef(0);
-        FormStructure structure = fetchStructure(rootRecordRef);
-
-        FormInputViewModelBuilder builder = builderFor(structure);
-
-        FormInputModel inputModel = new FormInputModel(rootRecordRef);
-
-        FormInputViewModel viewModel = builder.build(inputModel, structure.getExistingRecord());
-
-        SubFormViewModel subFormField = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID);
-        assertThat(subFormField.getSubRecords(), hasSize(4));
-
-        // Try deleting the first one...
-        RecordRef deletedRef = subFormField.getSubRecords().get(0).getRecordRef();
-        inputModel = inputModel.deleteSubRecord(deletedRef);
-        viewModel = builder.build(inputModel, structure.getExistingRecord());
-        subFormField = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID);
-
-        assertThat(subFormField.getSubRecords(), hasSize(3));
-
-        // Should show up in transaction
-        RecordTransaction tx = viewModel.buildTransaction();
-        assertThat(tx.getChanges(), hasItem(hasProperty("deleted", equalTo(true))));
-
-
-    }
-
-
     @Test
     public void inputMask() {
         IntakeForm intakeForm = setup.getCatalog().getIntakeForm();
@@ -321,202 +230,12 @@ public class FormInputViewModelTest {
         assertThat(viewModel.getValidationErrors(intakeForm.getRegNumberFieldId()), not(empty()));
     }
 
-    @Test
-    public void requiredSubFormFields() {
-        BioDataForm bioDataForm = setup.getCatalog().getBioDataForm();
-        IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
-        ReferralSubForm referralSubForm = setup.getCatalog().getReferralSubForm();
-
-        FormInputViewModelBuilder builder = builderFor(incidentForm);
-
-        FormInputModel inputModel = new FormInputModel(new RecordRef(incidentForm.getFormId(), ResourceId.generateId()));
-
-        // Fill in required fields
-        inputModel = inputModel
-            .update(IncidentForm.PROTECTION_CODE_FIELD_ID, new ReferenceValue(bioDataForm.getRecordRef(0)));
-
-        // Should be valid as we have only a placeholder sub form...
-        FormInputViewModel viewModel = builder.build(inputModel);
-
-
-        FormInputViewModel referralRecord = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID).getSubRecords().get(0);
-        assertTrue(referralRecord.isPlaceholder());
-
-        assertThat(viewModel.isValid(), equalTo(true));
-
-        // Now add a new referral sub form
-        // Without completing all required fields, and make sure the form is invalid
-        inputModel = inputModel.update(referralRecord.getRecordRef(), referralSubForm.getContactNumber().getId(), FieldInput.EMPTY);
-
-               viewModel = builder.build(inputModel);
-
-        referralRecord = viewModel.getSubForm(IncidentForm.REFERRAL_FIELD_ID).getSubRecords().get(0);
-
-        assertFalse("subform is invalid", referralRecord.isValid());
-        assertFalse("parent is invalid", viewModel.isValid());
-    }
-
-    @Test
-    public void monthlySubForms() {
-        ClinicForm clinicForm = setup.getCatalog().getClinicForm();
-        ResourceId consultCountFieldId = clinicForm.getSubForm().getConsultsField().getId();
-
-        FormInputViewModelBuilder builder = builderFor(clinicForm);
-
-        ResourceId parentRecordId = ResourceId.generateId();
-        FormInputModel inputModel = new FormInputModel(new RecordRef(clinicForm.getFormId(), parentRecordId));
-
-        FormInputViewModel viewModel = builder.build(inputModel);
-
-        // Get the sub form view model.
-        // The active ref should be set to 2017-10 by default.
-        ResourceId subFormFieldId = clinicForm.getSubFormField().getId();
-        SubFormViewModel subForm = viewModel.getSubForm(subFormFieldId);
-        assertThat(subForm, notNullValue());
-
-        RecordRef octoberId = new RecordRef(clinicForm.getSubForm().getFormId(),
-                ResourceId.generatedPeriodSubmissionId(parentRecordId, "2017-10"));
-
-        RecordRef novemberId = new RecordRef(clinicForm.getSubForm().getFormId(),
-                ResourceId.generatedPeriodSubmissionId(parentRecordId, "2017-11"));
-
-        assertThat(subForm.getActiveRecordRef(), equalTo(octoberId));
-
-        // Update a field in the active form
-        inputModel = inputModel.updateSubForm(
-            subForm.update(
-                consultCountFieldId,
-                new FieldInput(new Quantity(33))));
-
-        viewModel = builder.build(inputModel);
-
-        FormInputViewModel subFormViewModel = viewModel.getSubForm(subFormFieldId).getActiveSubViewModel();
-        assertThat(subFormViewModel.getField(consultCountFieldId), equalTo(new Quantity(33)));
-        assertThat(subFormViewModel.isValid(), equalTo(true));
-
-        // Now change the active record to another month
-        inputModel = inputModel.updateActiveSubRecord(subFormFieldId, novemberId);
-
-        viewModel = builder.build(inputModel);
-        subForm = viewModel.getSubForm(subFormFieldId);
-
-        // At this point, the subform is not valid because required fields are not filled in,
-        // but it is also not dirty because we have not changed anything
-        assertThat(subForm.getActiveSubViewModel().isValid(), equalTo(false));
-        assertThat(subForm.getActiveSubViewModel().isDirty(), equalTo(false));
-        assertThat(subForm.getActiveSubViewModel().isPlaceholder(), equalTo(true));
-
-        // Now fill in the required field
-
-        inputModel = inputModel.updateSubForm(subForm.update(consultCountFieldId, new FieldInput(new Quantity(44))));
-
-        viewModel = builder.build(inputModel);
-
-        assertThat(viewModel.getSubForm(subFormFieldId).getActiveRecordRef(), equalTo(novemberId));
-        assertThat(viewModel.getSubForm(subFormFieldId).isValid(), equalTo(true));
-    }
-
-
-    @Test
-    public void lockedMonthlySubForms() {
-
-        ClinicForm clinicForm = setup.getCatalog().getClinicForm();
-
-        ResourceId databaseId = ResourceId.valueOf("db1");
-
-        setup.describeDatabase(new UserDatabaseMeta.Builder()
-            .setDatabaseId(databaseId)
-            .setLabel("My Database")
-            .setOwner(true)
-            .setVersion("1")
-            .addResource(new ResourceBuilder()
-                        .setId(clinicForm.getFormId())
-                        .setParentId(databaseId)
-                        .setLabel(clinicForm.getFormClass().getLabel())
-                        .setType(ResourceType.FORM)
-                        .build())
-            .addResource(new ResourceBuilder()
-                        .setId(clinicForm.getSubForm().getFormId())
-                        .setParentId(clinicForm.getFormId())
-                        .setLabel(clinicForm.getSubForm().getFormClass().getLabel())
-                        .setType(ResourceType.FORM)
-                        .build())
-            .addLock(new RecordLockBuilder()
-                        .setId(ResourceId.valueOf("lock1"))
-                        .setLabel("Archived")
-                        .setResourceId(clinicForm.getFormId())
-                        .setDateRange(LocalDateInterval.year(2017))
-                        .build())
-            .build());
-
-        ResourceId consultCountFieldId = clinicForm.getSubForm().getConsultsField().getId();
-
-        FormInputViewModelBuilder builder = builderFor(clinicForm);
-
-        ResourceId parentRecordId = ResourceId.generateId();
-        FormInputModel inputModel = new FormInputModel(new RecordRef(clinicForm.getFormId(), parentRecordId));
-
-        FormInputViewModel viewModel = builder.build(inputModel);
-
-        // Get the sub form view model.
-        // The active ref should be set to 2017-10 by default.
-        ResourceId subFormFieldId = clinicForm.getSubFormField().getId();
-        SubFormViewModel subForm = viewModel.getSubForm(subFormFieldId);
-        assertThat(subForm, notNullValue());
-
-        // All of 2017 should be locked
-        assertTrue(subForm.getActiveSubViewModel().isLocked());
-
-    }
-
-
-    /**
-     * Test the ViewModel for when the user does not have access to a referenced sub form.
-     */
-    @Test
-    public void hiddenSubForm() {
-
-        FormClass parentForm = new FormClass(ResourceId.valueOf("PARENT_FORM"));
-        parentForm.addField(ResourceId.valueOf("F1"))
-                .setLabel("What is your name?")
-                .setType(TextType.SIMPLE);
-
-        parentForm.addField(ResourceId.valueOf("F2"))
-                .setLabel("What are your secrets?")
-                .setType(new SubFormReferenceType(ResourceId.valueOf("SECRET_FORM")));
-
-        FormTreeBuilder treeBuilder = new FormTreeBuilder(new FormMetadataProvider() {
-            @Override
-            public FormMetadata getFormMetadata(ResourceId formId) {
-                if(formId.equals(parentForm.getId())) {
-                    return FormMetadata.of(1, parentForm, FormPermissions.owner());
-                } else {
-                    return FormMetadata.forbidden(formId);
-                }
-            }
-        });
-
-        FormTree formTree = treeBuilder.queryTree(parentForm.getId());
-
-        FormStore formStore = EasyMock.createMock(FormStore.class);
-        EasyMock.replay(formStore);
-
-        FormInputViewModelBuilder viewModelBuilder = new FormInputViewModelBuilder(formStore, formTree, new TestingActivePeriodMemory());
-
-        FormInputViewModel viewModel = viewModelBuilder.build(
-                new FormInputModel(new RecordRef(parentForm.getId(), ResourceId.valueOf("R1"))));
-
-
-
-    }
-
-
     private FormInputViewModelBuilder builderFor(TestForm survey) {
-        return new FormInputViewModelBuilder(setup.getFormStore(), fetchStructure(survey.getFormId()).getFormTree(), new TestingActivePeriodMemory());
+        return new FormInputViewModelBuilder(fetchStructure(survey.getFormId()).getFormTree());
     }
 
     private FormInputViewModelBuilder builderFor(FormStructure structure) {
-        return new FormInputViewModelBuilder(setup.getFormStore(), structure.getFormTree(), new TestingActivePeriodMemory());
+        return new FormInputViewModelBuilder(structure.getFormTree());
     }
 
     private FormStructure fetchStructure(ResourceId formId) {

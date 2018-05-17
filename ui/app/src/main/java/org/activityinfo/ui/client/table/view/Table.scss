@@ -11,3 +11,13 @@
   position: relative;
   width: calc(100% - #{$sidepanel-collapsed-width});
 }
+
+
+.formtable__formcontainer {
+  position: absolute;
+  display: none;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+}

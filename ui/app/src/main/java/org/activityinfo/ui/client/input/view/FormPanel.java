@@ -21,20 +21,15 @@ package org.activityinfo.ui.client.input.view;
 import com.google.common.base.Strings;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.CssFloatLayoutContainer;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.form.SubFormKind;
+import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.store.query.shared.FormSource;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.view.field.FieldView;
 import org.activityinfo.ui.client.input.view.field.FieldWidget;
@@ -52,60 +47,39 @@ public class FormPanel implements IsWidget {
 
     private final FormSource formSource;
 
-    private final CssFloatLayoutContainer panel;
+    private final CssLayoutContainer panel;
 
     private final List<FieldView> fieldViews = new ArrayList<>();
-    private final List<RepeatingSubFormPanel> repeatingSubForms = new ArrayList<>();
-    private final List<KeyedSubFormPanel> keyedSubFormPanels = new ArrayList<>();
 
     private InputHandler inputHandler;
     private RecordRef recordRef;
 
-    private int horizontalPadding = 0;
-
     private FormInputViewModel viewModel;
-    private final TextButton deleteButton;
 
     public FormPanel(FormSource formSource, FormTree formTree, RecordRef recordRef, InputHandler inputHandler) {
         this.formSource = formSource;
 
         assert recordRef != null;
 
-        InputResources.INSTANCE.style().ensureInjected();
-
         this.recordRef = recordRef;
         this.inputHandler = inputHandler;
 
-        panel = new CssFloatLayoutContainer();
-        panel.addStyleName(InputResources.INSTANCE.style().form());
-
-        if(formTree.getRootFormClass().isSubForm()) {
-            panel.addStyleName(InputResources.INSTANCE.style().subform());
-        }
+        panel = new CssLayoutContainer("form");
 
         FieldWidgetFactory widgetFactory = new FieldWidgetFactory(formSource, formTree);
 
         for (FormTree.Node node : formTree.getRootFields()) {
             if(node.isSubForm()) {
-                if(node.isSubFormVisible()) {
-                    addSubForm(formTree, node);
-                }
+                // ignore
             } else if(node.isParentReference()) {
                 // ignore
             } else if(node.getField().isVisible() && !isSubFormKey(node)) {
                 FieldWidget fieldWidget = widgetFactory.create(node.getField(), input -> onInput(node, input));
 
                 if (fieldWidget != null) {
-                    addField(node, fieldWidget);
+                    addField(node.getField(), fieldWidget);
                 }
             }
-        }
-        deleteButton = new TextButton(I18N.CONSTANTS.remove());
-
-        if(formTree.getRootFormClass().isSubForm()) {
-            deleteButton.addSelectHandler(event -> onDelete());
-            panel.add(deleteButton, new CssFloatLayoutContainer.CssFloatData(1,
-                    new Margins(0, horizontalPadding, 10, horizontalPadding)));
         }
     }
 
@@ -114,19 +88,9 @@ public class FormPanel implements IsWidget {
                 node.getType() instanceof PeriodType;
     }
 
-    private void onDelete() {
-        MessageBox messageBox = new MessageBox(I18N.CONSTANTS.confirmDeletion());
-        messageBox.setMessage(I18N.CONSTANTS.confirmDeleteRecord());
-        messageBox.setPredefinedButtons(Dialog.PredefinedButton.OK, Dialog.PredefinedButton.CANCEL);
-        messageBox.getButton(Dialog.PredefinedButton.OK)
-                .addSelectHandler(e -> inputHandler.deleteSubRecord(this.recordRef));
-        messageBox.show();
-    }
-
     public RecordRef getRecordRef() {
         return recordRef;
     }
-
 
     public void init(FormInputViewModel viewModel) {
 
@@ -135,90 +99,50 @@ public class FormPanel implements IsWidget {
         for (FieldView fieldView : fieldViews) {
             fieldView.init(viewModel);
         }
-
-        for (RepeatingSubFormPanel subFormView : repeatingSubForms) {
-            subFormView.init(viewModel.getSubForm(subFormView.getFieldId()));
-        }
     }
 
     public void updateView(FormInputViewModel viewModel) {
 
         this.viewModel = viewModel;
 
-        deleteButton.setEnabled(!viewModel.isLocked());
-
         // Update Field Views
         for (FieldView fieldView : fieldViews) {
             fieldView.updateView(viewModel);
         }
-
-        // Update Subforms
-        for (RepeatingSubFormPanel subFormView : repeatingSubForms) {
-            subFormView.updateView(viewModel.getSubForm(subFormView.getFieldId()));
-        }
-        for (KeyedSubFormPanel subFormView : keyedSubFormPanels) {
-            subFormView.updateView(viewModel.getSubForm(subFormView.getFieldId()));
-        }
-
     }
 
     private void onInput(FormTree.Node node, FieldInput input) {
-        if(viewModel.isPlaceholder()) {
-            inputHandler.updateSubModel(viewModel.getInputModel().update(node.getFieldId(), input));
-
-        } else {
-            inputHandler.updateModel(recordRef, node.getFieldId(), input);
-        }
+        inputHandler.updateModel(recordRef, node.getFieldId(), input);
     }
 
-    private void addField(FormTree.Node node, FieldWidget fieldWidget) {
+    private void addField(FormField field, FieldWidget fieldWidget) {
 
-        Label fieldLabel = new Label(node.getField().getLabel());
-        fieldLabel.addStyleName(InputResources.INSTANCE.style().fieldLabel());
+        StaticHtml fieldLabel;
+        if(field.isRequired()) {
+            fieldLabel = new StaticHtml(InputTemplates.TEMPLATES.requiredFieldHeading(field.getLabel(), I18N.CONSTANTS.required()));
+        } else {
+            fieldLabel = new StaticHtml(InputTemplates.TEMPLATES.fieldHeading(field.getLabel()));
+        }
 
         HTML validationMessage = new HTML();
         validationMessage.setVisible(false);
+        validationMessage.addStyleName("forminput__validationmessage");
 
-        CssFloatLayoutContainer fieldPanel = new CssFloatLayoutContainer();
-        fieldPanel.setStyleName(InputResources.INSTANCE.style().field());
-        fieldPanel.add(fieldLabel, new CssFloatLayoutContainer.CssFloatData(1));
-        fieldPanel.add(fieldWidget, new CssFloatLayoutContainer.CssFloatData(1,
-                new Margins(5, horizontalPadding, 5, horizontalPadding)));
-
-        if (!Strings.isNullOrEmpty(node.getField().getDescription())) {
-            Label descriptionLabel = new Label(node.getField().getDescription());
-            descriptionLabel.addStyleName(InputResources.INSTANCE.style().fieldDescription());
-            fieldPanel.add(descriptionLabel,
-                    new CssFloatLayoutContainer.CssFloatData(1));
+        CssLayoutContainer fieldPanel = new CssLayoutContainer();
+        fieldPanel.setStyleName("forminput__field");
+        if(field.isRequired()) {
+            fieldPanel.addStyleName("forminput__field--required");
         }
-
-        fieldPanel.add(validationMessage, new CssFloatLayoutContainer.CssFloatData(1));
-        panel.add(fieldPanel, new CssFloatLayoutContainer.CssFloatData(1,
-                new Margins(10, horizontalPadding, 10, horizontalPadding)));
-
-        fieldViews.add(new FieldView(node.getFieldId(), fieldWidget, validationMessage));
-    }
-
-    private void addSubForm(FormTree formTree, FormTree.Node node) {
-        SubFormReferenceType subFormType = (SubFormReferenceType) node.getType();
-        FormTree subTree = formTree.subTree(subFormType.getClassId());
-        SubFormKind subFormKind = subTree.getRootFormClass().getSubFormKind();
-
-        if(subFormKind == SubFormKind.REPEATING) {
-            RepeatingSubFormPanel subPanel = new RepeatingSubFormPanel(formSource, node, subTree, inputHandler);
-
-            panel.add(subPanel, new CssFloatLayoutContainer.CssFloatData(1));
-            repeatingSubForms.add(subPanel);
-
-        } else {
-            KeyedSubFormPanel subPanel = new KeyedSubFormPanel(recordRef, formSource, node, subTree, inputHandler);
-            panel.add(subPanel, new CssFloatLayoutContainer.CssFloatData(1));
-            keyedSubFormPanels.add(subPanel);
+        fieldPanel.add(fieldLabel);
+        if (!Strings.isNullOrEmpty(field.getDescription())) {
+            fieldPanel.add(new StaticHtml(InputTemplates.TEMPLATES.fieldDescription(field.getDescription())));
         }
-    }
+        fieldPanel.add(fieldWidget);
+        fieldPanel.add(validationMessage);
 
-    public void setBorders(boolean borders) {
-        panel.setBorders(borders);
+        panel.add(fieldPanel);
+
+        fieldViews.add(new FieldView(field.getId(), fieldWidget, validationMessage));
     }
 
     @Override

@@ -31,6 +31,7 @@ import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.HasTitle;
 import org.activityinfo.ui.client.header.HasFixedHeight;
+import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.page.FullWidthPageContainer;
 import org.activityinfo.ui.client.page.GenericAvatar;
@@ -44,8 +45,6 @@ import java.util.logging.Logger;
  */
 public class TableView implements IsWidget, HasTitle, HasFixedHeight {
 
-    public static final int MARGINS = 8;
-
     private static final Logger LOGGER = Logger.getLogger(TableView.class.getName());
 
     private final TableViewModel viewModel;
@@ -55,22 +54,25 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
     private final SidePanel sidePanel;
     private final FullWidthPageContainer container;
     private final GridContainer gridContainer;
+    private final FormOverlay formOverlay;
 
     private final SubscriptionSet subscriptions = new SubscriptionSet();
 
 
     public TableView(FormStore formStore, final TableViewModel viewModel) {
 
-        TableBundle.INSTANCE.style().ensureInjected();
-
         this.viewModel = viewModel;
 
-        TableToolBar toolBar = new TableToolBar(formStore, viewModel);
+        formOverlay = new FormOverlay(formStore);
+
+
+        TableToolBar toolBar = new TableToolBar(formStore, viewModel, formOverlay);
 
         gridContainer = new GridContainer();
         gridContainer.addStyleName("formtable__gridcontainer");
 
         sidePanel = new SidePanel(formStore, viewModel);
+
 
         this.container = new FullWidthPageContainer();
         this.container.addBodyStyleName("formtable");
@@ -78,6 +80,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         this.container.addBodyWidget(toolBar);
         this.container.addBodyWidget(gridContainer);
         this.container.addBodyWidget(sidePanel);
+        this.container.addBodyWidget(formOverlay);
         this.container.getHeader().setBreadcrumbs(Breadcrumb.DATABASES);
 
         subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));

@@ -37,7 +37,7 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
-import org.activityinfo.ui.client.input.view.FormDialog;
+import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.ColumnDialog;
 
@@ -49,6 +49,7 @@ public class TableToolBar implements IsWidget {
 
     private FormStore formStore;
     private TableViewModel viewModel;
+    private final FormOverlay formOverlay;
 
     private final IconButton newButton;
     private final TextButton importButton;
@@ -59,9 +60,10 @@ public class TableToolBar implements IsWidget {
     private final Toolbar toolbar;
 
 
-    public TableToolBar(FormStore formStore, TableViewModel viewModel) {
+    public TableToolBar(FormStore formStore, TableViewModel viewModel, FormOverlay formOverlay) {
         this.formStore = formStore;
         this.viewModel = viewModel;
+        this.formOverlay = formOverlay;
 
         newButton = new IconButton(Icon.BUBBLE_ADD, IconButtonStyle.PRIMARY, I18N.CONSTANTS.newRecord());
         newButton.addSelectHandler(this::onNewRecord);
@@ -110,8 +112,7 @@ public class TableToolBar implements IsWidget {
         ResourceId newRecordId = ResourceId.generateSubmissionId(viewModel.getFormId());
         RecordRef newRecordRef = new RecordRef(viewModel.getFormId(), newRecordId);
 
-        FormDialog dialog = new FormDialog(formStore, newRecordRef);
-        dialog.show();
+        formOverlay.show(newRecordRef);
     }
 
     private void onImport(SelectEvent event) {

@@ -37,7 +37,6 @@ public class HistoryPane implements IsWidget {
 
     public HistoryPane(FormStore formStore, TableViewModel viewModel) {
         this.panel = new HTML("Testing");
-        this.panel.addStyleName(TableBundle.INSTANCE.style().detailPane());
 
         Observable<RecordHistory> history = viewModel.getSelectedRecordRef().join(ref -> {
             if (ref.isPresent()) {

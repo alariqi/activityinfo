@@ -15,5 +15,6 @@ public interface DevBundle extends ClientBundle {
 
         String component();
 
+        String forms();
     }
 }

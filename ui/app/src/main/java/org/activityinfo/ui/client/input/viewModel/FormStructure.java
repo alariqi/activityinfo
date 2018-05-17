@@ -42,6 +42,10 @@ public class FormStructure {
         return formTree;
     }
 
+    public String getFormLabel() {
+        return formTree.getRootFormClass().getLabel();
+    }
+
     public Maybe<RecordTree> getExistingRecord() {
         return existingRecord;
     }

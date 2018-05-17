@@ -18,13 +18,11 @@
  */
 package org.activityinfo.ui.client.input.view;
 
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.dom.ScrollSupport;
-import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.CloseEvent;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.json.Json;
@@ -35,9 +33,13 @@ import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.promise.Maybe;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
-import org.activityinfo.ui.client.input.viewModel.*;
+import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
+import org.activityinfo.ui.client.input.viewModel.FormInputViewModelBuilder;
+import org.activityinfo.ui.client.input.viewModel.FormStructure;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.logging.Logger;
@@ -67,7 +69,7 @@ public class FormInputView implements IsWidget, InputHandler {
 
     private FormInputViewModel viewModel = null;
 
-    private VerticalLayoutContainer container;
+    private CssLayoutContainer container;
 
     private Subscription structureSubscription;
 
@@ -77,9 +79,9 @@ public class FormInputView implements IsWidget, InputHandler {
         this.formStructure = FormStructure.fetch(formStore, recordRef);
         this.inputModel = new FormInputModel(recordRef);
 
-        this.container = new VerticalLayoutContainer();
+        this.container = new CssLayoutContainer();
+        this.container.addStyleName("forminput__inner");
         this.container.mask();
-        this.container.setScrollMode(ScrollSupport.ScrollMode.AUTOY);
         this.container.addAttachHandler(event -> {
             if(event.isAttached()) {
                 structureSubscription = this.formStructure.subscribe(this::onStructureChanged);
@@ -102,16 +104,24 @@ public class FormInputView implements IsWidget, InputHandler {
         initialLoad = true;
         container.unmask();
 
-        viewModelBuilder = new FormInputViewModelBuilder(formStore, formStructure.getFormTree(), new LiveActivePeriodMemory());
+        viewModelBuilder = new FormInputViewModelBuilder(formStructure.getFormTree());
         existingRecord = formStructure.getExistingRecord();
 
+        SafeHtml heading;
+        if(existingRecord.getState() == Maybe.State.NOT_FOUND) {
+            heading = I18N.MESSAGES.newRecordHeading(formStructure.getFormLabel());
+        } else {
+            heading = I18N.MESSAGES.editRecordHeading(formStructure.getFormLabel());
+        }
+
         formPanel = new FormPanel(formStore, formStructure.getFormTree(), inputModel.getRecordRef(), this);
-        container.add(formPanel, new VerticalLayoutContainer.VerticalLayoutData(1, -1, new Margins(15, 25, 10, 15)));
-        container.forceLayout();
 
         viewModel = viewModelBuilder.build(inputModel, existingRecord);
         formPanel.init(viewModel);
         formPanel.updateView(viewModel);
+
+        container.add(new StaticHtml(InputTemplates.TEMPLATES.formHeading(heading)));
+        container.add(formPanel);
     }
 
 
@@ -122,40 +132,13 @@ public class FormInputView implements IsWidget, InputHandler {
 
     @Override
     public void updateModel(RecordRef recordRef, ResourceId fieldId, FieldInput value) {
-        update(inputModel.update(recordRef, fieldId, value));
-    }
-
-    @Override
-    public void addSubRecord(RecordRef subRecordRef) {
-        update(inputModel.addSubRecord(subRecordRef));
-    }
-
-    @Override
-    public void deleteSubRecord(RecordRef recordRef) {
-        update(inputModel.deleteSubRecord(recordRef));
-    }
-
-    @Override
-    public void changeActiveSubRecord(ResourceId fieldId, RecordRef newActiveRef) {
-        update(inputModel.updateActiveSubRecord(fieldId, newActiveRef));
-    }
-
-    @Override
-    public void updateSubModel(FormInputModel update) {
-        update(inputModel.updateSubForm(update));
+        update(inputModel.update(fieldId, value));
     }
 
     private void update(FormInputModel updatedModel) {
         this.inputModel = updatedModel;
         this.viewModel = viewModelBuilder.build(inputModel, existingRecord);
         formPanel.updateView(viewModel);
-    }
-
-    public boolean isValid() {
-        if(viewModel == null) {
-            return false;
-        }
-        return false;
     }
 
     public void save(CloseEvent.CloseHandler closeHandler) {
@@ -191,3 +174,4 @@ public class FormInputView implements IsWidget, InputHandler {
         });
     }
 }
+

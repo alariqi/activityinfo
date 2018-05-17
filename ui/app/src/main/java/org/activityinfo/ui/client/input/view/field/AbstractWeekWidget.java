@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client.input.view.field;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,7 +33,6 @@ import org.activityinfo.model.type.time.LocalDate;
 import org.activityinfo.model.type.time.Month;
 import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.model.type.time.PeriodValue;
-import org.activityinfo.ui.client.base.field.Css3DateCellAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
 import java.util.ArrayList;
@@ -47,9 +45,6 @@ import java.util.List;
  * {@link org.activityinfo.model.type.time.FortnightType}
  */
 abstract class AbstractWeekWidget<T extends PeriodValue> implements PeriodFieldWidget {
-
-    private static final Css3DateCellAppearance.Css3DateCellResources DATE_RESOURCES =
-            GWT.create(Css3DateCellAppearance.Css3DateCellResources.class);
 
     private final PeriodType periodType;
     private final List<String> periodNames;
@@ -80,7 +75,7 @@ abstract class AbstractWeekWidget<T extends PeriodValue> implements PeriodFieldW
         dateMenu.getDatePicker().addValueChangeHandler(this::onDatePicked);
 
         pickButton = new TextButton();
-        pickButton.setIcon(DATE_RESOURCES.triggerArrow());
+//        pickButton.setIcon(DATE_RESOURCES.triggerArrow());
         pickButton.addSelectHandler(this::onDatePickerSelected);
 
         panel = new CssFloatLayoutContainer();

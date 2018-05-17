@@ -1,0 +1,70 @@
+
+$field-border-radius: 3px;
+
+.field {
+
+}
+
+.field--readonly {
+
+}
+
+.field--invalid {
+
+}
+
+.field__wrap {
+  display: flex;
+  flex-direction: row;
+  border-radius: $field-border-radius;
+  border: 1px solid #466366;
+  background-color: $white;
+
+  input, textarea {
+    font-size: 1rem;
+    line-height: 1;
+    flex-grow: 1;
+    outline: 0;
+    border: 0;
+    border-radius: $field-border-radius;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+.field__units {
+  color: $black;
+  font-family: $gretasemibold;
+
+  font-size: 0.75rem;
+
+  max-width: 30ch;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  position: relative;
+
+  padding-left: 1rem;
+  padding-right: 0.5rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+.field__units::before {
+  content: '';
+  display: block;
+  position: absolute;
+  background-image: linear-gradient(to right, rgba(36, 50, 51, 0.3) 0%, rgba(255, 255, 255, 0.3) 100%);
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1rem;
+}
+
+.field__trigger {
+
+}
+
+.field input::-ms-clear {
+  display: none;
+}

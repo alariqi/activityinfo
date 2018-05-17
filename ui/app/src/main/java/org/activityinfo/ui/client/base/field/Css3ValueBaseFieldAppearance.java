@@ -39,64 +39,78 @@ package org.activityinfo.ui.client.base.field;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
-import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.sencha.gxt.cell.core.client.form.FieldCell;
 import com.sencha.gxt.cell.core.client.form.ValueBaseInputCell.ValueBaseFieldAppearance;
+import com.sencha.gxt.core.client.GXT;
 import com.sencha.gxt.core.client.dom.XElement;
-import com.sencha.gxt.core.client.resources.StyleInjectorHelper;
-import com.sencha.gxt.themebuilder.base.client.config.ThemeDetails;
-import com.sencha.gxt.widget.core.client.form.Field.FieldStyles;
 
 public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppearance {
 
-  public interface Css3ValueBaseFieldResources {
-    Css3ValueBaseFieldStyle style();
 
-    ThemeDetails theme();
-  }
-
-  public interface Css3ValueBaseFieldStyle extends CssResource, FieldStyles {
-    @Override
-    String focus();
+    public Css3ValueBaseFieldAppearance() {
+    }
 
     @Override
-    String invalid();
+    public void onEmpty(Element parent, boolean empty) {
+    }
 
-    String empty();
+    @Override
+    public void onFocus(Element parent, boolean focus) {
+    }
 
-    String field();
+    @Override
+    public void onValid(Element parent, boolean valid) {
+        parent.<XElement>cast().setClassName("field--invalid", !valid);
+    }
 
-    String readonly();
+    @Override
+    public void setReadOnly(Element parent, boolean readOnly) {
+        getInputElement(parent).<InputElement>cast().setReadOnly(readOnly);
+        getInputElement(parent).setClassName("field--readonly", readOnly);
+    }
 
-    String wrap();
+    protected final XElement getWrapper(Element parent) {
+        return parent.getFirstChildElement().cast();
+    }
 
-  }
+    protected final void renderInput(SafeHtmlBuilder shb, String value, FieldCell.FieldAppearanceOptions options) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<input ");
 
-  private final Css3ValueBaseFieldStyle style;
+        if (options.isDisabled()) {
+            sb.append("disabled=true ");
+        }
 
-  public Css3ValueBaseFieldAppearance(Css3ValueBaseFieldResources resources) {
-    this.style = resources.style();
+        if (options.getName() != null) {
+            sb.append("name='").append(SafeHtmlUtils.htmlEscape(options.getName())).append("' ");
+        }
 
-    StyleInjectorHelper.ensureInjected(this.style, true);
-  }
+        if (options.isReadonly() || !options.isEditable()) {
+            sb.append("readonly ");
+        }
 
-  @Override
-  public void onEmpty(Element parent, boolean empty) {
-    getInputElement(parent).setClassName(style.empty(), empty);
-  }
+        String placeholder = options.getEmptyText() != null ? " placeholder='" + SafeHtmlUtils.htmlEscape(options.getEmptyText()) + "' " : "";
 
-  @Override
-  public void onFocus(Element parent, boolean focus) {
-    parent.<XElement>cast().setClassName(style.focus(), focus);
-  }
+        if ("".equals(value) && options.getEmptyText() != null) {
+            sb.append(" ").append("field--empty");
+            if (GXT.isIE8() || GXT.isIE9()) {
+                value = options.getEmptyText();
+            }
+        }
 
-  @Override
-  public void onValid(Element parent, boolean valid) {
-    parent.<XElement>cast().setClassName(style.invalid(), !valid);
-  }
+        if (!options.isEditable()) {
+            sb.append(" ").append("field--readonly");
+        }
 
-  @Override
-  public void setReadOnly(Element parent, boolean readOnly) {
-    getInputElement(parent).<InputElement>cast().setReadOnly(readOnly);
-    getInputElement(parent).setClassName(style.readonly(), readOnly);
-  }
+        sb.append("' ");
+        sb.append(placeholder);
+
+        sb.append("type='text' value='").append(SafeHtmlUtils.htmlEscape(value)).append("' ");
+
+        sb.append("/>");
+
+        shb.append(SafeHtmlUtils.fromTrustedString(sb.toString()));
+    }
 }

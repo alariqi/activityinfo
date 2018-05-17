@@ -23,7 +23,6 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import org.activityinfo.model.database.RecordLockSet;
 import org.activityinfo.model.form.FormEvalContext;
-import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
@@ -31,14 +30,12 @@ import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.formula.FormulaParser;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.SerialNumberType;
 import org.activityinfo.model.type.primitive.TextType;
 import org.activityinfo.model.type.time.PeriodValue;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
-import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -64,17 +61,12 @@ public class FormInputViewModelBuilder {
 
     private List<FieldValidator> validators = new ArrayList<>();
 
-    private List<SubFormViewModelBuilder> subBuilders = new ArrayList<>();
-
-    public FormInputViewModelBuilder(FormStore formStore, FormTree formTree, ActivePeriodMemory memory) {
+    public FormInputViewModelBuilder(FormTree formTree) {
         this.formTree = formTree;
         this.locks = formTree.getRootMetadata().getLocks();
         this.evalContext = new FormEvalContext(this.formTree.getRootFormClass());
 
         for (FormTree.Node node : this.formTree.getRootFields()) {
-            if(node.isSubForm() && node.isSubFormVisible()) {
-                subBuilders.add(new SubFormViewModelBuilder(formStore, formTree, node, memory));
-            }
             if(node.getField().hasRelevanceCondition()) {
                 buildRelevanceCalculator(node);
             }
@@ -116,24 +108,8 @@ public class FormInputViewModelBuilder {
         return build(inputModel, Maybe.notFound());
     }
 
+
     public FormInputViewModel build(FormInputModel inputModel, Maybe<RecordTree> existingRecord) {
-        return build(inputModel, existingRecord, false);
-    }
-
-    public FormInputViewModel placeholder(RecordRef recordRef) {
-        return build(new FormInputModel(recordRef), Maybe.notFound(), true);
-    }
-
-    public FormInputViewModel placeholder(RecordRef recordRef, FormField subFormKeyField, FieldValue keyValue) {
-
-
-        FormInputModel inputModel = new FormInputModel(recordRef)
-            .update(subFormKeyField.getId(), keyValue);
-
-        return build(inputModel, Maybe.notFound(), true);
-    }
-
-    public FormInputViewModel build(FormInputModel inputModel, Maybe<RecordTree> existingRecord, boolean placeholder) {
 
         // Combine the original values of the record with the newly entered data
 
@@ -150,19 +126,16 @@ public class FormInputViewModelBuilder {
         viewModel.formTree = this.formTree;
         viewModel.inputModel = inputModel;
         viewModel.fieldValueMap = record.getFieldValueMap();
-        viewModel.subFormMap = computeSubViewModels(inputModel, existingRecord);
         viewModel.existingValues = existingValues;
-        viewModel.placeholder = placeholder;
         viewModel.relevant = computeRelevance(record);
         viewModel.missing = computeMissing(record, viewModel.relevant);
         viewModel.validationErrors = validateFieldValues(record);
-        viewModel.dirty = computeDirty(placeholder, existingValues, record);
+        viewModel.dirty = computeDirty(existingValues, record);
         viewModel.locked = checkLocks(record);
         viewModel.valid =
                 allInputValid(inputModel) &&
                 viewModel.missing.isEmpty() &&
-                viewModel.validationErrors.isEmpty() &&
-                viewModel.subFormMap.values().stream().allMatch(SubFormViewModel::isValid);
+                viewModel.validationErrors.isEmpty();
 
         LOGGER.info("Valid = " + viewModel.valid);
 
@@ -280,17 +253,6 @@ public class FormInputViewModelBuilder {
         return missing;
     }
 
-    private Map<ResourceId, SubFormViewModel> computeSubViewModels(FormInputModel inputModel, Maybe<RecordTree> existingRecord) {
-        // Build repeating sub form view models
-        Map<ResourceId, SubFormViewModel> subFormMap = new HashMap<>();
-        for (SubFormViewModelBuilder subBuilder : subBuilders) {
-            SubFormViewModel subViewModel = subBuilder.build(inputModel, existingRecord);
-
-            subFormMap.put(subBuilder.getFieldId(), subViewModel);
-        }
-        return subFormMap;
-    }
-
     private Multimap<ResourceId, String> validateFieldValues(FormInstance record) {
         Multimap<ResourceId, String> validationErrors = HashMultimap.create();
         for (FieldValidator validator : validators) {
@@ -312,14 +274,7 @@ public class FormInputViewModelBuilder {
         return false;
     }
 
-    private boolean computeDirty(boolean placeholder, Map<ResourceId, FieldValue> existingValues, FormInstance currentValues) {
-
-        if(placeholder) {
-            // if this is a placeholder subrecord, there may be a key
-            // field provided, but we won't consider it dirty because
-            // the user themselves hasn't entered any information.
-            return false;
-        }
+    private boolean computeDirty(Map<ResourceId, FieldValue> existingValues, FormInstance currentValues) {
 
         for (FormTree.Node node : formTree.getRootFields()) {
             FieldValue originalValue = existingValues.get(node.getFieldId());

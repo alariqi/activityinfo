@@ -41,6 +41,7 @@ public class LocalDateWidget implements PeriodFieldWidget {
         this.field.setMinValue(LocalDate.MIN_DATE.atMidnightInMyTimezone());
         this.field.setPropertyEditor(new LocalDateTimePropertyEditor());
         this.field.addValueChangeHandler(event -> fieldUpdater.update(input()));
+        this.field.setWidth(-1);
     }
 
     private FieldInput input() {

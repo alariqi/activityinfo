@@ -43,6 +43,7 @@ public class TextWidget implements FieldWidget {
             super(cell);
             this.updater = updater;
             sinkEvents(Event.ONPASTE);
+            setWidth(-1);
         }
 
         @Override
