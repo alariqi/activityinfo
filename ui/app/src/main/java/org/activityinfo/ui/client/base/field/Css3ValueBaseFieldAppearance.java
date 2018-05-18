@@ -43,7 +43,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.sencha.gxt.cell.core.client.form.FieldCell;
 import com.sencha.gxt.cell.core.client.form.ValueBaseInputCell.ValueBaseFieldAppearance;
-import com.sencha.gxt.core.client.GXT;
 import com.sencha.gxt.core.client.dom.XElement;
 
 public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppearance {
@@ -74,7 +73,7 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
 
     protected final void renderInput(SafeHtmlBuilder shb, String value, FieldCell.FieldAppearanceOptions options) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<input ");
+        sb.append("<input autocomplete=off data-lpignore=true ");
 
         if (options.isDisabled()) {
             sb.append("disabled=true ");
@@ -90,18 +89,6 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
 
         String placeholder = options.getEmptyText() != null ? " placeholder='" + SafeHtmlUtils.htmlEscape(options.getEmptyText()) + "' " : "";
 
-        if ("".equals(value) && options.getEmptyText() != null) {
-            sb.append(" ").append("field--empty");
-            if (GXT.isIE8() || GXT.isIE9()) {
-                value = options.getEmptyText();
-            }
-        }
-
-        if (!options.isEditable()) {
-            sb.append(" ").append("field--readonly");
-        }
-
-        sb.append("' ");
         sb.append(placeholder);
 
         sb.append("type='text' value='").append(SafeHtmlUtils.htmlEscape(value)).append("' ");

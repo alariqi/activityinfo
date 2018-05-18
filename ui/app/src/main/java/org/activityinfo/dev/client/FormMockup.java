@@ -62,6 +62,10 @@ public class FormMockup implements IsWidget {
 
         FieldView multiView = new FieldView(field("2.1 Type of access to services issue"), multiWidget);
 
+
+        RadioGroupWidget radioWidget = new RadioGroupWidget(enumType(Cardinality.SINGLE,"Female", "Male"), NULL_UPDATER);
+        FieldView radioView = new FieldView(requiredField("Gender"), radioWidget);
+
         CssLayoutContainer form = new CssLayoutContainer("form");
         form.addStyleName("forminput__inner");
         form.add(serialNumberView);
@@ -73,6 +77,7 @@ public class FormMockup implements IsWidget {
         form.add(geoPointView);
         form.add(attachmentView);
         form.add(multiView);
+        form.add(radioView);
 
         container = new CssLayoutContainer();
         container.addStyleName(DevBundle.RESOURCES.style().forms());
