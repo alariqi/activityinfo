@@ -74,9 +74,9 @@ public class Css3TextFieldAppearance extends Css3ValueBaseFieldAppearance implem
         sb.appendHtmlConstant("<div class='field__wrap'>");
         renderInput(sb, value, options);
         if(!Strings.isNullOrEmpty(units)) {
-            sb.appendHtmlConstant("<div class=\"field__units\">");
+            sb.appendHtmlConstant("<div class=\"field__units\"></span>");
             sb.appendEscaped(units);
-            sb.appendHtmlConstant("</span>");
+            sb.appendHtmlConstant("</span></div>");
         }
         sb.appendHtmlConstant("</div>");
     }

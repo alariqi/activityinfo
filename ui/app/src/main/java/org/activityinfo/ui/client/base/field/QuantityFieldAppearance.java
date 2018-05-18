@@ -48,9 +48,9 @@ public class QuantityFieldAppearance extends Css3TwinTriggerFieldAppearance {
 
     @Override
     protected void renderTrigger(SafeHtmlBuilder sb, String value, FieldCell.FieldAppearanceOptions options) {
-        sb.appendHtmlConstant("<div class=\"field__units\">");
+        sb.appendHtmlConstant("<div class=\"field__units\"><span>");
         sb.appendEscaped(units);
-        sb.appendHtmlConstant("</span>");
+        sb.appendHtmlConstant("</span></div>");
     }
 
     @Override
