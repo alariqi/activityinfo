@@ -18,11 +18,6 @@ public class Css3TriggerFieldAppearance extends Css3ValueBaseFieldAppearance imp
     }
 
     @Override
-    public void onFocus(Element parent, boolean focus) {
-        parent.<XElement>cast().setClassName("field--focused", focus);
-    }
-
-    @Override
     public void onResize(XElement parent, int width, int height, boolean hideTrigger) {
         if (width != -1) {
             width = Math.max(0, width);

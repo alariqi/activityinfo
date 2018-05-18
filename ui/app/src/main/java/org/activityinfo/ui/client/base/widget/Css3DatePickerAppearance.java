@@ -61,10 +61,6 @@ public class Css3DatePickerAppearance implements DatePickerAppearance {
             return "datepicker__date--today";
         }
 
-        String monthSelected() {
-            return "datepicker__month--selected";
-        }
-
         String header() {
             return "datepicker__header";
         }

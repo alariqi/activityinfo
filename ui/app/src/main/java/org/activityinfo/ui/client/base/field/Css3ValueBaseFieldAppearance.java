@@ -57,8 +57,8 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
     }
 
     @Override
-    public void onFocus(Element parent, boolean focus) {
-        getWrapper(parent).setClassName("field--focused", focus);
+    public final void onFocus(Element parent, boolean focus) {
+        parent.<XElement>cast().setClassName("field--focused", focus);
     }
 
     @Override
@@ -70,10 +70,6 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
     public void setReadOnly(Element parent, boolean readOnly) {
         getInputElement(parent).<InputElement>cast().setReadOnly(readOnly);
         getInputElement(parent).setClassName("field--readonly", readOnly);
-    }
-
-    protected final XElement getWrapper(Element parent) {
-        return parent.getFirstChildElement().cast();
     }
 
     protected final void renderInput(SafeHtmlBuilder shb, String value, FieldCell.FieldAppearanceOptions options) {

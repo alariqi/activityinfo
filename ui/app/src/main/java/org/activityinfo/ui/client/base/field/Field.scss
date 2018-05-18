@@ -61,6 +61,10 @@ $field-border-radius: 3px;
   padding-right: 1rem;
 }
 
+.field--focused .field__units {
+  color: $green;
+}
+
 .field__units::before {
   content: '';
   display: block;

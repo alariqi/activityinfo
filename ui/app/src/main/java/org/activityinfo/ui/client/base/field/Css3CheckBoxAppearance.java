@@ -49,13 +49,15 @@ import com.sencha.gxt.core.client.dom.XElement;
 public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
 
   private final String type;
+  private String iconHref;
 
   public Css3CheckBoxAppearance() {
-    this("checkbox");
+    this("checkbox", "#checkmark");
   }
 
-  protected Css3CheckBoxAppearance(String type) {
+  protected Css3CheckBoxAppearance(String type, String iconHref) {
     this.type = type;
+    this.iconHref = iconHref;
   }
 
   @Override
@@ -78,7 +80,7 @@ public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
     sb.appendHtmlConstant("</label>");
     sb.appendHtmlConstant("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"40\" height=\"40\"" +
             " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
-            "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"#checkmark\"></use></svg>");
+            "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + iconHref + "\"></use></svg>");
     sb.appendHtmlConstant("</fieldset>");
   }
 

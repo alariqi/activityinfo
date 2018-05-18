@@ -42,6 +42,6 @@ import com.sencha.gxt.cell.core.client.form.RadioCell;
 public class Css3RadioAppearance extends Css3CheckBoxAppearance implements RadioCell.RadioAppearance {
 
   public Css3RadioAppearance() {
-    super("radio");
+    super("radio", "#radio");
   }
 }
