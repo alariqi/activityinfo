@@ -19,11 +19,3 @@
     min-height: 100vh;
 
 }
-
-.forms form {
-    padding: 20px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: #344a4c;
-}

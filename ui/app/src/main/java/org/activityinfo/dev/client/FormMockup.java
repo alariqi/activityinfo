@@ -63,6 +63,7 @@ public class FormMockup implements IsWidget {
         FieldView multiView = new FieldView(field("2.1 Type of access to services issue"), multiWidget);
 
         CssLayoutContainer form = new CssLayoutContainer("form");
+        form.addStyleName("forminput__inner");
         form.add(serialNumberView);
         form.add(textView);
         form.add(codeView);
