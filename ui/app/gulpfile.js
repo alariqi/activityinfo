@@ -9,6 +9,8 @@ const gulp = require('gulp');
 const util = require('gulp-util');
 const notify       = require('gulp-notify');
 const plumber      = require('gulp-plumber');
+const touch = require("touch");
+
 
 // CSS
 const sass = require('gulp-sass');
@@ -46,7 +48,11 @@ function styles() {
     return gulp.src(`${paths.src}/main/css/app.scss`)
         .pipe(sassGlob())
         .pipe(sass.sync().on('error', sass.logError))
-        .pipe(gulp.dest(`${paths.build}/client`));
+        .pipe(gulp.dest(`${paths.build}/client`))
+        .on('end', function() {
+            console.log("Touching ThemeBundle.java...");
+            touch.sync(`${paths.src}/main/java/org/activityinfo/ui/client/ThemeBundle.java`)
+        })
 }
 
 function sprites() {

@@ -46,7 +46,8 @@
     "gulp-svg-sprites": "^4.1.2",
     "stylelint": "^8.2.0",
     "stylelint-config-standard": "^17.0.0",
-    "xo": "^0.18.0"
+    "xo": "^0.18.0",
+    "touch": "3.1.0"
   },
   "devDependencies": {}
 }
