@@ -22,9 +22,8 @@ import com.google.common.base.Strings;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.form.TextInputCell;
 import com.sencha.gxt.widget.core.client.container.Container;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.io.match.coord.CoordinateAxis;
@@ -33,6 +32,8 @@ import org.activityinfo.io.match.coord.CoordinateParser;
 import org.activityinfo.io.match.coord.JsCoordinateNumberFormatter;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.geo.GeoPoint;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.field.Css3TextFieldAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
 import java.util.logging.Logger;
@@ -59,9 +60,10 @@ public class GeoPointWidget implements FieldWidget {
         latitude = new CoordField(CoordinateAxis.LATITUDE);
         longitude = new CoordField(CoordinateAxis.LONGITUDE);
 
-        panel = new FlowLayoutContainer();
-        panel.add(latitude.fieldLabel);
-        panel.add(longitude.fieldLabel);
+        panel = new CssLayoutContainer();
+        panel.addStyleName("forminput__field__geopoint");
+        panel.add(latitude.field);
+        panel.add(longitude.field);
 
         latitude.field.addKeyUpHandler(this::onKeyUp);
         longitude.field.addKeyUpHandler(this::onKeyUp);
@@ -144,7 +146,6 @@ public class GeoPointWidget implements FieldWidget {
         private final CoordinateAxis axis;
         private final CoordinateParser parser;
         private final TextField field;
-        private final FieldLabel fieldLabel;
 
         private Double value;
         private boolean empty = true;
@@ -153,10 +154,10 @@ public class GeoPointWidget implements FieldWidget {
         public CoordField(CoordinateAxis axis) {
             this.axis = axis;
             this.parser = new CoordinateParser(axis, JsCoordinateNumberFormatter.INSTANCE);
-            this.field = new TextField();
+            this.field = new TextField(new TextInputCell(new Css3TextFieldAppearance(axis.getLocalizedShortName())));
             this.field.setValidateOnBlur(false);
             this.field.setAutoValidate(false);
-            this.fieldLabel = new FieldLabel(field, axis.getLocalizedName());
+            this.field.setWidth(-1);
         }
 
         public void init(double coordinateValue) {

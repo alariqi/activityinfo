@@ -33,6 +33,11 @@ public enum CoordinateAxis {
         }
 
         @Override
+        public String getLocalizedShortName() {
+            return I18N.CONSTANTS.latitudeShort();
+        }
+
+        @Override
         public String getDegreesOutOfBoundsMessage() {
             return I18N.CONSTANTS.latitudeOutOfBounds();
         }
@@ -48,6 +53,7 @@ public enum CoordinateAxis {
         }
 
     },
+
     LONGITUDE {
 
 
@@ -59,6 +65,11 @@ public enum CoordinateAxis {
         @Override
         public String getLocalizedName() {
             return I18N.CONSTANTS.longitude();
+        }
+
+        @Override
+        public String getLocalizedShortName() {
+            return I18N.CONSTANTS.longitudeShort();
         }
 
         @Override
@@ -101,4 +112,6 @@ public enum CoordinateAxis {
      * axis in the current Locale. For example, 'S', is used to indicate the negative hemisphere for latitude.
      */
     public abstract String getNegativeHemisphereCharacters();
+
+    public abstract String getLocalizedShortName();
 }

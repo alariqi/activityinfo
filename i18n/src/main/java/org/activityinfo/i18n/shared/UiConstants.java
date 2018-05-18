@@ -547,6 +547,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Latitude")
     String latitude();
 
+    @DefaultStringValue("lat")
+    String latitudeShort();
+
     @DefaultStringValue("Layers")
     String layers();
 
@@ -600,6 +603,9 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Longitude")
     String longitude();
+
+    @DefaultStringValue("long")
+    String longitudeShort();
 
     @DefaultStringValue("Mailing List")
     String mailingList();

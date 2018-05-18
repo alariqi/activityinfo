@@ -58,6 +58,7 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
 
     @Override
     public void onFocus(Element parent, boolean focus) {
+        getWrapper(parent).setClassName("field--focused", focus);
     }
 
     @Override

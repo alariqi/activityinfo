@@ -1,0 +1,46 @@
+
+.monthpicker {
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+}
+
+.monthpicker svg {
+  pointer-events: none;
+}
+
+.monthpicker__years {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.monthpicker__years__body {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.monthpicker__months {
+  background-color: $datepicker-alt-background;
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.monthpicker__footer {
+  background-color: $datepicker-alt-background;
+  display: flex;
+
+}
+
+.monthpicker__year, .monthpicker__month {
+  font-size: 0.875rem;
+  padding: 0.25rem;
+}
+
+.monthpicker__month--selected {
+  font-family: $gretasemibold;
+  background-color: #91f2ca;
+  border-radius: 50%;
+}

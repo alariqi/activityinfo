@@ -15,20 +15,33 @@ $field-border-radius: 3px;
 
 .field__wrap {
   display: flex;
+  align-items: baseline;
   flex-direction: row;
   border-radius: $field-border-radius;
   border: 1px solid #466366;
   background-color: $white;
 
   input, textarea {
-    font-size: 1rem;
-    line-height: 1;
+    font-size: 1.125rem;
+    line-height: 2rem;
     flex-grow: 1;
     outline: 0;
     border: 0;
     border-radius: $field-border-radius;
-    padding: 0.5rem 0.75rem;
+    padding-top: 0.625rem;
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+    padding-bottom: 0.875rem;
   }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.field--focused .field__wrap {
+  box-shadow: 0 0 0.5rem $green;
+  border: 1px solid $green;
 }
 
 .field__units {
@@ -44,10 +57,8 @@ $field-border-radius: 3px;
 
   position: relative;
 
-  padding-left: 1rem;
-  padding-right: 0.5rem;
-  padding-top: 0.625rem;
-  padding-bottom: 0.625rem;
+  padding-left: 1.5rem;
+  padding-right: 1rem;
 }
 
 .field__units::before {
@@ -58,11 +69,16 @@ $field-border-radius: 3px;
   left: 0;
   top: 0;
   bottom: 0;
-  width: 1rem;
+  width: 0.5rem;
 }
 
 .field__trigger {
 
+}
+
+.field__trigger .icon {
+  align-self: center;
+  padding: 1.25rem;
 }
 
 .field input::-ms-clear {

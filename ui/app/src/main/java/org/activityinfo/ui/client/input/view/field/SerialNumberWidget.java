@@ -40,6 +40,7 @@ public class SerialNumberWidget implements FieldWidget {
         this.field = new TextField();
         this.field.setReadOnly(true);
         this.field.setEmptyText(I18N.CONSTANTS.pending());
+        this.field.setWidth(-1);
     }
 
     @Override

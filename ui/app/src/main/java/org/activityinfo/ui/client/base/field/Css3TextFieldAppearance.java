@@ -37,6 +37,7 @@
  */
 package org.activityinfo.ui.client.base.field;
 
+import com.google.common.base.Strings;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.cell.core.client.form.FieldCell.FieldAppearanceOptions;
@@ -45,8 +46,18 @@ import com.sencha.gxt.core.client.dom.XElement;
 
 public class Css3TextFieldAppearance extends Css3ValueBaseFieldAppearance implements TextFieldAppearance {
 
+    private String units;
+
     public Css3TextFieldAppearance() {
         super();
+    }
+
+    /**
+     *
+     * @param units a string that appears at the end of the input field.
+     */
+    public Css3TextFieldAppearance(String units) {
+        this.units = units;
     }
 
     @Override
@@ -62,6 +73,11 @@ public class Css3TextFieldAppearance extends Css3ValueBaseFieldAppearance implem
     public void render(SafeHtmlBuilder sb, String type, String value, FieldAppearanceOptions options) {
         sb.appendHtmlConstant("<div class='field__wrap'>");
         renderInput(sb, value, options);
+        if(!Strings.isNullOrEmpty(units)) {
+            sb.appendHtmlConstant("<div class=\"field__units\">");
+            sb.appendEscaped(units);
+            sb.appendHtmlConstant("</span>");
+        }
         sb.appendHtmlConstant("</div>");
     }
 }

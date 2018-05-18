@@ -61,7 +61,7 @@ public class TextWidget implements FieldWidget {
         this(textType, GWT.create(TextInputCell.TextFieldAppearance.class), updater);
     }
 
-    public TextWidget(TextType textType, TextInputCell.TextFieldAppearance appearance, FieldUpdater updater) {
+    private TextWidget(TextType textType, TextInputCell.TextFieldAppearance appearance, FieldUpdater updater) {
         field = new TextFieldBox(new TextInputCell(appearance), updater);
 
         field.addKeyUpHandler(event -> updater.update(input()));

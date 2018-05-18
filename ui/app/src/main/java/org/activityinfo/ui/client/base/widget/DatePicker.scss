@@ -1,0 +1,113 @@
+
+$datepicker-alt-background: #f2f7f7;
+
+
+.datepicker { }
+
+
+// Header for the date picker that
+// includes next/prev month buttons and the current month
+.datepicker__header {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
+
+  // Ensure that icons in buttons do not receive
+  // clicks because this will break event handling in DatePicker
+  svg {
+    pointer-events: none;
+  }
+}
+
+.datepicker__month--prev {
+
+}
+
+.datepicker__month {
+  flex-grow: 1;
+  text-align: center;
+
+  h3 {
+    font-family: $gretasemibold;
+    font-size: 1.25rem;
+  }
+
+}
+
+.datepicker__month--next {
+
+}
+
+
+.datepicker__body {
+  background-color: $datepicker-alt-background;
+  padding: 0.5rem;
+
+  th {
+    font-family: $gretasemibold;
+  }
+
+  th, td {
+    text-align: center;
+    font-size: 0.875rem;
+    padding: 0.25rem;
+  }
+}
+
+.datepicker__date {
+
+  color: $black;
+  font-family: $gretalight;
+
+  &--over {
+
+  }
+
+  &--active {
+
+  }
+
+  &--selected {
+    font-family: $gretasemibold;
+    background-color: #91f2ca;
+    border-radius: 50%;
+  }
+
+  &--disabled {
+
+  }
+
+  &--over {
+
+  }
+
+  // Belongs to the previous month
+  &--previous {
+    opacity: 0.5;
+  }
+
+  // Belongs to the next month
+  &--next {
+    opacity: 0.5;
+  }
+
+  &__anchor {
+
+  }
+}
+
+
+.datepicker__footer {
+
+  background-color: $datepicker-alt-background;
+
+  //
+  //button {
+  //  border-radius: 3px;
+  //  background-color: $black;
+  //  color: $white;
+  //  font-family: $gretasemibold;
+  //  font-size: 1rem;
+  //  padding: 0.5rem 1rem;
+  //}
+}

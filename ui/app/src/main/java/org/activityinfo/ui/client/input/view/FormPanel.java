@@ -18,18 +18,14 @@
  */
 package org.activityinfo.ui.client.input.view;
 
-import com.google.common.base.Strings;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
-import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.view.field.FieldView;
 import org.activityinfo.ui.client.input.view.field.FieldWidget;
@@ -116,33 +112,9 @@ public class FormPanel implements IsWidget {
     }
 
     private void addField(FormField field, FieldWidget fieldWidget) {
-
-        StaticHtml fieldLabel;
-        if(field.isRequired()) {
-            fieldLabel = new StaticHtml(InputTemplates.TEMPLATES.requiredFieldHeading(field.getLabel(), I18N.CONSTANTS.required()));
-        } else {
-            fieldLabel = new StaticHtml(InputTemplates.TEMPLATES.fieldHeading(field.getLabel()));
-        }
-
-        HTML validationMessage = new HTML();
-        validationMessage.setVisible(false);
-        validationMessage.addStyleName("forminput__validationmessage");
-
-        CssLayoutContainer fieldPanel = new CssLayoutContainer();
-        fieldPanel.setStyleName("forminput__field");
-        if(field.isRequired()) {
-            fieldPanel.addStyleName("forminput__field--required");
-        }
-        fieldPanel.add(fieldLabel);
-        if (!Strings.isNullOrEmpty(field.getDescription())) {
-            fieldPanel.add(new StaticHtml(InputTemplates.TEMPLATES.fieldDescription(field.getDescription())));
-        }
-        fieldPanel.add(fieldWidget);
-        fieldPanel.add(validationMessage);
-
-        panel.add(fieldPanel);
-
-        fieldViews.add(new FieldView(field.getId(), fieldWidget, validationMessage));
+        FieldView fieldView = new FieldView(field, fieldWidget);
+        panel.add(fieldView);
+        fieldViews.add(fieldView);
     }
 
     @Override

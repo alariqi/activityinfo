@@ -57,7 +57,8 @@ public class Css3TriggerFieldAppearance extends Css3ValueBaseFieldAppearance imp
 
     @Override
     public boolean triggerIsOrHasChild(XElement parent, Element target) {
-        return parent.isOrHasChild(target) && target.<XElement>cast().is(".field__trigger");
+        return parent.isOrHasChild(target) &&
+                target.<XElement>cast().findParentElement(".field__trigger", 3) != null;
     }
 
 

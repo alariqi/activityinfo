@@ -1,3 +1,9 @@
-<svg id="SVGDoc" width="16" height="15" xmlns="http://www.w3.org/2000/svg" version="1.1"
-     xmlns:xlink="http://www.w3.org/1999/xlink"
-     viewBox="0 0 16 15"><defs><path d="M982.68,830.56c0,4.1425 -3.3575,7.5 -7.5,7.5c-4.1425,0 -7.5,-3.3575 -7.5,-7.5c0,-4.1425 3.3575,-7.5 7.5,-7.5c4.1425,0 7.5,3.3575 7.5,7.5" id="Path-0"/><path d="M967.68,838.06h15v-15h-15z" id="Path-1"/><path d="M971.43,834.11875h7.5v-7.11875h-7.5zM972.4475,833.10125h5.46625v-3.05125h-5.46625z" id="Path-2"/><path d="M973.47,828.9875v-3.1075" id="Path-3"/><path d="M976.85,828.9875v-3.1075" id="Path-4"/><clipPath id="clip-33D0BB43-89F6-4D46-B744-2B3BC2F0D3DF"><use xlink:href="#Path-1" /></clipPath></defs><desc>Generated with Avocode.</desc><g transform="matrix(1,0,0,1,-967,-823)"><g><title>Group 4</title><g><title>Page 1</title><g><title>Fill 1</title><use xlink:href="#Path-0" fill="#243233" fill-opacity="1"/></g><g><title>Clip 4</title></g><g clip-path="url(#clip-33D0BB43-89F6-4D46-B744-2B3BC2F0D3DF)"><title>Fill 3</title><use xlink:href="#Path-2" fill="#ffffff" fill-opacity="1"/></g><g clip-path="url(#clip-33D0BB43-89F6-4D46-B744-2B3BC2F0D3DF)"><title>Stroke 5</title><use xlink:href="#Path-3" fill-opacity="0" fill="#ffffff" stroke-linejoin="miter" stroke-linecap="butt" stroke-opacity="1" stroke="#ffffff" stroke-miterlimit="50" stroke-width="1"/></g><g clip-path="url(#clip-33D0BB43-89F6-4D46-B744-2B3BC2F0D3DF)"><title>Stroke 6</title><use xlink:href="#Path-4" fill-opacity="0" fill="#ffffff" stroke-linejoin="miter" stroke-linecap="butt" stroke-opacity="1" stroke="#ffffff" stroke-miterlimit="50" stroke-width="1"/></g></g></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+     viewBox="0 0 16 15">
+    <g transform="translate(-967 -763)">
+        <path fill="#243233" d="M982.68 770.56a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0"/>
+        <path fill="#fff" fillrule="evenodd" d="M971.43 774.12h7.5V767h-7.5zm1.02-1.02h5.46v-3.05h-5.46z"/>
+        <path fill="#fff" fill-opacity="0" stroke="#fff" d="M973.47 768.99v-3.11"/>
+        <path fill="#fff" fill-opacity="0" stroke="#fff" d="M976.85 768.99v-3.11"/>
+    </g>
+</svg>
