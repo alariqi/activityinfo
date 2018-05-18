@@ -49,8 +49,6 @@
   resize: vertical;
 }
 
-
-
 .field__units {
   position: relative;
   display: flex;
@@ -103,12 +101,13 @@
 }
 
 .field__trigger {
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
 .field__trigger .icon {
-  align-self: center;
-  padding: 1.25rem;
 }
 
 .field input::-ms-clear {
