@@ -1,5 +1,4 @@
 
-$field-border-radius: 3px;
 
 .field {
 
@@ -14,29 +13,13 @@ $field-border-radius: 3px;
 }
 
 .field__wrap {
+  transition: box-shadow 0.2s ease,
+              border 0.2s ease;
   display: flex;
-  align-items: baseline;
   flex-direction: row;
-  border-radius: $field-border-radius;
+  border-radius: $borderradius;
   border: 1px solid #466366;
   background-color: $white;
-
-  input, textarea {
-    font-size: 1.125rem;
-    line-height: 2rem;
-    flex-grow: 1;
-    outline: 0;
-    border: 0;
-    border-radius: $field-border-radius;
-    padding-top: 0.625rem;
-    padding-right: 1.25rem;
-    padding-left: 1.25rem;
-    padding-bottom: 0.875rem;
-  }
-
-  textarea {
-    resize: vertical;
-  }
 }
 
 .field--focused .field__wrap {
@@ -44,36 +27,79 @@ $field-border-radius: 3px;
   border: 1px solid $green;
 }
 
+.forminput__field__geopoint > div {
+  flex: 1 1 calc((100% - 0.5rem) / 2);
+
+  &:first-child {
+    margin-right: 0.5rem;
+  }
+}
+
+.field__wrap input,
+.field__wrap textarea {
+  flex-grow: 1;
+  padding: 1rem;
+  outline: 0;
+  border: 0;
+  border-radius: $borderradius;
+  font-size: 1rem;
+}
+
+.field__wrap textarea {
+  resize: vertical;
+}
+
+
+
 .field__units {
-  color: $black;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  &::before,
+  &::after {
+    z-index: 0;
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+  }
+
+  &::before {
+    transition: transform 0.2s ease;
+    width: 100%;
+    background-color: $green;
+    transform: scaleX(0);
+    transform-origin: 0% 0%;
+  }
+
+  &::after {
+    width: 0.5rem;
+    background-image: linear-gradient(to right, rgba($black, 0.3) 0%, rgba($white, 0) 100%);
+  }
+}
+
+.field__units span {
+  z-index: 1;
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 15ch;
+  overflow: hidden;
   font-family: $gretasemibold;
-
   font-size: 0.75rem;
-
-  max-width: 30ch;
+  color: $black;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden;
-
-  position: relative;
-
-  padding-left: 1.5rem;
-  padding-right: 1rem;
 }
 
-.field--focused .field__units {
-  color: $green;
-}
-
-.field__units::before {
-  content: '';
-  display: block;
-  position: absolute;
-  background-image: linear-gradient(to right, rgba(36, 50, 51, 0.3) 0%, rgba(255, 255, 255, 0.3) 100%);
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 0.5rem;
+.field--focused .field__units::before {
+  transform: scaleX(1);
 }
 
 .field__trigger {
