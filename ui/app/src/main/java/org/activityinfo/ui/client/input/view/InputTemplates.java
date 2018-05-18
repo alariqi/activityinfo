@@ -14,7 +14,7 @@ public interface InputTemplates extends XTemplates {
     @XTemplate("<h3>{label}</h3>")
     SafeHtml fieldHeading(String label);
 
-    @XTemplate("<h3><span>{label}*</span><span class=\"forminput__field__required\">{requiredText}</span></h3>")
+    @XTemplate("<div class=\"forminput__field__header\"><h3>{label}*</h3><span class=\"forminput__field__required\">{requiredText}</span></div>")
     SafeHtml requiredFieldHeading(String label, String requiredText);
 
     @XTemplate("<p class=\"forminput__field__description\">{description}</p>")
