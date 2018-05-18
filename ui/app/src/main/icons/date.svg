@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="6px" height="7px" viewBox="0 0 6 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Bare / Calendar</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Bare-/-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M0.816142344,6.12876622 L5.20065152,6.12876622 L5.20065152,3.51613519 L0.816142344,3.51613519 L0.816142344,6.12876622 Z M0,7 L6.01579123,7 L6.01579123,0.904574475 L0,0.904574475 L0,7 Z" id="Fill-3" fill="#243233"></path>
+        <path d="M1.63168311,1.25 L1.63168311,0" id="Stroke-5" stroke="#243233" stroke-width="1.25"></path>
+        <path d="M4.34049364,1.25 L4.34049364,0" id="Stroke-6" stroke="#243233" stroke-width="1.25"></path>
+    </g>
+</svg>

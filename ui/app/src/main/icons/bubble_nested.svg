@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Nested</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Nested" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M14.9462563,7.43585474 C14.9462563,11.5783547 11.5887563,14.9358547 7.4462563,14.9358547 C3.3037563,14.9358547 -0.0537436987,11.5783547 -0.0537436987,7.43585474 C-0.0537436987,3.29460474 3.3037563,-0.0641452576 7.4462563,-0.0641452576 C11.5887563,-0.0641452576 14.9462563,3.29460474 14.9462563,7.43585474" id="Fill-1" fill="#243233"></path>
+        <g id="Group" transform="translate(4.946256, 3.935855)" stroke="#FFFFFF" stroke-width="1.25">
+            <polyline id="Stroke-3" points="3.67675 1.72181127 5.90675 3.95306127 3.6755 6.18431127"></polyline>
+            <polyline id="Stroke-5" points="5.76082465 3.95306127 0.384425353 3.95306127 0.384425353 0.63475"></polyline>
+        </g>
+    </g>
+</svg>

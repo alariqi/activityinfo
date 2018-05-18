@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="15" viewBox="0 0 16 15"><defs><path id="1o9ca" d="M668.82 681.63a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0"/><path id="1o9cb" d="M661.32 682.69c-2 0-3.8.78-5.14 2.04a6 6 0 0 0 10.27 0 7.46 7.46 0 0 0-5.13-2.04"/><path id="1o9cc" d="M663.58 679.7c0 1.68-1.02 3.56-2.27 3.56s-2.26-1.88-2.26-3.56c0-1.68 1.01-2.52 2.26-2.52 1.25 0 2.27.84 2.27 2.52"/></defs><g><g transform="translate(-653 -674)"><g><use fill="#243233" xlink:href="#1o9ca"/></g><g><use fill="#fff" xlink:href="#1o9cb"/></g><g><use fill="#fff" xlink:href="#1o9cc"/></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Accounts</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Accounts" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Page-1">
+            <path d="M15,7.5 C15,11.6425 11.6425,15 7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.35875 3.3575,0 7.5,0 C11.6425,0 15,3.35875 15,7.5" id="Fill-1" fill="#243233"></path>
+            <path d="M7.5,8.55475 C5.51,8.55475 3.70625,9.33475 2.36375,10.59975 C3.41875,12.34225 5.31375,13.51975 7.5,13.51975 C9.68625,13.51975 11.58125,12.34225 12.63625,10.59975 C11.29375,9.33475 9.49,8.55475 7.5,8.55475" id="Fill-3" fill="#FFFFFF"></path>
+            <path d="M9.7455,5.576125 C9.7455,7.254875 8.73425,9.137375 7.488,9.137375 C6.2405,9.137375 5.2305,7.254875 5.2305,5.576125 C5.2305,3.896125 6.2405,3.053625 7.488,3.053625 C8.73425,3.053625 9.7455,3.896125 9.7455,5.576125" id="Fill-5" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

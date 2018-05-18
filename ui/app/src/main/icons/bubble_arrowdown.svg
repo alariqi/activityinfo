@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Arrow down</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Arrow-down" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Page-1">
+            <path d="M7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.3575 3.3575,0 7.5,0 C11.6425,0 15,3.3575 15,7.5 C15,11.6425 11.6425,15 7.5,15" id="Fill-1" fill="#243233"></path>
+            <polygon id="Fill-3" fill="#FFFFFF" points="7.5 10.578 3.8875 5.678 11.1125 5.678"></polygon>
+        </g>
+    </g>
+</svg>

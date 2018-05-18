@@ -1,5 +1,12 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M15 7.5C15 11.6425 11.6425 15 7.5 15C3.3575 15 0 11.6425 0 7.5C0 3.3575 3.3575 0 7.5 0C11.6425 0 15 3.3575 15 7.5Z" transform="translate(0.265625 0.0656738)" fill="#243233"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.7675L2.0175 2.01625L1.7675 0L0 1.7675Z" transform="translate(9.78711 9.58838)" fill="white"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 1.7675L5.58375 7.35125L7.35125 5.585L1.7675 0L0 1.7675Z" transform="translate(3.72656 3.5271)" fill="white"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Edit</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Edit" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15,7.57292912 C15,11.7153601 11.6418096,15.0735505 7.49937857,15.0735505 C3.35694755,15.0735505 0,11.7153601 0,7.57292912 C0,3.4304981 3.35694755,0.0723076923 7.49937857,0.0723076923 C11.6418096,0.0723076923 15,3.4304981 15,7.57292912" id="Fill-1" fill="#243233"></path>
+        <polygon id="Fill-4" fill="#FFFFFF" points="9.08142037 11.2318154 11.0678819 11.4767385 10.8217281 9.49150769"></polygon>
+        <polygon id="Fill-6" fill="#FFFFFF" points="3.11391268 5.26356923 8.61175883 10.7614154 10.3520665 9.02233846 4.85422037 3.52326154"></polygon>
+    </g>
 </svg>

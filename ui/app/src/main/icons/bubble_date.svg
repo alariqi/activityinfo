@@ -1,9 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-     viewBox="0 0 16 15">
-    <g transform="translate(-967 -763)">
-        <path fill="#243233" d="M982.68 770.56a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0"/>
-        <path fill="#fff" fillrule="evenodd" d="M971.43 774.12h7.5V767h-7.5zm1.02-1.02h5.46v-3.05h-5.46z"/>
-        <path fill="#fff" fill-opacity="0" stroke="#fff" d="M973.47 768.99v-3.11"/>
-        <path fill="#fff" fill-opacity="0" stroke="#fff" d="M976.85 768.99v-3.11"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Calendar</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 15 15 15 15 0 0 0"></polygon>
+    </defs>
+    <g id="Icon-/-Calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-4">
+            <g id="Page-1">
+                <path d="M15,7.5 C15,11.6425 11.6425,15 7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.3575 3.3575,0 7.5,0 C11.6425,0 15,3.3575 15,7.5" id="Fill-1" fill="#243233"></path>
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="Clip-4"></g>
+                <path d="M4.7675,10.0425 L10.23375,10.0425 L10.23375,6.99125 L4.7675,6.99125 L4.7675,10.0425 Z M3.75,11.06 L11.25,11.06 L11.25,3.94125 L3.75,3.94125 L3.75,11.06 Z" id="Fill-3" fill="#FFFFFF" mask="url(#mask-2)"></path>
+                <path d="M5.78425,5.921 L5.78425,2.8135" id="Stroke-5" stroke="#FFFFFF" mask="url(#mask-2)"></path>
+                <path d="M9.161375,5.921 L9.161375,2.8135" id="Stroke-6" stroke="#FFFFFF" mask="url(#mask-2)"></path>
+            </g>
+        </g>
     </g>
 </svg>

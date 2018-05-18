@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Reload</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Reload" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15,7.5 C15,11.6425 11.6425,15 7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.3575 3.3575,0 7.5,0 C11.6425,0 15,3.3575 15,7.5" id="Fill-1" fill="#243233"></path>
+        <path d="M7.50675,4.37075 C8.20675,4.372 8.91175,4.58575 9.518,5.0295 C11.04175,6.1445 11.37425,8.28325 10.2605,9.80825 C9.1455,11.332 7.00675,11.6645 5.48175,10.5495 C3.95925,9.4345 3.6255,7.29575 4.7405,5.772" id="Stroke-3" stroke="#FFFFFF" stroke-width="1.25"></path>
+        <polyline id="Stroke-5" stroke="#FFFFFF" stroke-width="1.25" points="8.786 6.62175 7.341 4.46425 9.4985 3.01925"></polyline>
+    </g>
+</svg>

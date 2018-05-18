@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="15" height="16" viewBox="0 0 15 16"><defs><path id="hth0a" d="M454 215a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0"/><path id="hth0b" d="M446.5 211.25v7.5"/><path id="hth0c" d="M449 212.5v5"/><path id="hth0d" d="M444 212.5v5"/></defs><g><g transform="translate(-439 -207)"><g><use fill="#243233" xlink:href="#hth0a"/></g><g><use fill="#fff" fill-opacity="0" stroke="#fff" stroke-miterlimit="50" xlink:href="#hth0b"/></g><g><use fill="#fff" fill-opacity="0" stroke="#fff" stroke-miterlimit="50" xlink:href="#hth0c"/></g><g><use fill="#fff" fill-opacity="0" stroke="#fff" stroke-miterlimit="50" xlink:href="#hth0d"/></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Columns</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Columns" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15,7.5 C15,11.6425 11.6425,15 7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.35875 3.3575,0 7.5,0 C11.6425,0 15,3.35875 15,7.5" id="Fill-1" fill="#243233"></path>
+        <path d="M7.5,3.75 L7.5,11.25" id="Stroke-3" stroke="#FFFFFF" stroke-width="1.25"></path>
+        <path d="M10,5 L10,10" id="Stroke-5" stroke="#FFFFFF" stroke-width="1.25"></path>
+        <path d="M5,5 L5,10" id="Stroke-7" stroke="#FFFFFF" stroke-width="1.25"></path>
+    </g>
+</svg>
