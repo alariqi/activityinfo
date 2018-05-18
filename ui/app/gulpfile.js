@@ -42,14 +42,10 @@ const paths = {
 
 
 // Styles
-// Write to the /public section for now so that we
-// can benefit from sourcemaps
 function styles() {
     return gulp.src(`${paths.src}/main/css/app.scss`)
         .pipe(sassGlob())
-        //.pipe(sourcemaps.init())
         .pipe(sass.sync().on('error', sass.logError))
-     //   .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${paths.build}/client`));
 }
 
@@ -76,7 +72,7 @@ function sprites() {
 
 // Watch
 function watch() {
-    gulp.watch([ `${paths.src}/main/**/*.css`, `${paths.src}/main/**/*.scss`], styles);
+    gulp.watch(`${paths.src}/main/**/*.scss`, styles);
 }
 
 
