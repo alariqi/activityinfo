@@ -71,7 +71,7 @@ public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
     String typeParam = " type=" + type;
     String checkedParam = value ? " checked" : "";
 
-    sb.appendHtmlConstant("<fieldset class=\"fieldset__checkbox\">");
+    sb.appendHtmlConstant("<fieldset class=\"fieldset__" + type + "\">");
     sb.appendHtmlConstant("<input " + typeParam + nameParam + disabledParam + readOnlyParam + idParam + checkedParam + " />");
     sb.appendHtmlConstant("<label for=" + checkBoxId + " tabindex=\"0\">");
     if (options.getBoxLabel() != null) {
