@@ -40,6 +40,13 @@
 }
 */
 
+/* not sure why it needs the !important, figure this out */
+.menu .x-view-highlightrow.x-view-highlightrow {
+  border: 1px solid $green;
+  background-color: $grey-5;
+}
+
+
 .menu--date {
   padding: 0 !important;
 }

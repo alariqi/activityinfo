@@ -16,7 +16,8 @@ public enum Icon {
     BUBBLE_CLOSE,
     BUBBLE_COLUMNS,
     BUBBLE_DOWN,
-    BUBBLE_DATE,
+
+    DATE,
 
     OPTIONS,
     OPTIONS_HORIZONTAL,
@@ -32,6 +33,11 @@ public enum Icon {
     public SafeHtml render(final int width, final int height) {
         return SafeHtmlUtils.fromTrustedString("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" +
                 width + "\" height=\"" + height + "\"" +
+                " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
+                "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + href() + "\"></use></svg>");
+    }
+    public SafeHtml render() {
+        return SafeHtmlUtils.fromTrustedString("<svg xmlns=\"http://www.w3.org/2000/svg\"" +
                 " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
                 "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + href() + "\"></use></svg>");
     }

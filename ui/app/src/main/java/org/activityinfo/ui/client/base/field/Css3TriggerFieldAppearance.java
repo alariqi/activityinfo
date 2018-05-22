@@ -6,6 +6,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.cell.core.client.form.FieldCell.FieldAppearanceOptions;
 import com.sencha.gxt.cell.core.client.form.TriggerFieldCell.TriggerFieldAppearance;
 import com.sencha.gxt.core.client.dom.XElement;
+import org.activityinfo.ui.client.Icon;
 
 /**
  *
@@ -47,7 +48,9 @@ public class Css3TriggerFieldAppearance extends Css3ValueBaseFieldAppearance imp
     }
 
     protected void renderTrigger(SafeHtmlBuilder sb, String value, FieldAppearanceOptions options) {
-
+        sb.appendHtmlConstant("<div class=\"field__trigger\">");
+        sb.append(Icon.EXPAND_DOWN.render());
+        sb.appendHtmlConstant("</div>");
     }
 
     @Override

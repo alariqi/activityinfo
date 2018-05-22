@@ -74,6 +74,7 @@ class ChoiceCell extends ComboBoxCell<String> {
         setUseQueryCache(false);
         setQueryDelay(QUERY_DELAY_MS);
         setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+        setWidth(-1);
         RESOURCES.style().ensureInjected();
     }
 

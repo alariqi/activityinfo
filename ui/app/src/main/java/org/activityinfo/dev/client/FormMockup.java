@@ -67,7 +67,6 @@ public class FormMockup implements IsWidget {
         FieldView radioView = new FieldView(requiredField("Gender"), radioWidget);
 
         CssLayoutContainer form = new CssLayoutContainer("form");
-        form.addStyleName("forminput__inner");
         form.add(serialNumberView);
         form.add(textView);
         form.add(codeView);
@@ -79,9 +78,13 @@ public class FormMockup implements IsWidget {
         form.add(multiView);
         form.add(radioView);
 
+        CssLayoutContainer inner = new CssLayoutContainer();
+        inner.addStyleName("forminput__inner");
+        inner.add(form);
+
         container = new CssLayoutContainer();
         container.addStyleName(DevBundle.RESOURCES.style().forms());
-        container.add(form);
+        container.add(inner);
 
     }
 

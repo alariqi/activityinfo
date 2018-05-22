@@ -40,15 +40,14 @@ package org.activityinfo.ui.client.base.field;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.sencha.gxt.cell.core.client.form.DateCell.DateCellAppearance;
 import com.sencha.gxt.cell.core.client.form.FieldCell;
+import org.activityinfo.ui.client.Icon;
 
 public class Css3DateCellAppearance extends Css3TriggerFieldAppearance implements DateCellAppearance {
 
     @Override
     protected void renderTrigger(SafeHtmlBuilder sb, String value, FieldCell.FieldAppearanceOptions options) {
         sb.appendHtmlConstant("<div class=\"field__trigger\">");
-        sb.appendHtmlConstant("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12px\" height=\"12px\" " +
-                "viewBox=\"0 0 12 12\" class=\"icon\"><use xmlns:xlink=\"http://www.w3.org/1999/xlink\" " +
-                "xlink:href=\"#bubble_date\"></use></svg>");
+        sb.append(Icon.DATE.render());
         sb.appendHtmlConstant("</div>");
     }
 }

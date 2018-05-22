@@ -59,7 +59,7 @@ public class LevelWidget implements IsWidget {
         store = new ListStore<>(key -> key);
 
         comboBox = new ComboBox<>(new ChoiceCell(level.getChoices(), store));
-        comboBox.setWidth(300);
+        comboBox.setWidth(-1);
 
         comboBox.addAttachHandler(this::onAttach);
         comboBox.addBeforeQueryHandler(this::onBeforeQuery);

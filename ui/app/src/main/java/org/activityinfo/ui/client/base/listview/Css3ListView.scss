@@ -1,11 +1,21 @@
 
 .listview {
+  padding: 1rem;
+  background-color: white;
+  border-radius: $borderradius;
 }
 
 .listview__item {
-
+  font-size: 1rem;
+  color: $black;
 }
 
 .listview__item--selected {
+
+}
+
+
+.listview__item.x-view-highlightrow {
+
 
 }
