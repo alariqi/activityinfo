@@ -103,11 +103,15 @@ public class AppEntryPoint implements EntryPoint {
         Viewport viewport = new Viewport();
         viewport.add(frame);
 
+        hideLoader();
+
         RootPanel.get().add(viewport);
 
         historyHandler.handleCurrentHistory();
 
     }
+
+
     public static void injectStyle() {
         StyleInjector.inject(ThemeBundle.INSTANCE.stylesheet().getText(), true);
     }
@@ -117,6 +121,15 @@ public class AppEntryPoint implements EntryPoint {
         divElement.setInnerHTML(ThemeBundle.INSTANCE.icons().getText());
         Element svgElement = divElement.getFirstChildElement();
         Document.get().getBody().insertFirst(svgElement);
+    }
+
+    /**
+     * Hides the loading indicator that is displayed while the application is loading. The html/css for the
+     * loading indicator can be found in {@code Host4.ftl}
+     */
+    private void hideLoader() {
+        Document.get().getBody().removeClassName("loading");
+        Document.get().getElementById("initial-loader").removeFromParent();
     }
 
     private String findServerUrl() {

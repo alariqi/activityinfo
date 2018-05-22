@@ -33,17 +33,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=10">
     <link rel="icon" href="/about/assets/images/logo-activityinfo.png">
 
-    <#if newUI>
-    <link rel="manifest" href="/activityinfo.webmanifest">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    </#if>
-
     <title>${domain.title}</title>
 
-    <#if newUI>
-    <link rel="stylesheet" href="https://fonts.typotheque.com/WF-028542-010274.css" type="text/css" />
-
-    <#else>
     <style type="text/css">
         #loading-box {
             position: absolute;
@@ -74,7 +65,6 @@
             font: normal 10px tahoma, arial, sans-serif;
         }
     </style>
-    </#if>
     <script type="text/javascript">
         if (document.cookie.indexOf('authToken=') == -1 ||
                 document.cookie.indexOf('userId') == -1 ||
@@ -103,7 +93,6 @@
 </head>
 <body role="application">
 
-<#if !newUI>
 <div id="loading">
     <div id="loading-box">
         <div class="loading-indicator">
@@ -114,12 +103,6 @@
         </div>
     </div>
 </div>
-</#if>
-
-<#if newUI>
-    <section id="root">
-    </section>
-</#if>
 
 <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
         style="position:absolute;width:0;height:0;border:0"></iframe>

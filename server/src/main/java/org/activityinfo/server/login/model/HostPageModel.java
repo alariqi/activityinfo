@@ -80,4 +80,13 @@ public class HostPageModel extends PageModel {
     public BuildProperties getBuildProperties() {
         return BuildProperties.PROPERTIES;
     }
+
+    @Override
+    public String getTemplateName() {
+        if(newUI) {
+            return "/page/Host4.ftl";
+        } else {
+            return "/page/Host.ftl";
+        }
+    }
 }
