@@ -27,17 +27,24 @@
   border: 1px solid $green;
 }
 
-.forminput__field__geopoint > div {
-  flex: 1 1 calc((100% - 0.5rem) / 2);
+.field--readonly .field__wrap,
+.field--readonly .field__wrap,
+input:disabled,
+textarea:disabled {
+  border: 1px solid $grey-4;
+  cursor: not-allowed;
+}
 
-  &:first-child {
-    margin-right: 0.5rem;
-  }
+.forminput__field__geopoint > div {
+  flex: 1 1 calc((100% - 2rem) / 2);
+  min-width: 200px;
+  margin: 0.5rem;
 }
 
 .field__wrap input,
 .field__wrap textarea {
-  flex-grow: 1;
+  flex: 1 1 auto;
+  width: 100%;
   padding: 1rem;
   outline: 0;
   border: 0;

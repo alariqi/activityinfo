@@ -57,6 +57,9 @@
 .forminput__field__geopoint {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+  width: calc(100% + 1rem);
 }
 
 .forminput__field__required {
