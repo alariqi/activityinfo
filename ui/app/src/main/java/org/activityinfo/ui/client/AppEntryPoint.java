@@ -26,9 +26,11 @@ import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.StyleInjector;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
+import com.google.gwt.resources.client.TextResource;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.event.shared.EventBus;
@@ -111,9 +113,16 @@ public class AppEntryPoint implements EntryPoint {
 
     }
 
-
     public static void injectStyle() {
-        StyleInjector.inject(ThemeBundle.INSTANCE.stylesheet().getText(), true);
+        StyleInjector.inject(getStylesheet().getText(), true);
+    }
+
+    private static TextResource getStylesheet() {
+        if(LocaleInfo.getCurrentLocale().isRTL()) {
+            return ThemeBundle.INSTANCE.stylesheetRtl();
+        } else {
+            return ThemeBundle.INSTANCE.stylesheet();
+        }
     }
 
     public static void injectIcons() {

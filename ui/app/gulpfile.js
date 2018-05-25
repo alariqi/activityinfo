@@ -9,6 +9,7 @@ const gulp = require('gulp');
 const util = require('gulp-util');
 const notify       = require('gulp-notify');
 const plumber      = require('gulp-plumber');
+const rename = require("gulp-rename");
 const touch = require("touch");
 
 
@@ -16,8 +17,10 @@ const touch = require("touch");
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
 const rtlcss = require('gulp-rtlcss');
-const svgSprite = require('gulp-svg-sprites');
 const nano = require('cssnano');
+
+// Icons/Svg
+const svgSprite = require('gulp-svg-sprites');
 
 
 // Misc
@@ -49,6 +52,9 @@ function styles() {
     return gulp.src(`${paths.src}/main/css/app.scss`)
         .pipe(sassGlob())
         .pipe(sass.sync().on('error', sass.logError))
+        .pipe(gulp.dest(`${paths.build}/client`))
+        .pipe(rtlcss())
+        .pipe(rename({basename: 'app-rtl'}))
         .pipe(gulp.dest(`${paths.build}/client`))
         .on('end', function() {
             console.log("Touching ThemeBundle.java...");

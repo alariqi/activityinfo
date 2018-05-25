@@ -13,4 +13,7 @@ public interface ThemeBundle extends ClientBundle {
 
     @Source("app.css")
     TextResource stylesheet();
+
+    @Source("app-rtl.css")
+    TextResource stylesheetRtl();
 }
