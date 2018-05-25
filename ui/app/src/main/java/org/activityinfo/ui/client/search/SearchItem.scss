@@ -4,10 +4,15 @@
   padding: 0.75rem 1rem;
   padding-left: 3.25rem;
   border: 1px solid transparent;
-  font-size: 1.15rem;
+  font-size: 1rem;
   line-height: 1.1;
   font-family: $gretasemibold;
+  font-weight: normal;
   color: $white;
+}
+
+.x-view-highlightrow.search__item {
+  border: 1px solid $green;
 }
 
 .search__type {
@@ -20,5 +25,5 @@
 }
 
 .x-view-highlightrow .search__type {
-  color: $green-light;
+  color: $white;
 }
