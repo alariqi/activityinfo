@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="-2.012 -5 110 110">
-    <circle cx="52.988" cy="50" r="50" fill="#FFF"/>
-    <linearGradient id="forbidden-a" x1="-141.04" x2="-76.022" y1="221.451" y2="221.451" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#c6d4d4"/>
-        <stop offset=".526" stop-color="#e6eded"/>
-        <stop offset=".825" stop-color="#f2f7f7"/>
-    </linearGradient>
-    <path fill="url(#forbidden-a)" d="M43.488.907c-9.197 16.14-6.92 37.042 6.853 50.812 14.115 14.115 35.726 16.153 52.02 6.134 2.416-15.27-2.248-31.441-14.016-43.209C76.152 2.454 59.232-2.125 43.488.907z"/>
-    <linearGradient id="forbidden-b" x1="-181.012" x2="-109.867" y1="189.721" y2="189.721" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#455c5c"/>
-        <stop offset="1"/>
-    </linearGradient>
-    <path fill="url(#forbidden-b)" d="M52.948 36.549c28.711 7.103 12.838 44.85 1.016 52.15C36.834 99.275 28.711 77.092 10.617 76.2c-12.05-.595-22.775-34.076 4.229-28.953 17.268 3.274 22.657-14.518 38.102-10.698z"/>
-    <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M42.971 57.793l.001 4.447m2.225-2.222h-4.45M45.896 57.092l42.448-42.447"/>
-    <linearGradient id="forbidden-c" x1="-95.266" x2="-89.356" y1="192.358" y2="186.449" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#00cf79"/>
-        <stop offset="1" stop-color="#00cfcd"/>
-    </linearGradient>
-    <circle cx="86.689" cy="64.097" r="4.179" fill="url(#forbidden-c)" opacity=".8"/>
+  <circle cx="52.988" cy="50" r="50" fill="#FFF"/>
+  <linearGradient id="nopermissionsstate-grad-a" x1="-141.04" x2="-76.022" y1="221.451" y2="221.451" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#c6d4d4"/>
+    <stop offset=".526" stop-color="#e6eded"/>
+    <stop offset=".825" stop-color="#f2f7f7"/>
+  </linearGradient>
+  <path fill="url(#nopermissionsstate-grad-a)" d="M43.488.907c-9.197 16.14-6.92 37.042 6.853 50.812 14.115 14.115 35.726 16.153 52.02 6.134 2.416-15.27-2.248-31.441-14.016-43.209C76.152 2.454 59.232-2.125 43.488.907z"/>
+  <linearGradient id="nopermissionsstate-grad-b" x1="-181.012" x2="-109.867" y1="189.721" y2="189.721" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#455c5c"/>
+    <stop offset="1"/>
+  </linearGradient>
+  <path fill="url(#nopermissionsstate-grad-b)" d="M52.948 36.549c28.711 7.103 12.838 44.85 1.016 52.15C36.834 99.275 28.711 77.092 10.617 76.2c-12.05-.595-22.775-34.076 4.229-28.953 17.268 3.274 22.657-14.518 38.102-10.698z"/>
+  <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M42.971 57.793l.001 4.447m2.225-2.222h-4.45m5.149-2.926l42.448-42.447"/>
+  <linearGradient id="nopermissionsstate-grad-c" x1="-95.266" x2="-89.356" y1="192.358" y2="186.449" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="86.689" cy="64.097" r="4.179" fill="url(#nopermissionsstate-grad-c)" opacity=".8"/>
 </svg>

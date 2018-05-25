@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="-.974 -5 110 110">
+  <circle cx="54.026" cy="50" r="50" fill="#FFF"/>
+  <linearGradient id="offlinestate-grad-a" x1="-164.974" x2="-124.974" y1="203.5" y2="203.5" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#c6d4d4"/>
+    <stop offset="1" stop-color="#f2f7f7"/>
+  </linearGradient>
+  <path fill="url(#offlinestate-grad-a)" d="M54.026 90c-22.091 0-40-17.909-40-40 0-22.092 17.909-40 40-40v80z"/>
+  <linearGradient id="offlinestate-grad-b" x1="-144.796" x2="-84.441" y1="173.322" y2="233.678" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0"/>
+    <stop offset="1" stop-color="#455c5c"/>
+  </linearGradient>
+  <path fill="url(#offlinestate-grad-b)" d="M54.026 0c27.615 0 50 22.386 50 50 0 27.615-22.385 50-50 50V0z"/>
+  <linearGradient id="offlinestate-grad-c" x1="-176.642" x2="-165.256" y1="209.192" y2="197.807" gradientTransform="matrix(1 0 0 -1 179 253.5)" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="8.051" cy="50" r="8.051" fill="url(#offlinestate-grad-c)" opacity=".8"/>
+  <path fill="none" stroke="#FFF" stroke-miterlimit="10" d="M97.113 50.982c-2.638 0-2.638-1.964-5.386-1.964-2.75 0-2.75 1.964-5.387 1.964s-2.637-1.964-5.386-1.964-2.749 1.964-5.386 1.964-2.637-1.964-5.387-1.964c-2.748 0-2.748 1.964-5.386 1.964-2.637 0-2.637-1.964-5.386-1.964s-2.749 1.964-5.387 1.964"/>
+  <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M48.779 57.807L40.279 50H4.026"/>
+</svg>

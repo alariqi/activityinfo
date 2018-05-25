@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="110" viewBox="0 0 110 110">
+  <circle cx="54.026" cy="50" r="50" fill="#FFF"/>
+  <linearGradient id="errorstate-grad-a" x1="4.0371" x2="84.6189" y1="29.5708" y2="29.5708" gradientUnits="userSpaceOnUse">
+    <stop offset=".1755" stop-color="#f2f7f7"/>
+    <stop offset=".4742" stop-color="#e6eded"/>
+    <stop offset="1" stop-color="#c6d4d4"/>
+  </linearGradient>
+  <path fill="url(#errorstate-grad-a)" d="M97.443 40.341s-2.25-11.642-11.311-21.025c-20.2-20.92-51.448-17.184-72.995 1.92-6.416 9.098-9.441 19.851-9.07 30.514 2.614-3.931 9.297-11.786 20.961-11.786 20.248 0 26.291 13.487 46.498 13.973 20.809.499 25.917-13.596 25.917-13.596z"/>
+  <linearGradient id="errorstate-grad-b" x1="22.7627" x2="87.458" y1="90.957" y2="90.957" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#455c5c"/>
+    <stop offset="1"/>
+  </linearGradient>
+  <path fill="url(#errorstate-grad-b)" d="M22.763 89.02c18.956 15.225 46.428 14.615 64.695-1.842-6.015 2.725-13.302 4.32-20.809 2.914-12.667-2.375-14.622-7.834-27.65-8.168-8.726-.223-13.82 4.168-16.236 7.096z"/>
+  <linearGradient id="errorstate-grad-c" x1="75.8232" x2="90.0172" y1="42.9028" y2="57.0968" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="82.918" cy="49.998" r="10.035" fill="url(#errorstate-grad-c)" opacity=".8"/>
+  <linearGradient id="errorstate-grad-d" x1="39.3652" x2="46.1297" y1="77.5391" y2="84.3035" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="42.747" cy="80.92" r="4.782" fill="url(#errorstate-grad-d)" opacity=".8"/>
+  <linearGradient id="errorstate-grad-e" x1="65.0557" x2="68.2432" y1="72.29" y2="75.4775" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="66.649" cy="73.883" r="2.254" fill="url(#errorstate-grad-e)" opacity=".8"/>
+  <linearGradient id="errorstate-grad-f" x1="18.9141" x2="22.1016" y1="28.2012" y2="31.3887" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#00cf79"/>
+    <stop offset="1" stop-color="#00cfcd"/>
+  </linearGradient>
+  <circle cx="20.507" cy="29.794" r="2.254" fill="url(#errorstate-grad-f)" opacity=".8"/>
+  <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" d="M82.919 50V29.568m0-3.94V10.925m-40.172 69.69v-5.189m0-45.673v-4.041m0 20.312V34.233"/>
+</svg>
