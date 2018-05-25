@@ -1,5 +1,6 @@
-
 .monthpicker {
+  z-index: 2;
+  position: relative;
   background-color: $white;
   display: flex;
   flex-direction: column;
@@ -13,6 +14,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: row;
+  padding: 1rem;
 }
 
 .monthpicker__years__body {
@@ -22,25 +24,59 @@
 }
 
 .monthpicker__months {
-  background-color: $datepicker-alt-background;
-  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
+  flex-grow: 1;
+  padding: 1rem;
+  background-color: $background;
+}
+
+.monthpicker__month {
+  flex: 1 0 calc(100% / 6);
 }
 
 .monthpicker__footer {
-  background-color: $datepicker-alt-background;
+  background-color: $background;
   display: flex;
-
 }
 
-.monthpicker__year, .monthpicker__month {
-  font-size: 0.875rem;
+.monthpicker__year span,
+.monthpicker__month span {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 1rem;
   padding: 0.25rem;
+  width: 100%;
+
+  &::after {
+    z-index: -1;
+    transition: transform 0.3s ease;
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2rem;
+    height: 2rem;
+    background-color: $white;
+    border-radius: 50%;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  &:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
-.monthpicker__month--selected {
-  font-family: $gretasemibold;
-  background-color: #91f2ca;
-  border-radius: 50%;
+.monthpicker__year span::after {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: $grey-1;
+}
+
+.monthpicker__month--selected.monthpicker__year span::after,
+.monthpicker__month--selected.monthpicker__month span::after {
+  background-color: $green-light;
+  transform: translate(-50%, -50%) scale(1);
 }

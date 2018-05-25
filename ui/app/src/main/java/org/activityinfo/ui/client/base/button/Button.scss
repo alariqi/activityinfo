@@ -56,6 +56,20 @@ button,
   }
 }
 
+.datepicker__footer .button {
+// .link {
+  padding: 0;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-decoration-skip: ink;
+  border: 0 none;
+
+  &:hover {
+    text-decoration: none;
+    border: 0 none;
+  }
+}
+
 %button--background {
   &:disabled {
     background-color:  $grey-2;

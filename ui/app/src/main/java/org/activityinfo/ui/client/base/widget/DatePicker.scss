@@ -1,15 +1,22 @@
+/* ========== */
+/* DATEPICKER */
+/* ========== */
 
-$datepicker-alt-background: #f2f7f7;
+.menu--date {
+  // Temporary fix, just to show the layout better
+  width: 250px !important;
+}
 
-
-.datepicker { }
-
+.datepicker {
+  box-shadow: 0 0.1rem 1rem 0.1rem $shadow;
+}
 
 // Header for the date picker that
 // includes next/prev month buttons and the current month
 .datepicker__header {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 1rem;
 
   // Ensure that icons in buttons do not receive
@@ -19,18 +26,19 @@ $datepicker-alt-background: #f2f7f7;
   }
 }
 
-.datepicker__month--prev {
-
-}
-
 .datepicker__month {
   flex-grow: 1;
   text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 
-  h3 {
-    font-family: $gretasemibold;
-    font-size: 1.25rem;
-  }
+.datepicker__month h3 {
+  font-family: $gretasemibold;
+  font-size: 1.25rem;
+}
+
+.datepicker__month--prev {
 
 }
 
@@ -38,76 +46,93 @@ $datepicker-alt-background: #f2f7f7;
 
 }
 
-
 .datepicker__body {
-  background-color: $datepicker-alt-background;
+  background-color: $background;
   padding: 0.5rem;
 
   th {
     font-family: $gretasemibold;
-  }
-
-  th, td {
     text-align: center;
-    font-size: 0.875rem;
     padding: 0.25rem;
   }
 }
 
 .datepicker__date {
-
   color: $black;
   font-family: $gretalight;
 
   &--over {
-
   }
 
   &--active {
-
-  }
-
-  &--selected {
-    font-family: $gretasemibold;
-    background-color: #91f2ca;
-    border-radius: 50%;
   }
 
   &--disabled {
-
-  }
-
-  &--over {
-
-  }
-
-  // Belongs to the previous month
-  &--previous {
-    opacity: 0.5;
-  }
-
-  // Belongs to the next month
-  &--next {
-    opacity: 0.5;
-  }
-
-  &__anchor {
-
   }
 }
 
+.datepicker__date__anchor {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 1rem;
+  padding: 0.25rem;
+  width: 100%;
+
+  &::after {
+    z-index: -1;
+    transition: transform 0.3s ease;
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2rem;
+    height: 2rem;
+    background-color: $white;
+    border-radius: 50%;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  &:hover::after {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+// Belongs to the previous month
+.datepicker__date--previous {
+  opacity: 0.5;
+}
+
+// Belongs to the next month
+.datepicker__date--next {
+  opacity: 0.5;
+}
+
+.datepicker__date--selected {
+  font-family: $gretasemibold;
+}
+
+.datepicker__date--selected .datepicker__date__anchor::after {
+  background-color: $green-light;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.datepicker__date--disabled {
+  opacity: 0.3;
+}
+
+.datepicker__date--disabled .datepicker__date__anchor {
+  text-decoration: line-through;
+
+  &:hover::after {
+    transform: translate(-50%, -50%) scale(0);
+  }
+}
 
 .datepicker__footer {
-
-  background-color: $datepicker-alt-background;
-
-  //
-  //button {
-  //  border-radius: 3px;
-  //  background-color: $black;
-  //  color: $white;
-  //  font-family: $gretasemibold;
-  //  font-size: 1rem;
-  //  padding: 0.5rem 1rem;
-  //}
+  background-color: $background;
+  text-align: center;
+  padding: 1rem;
+  padding-top: 0;
 }

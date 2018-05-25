@@ -271,7 +271,7 @@ public class Css3DatePickerAppearance implements DatePickerAppearance {
         sb.appendHtmlConstant("</div>");
 
         sb.appendHtmlConstant("<button class='monthpicker__year--next'>");
-        sb.append(Icon.BUBBLE_ARROWLEFT.render(16,  16));
+        sb.append(Icon.BUBBLE_ARROWRIGHT.render(16,  16));
         sb.appendHtmlConstant("</button>");
 
         sb.appendHtmlConstant("</div>");
