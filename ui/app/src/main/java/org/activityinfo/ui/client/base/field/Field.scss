@@ -91,6 +91,10 @@ textarea:disabled {
   }
 }
 
+.field__wrap--focused .field__units::before {
+  transform: scaleX(1);
+}
+
 .field__units span {
   z-index: 1;
   position: relative;
@@ -105,21 +109,46 @@ textarea:disabled {
   white-space: nowrap;
 }
 
-.field--focused .field__units::before {
-  transform: scaleX(1);
-}
-
 .field__trigger {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1rem;
+  min-width: 3rem;
+
+  &::before {
+    transition: background-color 0.3s ease,
+                opacity 0.3s ease;
+    z-index: 0;
+    content: '';
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2rem;
+    height: 2rem;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: $grey-2;
+    opacity: 0;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+// THIS NEEDS IMPLEMENTING
+.field__trigger--active::before {
+  background-color: $green-light;
+  opacity: 1;
 }
 
 .field__trigger .icon {
+  z-index: 1;
+  position: relative;
 }
-
-
 
 /* checkbox */
 .fieldset__checkbox {
