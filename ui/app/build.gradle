@@ -68,7 +68,6 @@ dependencies {
     compile project(':clients:gwtrest')
     compile project(':io:match')
     compile project(':analysis')
-    compile project(':ui:icons')
 
     compile project(':tools:codemirror')
     compile project(':tools:indexeddb')

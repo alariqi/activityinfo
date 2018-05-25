@@ -24,7 +24,6 @@
         >
 
   <ui:with field="i18n" type="org.activityinfo.i18n.shared.UiConstants"/>
-  <ui:with field="icons" type="org.activityinfo.ui.icons.Icons"/>
 
   <ui:style>
 
@@ -42,10 +41,9 @@
   </ui:style>
 
   <g:HTMLPanel width="100%" ui:field="rootPanel" addStyleNames="{style.attachment}">
-      <span class="{icons.file}" ui:field="thumbnailContainer"/>
+      <span ui:field="thumbnailContainer"/>
       <a href="#" target="_blank" ui:field="fileName"><ui:text from="{i18n.loading}"/></a>
       <g:Button ui:field="removeButton" addStyleNames="{style.removeButton}">
-        <span class="{icons.remove}"/>
       </g:Button>
   </g:HTMLPanel>
 
