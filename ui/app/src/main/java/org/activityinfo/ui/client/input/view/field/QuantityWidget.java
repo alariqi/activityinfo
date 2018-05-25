@@ -27,6 +27,7 @@ import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.number.Quantity;
 import org.activityinfo.model.type.number.QuantityType;
+import org.activityinfo.ui.client.base.field.BottomErrorHandler;
 import org.activityinfo.ui.client.base.field.QuantityFieldAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
@@ -45,7 +46,7 @@ public class QuantityWidget implements FieldWidget {
                 new QuantityFieldAppearance(quantityType.getUnits())));
 
         this.field.setWidth(-1);
-
+        this.field.setErrorSupport(new BottomErrorHandler(field));
         this.field.addKeyUpHandler(event -> Scheduler.get().scheduleDeferred(() -> {
             updater.update(input());
         }));

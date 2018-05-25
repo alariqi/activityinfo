@@ -2,6 +2,7 @@ package org.activityinfo.dev.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.Cardinality;
@@ -43,9 +44,14 @@ public class FormMockup implements IsWidget {
 
         QuantityWidget householdWidget = new QuantityWidget(new QuantityType("households"), NULL_UPDATER);
         FieldView householdView = new FieldView(requiredField("Households served"), householdWidget);
+        householdView.invalidate(I18N.CONSTANTS.requiredFieldMessage());
 
         GeoPointWidget geoPointWidget = new GeoPointWidget(NULL_UPDATER);
         FieldView geoPointView = new FieldView(field("Precise location of the distribution"), geoPointWidget);
+
+        GeoPointWidget invalidGeoPointWidget = new GeoPointWidget(NULL_UPDATER);
+        FieldView invalidGeoPointView = new FieldView(field("Location of the upstream source"), invalidGeoPointWidget);
+        invalidGeoPointView.invalidate(I18N.CONSTANTS.requiredFieldMessage());
 
         AttachmentWidget attachmentWidget = new AttachmentWidget(ResourceId.generateId(), NULL_UPDATER);
         FieldView attachmentView = new FieldView(field("Certificate of distribution",
@@ -74,6 +80,7 @@ public class FormMockup implements IsWidget {
         form.add(commentsView);
         form.add(householdView);
         form.add(geoPointView);
+        form.add(invalidGeoPointView);
         form.add(attachmentView);
         form.add(multiView);
         form.add(radioView);

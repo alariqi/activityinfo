@@ -33,6 +33,7 @@ import org.activityinfo.io.match.coord.JsCoordinateNumberFormatter;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.geo.GeoPoint;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.field.BottomErrorHandler;
 import org.activityinfo.ui.client.base.field.Css3TextFieldAppearance;
 import org.activityinfo.ui.client.input.model.FieldInput;
 
@@ -158,6 +159,7 @@ public class GeoPointWidget implements FieldWidget {
             this.field.setValidateOnBlur(false);
             this.field.setAutoValidate(false);
             this.field.setWidth(-1);
+            this.field.setErrorSupport(new BottomErrorHandler(field));
         }
 
         public void init(double coordinateValue) {
