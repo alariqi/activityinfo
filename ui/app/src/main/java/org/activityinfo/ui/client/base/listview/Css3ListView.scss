@@ -1,5 +1,5 @@
-
 .listview {
+  // Removed padding: 1rem; here, that interferes with the database/form/folder lists.
   background-color: white;
   border-radius: $borderradius;
 }
@@ -10,11 +10,8 @@
 }
 
 .listview__item--selected {
-
 }
 
 
 .listview__item.x-view-highlightrow {
-
-
 }
