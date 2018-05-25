@@ -18,11 +18,22 @@ input {
   display: flex;
   align-items: center;
   position: relative;
+  padding: 0.5rem 0;
   padding-left: 2rem;
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .page__header__actions .fieldset__checkbox {
   padding: 0.75rem;
+}
+
+.fieldset__checkbox input[type="checkbox"] {
+  position: absolute;
+  visibility: hidden;
 }
 
 .fieldset__checkbox svg {
@@ -30,57 +41,33 @@ input {
               transform 0.2s ease;
   z-index: 1;
   position: absolute;
-  left: 0.25rem;
-  top: 50%;
+  left: 0.35rem;
+  top: 0.75rem;
   width: 0.8rem;
   height: 0.8rem;
   opacity: 0;
-  transform: translateY(-50%) rotate(-20deg) scale(0.8);
+  transform: rotate(-20deg) scale(0.8);
   transform-origin: 50% 100%;
-}
-
-.page__header__actions .fieldset__checkbox svg {
-  left: 0.75rem;
 }
 
 .fieldset__checkbox input[type="checkbox"]:checked ~ svg {
   transition: opacity 0.2s 0.1s ease,
               transform 0.2s 0.15s ease;
   opacity: 1;
-  transform: translateY(-50%) rotate(0) scale(1);
-}
-
-.fieldset__checkbox input[type="checkbox"]{
-  position: absolute;
-  visibility: hidden;
+  transform: rotate(0) scale(1);
 }
 
 .fieldset__checkbox label {
   font-family: $gretasemibold;
-}
 
-.page__header__actions .fieldset__checkbox label {
-   padding-left: 1.5rem;
-}
-
-.fieldset__checkbox input[type="checkbox"]:checked ~ label {
-  color: $black;
-}
-
-.fieldset__checkbox input[type="checkbox"]:focus ~ label {
-  box-shadow: 0 0 20px 0 rgba($green, 1);
-}
-
-.fieldset__checkbox label {
   &:before,
   &:after {
     content: '';
     position: absolute;
     left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
+    top: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &:before {
@@ -88,40 +75,115 @@ input {
                 transform 0.2s 0.1s ease;
     background-color: $green-light;
     opacity: 0;
-    transform: translateY(-50%) scaleY(0);
+    transform: scaleY(0);
     transform-origin: 0% 100%;
   }
 
   &:after {
     transition: opacity 0.4s ease;
     border: 1px solid $black;
-    background-color: rgba($white, 0.2);
+    background-color: $white;
     opacity: 1;
   }
-}
 
-.page__header__actions .fieldset__checkbox label {
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.25rem;
-    height: 1.25rem;
+  &:focus {
+    outline: 0 none;
   }
 }
 
 .fieldset__checkbox input[type="checkbox"]:checked ~ label {
+  color: $black;
+
   &:before {
     transition: opacity 0.2s 0.1s ease,
                 transform 0.2s 0.1s ease;
     opacity: 1;
-    transform: translateY(-50%) scaleY(1);
+    transform: scaleY(1);
   }
 
   &:after {
     opacity: 0;
   }
+}
+
+.forminput__inner .fieldset__checkbox input[type="checkbox"]:checked ~ label {
+  color: $green-light;
+}
+
+
+/* radio */
+.fieldset__radio {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0.5rem 0;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.fieldset__radio svg {
+  display: none;
+}
+
+.fieldset__radio input[type="radio"] {
+  position: absolute;
+  visibility: hidden;
+}
+
+.fieldset__radio label {
+  font-family: $gretasemibold;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+  }
+
+  &:before {
+    z-index: 1;
+    transition: opacity 0.2s 0.1s ease,
+                transform 0.2s 0.1s ease;
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0);
+    width: 1rem;
+    height: 1rem;
+    margin: 0.25rem;
+    border: 0.2rem solid $black;
+    background-color: $green-light;
+  }
+
+  &:after {
+    border: 1px solid $black;
+    background-color: $white;
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: 0 none;
+  }
+}
+
+.fieldset__radio input[type="radio"]:checked ~ label {
+  color: $black;
+
+  &:before {
+    transition: opacity 0.2s 0.1s ease,
+                transform 0.2s 0.1s ease;
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.forminput__inner .fieldset__radio input[type="radio"]:checked ~ label {
+  color: $green-light;
 }
