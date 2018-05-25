@@ -38,7 +38,6 @@
   <!-- Avoid unsupported RTL layout even when using RTL text -->
   <inherits name="org.activityinfo.i18n.ArabicLTR"/>
 
-  <inherits name="org.activityinfo.ui.Icons"/>
   <set-configuration-property name="CssResource.conversionMode" value="strict" />
 
   <inherits name="org.activityinfo.IndexedDB"/>
