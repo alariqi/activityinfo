@@ -20,8 +20,9 @@ $blue: #006FC3;
 $blue-light: #5B92E3;
 $blue-dark: #0D388C;
 
-$red: #F45443;
-$red-alt: #C11F43;
+$red: #D2003D;
+$red-alt: darken($red, 5%);
+$red-pale: #D99BAD;
 
 /* use specific colour palette */
 $background: $grey-1;
