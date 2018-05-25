@@ -57,18 +57,22 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
 
     @Override
     public final void onFocus(Element parent, boolean focus) {
-        parent.<XElement>cast().setClassName("field--focused", focus);
+        getWrapElement(parent).setClassName("field__wrap--focused", focus);
     }
 
     @Override
     public void onValid(Element parent, boolean valid) {
-        parent.<XElement>cast().setClassName("field--invalid", !valid);
+        getWrapElement(parent).setClassName("field__wrap--invalid", !valid);
+    }
+
+    protected final XElement getWrapElement(Element parent) {
+        return parent.getFirstChildElement().cast();
     }
 
     @Override
     public void setReadOnly(Element parent, boolean readOnly) {
         getInputElement(parent).<InputElement>cast().setReadOnly(readOnly);
-        getInputElement(parent).setClassName("field--readonly", readOnly);
+        getWrapElement(parent).setClassName("field__wrap--readonly", readOnly);
     }
 
     protected final void renderInput(SafeHtmlBuilder shb, String value, FieldCell.FieldAppearanceOptions options) {

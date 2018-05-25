@@ -80,17 +80,21 @@ public class FieldView implements IsWidget {
         widget.setRelevant(viewModel.isRelevant(fieldId) && !viewModel.isLocked());
 
         if(viewModel.isMissing(fieldId)) {
-            validationMessage.setText(I18N.CONSTANTS.requiredFieldMessage());
-            validationMessage.setVisible(true);
+            invalidate(I18N.CONSTANTS.requiredFieldMessage());
         } else {
             Collection<String> validationErrors = viewModel.getValidationErrors(fieldId);
             if(!validationErrors.isEmpty()) {
-                validationMessage.setText(validationErrors.iterator().next());
-                validationMessage.setVisible(true);
+                invalidate(validationErrors.iterator().next());
             } else {
                 validationMessage.setVisible(false);
             }
         }
+    }
+
+    public void invalidate(String message) {
+        validationMessage.setText(message);
+        validationMessage.setVisible(true);
+        container.addStyleName("forminput__field--invalid");
     }
 
     public void init(FormInputViewModel viewModel) {

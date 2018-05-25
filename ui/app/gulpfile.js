@@ -15,6 +15,7 @@ const touch = require("touch");
 // CSS
 const sass = require('gulp-sass');
 const sassGlob = require('gulp-sass-glob');
+const rtlcss = require('gulp-rtlcss');
 const svgSprite = require('gulp-svg-sprites');
 const nano = require('cssnano');
 
