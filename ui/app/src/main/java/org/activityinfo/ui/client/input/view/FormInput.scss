@@ -17,6 +17,16 @@
   background-color: $grey-5;
 }
 
+.forminput__inner .fieldset__radio input[type="radio"]:checked ~ label,
+.forminput__inner .fieldset__checkbox input[type="checkbox"]:checked ~ label {
+  color: $green-light;
+}
+
+.forminput__inner .fieldset__radio input[type="radio"]:disabled ~ label,
+.forminput__inner .fieldset__checkbox input[type="checkbox"]:disabled ~ label {
+  color: $grey-3;
+}
+
 .forminput form {
   padding: 2rem;
   background-color: $box-background;
@@ -43,6 +53,10 @@
   }
 }
 
+.forminput__field--invalid {
+  border-left: 0.2rem solid $red;
+}
+
 .forminput__field__header {
   display: flex;
   align-items: flex-end;
@@ -60,6 +74,12 @@
   flex-wrap: wrap;
   margin: -0.5rem;
   width: calc(100% + 1rem);
+}
+
+.forminput__field__geopoint > div {
+  flex: 1 1 calc((100% - 2rem) / 2);
+  min-width: 200px;
+  margin: 0.5rem;
 }
 
 .forminput__field__required {
