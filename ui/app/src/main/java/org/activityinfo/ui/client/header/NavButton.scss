@@ -53,25 +53,30 @@
 .nav__button .button__label {
   z-index: 1;
   position: relative;
+
+  &:before {
+    transition: background-color 0.3s ease,
+                transform 0.3s ease;
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -2.1rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 1rem;
+    transform-origin: 50% 50%;
+    transform: translateX(-50%) scale(0);
+    background-color: $white;
+  }
 }
 
-.nav__button .button__label:before {
-  transition: background-color 0.3s ease,
-              transform 0.3s ease;
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: -2.15rem;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 1rem;
-  transform-origin: 50% 50%;
-  transform: translateX(-50%) scale(0);
-  background-color: $green-light;
+.nav__button:hover .button__label:before {
+  transform: translateX(-50%) scale(1);
 }
 
 .nav__button--active .button__label:before {
   transform: translateX(-50%) scale(1);
+  background-color: $green-light;
 }
 
 .nav__button--active:hover .button__label:before {
