@@ -35,7 +35,7 @@ public class Css3TriggerFieldAppearance extends Css3ValueBaseFieldAppearance imp
     }
 
     @Override
-    public final void render(SafeHtmlBuilder sb, String value, FieldAppearanceOptions options) {
+    public void render(SafeHtmlBuilder sb, String value, FieldAppearanceOptions options) {
         sb.appendHtmlConstant("<div class='field__wrap'>");
         renderInput(sb, value, options);
         renderTrigger(sb, value, options);

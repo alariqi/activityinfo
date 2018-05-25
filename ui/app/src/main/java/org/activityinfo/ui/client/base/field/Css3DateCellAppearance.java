@@ -45,6 +45,15 @@ import org.activityinfo.ui.client.Icon;
 public class Css3DateCellAppearance extends Css3TriggerFieldAppearance implements DateCellAppearance {
 
     @Override
+    public void render(SafeHtmlBuilder sb, String value, FieldCell.FieldAppearanceOptions options) {
+        sb.appendHtmlConstant("<div class='field__wrap'>");
+        renderTrigger(sb, value, options);
+        renderInput(sb, value, options);
+        sb.appendHtmlConstant("</div>");
+    }
+
+
+    @Override
     protected void renderTrigger(SafeHtmlBuilder sb, String value, FieldCell.FieldAppearanceOptions options) {
         sb.appendHtmlConstant("<div class=\"field__trigger\">");
         sb.append(Icon.DATE.render());
