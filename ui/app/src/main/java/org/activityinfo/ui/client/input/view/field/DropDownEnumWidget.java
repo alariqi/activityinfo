@@ -61,6 +61,7 @@ public class DropDownEnumWidget implements FieldWidget {
         comboBox = new ComboBox<>(store, item -> item.getLabel());
         comboBox.setForceSelection(true);
         comboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+        comboBox.setWidth(-1);
         comboBox.addSelectionHandler(event -> {
            if(event.getSelectedItem() == null || event.getSelectedItem() == MISSING) {
                updater.update(FieldInput.EMPTY);
