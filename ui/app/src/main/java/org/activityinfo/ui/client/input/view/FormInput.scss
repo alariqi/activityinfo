@@ -11,11 +11,9 @@
 }
 
 .forminput__inner {
-  padding: 4rem;
   margin-left: auto;
   margin-right: auto;
   max-width: $formwidth;
-  background-color: $grey-5;
 }
 
 .forminput__inner .fieldset__radio input[type="radio"]:checked ~ label,
@@ -29,8 +27,16 @@
 }
 
 .forminput form {
-  padding: 2rem;
+  padding: 4rem;
   background-color: $box-background;
+  margin-top: 3rem;
+
+}
+
+/* form name */
+.forminput h1 {
+  margin-top: 5rem;
+  font-size: 2rem;
 }
 
 /* form headings */
@@ -38,6 +44,22 @@
 .forminput h2,
 .forminput__field h3 {
   margin-bottom: 0.5rem;
+}
+
+.forminput__error {
+  background-color: $red;
+  color: $white;
+  font-family: $gretasemibold;
+  font-size: 1.125rem;
+  padding: 0.75rem;
+}
+
+/* save & cancel buttons at the bottom */
+
+.forminput__footer {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: right;
 }
 
 .forminput__field {

@@ -87,6 +87,7 @@ public class FieldView implements IsWidget {
                 invalidate(validationErrors.iterator().next());
             } else {
                 validationMessage.setVisible(false);
+                container.removeStyleName("forminput__field--invalid");
             }
         }
     }

@@ -55,6 +55,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Form")
     String form();
 
+    @DefaultStringValue("There is an error in this form.")
+    String formError();
+
     @DefaultStringValue("Forms")
     String forms();
 
@@ -84,6 +87,9 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Add a project")
     String addProject();
+
+    @DefaultStringValue("Add record")
+    String addRecord();
 
     @DefaultStringValue("Add Pivot Table")
     String addTable();

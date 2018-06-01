@@ -19,8 +19,10 @@
 package org.activityinfo.ui.client.input.view;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.CloseEvent;
@@ -33,6 +35,9 @@ import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.promise.Maybe;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.button.IconButton;
+import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.input.model.FieldInput;
@@ -69,15 +74,20 @@ public class FormInputView implements IsWidget, InputHandler {
 
     private FormInputViewModel viewModel = null;
 
+    private Label errorMessage;
+
     private CssLayoutContainer container;
 
     private Subscription structureSubscription;
-
 
     public FormInputView(FormStore formStore, RecordRef recordRef) {
         this.formStore = formStore;
         this.formStructure = FormStructure.fetch(formStore, recordRef);
         this.inputModel = new FormInputModel(recordRef);
+
+        this.errorMessage = new Label(I18N.CONSTANTS.formError());
+        this.errorMessage.addStyleName("forminput__error");
+        this.errorMessage.setVisible(false);
 
         this.container = new CssLayoutContainer();
         this.container.addStyleName("forminput__inner");
@@ -109,7 +119,7 @@ public class FormInputView implements IsWidget, InputHandler {
 
         SafeHtml heading;
         if(existingRecord.getState() == Maybe.State.NOT_FOUND) {
-            heading = I18N.MESSAGES.newRecordHeading(formStructure.getFormLabel());
+            heading = SafeHtmlUtils.fromString(I18N.CONSTANTS.addRecord());
         } else {
             heading = I18N.MESSAGES.editRecordHeading(formStructure.getFormLabel());
         }
@@ -118,12 +128,22 @@ public class FormInputView implements IsWidget, InputHandler {
 
         viewModel = viewModelBuilder.build(inputModel, existingRecord);
         formPanel.init(viewModel);
-        formPanel.updateView(viewModel);
+        updateView();
+
+        IconButton cancelButton = new IconButton(Icon.BUBBLE_CLOSE, I18N.CONSTANTS.cancel());
+        IconButton saveButton = new IconButton(Icon.BUBBLE_CHECKMARK, IconButtonStyle.PRIMARY, I18N.CONSTANTS.save());
+        saveButton.addSelectHandler(event -> save(event1 -> { }));
+
+        CssLayoutContainer footer = new CssLayoutContainer();
+        footer.addStyleName("forminput__footer");
+        footer.add(cancelButton);
+        footer.add(saveButton);
 
         container.add(new StaticHtml(InputTemplates.TEMPLATES.formHeading(heading)));
+        container.add(errorMessage);
         container.add(formPanel);
+        container.add(footer);
     }
-
 
     @Override
     public Widget asWidget() {
@@ -138,7 +158,12 @@ public class FormInputView implements IsWidget, InputHandler {
     private void update(FormInputModel updatedModel) {
         this.inputModel = updatedModel;
         this.viewModel = viewModelBuilder.build(inputModel, existingRecord);
+        updateView();
+    }
+
+    private void updateView() {
         formPanel.updateView(viewModel);
+        errorMessage.setVisible(!viewModel.isValid());
     }
 
     public void save(CloseEvent.CloseHandler closeHandler) {

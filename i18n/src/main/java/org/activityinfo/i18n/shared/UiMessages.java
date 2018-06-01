@@ -294,9 +294,6 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("Current column length {0} exceeds Column Export Limitation of {1} for Export Type {2}")
     String columnLimit(int colLength, int colLimit, String exportType);
 
-    @DefaultMessage("<strong>New record</strong> in {0}")
-    SafeHtml newRecordHeading(String formName);
-
     @DefaultMessage("<strong>Update record</strong> in {0}")
     SafeHtml editRecordHeading(String formName);
 }
