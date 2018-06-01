@@ -32,6 +32,7 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.field.FileDropZone;
 import org.activityinfo.ui.client.base.field.FilePicker;
 
 import java.util.ArrayList;
@@ -81,6 +82,9 @@ public class AttachmentWidget implements FieldWidget {
         container.add(fileContainer);
         container.add(buttons);
         container.add(filePicker);
+
+        FileDropZone dropZone = new FileDropZone(container);
+        dropZone.addFileSelectedHandler(this::startUpload);
     }
 
     private void startUpload(FileList fileList) {
