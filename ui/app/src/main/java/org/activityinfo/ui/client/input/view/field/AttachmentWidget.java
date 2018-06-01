@@ -18,251 +18,111 @@
  */
 package org.activityinfo.ui.client.input.view.field;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.*;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
+import elemental2.dom.File;
+import elemental2.dom.FileList;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.attachment.Attachment;
 import org.activityinfo.model.type.attachment.AttachmentValue;
-import org.activityinfo.ui.client.input.model.FieldInput;
+import org.activityinfo.store.spi.BlobId;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.button.IconButton;
+import org.activityinfo.ui.client.base.button.IconButtonStyle;
+import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.base.field.FilePicker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author yuriyz on 8/7/14.
- */
-public class AttachmentWidget implements FieldWidget, AttachmentRow.ValueChangedCallback {
+public class AttachmentWidget implements FieldWidget {
 
     private static final Logger LOGGER = Logger.getLogger(AttachmentWidget.class.getName());
 
-    interface OurUiBinder extends UiBinder<HTMLPanel, AttachmentWidget> {
-    }
+    private CssLayoutContainer container;
 
-    private static OurUiBinder ourUiBinder = GWT.create(OurUiBinder.class);
-
-    @UiField
-    HTMLPanel rootPanel;
-    @UiField
-    HTMLPanel noAttachments;
-    @UiField
-    VerticalPanel hiddenFieldsContainer;
-    @UiField
-    FormPanel formPanel;
-    @UiField
-    HTMLPanel uploadFailed;
-    @UiField
-    TextButton browseButton;
-    @UiField
-    FileUpload fileUpload;
-    @UiField
-    HTMLPanel loadingContainer;
-
-    @UiField
-    HTMLPanel rows;
-
+    private final Label emptyText;
     private final FieldUpdater valueUpdater;
     private final ResourceId formId;
-    private final Uploader uploader;
+    private final IconButton browseButton;
+    private final CssLayoutContainer fileContainer;
+    private final FilePicker filePicker;
 
-    private HandlerRegistration oldHandler;
+    private List<AttachmentUpload> uploads = new ArrayList<>();
+    private List<AttachmentFileWidget> files = new ArrayList<>();
 
     public AttachmentWidget(ResourceId formId, final FieldUpdater valueUpdater) {
         this.formId = formId;
         this.valueUpdater = valueUpdater;
 
-        ourUiBinder.createAndBindUi(this);
+        this.emptyText = new Label(I18N.CONSTANTS.emptyAttachmentText());
+        this.emptyText.addStyleName("forminput__field__attachment__empty");
 
-        this.uploader = new Uploader(formPanel, fileUpload, formId, hiddenFieldsContainer, new Uploader.UploadCallback() {
-            @Override
-            public void onFailure(Throwable exception) {
-                uploadFailed.setVisible(true);
-            }
+        filePicker = new FilePicker();
+        filePicker.setMultiple(true);
+        filePicker.addFileSelectedHandler(this::startUpload);
 
-            @Override
-            public void upload() {
-                AttachmentWidget.this.upload();
-            }
-        });
+        fileContainer = new CssLayoutContainer();
 
-        fileUpload.addChangeHandler(new ChangeHandler() {
-            @Override
-            public void onChange(ChangeEvent event) {
-                uploader.setAttachment(new Attachment());
-                uploader.upload();
-            }
-        });
+        browseButton = new IconButton(Icon.BUBBLE_ATTACHMENT, IconButtonStyle.PRIMARY, I18N.CONSTANTS.browse());
+        browseButton.addStyleName("forminput__field__attachment__browse");
+        browseButton.addSelectHandler(event -> filePicker.browse());
+
+        container = new CssLayoutContainer();
+        container.addStyleName("forminput__field__attachment");
+        container.add(emptyText);
+        container.add(fileContainer);
+        container.add(browseButton);
+        container.add(filePicker);
     }
 
-    @UiHandler("browseButton")
-    public void onBrowse(SelectEvent event) {
-        triggerUpload(fileUpload.getElement());
-    }
+    private void startUpload(FileList fileList) {
+        for (int i = 0; i < fileList.length; i++) {
+            File item = fileList.item(i);
+            Attachment attachment = new Attachment(item.type, item.name, BlobId.generate().asString());
+            AttachmentFileWidget widget = new AttachmentFileWidget(attachment);
+            AttachmentUpload upload = new AttachmentUpload(formId, attachment, item, widget);
 
-    private void upload() {
-        loadingContainer.setVisible(true);
-        uploadFailed.setVisible(false);
-        noAttachments.setVisible(false);
-
-        if (oldHandler != null) {
-            oldHandler.removeHandler();
+            files.add(widget);
+            fileContainer.add(widget);
+            uploads.add(upload);
         }
-
-        oldHandler = formPanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-            @Override
-            public void onSubmitComplete(FormPanel.SubmitCompleteEvent event) {
-                // event.getResults is always null because of cross-domain upload
-                // we are forced to make additional call to check whether upload is successful
-
-                checkBlobExistance();
-                formPanel.reset();
-            }
-        });
-        formPanel.submit();
+        emptyText.setVisible(false);
     }
 
-    public void checkBlobExistance() {
-        try {
-            RequestBuilder requestBuilder = new RequestBuilder(RequestBuilder.GET, uploader.getBaseUrl() + "/exists");
-            requestBuilder.sendRequest(null, new RequestCallback() {
-                @Override
-                public void onResponseReceived(Request request, Response response) {
-                    if (response.getStatusCode() == Response.SC_OK) {
-                        addNewRow(uploader.getAttachment());
-
-                        setState(true);
-                        fireValueChanged();
-                    } else {
-                        LOGGER.severe("Failed to fetch attachment serving url. Status code is not ok. ");
-                        setState(false);
-                    }
-                }
-
-                @Override
-                public void onError(Request request, Throwable exception) {
-                    LOGGER.log(Level.SEVERE, "Failed to fetch attachment serving url. ", exception);
-                    setState(false);
-                }
-            });
-        } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Failed to send request for fetching serving url. ", e);
-            setState(false);
-        }
-    }
-
-    private void setState(boolean success) {
-        loadingContainer.setVisible(false);
-
-        int size = rowsFromPanel().size();
-
-        noAttachments.setVisible(size == 0);
-        uploadFailed.setVisible(!success);
-    }
-
-    private static native void triggerUpload(Element element) /*-{
-        element.click();
-    }-*/;
-
-    public void fireValueChanged() {
-        List<AttachmentRow> rows = rowsFromPanel();
-        if(rows.isEmpty()) {
-            valueUpdater.update(FieldInput.EMPTY);
-        } else {
-            valueUpdater.update(new FieldInput(getValue()));
-        }
+    @Override
+    public Widget asWidget() {
+        return container;
     }
 
 
     @Override
     public void init(FieldValue value) {
         if(value instanceof AttachmentValue) {
-            setValue(((AttachmentValue) value));
-        } else {
-            clear();
+            AttachmentValue attachmentValue = (AttachmentValue) value;
+            for (Attachment attachment : attachmentValue.getValues()) {
+                AttachmentFileWidget widget = new AttachmentFileWidget(attachment);
+                files.add(widget);
+                fileContainer.add(widget);
+            }
         }
     }
-
 
     @Override
     public void setRelevant(boolean relevant) {
-        for (AttachmentRow row : rowsFromPanel()) {
-            row.setReadOnly(!relevant);
-        }
-    }
 
-    private AttachmentValue getValue() {
-        AttachmentValue value = new AttachmentValue();
-        for (AttachmentRow row : rowsFromPanel()) {
-            value.getValues().add(row.getValue());
-        }
-        return value;
-    }
-
-    private void addNewRow(final Attachment attachment) {
-        final AttachmentRow uploadRow = new AttachmentRow(attachment, formId);
-
-        uploadRow.removeButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent clickEvent) {
-                rows.remove(uploadRow);
-                setState(true);
-                fireValueChanged();
-            }
-        });
-
-        rows.add(uploadRow);
-    }
-
-    private List<AttachmentRow> rowsFromPanel() {
-        List<AttachmentRow> rows = new ArrayList<>();
-        for (int i = 0; i < this.rows.getWidgetCount(); i++) {
-            Widget widget = this.rows.getWidget(i);
-            if (widget instanceof AttachmentRow) {
-                rows.add((AttachmentRow) widget);
-            }
-        }
-        return rows;
-    }
-
-    public void setValue(AttachmentValue value) {
-        if (value != null && value.getValues() != null && value.getValues().size() > 0) {
-            rows.clear();
-
-            for (Attachment rowValue : value.getValues()) {
-                addNewRow(rowValue);
-            }
-            setState(true);
-        } else {
-            clear();
-        }
     }
 
     @Override
     public void clear() {
-        rows.clear();
-        formPanel.reset();
-        setState(true);
+        fileContainer.clear();
+        files.clear();
+        for (AttachmentUpload upload : uploads) {
+            upload.cancel();
+        }
     }
 
-    @Override
-    public Widget asWidget() {
-        return rootPanel;
-    }
 }

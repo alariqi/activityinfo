@@ -85,6 +85,7 @@ button,
 .button--primary {
   @extend %button--background;
   background-color: $green-light;
+  color: $black;
 }
 
 .button--delete {

@@ -30,7 +30,6 @@
 
   <g:HTMLPanel ui:field="rootPanel">
     <g:HTMLPanel ui:field="noAttachments" visible="true" width="100%">
-      <ui:text from="{i18n.noAttachments}"/>
     </g:HTMLPanel>
 
     <g:HTMLPanel ui:field="rows" width="100%"/>

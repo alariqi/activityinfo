@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon / Checkmark</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Icon-/-Checkmark" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M15,7.5 C15,11.6425 11.6425,15 7.5,15 C3.3575,15 0,11.6425 0,7.5 C0,3.3575 3.3575,0 7.5,0 C11.6425,0 15,3.3575 15,7.5" id="Fill-1" fill="#00CF79"></path>
+        <polygon id="Fill-3" fill="#FFFFFF" points="11.89025 5.622 10.34275 4.0745 5.04025 9.37825 6.5865 10.92575"></polygon>
+        <polygon id="Fill-5" fill="#FFFFFF" points="4.656375 5.963125 3.110125 7.509375 6.525125 10.926875 8.072625 9.378125"></polygon>
+    </g>
+</svg>

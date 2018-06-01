@@ -7,6 +7,7 @@
   top: 0;
   bottom: 0;
   overflow-y: auto;
+  background-color: $black;
 }
 
 .forminput__inner {
@@ -37,12 +38,6 @@
 .forminput h2,
 .forminput__field h3 {
   margin-bottom: 0.5rem;
-}
-
-.forminput label {
-  font-family: $gretasemibold;
-  font-size: 1rem;
-  color: $green-pale;
 }
 
 .forminput__field {
@@ -155,4 +150,60 @@
     border-top: 0.25rem solid transparent;
     border-right: 0.25rem solid transparent;
   }
+}
+
+.forminput__field__attachment {
+
+  border-radius: $borderradius;
+  border: 1px solid $white;
+  padding: 1rem;
+  
+}
+
+.forminput__field__attachment__empty {
+  text-align: center;
+  font-size: 1.125rem;
+}
+
+.forminput__field__attachment__browse {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.forminput__field__attachment__file {
+  padding-left: 2rem;
+  position: relative;
+}
+
+.forminput__field__attachment__file__remove {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.forminput__field__attachment__file__name {
+  display: flex;
+  flex-direction: row;
+}
+
+.forminput__field__attachment__file__base {
+  flex-grow: 2;
+  font-family: $gretasemibold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.forminput__field__attachment__file__ext {
+
+}
+
+.forminput__field__attachment__file__progress {
+  background-color: #466366;
+}
+
+.forminput__field__attachment__file__progress__bar {
+  height: 0.5rem;
+  background-color: $white;
 }

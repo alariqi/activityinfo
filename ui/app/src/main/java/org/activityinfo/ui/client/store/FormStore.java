@@ -69,4 +69,5 @@ public interface FormStore extends FormSource {
     Promise<Void> updateAnalysis(AnalysisUpdate update);
 
     <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus<T, R>>  startJob(T job);
+
 }

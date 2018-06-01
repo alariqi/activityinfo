@@ -1570,8 +1570,8 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Replace")
     String replace();
 
-    @DefaultStringValue("No attachments")
-    String noAttachments();
+    @DefaultStringValue("Drag a file into this box or browse for the file.")
+    String emptyAttachmentText();
 
     @DefaultStringValue("No image selected.")
     String noImage();
