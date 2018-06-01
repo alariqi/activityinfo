@@ -76,7 +76,14 @@ dependencies {
 
     compile group: 'com.sencha.gxt', name: 'gxt', version: '4.0.0'
     compile group: 'com.sencha.gxt', name: 'gxt-chart', version: '4.0.0'
-    compile "com.sencha.gxt:gxt-themebuilder:4.0.0"
+    compile("com.sencha.gxt:gxt-themebuilder:4.0.0") {
+        exclude group: 'org.apache.xmlgraphics', module: 'batik-rasterizer'
+        exclude group: 'org.apache.xmlgraphics', module: 'batik-script'
+    }
+
+    compile 'com.google.elemental2:elemental2-core:1.0.0-RC1'
+    compile 'com.google.elemental2:elemental2-dom:1.0.0-RC1'
+
 
     testCompile libraries.gwt.servlet
     testCompile project(':store:testing')
@@ -85,6 +92,7 @@ dependencies {
     // Sources need for compiling to JavaScript
     gwt 'com.google.guava:guava-gwt:21.0'
     gwt libraries.gwt.gson
+
 
     // Sources need for compiling tests to JavaScript
     gwtTestCompile libraries.gwt.user
