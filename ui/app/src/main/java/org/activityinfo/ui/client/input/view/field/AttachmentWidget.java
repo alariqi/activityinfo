@@ -71,11 +71,15 @@ public class AttachmentWidget implements FieldWidget {
         browseButton.addStyleName("forminput__field__attachment__browse");
         browseButton.addSelectHandler(event -> filePicker.browse());
 
+        CssLayoutContainer buttons = new CssLayoutContainer();
+        buttons.addStyleName("forminput__field__attachment__browse");
+        buttons.add(browseButton);
+
         container = new CssLayoutContainer();
         container.addStyleName("forminput__field__attachment");
         container.add(emptyText);
         container.add(fileContainer);
-        container.add(browseButton);
+        container.add(buttons);
         container.add(filePicker);
     }
 

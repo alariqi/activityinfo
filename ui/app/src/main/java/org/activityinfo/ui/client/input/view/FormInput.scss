@@ -165,10 +165,13 @@
   font-size: 1.125rem;
 }
 
+.forminput__field__attachment__buttons {
+
+}
+
 .forminput__field__attachment__browse {
   text-align: center;
   margin-top: 1rem;
-  margin-bottom: 1rem;
 }
 
 .forminput__field__attachment__file {
@@ -185,10 +188,10 @@
 .forminput__field__attachment__file__name {
   display: flex;
   flex-direction: row;
+  justify-content: flex-start;
 }
 
 .forminput__field__attachment__file__base {
-  flex-grow: 2;
   font-family: $gretasemibold;
   white-space: nowrap;
   overflow: hidden;
