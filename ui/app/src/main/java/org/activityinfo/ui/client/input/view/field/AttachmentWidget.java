@@ -71,6 +71,7 @@ public class AttachmentWidget implements FieldWidget {
         browseButton = new IconButton(Icon.BUBBLE_ATTACHMENT, IconButtonStyle.PRIMARY, I18N.CONSTANTS.browse());
         browseButton.addStyleName("forminput__field__attachment__browse");
         browseButton.addSelectHandler(event -> filePicker.browse());
+        browseButton.addSelectHandler(event -> valueUpdater.touch());
 
         CssLayoutContainer buttons = new CssLayoutContainer();
         buttons.addStyleName("forminput__field__attachment__browse");

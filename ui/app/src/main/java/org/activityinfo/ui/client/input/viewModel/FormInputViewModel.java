@@ -89,6 +89,11 @@ public class FormInputViewModel {
         return missing.contains(fieldId);
     }
 
+    public boolean isMissingErrorVisible(ResourceId fieldId) {
+        return missing.contains(fieldId) &&
+                (inputModel.isValidationRequested() || inputModel.isTouched(fieldId));
+    }
+
     public FieldValue getField(ResourceId fieldId) {
         return fieldValueMap.get(fieldId);
     }

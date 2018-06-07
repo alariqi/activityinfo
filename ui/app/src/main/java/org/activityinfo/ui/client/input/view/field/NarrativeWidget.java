@@ -62,6 +62,7 @@ public class NarrativeWidget implements FieldWidget {
         textArea = new NarrativeTextArea(new TextAreaInputCell(appearance), updater);
         textArea.addKeyUpHandler(event -> updater.update(input()));
         textArea.addValueChangeHandler(event -> updater.update(input()));
+        textArea.addBlurHandler(event -> updater.touch());
         textArea.setWidth(-1);
     }
 

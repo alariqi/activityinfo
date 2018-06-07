@@ -151,14 +151,21 @@ public class FormInputView implements IsWidget, InputHandler {
     }
 
     @Override
-    public void updateModel(RecordRef recordRef, ResourceId fieldId, FieldInput value) {
+    public void updateField(RecordRef recordRef, ResourceId fieldId, FieldInput value) {
         update(inputModel.update(fieldId, value));
     }
 
+    @Override
+    public void touchField(RecordRef recordRef, ResourceId fieldId) {
+        update(inputModel.touch(fieldId));
+    }
+
     private void update(FormInputModel updatedModel) {
-        this.inputModel = updatedModel;
-        this.viewModel = viewModelBuilder.build(inputModel, existingRecord);
-        updateView();
+        if(this.inputModel != updatedModel) {
+            this.inputModel = updatedModel;
+            this.viewModel = viewModelBuilder.build(inputModel, existingRecord);
+            updateView();
+        }
     }
 
     private void updateView() {

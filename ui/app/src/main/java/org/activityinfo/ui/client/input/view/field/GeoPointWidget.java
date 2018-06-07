@@ -69,6 +69,9 @@ public class GeoPointWidget implements FieldWidget {
         latitude.field.addKeyUpHandler(this::onKeyUp);
         longitude.field.addKeyUpHandler(this::onKeyUp);
 
+        latitude.field.addBlurHandler(event -> updater.touch());
+        longitude.field.addBlurHandler(event -> updater.touch());
+
         timer = new Timer() {
             @Override
             public void run() {

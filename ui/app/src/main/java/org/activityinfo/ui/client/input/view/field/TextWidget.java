@@ -66,6 +66,7 @@ public class TextWidget implements FieldWidget {
 
         field.addKeyUpHandler(event -> updater.update(input()));
         field.addValueChangeHandler(event -> updater.update(input()));
+        field.addBlurHandler(event -> updater.touch());
 
         if(textType.hasInputMask()) {
             field.setEmptyText(textType.getInputMask());

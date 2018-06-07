@@ -27,7 +27,6 @@ import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.model.type.ReferenceValue;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
@@ -80,6 +79,10 @@ public class ReferenceFieldWidget implements FieldWidget {
                 panel.add(levelWidget, new CssFloatLayoutContainer.CssFloatData(1, new Margins(5, 0, 5, 0)));
             }
             widget = panel;
+        }
+
+        for (LevelWidget levelWidget : levelWidgets) {
+            levelWidget.addBlurHandler(event -> fieldUpdater.touch());
         }
     }
 

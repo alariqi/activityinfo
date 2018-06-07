@@ -12,6 +12,7 @@ import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.model.type.number.QuantityType;
 import org.activityinfo.model.type.primitive.TextType;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.view.field.*;
 
 import java.util.ArrayList;
@@ -21,7 +22,15 @@ public class FormMockup implements IsWidget {
 
     private final CssLayoutContainer container;
 
-    private static final FieldUpdater NULL_UPDATER = input -> {};
+    private static final FieldUpdater NULL_UPDATER = new FieldUpdater() {
+        @Override
+        public void update(FieldInput input) {
+        }
+
+        @Override
+        public void touch() {
+        }
+    };
 
     public FormMockup() {
 

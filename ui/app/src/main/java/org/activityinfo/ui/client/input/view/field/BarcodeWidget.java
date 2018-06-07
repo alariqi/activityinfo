@@ -61,6 +61,7 @@ public class BarcodeWidget implements FieldWidget {
 
         field.addKeyUpHandler(event -> updater.update(input()));
         field.addValueChangeHandler(event -> updater.update(input()));
+        field.addBlurHandler(event -> updater.touch());
     }
 
     private FieldInput input() {

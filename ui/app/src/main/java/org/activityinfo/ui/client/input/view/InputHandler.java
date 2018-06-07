@@ -27,6 +27,7 @@ import org.activityinfo.ui.client.input.model.FieldInput;
  */
 public interface InputHandler {
 
-    void updateModel(RecordRef record, ResourceId fieldId, FieldInput value);
+    void updateField(RecordRef record, ResourceId fieldId, FieldInput value);
 
+    void touchField(RecordRef recordRef, ResourceId fieldId);
 }

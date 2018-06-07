@@ -22,28 +22,33 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
- * The state of the user's input into the form as well any sub forms.
- * Immutable.
+ * The state of the user's input to add or change a record.
  */
 public class FormInputModel {
 
     private final RecordRef recordRef;
     private final Map<ResourceId, FieldInput> fieldInputs;
+    private final Set<ResourceId> touchedFields;
+    private final boolean validationRequested;
 
     public FormInputModel(RecordRef recordRef) {
         this.recordRef = recordRef;
         fieldInputs = Collections.emptyMap();
+        touchedFields = Collections.emptySet();
+        validationRequested = false;
     }
 
     private FormInputModel(RecordRef recordRef,
-                           Map<ResourceId, FieldInput> fieldInputs) {
+                           Map<ResourceId, FieldInput> fieldInputs,
+                           Set<ResourceId> touchedFields,
+                           boolean validationRequested) {
         this.recordRef = recordRef;
         this.fieldInputs = fieldInputs;
+        this.touchedFields = touchedFields;
+        this.validationRequested = validationRequested;
     }
 
     public FieldInput get(ResourceId fieldId) {
@@ -69,14 +74,50 @@ public class FormInputModel {
      */
     public FormInputModel update(ResourceId fieldId, FieldInput input) {
 
+
         Map<ResourceId, FieldInput> updatedInputs = new HashMap<>(this.fieldInputs);
         updatedInputs.put(fieldId, input);
 
-        return new FormInputModel(this.recordRef, updatedInputs);
+        Set<ResourceId> updatedTouchSet = add(this.touchedFields, fieldId);
+
+        return new FormInputModel(this.recordRef, updatedInputs, updatedTouchSet, this.validationRequested);
     }
 
     public FormInputModel update(ResourceId fieldId, FieldValue value) {
         return update(fieldId, new FieldInput(value));
     }
 
+    public FormInputModel touch(ResourceId fieldId) {
+        if(this.touchedFields.contains(fieldId)) {
+            return this;
+        } else {
+            return new FormInputModel(recordRef, fieldInputs, add(touchedFields, fieldId), validationRequested);
+        }
+    }
+
+    /**
+     * @return true if the user has explicitly requested validation for this form,
+     * by example clicking the save button.
+     */
+    public boolean isValidationRequested() {
+        return validationRequested;
+    }
+
+    /**
+     * @return true if the user has "touched" the given field in any way, and so should,
+     * for example, see a validation message of this field.
+     */
+    public boolean isTouched(ResourceId fieldId) {
+        return touchedFields.contains(fieldId);
+    }
+
+    private static Set<ResourceId> add(Set<ResourceId> set, ResourceId fieldId) {
+        if(set.contains(fieldId)) {
+            return set;
+        } else {
+            Set<ResourceId> newSet = new HashSet<>(set);
+            newSet.add(fieldId);
+            return newSet;
+        }
+    }
 }

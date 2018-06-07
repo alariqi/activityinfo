@@ -27,6 +27,7 @@ import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.input.model.FieldInput;
+import org.activityinfo.ui.client.input.view.field.FieldUpdater;
 import org.activityinfo.ui.client.input.view.field.FieldView;
 import org.activityinfo.ui.client.input.view.field.FieldWidget;
 import org.activityinfo.ui.client.input.view.field.FieldWidgetFactory;
@@ -70,7 +71,18 @@ public class FormPanel implements IsWidget {
             } else if(node.isParentReference()) {
                 // ignore
             } else if(node.getField().isVisible() && !isSubFormKey(node)) {
-                FieldWidget fieldWidget = widgetFactory.create(node.getField(), input -> onInput(node, input));
+                FieldWidget fieldWidget = widgetFactory.create(node.getField(), new FieldUpdater() {
+                    @Override
+                    public void update(FieldInput input) {
+                        onInput(node, input);
+                    }
+
+                    @Override
+                    public void touch() {
+                        onTouch(node);
+                    }
+
+                });
 
                 if (fieldWidget != null) {
                     addField(node.getField(), fieldWidget);
@@ -108,7 +120,12 @@ public class FormPanel implements IsWidget {
     }
 
     private void onInput(FormTree.Node node, FieldInput input) {
-        inputHandler.updateModel(recordRef, node.getFieldId(), input);
+        inputHandler.updateField(recordRef, node.getFieldId(), input);
+    }
+
+
+    private void onTouch(FormTree.Node node) {
+        inputHandler.touchField(recordRef, node.getFieldId());
     }
 
     private void addField(FormField field, FieldWidget fieldWidget) {
