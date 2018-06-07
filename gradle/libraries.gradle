@@ -9,6 +9,7 @@ ext {
     guavaVersion = '23.0'
     rebarVersion = '2.5.31'
     gwtVersion = '2.8.2'
+    gxtVersion = project.property("gxtVersion")
     jerseyVersion = '1.19.4'
     gaeVersion = '1.9.59'
     jacksonVersion = '1.9.2'
@@ -58,7 +59,13 @@ ext {
         ],
             
         gxt:                'com.extjs:gxt:2.3.1-gwt26-bdd-80',
-            
+
+        sencha: [
+            gxt:            "com.sencha.gxt:gxt:${gxtVersion}",
+            chart:          "com.sencha.gxt:gxt-chart:${gxtVersion}",
+            themebuilder:   "com.sencha.gxt:gxt-themebuilder:${gxtVersion}"
+        ],
+
         rebar: [
             time:           "com.bedatadriven.rebar:rebar-time:${rebarVersion}",
             asyncFun:       "com.bedatadriven.rebar:rebar-asyncfun:${rebarVersion}",
