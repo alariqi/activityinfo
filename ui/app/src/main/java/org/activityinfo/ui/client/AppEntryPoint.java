@@ -137,7 +137,6 @@ public class AppEntryPoint implements EntryPoint {
      * loading indicator can be found in {@code Host4.ftl}
      */
     private void hideLoader() {
-        Document.get().getBody().removeClassName("loading");
         Document.get().getElementById("initial-loader").removeFromParent();
     }
 

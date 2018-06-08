@@ -40,12 +40,18 @@
     <title>${domain.title}</title>
 
     <style type="text/css">
-        body.loading {
+
+        #initial-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             background-color: #F2F7F7;
-            min-height: 100vh;
+            z-index: -2;
         }
 
         .loader {
@@ -161,11 +167,13 @@
         ga('send', 'pageview');
     </script>
 </head>
-<body role="application" class="loading">
-    <div class="loader" id="initial-loader">
-        <div class="loader__blob"></div>
-        <div class="loader__blob"></div>
-        <div class="loader__blob"></div>
+<body role="application" >
+    <div id="initial-loader">
+        <div class="loader">
+            <div class="loader__blob"></div>
+            <div class="loader__blob"></div>
+            <div class="loader__blob"></div>
+        </div>
     </div>
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
 </body>
