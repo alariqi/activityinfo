@@ -1916,4 +1916,15 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Switch accounts")
     String switchAccounts();
 
+    @DefaultStringValue("Success")
+    String success();
+
+    @DefaultStringValue("Your changes have been successfully saved.")
+    String changesSaved();
+
+    @DefaultStringValue("Could not reach the server. Please check your connection.")
+    String saveFailedConnectionProblem();
+
+
+
 }

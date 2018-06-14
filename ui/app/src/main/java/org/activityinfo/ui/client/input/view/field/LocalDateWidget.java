@@ -73,6 +73,11 @@ public class LocalDateWidget implements PeriodFieldWidget {
     }
 
     @Override
+    public void focus() {
+        field.focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return field;
     }

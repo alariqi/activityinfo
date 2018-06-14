@@ -85,6 +85,11 @@ public class QuantityWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        field.focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return field;
     }

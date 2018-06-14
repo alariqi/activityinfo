@@ -168,4 +168,9 @@ abstract class AbstractWeekWidget<T extends PeriodValue> implements PeriodFieldW
     public final Widget asWidget() {
         return panel;
     }
+
+    @Override
+    public void focus() {
+        yearBox.focus();
+    }
 }

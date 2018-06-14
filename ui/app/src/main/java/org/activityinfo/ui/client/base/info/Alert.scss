@@ -1,0 +1,16 @@
+
+.alert {
+
+}
+
+.alert--error {
+  background-color: $red;
+  color: $white;
+  font-family: $gretasemibold;
+  font-size: 1.125rem;
+  padding: 0.75rem;
+}
+
+.alert--warning {
+
+}

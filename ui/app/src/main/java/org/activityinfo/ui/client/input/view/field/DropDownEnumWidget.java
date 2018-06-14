@@ -92,6 +92,11 @@ public class DropDownEnumWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        comboBox.focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return comboBox;
     }

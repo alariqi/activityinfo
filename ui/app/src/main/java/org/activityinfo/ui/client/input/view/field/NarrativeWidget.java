@@ -86,6 +86,11 @@ public class NarrativeWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        textArea.focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return textArea;
     }

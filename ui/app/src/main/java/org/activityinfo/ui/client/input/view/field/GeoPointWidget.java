@@ -141,6 +141,11 @@ public class GeoPointWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        latitude.field.focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return panel;
     }

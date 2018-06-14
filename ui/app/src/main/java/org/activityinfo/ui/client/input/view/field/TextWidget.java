@@ -101,4 +101,9 @@ public class TextWidget implements FieldWidget {
     public void setRelevant(boolean relevant) {
         field.setEnabled(relevant);
     }
+
+    @Override
+    public void focus() {
+        field.focus();
+    }
 }

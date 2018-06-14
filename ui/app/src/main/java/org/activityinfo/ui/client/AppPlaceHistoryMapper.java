@@ -26,7 +26,6 @@ import org.activityinfo.ui.client.analysis.AnalysisPlace;
 import org.activityinfo.ui.client.catalog.CatalogPlace;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.input.RecordPlace;
 import org.activityinfo.ui.client.table.TablePlace;
 
 public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
@@ -42,11 +41,6 @@ public class AppPlaceHistoryMapper implements PlaceHistoryMapper {
             } else {
                 return new AnalysisPlace(ResourceId.generateCuid());
             }
-
-        } else if(parts[0].equals("record")) {
-            ResourceId formId = ResourceId.valueOf(parts[1]);
-            ResourceId recordId = ResourceId.valueOf(parts[2]);
-            return new RecordPlace(formId, recordId);
 
         } else if(parts[0].equals("databases")) {
             return new DatabaseListPlace();

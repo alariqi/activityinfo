@@ -126,6 +126,10 @@ public class AttachmentWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+    }
+
+    @Override
     public void clear() {
         fileContainer.clear();
         files.clear();

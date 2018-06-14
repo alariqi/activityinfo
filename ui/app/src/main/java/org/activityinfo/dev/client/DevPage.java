@@ -64,6 +64,12 @@ public enum DevPage {
         public IsWidget createWidget() {
             return new NonIdealMockup(new LoadingPage());
         }
+    },
+    NOTIFICATIONS {
+        @Override
+        public IsWidget createWidget() {
+            return new NotificationsMockup();
+        }
     };
 
     public abstract IsWidget createWidget();

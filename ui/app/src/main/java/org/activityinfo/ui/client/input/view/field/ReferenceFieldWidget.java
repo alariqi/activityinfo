@@ -124,6 +124,11 @@ public class ReferenceFieldWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        levelWidgets.get(0).getComboBox().focus();
+    }
+
+    @Override
     public Widget asWidget() {
         return widget;
     }

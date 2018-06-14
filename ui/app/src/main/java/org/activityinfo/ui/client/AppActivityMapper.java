@@ -30,8 +30,6 @@ import org.activityinfo.ui.client.database.DatabaseActivity;
 import org.activityinfo.ui.client.database.DatabaseListActivity;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.input.RecordActivity;
-import org.activityinfo.ui.client.input.RecordPlace;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TableActivity;
 import org.activityinfo.ui.client.table.TablePlace;
@@ -55,10 +53,6 @@ public class AppActivityMapper implements ActivityMapper {
 
         if (place instanceof AnalysisPlace) {
             return new AnalysisActivity(formStore, ((AnalysisPlace) place));
-        }
-
-        if (place instanceof RecordPlace) {
-            return new RecordActivity(formStore, (RecordPlace) place);
         }
 
         if (place instanceof CatalogPlace) {

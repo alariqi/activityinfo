@@ -99,6 +99,13 @@ public class CheckBoxGroupWidget implements FieldWidget {
     }
 
     @Override
+    public void focus() {
+        if(!checkBoxes.isEmpty()) {
+            checkBoxes.get(0).focus();
+        }
+    }
+
+    @Override
     public Widget asWidget() {
         return flowPanel;
     }

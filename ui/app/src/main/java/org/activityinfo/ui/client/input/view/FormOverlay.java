@@ -20,6 +20,7 @@ package org.activityinfo.ui.client.input.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.event.CloseEvent;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
@@ -43,7 +44,13 @@ public class FormOverlay implements IsWidget {
         container.clear();
         container.setVisible(true);
 
-        FormInputView view = new FormInputView(formStore, recordRef);
+        FormInputView view = new FormInputView(formStore, recordRef, new CloseEvent.CloseHandler() {
+            @Override
+            public void onClose(CloseEvent event) {
+                container.setVisible(false);
+                container.clear();
+            }
+        });
         container.add(view);
     }
 

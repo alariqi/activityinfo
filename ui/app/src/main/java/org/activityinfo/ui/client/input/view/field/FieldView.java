@@ -39,6 +39,8 @@ public class FieldView implements IsWidget {
     private HTML validationMessage;
     private final CssLayoutContainer container;
 
+    private boolean valid = true;
+
     public FieldView(FormField field, FieldWidget fieldWidget) {
 
         this.fieldId = field.getId();
@@ -87,6 +89,7 @@ public class FieldView implements IsWidget {
             if(!validationErrors.isEmpty()) {
                 invalidate(validationErrors.iterator().next());
             } else {
+                valid = true;
                 validationMessage.setVisible(false);
                 container.removeStyleName("forminput__field--invalid");
             }
@@ -94,6 +97,7 @@ public class FieldView implements IsWidget {
     }
 
     public void invalidate(String message) {
+        valid = false;
         validationMessage.setText(message);
         validationMessage.setVisible(true);
         container.addStyleName("forminput__field--invalid");
@@ -106,6 +110,18 @@ public class FieldView implements IsWidget {
         } else {
             widget.init(fieldValue);
         }
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    /**
+     * Scrolls this field into view and focus on the first input within the field.
+     */
+    public void focusTo() {
+        container.getElement().scrollIntoView();
+        widget.focus();
     }
 
     @Override

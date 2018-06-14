@@ -95,6 +95,10 @@ public class FormInputModel {
         }
     }
 
+    public FormInputModel validationRequested() {
+        return new FormInputModel(recordRef, fieldInputs, touchedFields, true);
+    }
+
     /**
      * @return true if the user has explicitly requested validation for this form,
      * by example clicking the save button.

@@ -139,4 +139,15 @@ public class FormPanel implements IsWidget {
         return panel;
     }
 
+    /**
+     * Scrolls to the first field with an error, and shifts focus to it.
+     */
+    public void scrollToFirstError() {
+        for (FieldView fieldView : fieldViews) {
+            if(!fieldView.isValid()) {
+                fieldView.focusTo();
+                break;
+            }
+        }
+    }
 }
