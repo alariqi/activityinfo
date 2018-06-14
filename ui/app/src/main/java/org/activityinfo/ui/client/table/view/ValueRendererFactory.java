@@ -21,8 +21,6 @@ package org.activityinfo.ui.client.table.view;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.safehtml.shared.SafeUri;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.io.match.coord.CoordinateAxis;
@@ -34,7 +32,6 @@ import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.*;
-import org.activityinfo.model.type.attachment.Attachment;
 import org.activityinfo.model.type.attachment.AttachmentType;
 import org.activityinfo.model.type.attachment.AttachmentValue;
 import org.activityinfo.model.type.barcode.BarcodeType;
@@ -54,8 +51,12 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.model.type.time.*;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.input.view.field.Blobs;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VText;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-import java.util.Iterator;
 import java.util.Optional;
 
 public class ValueRendererFactory {
@@ -70,8 +71,8 @@ public class ValueRendererFactory {
     private static class TextValueRenderer implements ValueRenderer {
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue value) {
-            return SafeHtmlUtils.fromString(((HasStringValue) value).asString());
+        public VTree render(RecordTree recordTree, FieldValue value) {
+            return new VText((((HasStringValue) value).asString()));
         }
     }
 
@@ -84,12 +85,12 @@ public class ValueRendererFactory {
         }
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
 
             SerialNumber serialNumber = ((SerialNumber) fieldValue);
             String serial = fieldType.format(serialNumber);
 
-            return SafeHtmlUtils.fromString(serial);
+            return new VText(serial);
         }
     }
 
@@ -102,12 +103,8 @@ public class ValueRendererFactory {
         }
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
-            SafeHtmlBuilder html = new SafeHtmlBuilder();
-            html.append(((Quantity) fieldValue).getValue());
-            html.appendHtmlConstant(" ");
-            html.appendEscaped(type.getUnits());
-            return html.toSafeHtml();
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
+            return new VText(((Quantity) fieldValue).getValue() + " " + type.getUnits());
         }
     }
 
@@ -116,17 +113,13 @@ public class ValueRendererFactory {
         private final CoordinateParser longitude = new CoordinateParser(CoordinateAxis.LONGITUDE, JsCoordinateNumberFormatter.INSTANCE);
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             GeoPoint point = ((GeoPoint) fieldValue);
-            SafeHtmlBuilder html = new SafeHtmlBuilder();
-            html.appendHtmlConstant("<p itemprop=\"geo\" itemscope itemtype=\"http://schema.org/GeoCoordinates\">");
-            html.appendEscaped(latitude.formatAsDMS(point.getLatitude()));
-            html.appendHtmlConstant("<br>");
-            html.appendEscaped(longitude.formatAsDMS(point.getLongitude()));
-            html.appendHtmlConstant("<meta itemprop=\"latitude\" content=\"" + point.getLatitude() + "\">");
-            html.appendHtmlConstant("<meta itemprop=\"longitude\" content=\"" + point.getLongitude() + "\">");
-            html.appendHtmlConstant("</p>");
-            return html.toSafeHtml();
+
+            return new VNode(HtmlTag.P,
+                    new VText(latitude.formatAsDMS(point.getLatitude())),
+                    new VNode(HtmlTag.BR),
+                    new VText(longitude.formatAsDMS(point.getLongitude())));
         }
     }
 
@@ -134,38 +127,38 @@ public class ValueRendererFactory {
 
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
 
             LocalDate localDate = (LocalDate) fieldValue;
 
-            return SafeHtmlUtils.fromString(localDate.toString());
+            return new VText(localDate.toString());
         }
     }
 
     private static class MonthRenderer implements ValueRenderer {
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             Month month = (Month) fieldValue;
-            return SafeHtmlUtils.fromString(I18N.MESSAGES.month(month.getFirstDayOfMonth().atMidnightInMyTimezone()));
+            return new VText(I18N.MESSAGES.month(month.getFirstDayOfMonth().atMidnightInMyTimezone()));
         }
     }
 
     private static class WeekRenderer implements ValueRenderer {
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             EpiWeek week = (EpiWeek) fieldValue;
-            return SafeHtmlUtils.fromString(I18N.MESSAGES.week(week.getYear(), week.getWeekInYear()));
+            return new VText(I18N.MESSAGES.week(week.getYear(), week.getWeekInYear()));
         }
     }
 
     private static class FortnightRenderer implements ValueRenderer {
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             FortnightValue fortnight = (FortnightValue) fieldValue;
-            return SafeHtmlUtils.fromString(I18N.MESSAGES.fortnight(
+            return new VText(I18N.MESSAGES.fortnight(
                     fortnight.getYear(),
                     fortnight.getWeekInYear(),
                     fortnight.getWeekInYear() + 1));
@@ -180,21 +173,21 @@ public class ValueRendererFactory {
         }
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             EnumValue enumValue = (EnumValue) fieldValue;
-            SafeHtmlBuilder html = new SafeHtmlBuilder();
+            StringBuilder text = new StringBuilder();
 
             boolean needsComma = false;
             for (EnumItem item : type.getValues()) {
                 if(enumValue.getResourceIds().contains(item.getId())) {
                     if(needsComma) {
-                        html.appendEscaped(", ");
+                        text.append(", ");
                     }
-                    html.appendEscaped(item.getLabel());
+                    text.append(item.getLabel());
                     needsComma = true;
                 }
             }
-            return html.toSafeHtml();
+            return new VText(text.toString());
         }
     }
 
@@ -207,16 +200,13 @@ public class ValueRendererFactory {
         }
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             AttachmentValue attachments = (AttachmentValue) fieldValue;
-            SafeHtmlBuilder html = new SafeHtmlBuilder();
-            for (Attachment attachment : attachments.getValues()) {
-                html.appendHtmlConstant("<div>");
-                html.append(TEMPLATES.attachmentLink(Blobs.getAttachmentUri(formId, attachment.getBlobId()),
-                    attachment.getFilename()));
-                html.appendHtmlConstant("</div>");
-            }
-            return html.toSafeHtml();
+
+            return new VNode(HtmlTag.DIV, attachments.getValues().stream().map(a ->
+                    new VNode(HtmlTag.A,
+                        new PropMap().href(Blobs.getAttachmentUri(formId, a.getBlobId())),
+                        new VText(a.getFilename()))));
         }
     }
 
@@ -230,24 +220,18 @@ public class ValueRendererFactory {
         }
 
         @Override
-        public SafeHtml render(RecordTree recordTree, FieldValue fieldValue) {
+        public VTree render(RecordTree recordTree, FieldValue fieldValue) {
 
             ReferenceValue refValue = (ReferenceValue) fieldValue;
 
-            SafeHtmlBuilder html = new SafeHtmlBuilder();
-            Iterator<RecordRef> recordRefs = refValue.getReferences().iterator();
-            while (recordRefs.hasNext()) {
-                Maybe<String> label = keySet.label(recordTree, recordRefs.next());
+            return new VNode(HtmlTag.UL, refValue.getReferences().stream().map(r -> {
+                Maybe<String> label = keySet.label(recordTree, r);
                 if(label.isVisible()) {
-                    html.appendEscaped(label.get());
+                    return new VNode(HtmlTag.LI, new VText(label.get()));
                 } else {
-                    html.appendEscaped("#REF!");
+                    return new VNode(HtmlTag.LI, new VText("#REF!"));
                 }
-                if(recordRefs.hasNext()) {
-                    html.appendHtmlConstant("<br>");
-                }
-            }
-            return html.toSafeHtml();
+            }));
         }
     }
 

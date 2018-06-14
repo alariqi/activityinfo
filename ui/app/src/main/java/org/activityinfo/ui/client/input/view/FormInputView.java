@@ -188,15 +188,7 @@ public class FormInputView implements IsWidget, InputHandler {
         }
 
         if(!viewModel.isValid()) {
-
-            update(inputModel.validationRequested());
-
-            com.google.gwt.core.client.Scheduler.get().scheduleDeferred(() -> {
-                formPanel.scrollToFirstError();
-            });
-
-            ErrorConfig errorConfig = new ErrorConfig(I18N.CONSTANTS.pleaseCompleteForm());
-            Info.display(errorConfig);
+            onInvalidSubmission();
             return;
         }
 
@@ -229,6 +221,21 @@ public class FormInputView implements IsWidget, InputHandler {
                 closeHandler.onClose(new CloseEvent(null));
             }
         });
+    }
+
+    /**
+     * The user has tried to save a record that is in an invalid state.
+     */
+    private void onInvalidSubmission() {
+
+        update(inputModel.validationRequested());
+
+        com.google.gwt.core.client.Scheduler.get().scheduleDeferred(() -> {
+            formPanel.scrollToFirstError();
+        });
+
+        ErrorConfig errorConfig = new ErrorConfig(I18N.CONSTANTS.pleaseCompleteForm());
+        Info.display(errorConfig);
     }
 
 

@@ -1,102 +1,98 @@
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.sencha.gxt.core.client.dom.XElement;
+import com.google.common.base.Optional;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsRenderer {
 
-    private static class FieldRenderer {
-        private ResourceId fieldId;
-        private ValueRenderer renderer;
 
-        public FieldRenderer(ResourceId fieldId, ValueRenderer renderer) {
-            this.fieldId = fieldId;
+    private static class FieldRenderer {
+        private final FormTree.Node field;
+        private final ValueRenderer renderer;
+
+        public FieldRenderer(FormTree.Node fieldNode, ValueRenderer renderer) {
+            this.field = fieldNode;
             this.renderer = renderer;
         }
     }
 
-    private final FormTree formTree;
     private final List<FormTree.Node> subForms = new ArrayList<>();
     private final List<FieldRenderer> fieldRenderers = new ArrayList<>();
 
+    private final VTree emptyState;
+
 
     public DetailsRenderer(FormTree formTree) {
-        this.formTree = formTree;
 
         // Find the subforms that belongs to this form
         for (FormTree.Node node : formTree.getRootFields()) {
-            if(node.isSubForm() && node.isSubFormVisible()) {
+            if (node.isSubForm() && node.isSubFormVisible()) {
                 subForms.add(node);
             }
         }
-    }
 
-    public SafeHtml renderSkeleton() {
-        SafeHtmlBuilder html = new SafeHtmlBuilder();
-        html.appendHtmlConstant("<h2>");
-        html.appendEscaped(I18N.CONSTANTS.recordDetails());
-        html.appendHtmlConstant("</h2>");
-//
-//        getParentForm().ifPresent(parent -> {
-//            html.appendHtmlConstant("<h4>");
-//            html.appendEscaped(I18N.CONSTANTS.goBackTo());
-//            html.appendHtmlConstant("</h4>");
-//            html.appendHtmlConstant("<a href=\"#\">");
-//            html.appendEscaped(parent.getLabel());
-//            html.appendHtmlConstant("</a>");
-//        });
-
-        if (!subForms.isEmpty()) {
-            html.appendHtmlConstant("<h3>");
-            html.appendEscaped(I18N.CONSTANTS.subForms());
-            html.appendHtmlConstant("</h3>");
-
-            for (FormTree.Node subForm : subForms) {
-                html.appendHtmlConstant("<a href=\"#\">");
-                html.appendEscaped(subForm.getForm().getSchema().getLabel());
-                html.appendHtmlConstant("</a>");
-            }
-        }
+        // Add renderers for each field
 
         for (FormTree.Node node : formTree.getRootFields()) {
             ValueRendererFactory.create(formTree, node.getField()).ifPresent(renderer -> {
-                html.appendHtmlConstant("<div class=\"sidepanel__details__field\" data-field=\"" + node.getFieldId() + "\">");
-                html.appendHtmlConstant("<h4>");
-                html.appendEscaped(node.getField().getLabel());
-                html.appendHtmlConstant("</h4>");
-                html.appendHtmlConstant("<div class=\"sidepanel__details__value\"></div></div>");
-
-                fieldRenderers.add(new FieldRenderer(node.getFieldId(), renderer));
+                fieldRenderers.add(new FieldRenderer(node, renderer));
             });
         }
 
-        return html.toSafeHtml();
+        // Define an empty state for when there is no record selected
+        emptyState = new VNode(HtmlTag.DIV, PropMap.withClasses("details__empty"),
+                Icon.NIS_EMPTYSTATE.tree(),
+                new VNode(HtmlTag.DIV, "No record selected"),
+                new VNode(HtmlTag.DIV, "Please select a record to see its history."));
+
     }
 
 
-    public void update(XElement parent, RecordTree recordTree) {
-        FormInstance record = recordTree.getRoot();
+    public VTree render(Optional<RecordTree> selection) {
+        return selection.transform(this::render).or(emptyState);
+    }
+
+    public VTree render(RecordTree selection) {
+
+        List<VTree> children = new ArrayList<>();
+
+        children.add(new VNode(HtmlTag.H2, I18N.CONSTANTS.recordDetails()));
+//
+//        if (!subForms.isEmpty()) {
+//            html.appendHtmlConstant("<h3>");
+//            html.appendEscaped(I18N.CONSTANTS.subForms());
+//            html.appendHtmlConstant("</h3>");
+//
+//            for (FormTree.Node subForm : subForms) {
+//                html.appendHtmlConstant("<a href=\"#\">");
+//                html.appendEscaped(subForm.getForm().getSchema().getLabel());
+//                html.appendHtmlConstant("</a>");
+//            }
+//        }
+        FormInstance record = selection.getRoot();
 
         for (FieldRenderer fieldRenderer : fieldRenderers) {
-            FieldValue fieldValue = record.get(fieldRenderer.fieldId);
-            XElement fieldElement = parent.selectNode("div[data-field=\"" + fieldRenderer.fieldId.asString() + "\"]");
-            if(fieldValue == null) {
-                fieldElement.setVisible(false);
-            } else {
-                fieldElement.setVisible(true);
-                XElement valueElement = fieldElement.selectNode(".sidepanel__details__value");
-                valueElement.setInnerSafeHtml(fieldRenderer.renderer.render(recordTree, fieldValue));
+            FieldValue fieldValue = record.get(fieldRenderer.field.getFieldId());
+            if(fieldValue != null) {
+                children.add(new VNode(HtmlTag.DIV, PropMap.withClasses("details__field"),
+                        new VNode(HtmlTag.H4, fieldRenderer.field.getField().getLabel()),
+                        new VNode(HtmlTag.DIV, PropMap.withClasses("details__value"),
+                                fieldRenderer.renderer.render(selection, fieldValue))));
             }
         }
+
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("details"), children);
     }
 }

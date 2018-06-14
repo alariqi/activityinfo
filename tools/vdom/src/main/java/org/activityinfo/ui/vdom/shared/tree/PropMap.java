@@ -1,5 +1,6 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
+import com.google.gwt.safehtml.shared.SafeUri;
 import org.activityinfo.ui.vdom.shared.html.AriaRole;
 import org.activityinfo.ui.vdom.shared.html.CssClass;
 
@@ -91,6 +92,10 @@ public class PropMap {
         return set("data-" + dataPropertyName, value);
     }
 
+    public PropMap href(SafeUri uri) {
+        return set("href", uri.asString());
+    }
+
 
     /**
      * Sets the "id" property
@@ -102,6 +107,10 @@ public class PropMap {
 
     public PropMap setClass(CssClass classNames) {
         return set("className", classNames.getClassNames());
+    }
+
+    public PropMap setClass(String classNames) {
+        return set("className", classNames);
     }
 
     public static boolean isObject(Object object) {
@@ -154,4 +163,11 @@ public class PropMap {
         return propMap.toString();
     }
 
+    public static PropMap withClass(String className, boolean add) {
+        if(add) {
+            return withClasses(className);
+        } else {
+            return new PropMap();
+        }
+    }
 }

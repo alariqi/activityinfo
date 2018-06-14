@@ -1,6 +1,7 @@
 package org.activityinfo.dev.client;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import org.activityinfo.ui.client.BackgroundStyle;
 import org.activityinfo.ui.client.nonideal.LoadingPage;
 
 public enum DevPage {
@@ -10,6 +11,21 @@ public enum DevPage {
             return new IndexPage();
         }
     },
+
+    BUTTONS {
+        @Override
+        public IsWidget createWidget() {
+            return new ButtonMockup(BackgroundStyle.LIGHT);
+        }
+    },
+
+    BUTTONS_DARK {
+        @Override
+        public IsWidget createWidget() {
+            return new ButtonMockup(BackgroundStyle.DARK);
+        }
+    },
+
     TABLEGRID {
         @Override
         public IsWidget createWidget() {

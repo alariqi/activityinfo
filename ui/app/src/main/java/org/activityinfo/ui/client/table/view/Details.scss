@@ -1,0 +1,36 @@
+
+
+.details {
+
+  h2 {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  /*
+   Field Label
+   */
+  h4 {
+    margin-top: 1rem;
+    color: $green-pale;
+    font-family: $gretasemibold;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+  }
+}
+
+.details__value {
+  color: $white;
+  font-family: $gretalight;
+  font-size: 1rem;
+}
+
+.details--loading .details__value {
+  color: transparent;
+  text-shadow: 0 0 5px rgba($white, 0.5)
+}

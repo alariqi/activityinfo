@@ -18,95 +18,70 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.common.base.Strings;
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.form.FieldValueChange;
 import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.form.RecordHistoryEntry;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VText;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.Date;
 
 public class HistoryRenderer {
 
-    public HistoryRenderer() {}
+    private static final DateTimeFormat CHANGE_TIME_FORMAT =
+            DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
 
-    private void appendItemSpan(SafeHtmlBuilder html, String string) {
-        html.appendHtmlConstant("<h3>");
-        html.appendEscaped(string);
-        html.appendHtmlConstant("</h3>");
-    }
+    private HistoryRenderer() {}
 
-    private void appendTo(RecordHistoryEntry entry, SafeHtmlBuilder html) {
-        Date changeTime = new Date(entry.getTime() * 1000L);
-
-        html.appendHtmlConstant("<p>");
-        if (entry.getChangeType().equals("created")) {
-            if (entry.getSubFieldLabel() == null) {
-
-                appendItemSpan(html, I18N.MESSAGES.siteHistoryCreated(
-                        changeTime, entry.getUserName(), entry.getUserEmail()));
-            } else {
-                appendItemSpan(html, I18N.MESSAGES.siteHistorySubFormCreated(
-                        changeTime, entry.getUserName(), entry.getUserEmail(),
-                        entry.getSubFieldLabel()));
-            }
+    public static VTree render(com.google.common.base.Optional<RecordHistory> history) {
+        if(history.isPresent()) {
+            return render(history.get());
         } else {
-            if (entry.getSubFieldLabel() == null) {
-                appendItemSpan(html, I18N.MESSAGES.siteHistoryUpdated(
-                        changeTime, entry.getUserName(), entry.getUserEmail()));
-            } else {
-                appendItemSpan(html, I18N.MESSAGES.siteHistorySubFormUpdated(
-                        changeTime, entry.getUserName(), entry.getUserEmail(),
-                        entry.getSubFieldLabel()));
-            }
-        }
-
-        if (!entry.getValues().isEmpty()) {
-            html.appendHtmlConstant("<ul style='margin:0px 0px 10px 20px;'>");
-            for (FieldValueChange change : entry.getValues()) {
-                html.appendHtmlConstant("<li>");
-
-                if (!Strings.isNullOrEmpty(change.getSubFormKey())) {
-                    html.appendEscaped(change.getSubFormKey());
-                    html.appendEscaped(", ");
-                }
-
-                html.appendEscaped(change.getFieldLabel());
-                html.appendEscaped(": ");
-                html.appendEscaped(change.getNewValueLabel());
-
-                html.appendEscaped(" (");
-                if (Strings.isNullOrEmpty(change.getOldValueLabel())) {
-                    html.appendEscaped(I18N.MESSAGES.siteHistoryOldValueBlank());
-                } else {
-                    html.appendEscaped(I18N.MESSAGES.siteHistoryOldValue(change.getOldValueLabel()));
-                }
-                html.appendEscaped(")");
-                html.appendHtmlConstant("</li>");
-            }
-            html.appendHtmlConstant("</ul>");
+            return new VText("No selection");
         }
     }
 
-    public SafeHtml render(RecordHistory history) {
-        SafeHtmlBuilder html = new SafeHtmlBuilder();
 
-        if (history.getEntries().isEmpty()) {
+    private static VTree render(RecordHistory history) {
+        if (!history.isAvailable()) {
             return renderNoHistory();
         }
 
-        for (RecordHistoryEntry historyEntry : history.getEntries()) {
-            appendTo(historyEntry, html);
-        }
-
-        return html.toSafeHtml();
+        return new VNode(HtmlTag.DIV, history.getEntries().stream().map(e -> renderEntry(e)));
     }
 
-    public SafeHtml renderNoHistory() {
-        return SafeHtmlUtils.fromTrustedString(I18N.MESSAGES.siteHistoryNotAvailable());
+    private static VTree renderEntry(RecordHistoryEntry e) {
+        return new VNode(HtmlTag.DIV,
+                new VNode(HtmlTag.DIV, PropMap.withClasses("history__date"), new VText(formatTime(e))),
+                new VNode(HtmlTag.DIV, PropMap.withClasses("history__type"), new VText(formatType(e))),
+                new VNode(HtmlTag.DIV, PropMap.withClasses("history__user"), new VText(formatUser(e))));
+    }
+
+    private static String formatTime(RecordHistoryEntry e) {
+        return CHANGE_TIME_FORMAT.format(new Date(e.getTime() * 1000L));
+    }
+
+
+    private static String formatType(RecordHistoryEntry e) {
+        switch (e.getChangeType()) {
+            case "created":
+                return "Record added";
+            default:
+            case "update":
+                return  "Record modified";
+        }
+    }
+
+    private static String formatUser(RecordHistoryEntry e) {
+        return e.getUserName() + " — " + e.getUserEmail();
+    }
+
+    private static VTree renderNoHistory() {
+        return new VText(I18N.MESSAGES.siteHistoryNotAvailable());
     }
 
 }

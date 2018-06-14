@@ -2,6 +2,10 @@ package org.activityinfo.ui.client;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import org.activityinfo.ui.vdom.shared.html.SvgTag;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public enum Icon {
     HEADER_REPORTS,
@@ -27,7 +31,9 @@ public enum Icon {
     OPTIONS_HORIZONTAL,
 
     EXPAND_DOWN,
-    EXPAND_UP;
+    EXPAND_UP,
+
+    NIS_EMPTYSTATE;
 
     public String href() {
         return "#" + name().toLowerCase();
@@ -44,5 +50,13 @@ public enum Icon {
         return SafeHtmlUtils.fromTrustedString("<svg xmlns=\"http://www.w3.org/2000/svg\"" +
                 " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
                 "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + href() + "\"></use></svg>");
+    }
+
+    public VTree tree() {
+        return new VNode(SvgTag.SVG, new PropMap()
+                .set("viewBox", "0 0 21 17")
+                .setClass("icon")
+                .set("preserveAspectRatio","xMinYMin meet"),
+                new VNode(SvgTag.USE, new PropMap().set("href", href())));
     }
 }

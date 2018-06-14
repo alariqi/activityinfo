@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class VNode extends VTree {
 
@@ -36,6 +37,14 @@ public class VNode extends VTree {
 
     public VNode(Tag tag, VTree... children) {
         this(tag, null, children, null, null);
+    }
+
+    public VNode(Tag tag, String text) {
+        this(tag, null, new VText(text));
+    }
+
+    public VNode(Tag tag, Stream<VTree> children) {
+        this(tag, null, children.toArray(VTree[]::new));
     }
 
     public VNode(Tag tag, PropMap propMap) {

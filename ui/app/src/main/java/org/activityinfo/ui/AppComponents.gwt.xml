@@ -41,6 +41,7 @@
     <inherits name="org.activityinfo.Storage"/>
 
     <inherits name="org.activityinfo.ui.codemirror.CodeMirror"/>
+    <inherits name="org.activityinfo.ui.vdom.VDom"/>
 
     <inherits name="com.bedatadriven.rebar.appcache.AppCache"/>
 
