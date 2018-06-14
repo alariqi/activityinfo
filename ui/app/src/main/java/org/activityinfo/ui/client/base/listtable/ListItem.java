@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.database;
+package org.activityinfo.ui.client.base.listtable;
 
 import com.google.gwt.safehtml.shared.SafeUri;
 

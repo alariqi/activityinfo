@@ -7,6 +7,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
+import org.activityinfo.ui.client.base.listtable.ListItem;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.List;

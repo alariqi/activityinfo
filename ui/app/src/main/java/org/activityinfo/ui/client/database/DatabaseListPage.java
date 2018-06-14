@@ -10,6 +10,9 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
+import org.activityinfo.ui.client.base.listtable.ListItem;
+import org.activityinfo.ui.client.base.listtable.ListItemCell;
+import org.activityinfo.ui.client.base.listtable.StaticListTable;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
 import org.activityinfo.ui.client.page.PageContainer;
 
@@ -18,7 +21,7 @@ import java.util.List;
 public class DatabaseListPage implements IsWidget {
 
     private final PageContainer container;
-    private final StaticListView<ListItem> listView;
+    private final StaticListTable<ListItem> listView;
 
     public DatabaseListPage() {
 
@@ -35,7 +38,7 @@ public class DatabaseListPage implements IsWidget {
         toolbar.addAction(newDatabaseButton);
         toolbar.addSort(sortButton);
 
-        listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
+        listView = new StaticListTable<>(new ListItemCell(), ListItem::getId);
 
         container = new PageContainer();
         container.getHeader().setHeading(I18N.CONSTANTS.databases());

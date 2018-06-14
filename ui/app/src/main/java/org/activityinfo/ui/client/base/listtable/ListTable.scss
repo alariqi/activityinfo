@@ -1,12 +1,12 @@
 
-/* listview */
-.listview {
+.listtable {
   box-shadow: 0 0.1rem 1rem 0 $shadow;
+  background-color: white;
+  border-radius: $borderradius;
 }
 
 
-
-.page__item {
+.listtable__item {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -30,7 +30,7 @@
   }
 }
 
-.page__item__label {
+.listtable__item__label {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,7 +68,7 @@
   }
 }
 
-.page__item__avatar {
+.listtable__item__avatar {
   position: relative;
   display: flex;
   align-items: center;
@@ -93,13 +93,13 @@
   }
 }
 
-.listview--forms .page__item__avatar {
+.listtable--forms .listtable__item__avatar {
   &:after {
     display: none;
   }
 }
 
-.page__item--offline .page__item__avatar {
+.listtable__item--offline .listtable__item__avatar {
   &:before {
     z-index: 2;
     content: '';
@@ -115,25 +115,25 @@
   }
 }
 
-.page__item__avatar .avatar {
+.listtable__item__avatar .avatar {
   z-index: 1;
   display: block;
   width: 1.5rem;
   height: 2.25rem;
 }
 
-.listview--forms .page__item__avatar .avatar {
+.listtable--forms .listtable__item__avatar .avatar {
   width: 1rem;
   height: 1.5rem;
 }
 
-.page__item__title {
+.listtable__item__title {
   flex-grow: 1;
   font-family: $gretasemibold;
   font-size: 1rem;
 }
 
-.page__item__offlineindicator {
+.listtable__item__offlineindicator {
   transition: opacity 0.3s 0s ease;
   position: relative;
   display: none;
@@ -165,18 +165,18 @@
   }
 }
 
-.page__item--offline .page__item__offlineindicator {
+.listtable__item--offline .listtable__item__offlineindicator {
   display: inline-block;
 }
 
-.page__item:hover .page__item__offlineindicator,
-.page__item__label:hover .page__item__offlineindicator,
-.page__item__label:focus .page__item__offlineindicator {
+.listtable__item:hover .listtable__item__offlineindicator,
+.listtable__item__label:hover .listtable__item__offlineindicator,
+.listtable__item__label:focus .listtable__item__offlineindicator {
   transition: opacity 0.3s 0.2s ease;
   opacity: 1;
 }
 
-.page__item__options {
+.listtable__item__options {
   padding: 1rem;
   font-size: 0;
 

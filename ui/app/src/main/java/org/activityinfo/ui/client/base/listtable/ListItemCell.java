@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.database;
+package org.activityinfo.ui.client.base.listtable;
 
 
 import com.google.gwt.cell.client.AbstractCell;
@@ -35,7 +35,7 @@ public class ListItemCell extends AbstractCell<ListItem> {
 
     @Override
     public void render(Context context, ListItem item, SafeHtmlBuilder sb) {
-        sb.append(DatabaseTemplates.TEMPLATES.listItem(item));
+        sb.append(ListTableTemplates.TEMPLATES.listItem(item));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ListItemCell extends AbstractCell<ListItem> {
 
         if (BrowserEvents.CLICK.equals(event.getType())) {
             Element element = event.getEventTarget().cast();
-            Element options = withinClass(element, "page__item__options", 5);
+            Element options = withinClass(element, "listtable__item__options", 5);
             if(options != null) {
                 LOGGER.info("Options clicked!");
                 optionsMenu.show(options, new Style.AnchorAlignment(Style.Anchor.TOP, Style.Anchor.BOTTOM));

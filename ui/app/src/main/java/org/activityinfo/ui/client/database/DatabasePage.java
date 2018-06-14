@@ -9,6 +9,9 @@ import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
 import org.activityinfo.ui.client.base.container.StaticHtml;
+import org.activityinfo.ui.client.base.listtable.ListItem;
+import org.activityinfo.ui.client.base.listtable.ListItemCell;
+import org.activityinfo.ui.client.base.listtable.StaticListTable;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
 import org.activityinfo.ui.client.nonideal.ViewWidget;
 import org.activityinfo.ui.client.page.Breadcrumb;
@@ -18,7 +21,7 @@ import org.activityinfo.ui.client.page.PageContainer;
 public class DatabasePage implements ViewWidget<DatabaseViewModel> {
 
     private final PageContainer container;
-    private final StaticListView<ListItem> listView;
+    private final StaticListTable<ListItem> listView;
 
 
     public DatabasePage() {
@@ -38,7 +41,7 @@ public class DatabasePage implements ViewWidget<DatabaseViewModel> {
         toolbar.addAction(newFolderButton);
         toolbar.addSort(sortButton);
 
-        listView = new StaticListView<>(new ListItemCell(), ListItem::getId);
+        listView = new StaticListTable<>(new ListItemCell(), ListItem::getId);
         listView.addStyleName("listview--forms");
 
         container = new PageContainer();

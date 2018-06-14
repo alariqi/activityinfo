@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.database;
+package org.activityinfo.ui.client.base.listtable;
 
 import com.google.common.base.Strings;
 import com.google.gwt.cell.client.Cell;
@@ -21,18 +21,18 @@ import java.util.Map;
  * A simplified version of a ListView that does not handle selection, mouse over, etc, and is suitable
  * for proper HTML lists that include actual hyperlinks, etc.
  */
-public class StaticListView<M> extends Widget {
+public class StaticListTable<M> extends Widget {
 
     private final Cell<M> cell;
     private final ModelKeyProvider<M> keyProvider;
 
     private final Map<String, M> modelMap = new HashMap<>();
 
-    public StaticListView(Cell<M> cell, ModelKeyProvider<M> keyProvider) {
+    public StaticListTable(Cell<M> cell, ModelKeyProvider<M> keyProvider) {
         this.cell = cell;
         this.keyProvider = keyProvider;
         DivElement divElement = Document.get().createDivElement();
-        divElement.addClassName("listview");
+        divElement.addClassName("listtable");
         setElement(divElement);
 
         sinkEvents(Event.ONCLICK);
@@ -43,7 +43,7 @@ public class StaticListView<M> extends Widget {
         modelMap.clear();
 
         if(models.isEmpty()) {
-            getElement().setInnerSafeHtml(DatabaseTemplates.TEMPLATES.emptyList());
+            getElement().setInnerSafeHtml(ListTableTemplates.TEMPLATES.emptyList());
             return;
         }
 
@@ -52,7 +52,7 @@ public class StaticListView<M> extends Widget {
             M model = models.get(i);
             String modelKey = keyProvider.getKey(model);
 
-            sb.appendHtmlConstant("<div class=\"listview__item\" data-key=\"" + modelKey + "\">");
+            sb.appendHtmlConstant("<div data-key=\"" + modelKey + "\">");
             cell.render(new Cell.Context(i, 0, modelKey), model, sb);
             sb.appendHtmlConstant("</div>");
 
@@ -84,6 +84,7 @@ public class StaticListView<M> extends Widget {
 
     private Element findParent(Element element) {
         while(element != null) {
+
             String dataKey = element.getAttribute("data-key");
             if(!Strings.isNullOrEmpty(dataKey)) {
                 return element;
