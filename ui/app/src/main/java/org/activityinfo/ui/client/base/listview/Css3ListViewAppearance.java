@@ -60,9 +60,9 @@ public class Css3ListViewAppearance<M> implements ListViewAppearance<M> {
 
     @Override
     public void renderItem(SafeHtmlBuilder sb, SafeHtml content) {
-        sb.appendHtmlConstant("<div class='listview__item'>");
+        sb.appendHtmlConstant("<div class='listview__item'><div class='listview__item__inner'>");
         sb.append(content);
-        sb.appendHtmlConstant("</div>");
+        sb.appendHtmlConstant("</div></div>");
     }
     @Override
     public void renderEnd(SafeHtmlBuilder builder) {
