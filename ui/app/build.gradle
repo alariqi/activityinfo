@@ -68,6 +68,8 @@ dependencies {
     compile project(':tools:codemirror')
     compile project(':tools:indexeddb')
 
+    compile project(':tools:vdom')
+
     compile libraries.rebar.appcache
 
     compile libraries.sencha.gxt
@@ -84,6 +86,7 @@ dependencies {
     testCompile libraries.gwt.servlet
     testCompile project(':store:testing')
     testCompile project(':tools:indexeddb').sourceSets.test.output
+
 
     // Sources need for compiling to JavaScript
     gwt 'com.google.guava:guava-gwt:21.0'

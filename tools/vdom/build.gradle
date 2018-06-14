@@ -1,0 +1,21 @@
+
+description = 'ActivityInfo Virtual DOM'
+
+
+dependencies {
+    compileOnly libraries.gwt.user
+    testCompile libraries.gwt.user
+
+    compile libraries.guava
+    compile libraries.jsr305
+}
+
+jar {
+    from project.sourceSets.main.allSource
+    from project.sourceSets.main.output
+}
+
+test {
+    exclude 'org/activityinfo/ui/vdom/client/**'
+    exclude 'org/activityinfo/ui/vdom/GwtVDomTestSuite*'
+}
