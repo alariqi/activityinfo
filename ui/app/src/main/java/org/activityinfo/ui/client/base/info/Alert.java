@@ -1,21 +1,26 @@
 package org.activityinfo.ui.client.base.info;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.dom.XElement;
 
-public class Alert implements IsWidget {
+/**
+ * Simple message drawing the user's attention to an error or a warning.
+ */
+public class Alert extends Widget {
+
+    private XElement div;
 
     public enum Type {
         ERROR,
         WARNING
     }
 
-    private Label label;
-
     public Alert() {
-        label = new Label();
-        label.addStyleName("alert");
+        div = Document.get().createDivElement().cast();
+        div.addClassName("alert");
+        setElement(div.<Element>cast());
     }
 
     public Alert(Type type, String message) {
@@ -25,20 +30,15 @@ public class Alert implements IsWidget {
     }
 
     public void setMessage(String message) {
-        label.setText(message);
+        div.setInnerText(message);
     }
 
     public void setType(Type type) {
-        label.setStyleName("alert--error", type == Type.ERROR);
-        label.setStyleName("alert--warning", type == Type.WARNING);
+        div.setClassName("alert--error", type == Type.ERROR);
+        div.setClassName("alert--warning", type == Type.WARNING);
     }
 
     public void setVisible(boolean visible) {
-        label.setVisible(visible);
-    }
-
-    @Override
-    public Widget asWidget() {
-        return label;
+        div.setVisible(visible);
     }
 }
