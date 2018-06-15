@@ -2,7 +2,6 @@ package org.activityinfo.ui.vdom.shared.tree;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import org.activityinfo.ui.vdom.shared.dom.DomElement;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 
 /**
@@ -29,7 +28,7 @@ public abstract class VWidget extends VComponent {
     protected final void componentDidMount() {
         assert widget == null : "component/widget has already been mounted";
         widget = createWidget().asWidget();
-        getContext().attachWidget(widget, (DomElement)getDomNode());
+        getContext().attachWidget(widget, getDomNode());
     }
 
     @Override

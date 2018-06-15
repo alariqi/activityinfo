@@ -1,7 +1,7 @@
 package org.activityinfo.ui.vdom.shared.diff;
 
+import com.google.gwt.dom.client.Node;
 import org.activityinfo.ui.vdom.client.render.PatchOpExecutor;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
 
 public class PatchTextOp implements PatchOp {
 
@@ -12,7 +12,7 @@ public class PatchTextOp implements PatchOp {
     }
 
     @Override
-    public DomNode apply(PatchOpExecutor executor, DomNode domNode) {
+    public Node apply(PatchOpExecutor executor, Node domNode) {
         return executor.patchText(domNode, text);
     }
 

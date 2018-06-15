@@ -19,14 +19,19 @@
 package org.activityinfo.analysis.table;
 
 import com.google.common.base.Optional;
+import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.formula.FormulaNode;
-import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.type.RecordRef;
 
 public interface TableUpdater {
+
+    void updateModel(TableModel updatedModel);
 
     void updateFilter(Optional<FormulaNode> filterFormula);
 
     void updateColumnWidth(String columnId, int width);
 
-    void editRecord(ResourceId recordId);
+    void editRecord(RecordRef ref);
+
+    void newRecord();
 }

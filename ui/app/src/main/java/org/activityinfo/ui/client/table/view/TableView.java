@@ -21,6 +21,7 @@ package org.activityinfo.ui.client.table.view;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.analysis.table.EffectiveTableModel;
+import org.activityinfo.analysis.table.TableUpdater;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.UserDatabaseMeta;
@@ -58,20 +59,21 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
     private final FormOverlay formOverlay;
 
     private final SubscriptionSet subscriptions = new SubscriptionSet();
+    private TableUpdater tableUpdater;
 
 
-    public TableView(FormStore formStore, final TableViewModel viewModel) {
+    public TableView(FormStore formStore, final TableViewModel viewModel, TableUpdater tableUpdater) {
 
         this.viewModel = viewModel;
 
         formOverlay = new FormOverlay(formStore);
-        toolBar = new TableToolBar(formStore, viewModel, formOverlay);
+        this.tableUpdater = tableUpdater;
+        toolBar = new TableToolBar(formStore, viewModel, tableUpdater);
 
         gridContainer = new GridContainer();
         gridContainer.addStyleName("formtable__gridcontainer");
 
         sidePanel = new SidePanel(new RecordView(formStore, viewModel));
-
 
         this.container = new FullWidthPageContainer();
         this.container.addBodyStyleName("formtable");
@@ -132,7 +134,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
             return;
         }
 
-        grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
+        grid = new TableGrid(viewModel, effectiveTableModel, tableUpdater);
 
         grid.addSelectionChangedHandler(event -> {
             if(!event.getSelection().isEmpty()) {
@@ -159,5 +161,9 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
             }
             return I18N.CONSTANTS.notFound();
         });
+    }
+
+    public void editRecord(RecordRef recordRef) {
+        formOverlay.show(recordRef);
     }
 }

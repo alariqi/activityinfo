@@ -1,7 +1,6 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
 import com.google.gwt.safehtml.shared.SafeUri;
-import org.activityinfo.ui.vdom.shared.dom.EventHandler;
 import org.activityinfo.ui.vdom.shared.html.AriaRole;
 import org.activityinfo.ui.vdom.shared.html.CssClass;
 

@@ -1,12 +1,9 @@
-package org.activityinfo.ui.vdom.shared.dom;
+package org.activityinfo.ui.vdom.shared.tree;
 
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Observer;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.VComponent;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public class ReactiveComponent extends VComponent {
     private Observable<VTree> observable;

@@ -1,10 +1,9 @@
 package org.activityinfo.ui.vdom.client.render;
 
 import com.google.gwt.core.client.GWT;
-import org.activityinfo.ui.vdom.shared.dom.DomDocument;
-import org.activityinfo.ui.vdom.shared.dom.DomElement;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
-import org.activityinfo.ui.vdom.shared.dom.DomText;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
 /**
@@ -13,15 +12,13 @@ import org.activityinfo.ui.vdom.shared.tree.*;
 public class DomBuilder {
 
     private RenderContext context;
-    private DomDocument doc;
 
 
     public DomBuilder(RenderContext context) {
         this.context = context;
-        this.doc = context.getDocument();
     }
 
-    public void updateRoot(DomElement rootElement, VTree vtree) {
+    public void updateRoot(Element rootElement, VTree vtree) {
         if(vtree instanceof VNode) {
             updateRootNode(rootElement, (VNode) vtree);
         } else if(vtree instanceof VComponent) {
@@ -31,7 +28,7 @@ public class DomBuilder {
         }
     }
 
-    public void updateRootNode(DomElement rootElement, VNode vNode) {
+    public void updateRootNode(Element rootElement, VNode vNode) {
         if(!rootElement.getTagName().equalsIgnoreCase(vNode.tag.name())) {
             throw new UnsupportedOperationException("Cannot change the tag name of the root element");
         }
@@ -42,8 +39,7 @@ public class DomBuilder {
         appendChildren(rootElement, vNode);
     }
 
-
-    public DomNode render(VTree vTree) {
+    public Node render(VTree vTree) {
 
         if(vTree instanceof VComponent) {
             return renderComponent((VComponent) vTree);
@@ -59,49 +55,49 @@ public class DomBuilder {
         }
     }
 
-    private DomElement renderTree(VNode vnode) {
-        DomElement domElement;
+    private Element renderTree(VNode vnode) {
+        Element Element;
         if(vnode.namespace == null) {
-            domElement = doc.createElement(vnode.tag);
+            Element = Document.get().createElement(vnode.tag.name());
         } else {
-            domElement = doc.createElementNS(vnode.tag, vnode.namespace);
+            Element = createElementNS(vnode.tag.name().toLowerCase(), vnode.namespace);
         }
 
         PropMap props = vnode.properties;
         if(props != null) {
             try {
-                Properties.applyProperties(domElement, props, null);
+                Properties.applyProperties(Element, props, null);
             } catch(Exception e) {
                 GWT.log("Exception thrown while setting properties of " + vnode + ": " + e.getMessage(), e);
             }
         }
 
-        return appendChildren(domElement, vnode);
+        return appendChildren(Element, vnode);
     }
 
-    private DomElement appendChildren(DomElement domElement, VNode vnode) {
+    private static native Element createElementNS(String tagName, String namespace) /*-{
+        return $wnd.document.createElementNS(namespace, tagName);
+    }-*/;
+
+    private Element appendChildren(Element Element, VNode vnode) {
         VTree[] children = vnode.children;
         for (int i = 0; i < children.length; ++i) {
-            domElement.appendChild(render(children[i]));
+            Element.appendChild(render(children[i]));
         }
 
-        return domElement;
+        return Element;
     }
 
-    private DomNode renderComponent(VComponent thunk) {
-        VTree virtualNode = thunk.ensureRendered();
-        DomNode domNode = render(virtualNode);
+    private Node renderComponent(VComponent component) {
+        VTree virtualNode = component.ensureRendered();
+        Node domNode = render(virtualNode);
 
-        if(thunk.getEventMask() != 0) {
-            context.registerEventListener(thunk, domNode);
-        }
-
-        thunk.fireMounted(context, domNode);
+        component.fireMounted(context, domNode.cast());
 
         return domNode;
     }
 
-    private void updateRootThunk(DomElement rootElement, VComponent thunk) {
+    private void updateRootThunk(Element rootElement, VComponent thunk) {
         VTree tree = materializeThunk(thunk);
         updateRoot(rootElement, tree);
 
@@ -112,8 +108,8 @@ public class DomBuilder {
         return thunk.force();
     }
 
-    private DomText renderText(VText vTree) {
-        return doc.createTextNode(vTree.getText());
+    private Node renderText(VText vTree) {
+        return Document.get().createTextNode(vTree.getText());
     }
 
 }

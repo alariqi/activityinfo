@@ -12,12 +12,14 @@ import org.activityinfo.ui.vdom.client.render.DomPatcher;
 import org.activityinfo.ui.vdom.client.render.RenderContext;
 import org.activityinfo.ui.vdom.shared.diff.Diff;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
-import org.activityinfo.ui.vdom.shared.dom.*;
+import org.activityinfo.ui.vdom.shared.tree.EventHandler;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,14 +30,9 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     private static final Logger LOGGER = Logger.getLogger(VDomWidget.class.getName());
 
-    private BrowserDomDocument document = new BrowserDomDocument();
-
     private VTree tree = null;
 
     private boolean updating = false;
-
-    private Map<DomNode, VComponent> componentMap = new HashMap<>();
-
     private boolean updateQueued = false;
 
     /**
@@ -114,7 +111,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
     }
 
     private void renderInitial(VTree vNode) {
-        domBuilder.updateRoot(BrowserDomElement.cast(getElement()), vNode);
+        domBuilder.updateRoot(getElement(), vNode);
         tree = vNode;
     }
 
@@ -141,28 +138,16 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     private void patch(VPatchSet diff) {
         DomPatcher domPatcher = new DomPatcher(domBuilder, this);
-        DomNode rootNode = domPatcher.patch(getRootNode(), diff);
+        Node rootNode = domPatcher.patch(getElement(), diff);
 
         if(rootNode != getElement()) {
             throw new IllegalStateException("Cannot replace the root node!");
         }
-
-        cleanUpEventListeners();
-    }
-
-
-    private BrowserDomNode getRootNode() {
-        return getElement().cast();
     }
 
     @Override
-    public DomDocument getDocument() {
-        return document;
-    }
-
-    @Override
-    public void attachWidget(Widget child, DomElement container) {
-        this.add(child, BrowserDomElement.cast(container));
+    public void attachWidget(Widget child, Element container) {
+        this.add(child, container);
     }
 
     @Override
@@ -189,13 +174,6 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
 
     @Override
-    public void registerEventListener(VComponent thunk, DomNode node) {
-        componentMap.put(node, thunk);
-//        sinkEvents(thunk.getEventMask());
-    }
-
-
-    @Override
     public void onBrowserEvent(Event event) {
 
         LOGGER.info("Event: " + event.getType());
@@ -213,12 +191,6 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
             }
         }
     }
-    
-
-    @Override
-    public void componentUnmounted(VComponent component, DomNode domNode) {
-        componentMap.remove(domNode);
-    }
 
     private void completeDetachments() {
         for(Widget widget : pendingDetachments) {
@@ -229,16 +201,5 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
             }
         }
         pendingDetachments.clear();
-    }
-
-    private void cleanUpEventListeners() {
-        Element container = getElement();
-        Iterator<Map.Entry<DomNode, VComponent>> it = componentMap.entrySet().iterator();
-        while(it.hasNext()) {
-            Element element = ((BrowserDomNode)it.next().getKey()).cast();
-            if(!container.isOrHasChild(element)) {
-                it.remove();
-            }
-        }
     }
 }

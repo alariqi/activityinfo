@@ -11,12 +11,8 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.client.VDomWidget;
-import org.activityinfo.ui.vdom.shared.dom.ReactiveComponent;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VText;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.ui.vdom.shared.tree.*;
 
 public class RecordView implements IsWidget {
 

@@ -39,6 +39,7 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableUpdater;
+import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.type.RecordRef;
@@ -67,8 +68,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
 
     private final EventBus eventBus = new SimpleEventBus();
 
-    public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet,
-                     TableUpdater tableUpdater) {
+    public TableGrid(TableViewModel viewModel, final EffectiveTableModel tableModel, TableUpdater tableUpdater) {
 
         this.initialTableModel = tableModel;
         this.tableUpdater = tableUpdater;
@@ -100,7 +100,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             @Override
             protected void onAttach() {
                 super.onAttach();
-                subscription = columnSet.subscribe(observable -> updateColumnView(observable));
+                subscription = viewModel.getColumnSet().subscribe(observable -> updateColumnView(observable));
                 TableGrid.this.loader.load(0, gridView.getCacheSize());
             }
 
@@ -111,7 +111,9 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             }
         };
 
-        MenuItem editRecord = new MenuItem(I18N.CONSTANTS.editRecord());
+        MenuItem editRecord = new MenuItem(I18N.CONSTANTS.editRecord(),
+                selectionEvent -> onEditSelectedRecord(viewModel, tableUpdater));
+
         MenuItem deleteRecord = new MenuItem(I18N.CONSTANTS.deleteRecord());
 
         Menu contextMenu = new Menu(new Css3MenuAppearance(MenuArrow.NONE));
@@ -131,6 +133,12 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
                 editRecord.setEnabled(hasSelection);
                 deleteRecord.setEnabled(hasSelection);
             }
+        });
+    }
+
+    private void onEditSelectedRecord(TableViewModel viewModel, TableUpdater tableUpdater) {
+        viewModel.getSelectedRecordRef().ifLoaded(selection -> {
+            selection.toJavaUtil().ifPresent(ref -> tableUpdater.editRecord(ref));
         });
     }
 

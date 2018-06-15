@@ -1,4 +1,4 @@
-package org.activityinfo.ui.vdom.shared.dom;
+package org.activityinfo.ui.vdom.shared.tree;
 
 import com.google.gwt.user.client.Event;
 

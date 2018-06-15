@@ -1,10 +1,6 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
-
 public abstract class VTree {
-
-    public DomNode domNode;
 
     public boolean hasComponents() {
         return false;

@@ -1,9 +1,8 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
+import com.google.gwt.dom.client.Element;
 import org.activityinfo.ui.vdom.client.render.RenderContext;
 import org.activityinfo.ui.vdom.shared.VDomLogger;
-import org.activityinfo.ui.vdom.shared.dom.DomEvent;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 
 import java.util.logging.Level;
@@ -17,13 +16,13 @@ public abstract class VComponent extends VTree {
 
     private RenderContext context = null;
 
-    private DomNode domNode;
+    private Element domNode;
 
     protected VComponent() {
         VDomLogger.event(this, "constructed");
     }
 
-    public final void fireMounted(RenderContext context, DomNode domNode) {
+    public final void fireMounted(RenderContext context, Element domNode) {
         assert this.domNode != domNode : this + " mounted twice to same dom node";
         assert this.context == null : this + " may only be mounted once";
         this.context = context;
@@ -38,8 +37,6 @@ public abstract class VComponent extends VTree {
         assert this.context != null : this.getDebugId() +  " must be mounted first";
 
         VDomLogger.event(this, "willUnmount");
-
-        context.componentUnmounted(this, domNode);
 
         componentWillUnmount();
 
@@ -118,7 +115,7 @@ public abstract class VComponent extends VTree {
 
     }
 
-    public final DomNode getDomNode() {
+    public final Element getDomNode() {
         assert domNode != null : "component has not been mounted";
         return domNode;
     }
@@ -135,10 +132,6 @@ public abstract class VComponent extends VTree {
      */
     public int getEventMask() {
         return 0;
-    }
-
-    public void onBrowserEvent(DomEvent event) {
-
     }
 
     @Override

@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.common.base.Optional;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.Window;
@@ -26,19 +25,17 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import org.activityinfo.analysis.table.TableUpdater;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.toolbar.Toolbar;
-import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.ColumnDialog;
 
@@ -50,7 +47,7 @@ public class TableToolBar implements IsWidget {
 
     private FormStore formStore;
     private TableViewModel viewModel;
-    private final FormOverlay formOverlay;
+    private final TableUpdater updater;
 
     private final IconButton newButton;
     private final TextButton importButton;
@@ -61,10 +58,10 @@ public class TableToolBar implements IsWidget {
     private final Toolbar toolbar;
 
 
-    public TableToolBar(FormStore formStore, TableViewModel viewModel, FormOverlay formOverlay) {
+    public TableToolBar(FormStore formStore, TableViewModel viewModel, TableUpdater updater) {
         this.formStore = formStore;
         this.viewModel = viewModel;
-        this.formOverlay = formOverlay;
+        this.updater = updater;
 
         newButton = new IconButton(Icon.BUBBLE_ADD, IconButtonStyle.PRIMARY, I18N.CONSTANTS.newRecord());
         newButton.addSelectHandler(this::onNewRecord);
@@ -110,21 +107,8 @@ public class TableToolBar implements IsWidget {
     }
 
     private void onNewRecord(SelectEvent event) {
+        updater.newRecord();
 
-        ResourceId newRecordId = ResourceId.generateSubmissionId(viewModel.getFormId());
-        RecordRef newRecordRef = new RecordRef(viewModel.getFormId(), newRecordId);
-
-        formOverlay.show(newRecordRef);
-    }
-
-    private void onEditRecord() {
-
-        Observable<Optional<RecordRef>> selection = viewModel.getSelectedRecordRef();
-        selection.ifLoaded(ref -> {
-            if (ref.isPresent()) {
-                formOverlay.show(ref.get());
-            }
-        });
     }
 
     private void onImport(SelectEvent event) {
@@ -148,7 +132,7 @@ public class TableToolBar implements IsWidget {
         if(viewModel.getEffectiveTable().isLoaded()) {
             ColumnDialog dialog = new ColumnDialog(viewModel.getEffectiveTable().get());
             dialog.show(updatedModel -> {
-                viewModel.update(updatedModel);
+                updater.updateModel(updatedModel);
             });
         }
     }

@@ -1,7 +1,7 @@
 package org.activityinfo.ui.vdom.shared.diff;
 
+import com.google.gwt.dom.client.Node;
 import org.activityinfo.ui.vdom.client.render.PatchOpExecutor;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public class RemoveOp implements PatchOp {
@@ -13,7 +13,7 @@ public class RemoveOp implements PatchOp {
     }
 
     @Override
-    public DomNode apply(PatchOpExecutor executor, DomNode domNode) {
+    public Node apply(PatchOpExecutor executor, Node domNode) {
         return executor.removeNode(node, domNode);
     }
 

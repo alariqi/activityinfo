@@ -1,25 +1,24 @@
 package org.activityinfo.ui.vdom.client.render;
 
+import com.google.gwt.dom.client.Node;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public interface PatchOpExecutor {
 
-    DomNode updateProperties(DomNode domNode, PropMap propPatch, PropMap previous);
+    Node updateProperties(Node Node, PropMap propPatch, PropMap previous);
 
-    DomNode removeNode(VTree virtualNode, DomNode domNode);
+    Node removeNode(VTree virtualNode, Node Node);
 
-    DomNode insertNode(DomNode parentNode, VTree newNode);
+    Node insertNode(Node parentNode, VTree newNode);
 
-    DomNode patchText(DomNode domNode, String newText);
+    Node patchText(Node Node, String newText);
 
-    DomNode replaceNode(VTree previousNode, VTree newNode, DomNode domNode);
+    Node replaceNode(VTree previousNode, VTree newNode, Node Node);
 
-    DomNode patchComponent(DomNode domNode, VComponent previous, VComponent replacement, VPatchSet patchSet);
-
+    Node patchComponent(Node Node, VComponent previous, VComponent replacement, VPatchSet patchSet);
 
 
 }

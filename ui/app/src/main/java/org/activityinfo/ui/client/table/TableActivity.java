@@ -22,21 +22,27 @@ import com.google.common.base.Optional;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import org.activityinfo.analysis.table.TableUpdater;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.json.JsonValue;
+import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.ImmutableTableModel;
+import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.Subscription;
+import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.storage.LocalStorage;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.view.TableView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TableActivity extends AbstractActivity {
+public class TableActivity extends AbstractActivity implements TableUpdater {
 
     private static final Logger LOGGER = Logger.getLogger(TableActivity.class.getName());
 
@@ -44,7 +50,9 @@ public class TableActivity extends AbstractActivity {
     private TablePlace place;
 
     private LocalStorage storage;
-    private Subscription modelSubscription;
+    private StatefulValue<TableModel> model;
+    private TableViewModel viewModel;
+    private TableView view;
 
     public TableActivity(FormStore formStore, LocalStorage storage, TablePlace place) {
         this.formStore = formStore;
@@ -54,12 +62,10 @@ public class TableActivity extends AbstractActivity {
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        TableViewModel tableViewModel = new TableViewModel(formStore, initialModel(place.getFormId()));
-
-        TableView tablePage = new TableView(formStore, tableViewModel);
-        panel.setWidget(tablePage);
-
-        modelSubscription = tableViewModel.getTableModel().subscribe(this::saveModel);
+        model = new StatefulValue<>(initialModel(place.getFormId()));
+        viewModel = new TableViewModel(formStore, model);
+        view = new TableView(formStore, viewModel, this);
+        panel.setWidget(view);
     }
 
 
@@ -67,8 +73,10 @@ public class TableActivity extends AbstractActivity {
         return "tableViewModel:" + formId.asString();
     }
 
+    /**
+     * The load the model for this table from local storage.
+     */
     private TableModel initialModel(ResourceId formId) {
-
         Optional<JsonValue> object = storage.getObjectIfPresent(modelKey(formId));
         if(object.isPresent()) {
             try {
@@ -83,15 +91,63 @@ public class TableActivity extends AbstractActivity {
                 .build();
     }
 
-    private void saveModel(Observable<TableModel> model) {
-        if (model.isLoaded()) {
-            storage.setObject(modelKey(place.getFormId()), model.get().toJson());
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void updateModel(TableModel updatedModel) {
+        if(model.updateIfNotEqual(updatedModel)) {
+
+            // Persist the model to local storage for the next time
+            // the user navigates here.
+            storage.setObject(modelKey(place.getFormId()), updatedModel.toJson());
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        modelSubscription.unsubscribe();
+    public void updateFilter(Optional<FormulaNode> filterNode) {
+
+        Optional<String> filter = filterNode.transform(n -> n.asExpression());
+
+        model.updateIfNotEqual(
+                ImmutableTableModel.builder()
+                        .from(model.get())
+                        .filter(filter)
+                        .build());
+
+    }
+
+    @Override
+    public void updateColumnWidth(String columnId, int newWidth) {
+
+        TableModel model = this.model.get();
+
+        List<TableColumn> updatedColumns = new ArrayList<>();
+        for (TableColumn column : model.getColumns()) {
+            if(column.getId().equals(columnId)) {
+                updatedColumns.add(ImmutableTableColumn.builder().from(column).width(newWidth).build());
+            } else {
+                updatedColumns.add(column);
+            }
+        }
+
+        this.model.updateIfNotSame(ImmutableTableModel.builder()
+                .from(model)
+                .columns(updatedColumns)
+                .build());
+    }
+
+    @Override
+    public void newRecord() {
+        ResourceId newRecordId = ResourceId.generateSubmissionId(viewModel.getFormId());
+        RecordRef newRecordRef = new RecordRef(viewModel.getFormId(), newRecordId);
+        view.editRecord(newRecordRef);
+    }
+
+    @Override
+    public void editRecord(RecordRef recordRef) {
+        view.editRecord(recordRef);
     }
 }

@@ -23,7 +23,6 @@ import com.google.common.base.Optional;
 import org.activityinfo.analysis.ParsedFormula;
 import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.ImmutableTableModel;
-import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.formTree.FormTree;
@@ -41,32 +40,30 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
  * Model's the user's selection of columns
  */
-public class TableViewModel implements TableUpdater {
+public class TableViewModel {
 
     private static final Logger LOGGER = Logger.getLogger(TableViewModel.class.getName());
 
     private final FormSource formStore;
     private ResourceId formId;
     private Observable<FormTree> formTree;
-    private StatefulValue<TableModel> tableModel;
+    private Observable<TableModel> tableModel;
     private Observable<EffectiveTableModel> effectiveTable;
     private Observable<ColumnSet> columnSet;
 
     private StatefulValue<Optional<RecordRef>> selectedRecordRef = new StatefulValue<>(Optional.absent());
     private final Observable<Optional<SelectionViewModel>> selectionViewModel;
 
-    public TableViewModel(final FormSource formStore, final TableModel tableModel) {
-        this.formId = tableModel.getFormId();
+    public TableViewModel(final FormSource formStore, Observable<TableModel> tableModel) {
+        this.formId = tableModel.get().getFormId();
         this.formStore = formStore;
         this.formTree = formStore.getFormTree(formId);
-        this.tableModel = new StatefulValue<>(tableModel);
+        this.tableModel = tableModel;
         this.effectiveTable = computeEffectiveTableModel(this.tableModel);
 
         this.selectionViewModel = SelectionViewModel.compute(formStore, selectedRecordRef);
@@ -150,51 +147,6 @@ public class TableViewModel implements TableUpdater {
         selectedRecordRef.updateIfNotEqual(Optional.of(ref));
     }
 
-    public void update(TableModel updatedModel) {
-
-        LOGGER.info("TableModel updated: " + updatedModel.toJson().toJson());
-
-        tableModel.updateIfNotEqual(updatedModel);
-    }
-
-    @Override
-    public void updateFilter(Optional<FormulaNode> filterNode) {
-
-        Optional<String> filter = filterNode.transform(n -> n.asExpression());
-
-        tableModel.updateIfNotEqual(
-            ImmutableTableModel.builder()
-            .from(tableModel.get())
-            .filter(filter)
-            .build());
-
-    }
-
-    @Override
-    public void updateColumnWidth(String columnId, int newWidth) {
-
-        TableModel model = this.tableModel.get();
-
-        List<TableColumn> updatedColumns = new ArrayList<>();
-        for (TableColumn column : model.getColumns()) {
-            if(column.getId().equals(columnId)) {
-                updatedColumns.add(ImmutableTableColumn.builder().from(column).width(newWidth).build());
-            } else {
-                updatedColumns.add(column);
-            }
-        }
-
-        tableModel.updateIfNotSame(ImmutableTableModel.builder()
-                .from(model)
-                .columns(updatedColumns)
-                .build());
-    }
-
-    @Override
-    public void editRecord(ResourceId recordId) {
-
-
-    }
 
     public Observable<ExportViewModel> computeExportModel(
             Observable<ResourceId> selectedForm,

@@ -1,12 +1,12 @@
 package org.activityinfo.ui.vdom.client.render;
 
 
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Text;
 import org.activityinfo.ui.vdom.shared.VDomLogger;
 import org.activityinfo.ui.vdom.shared.diff.PatchOp;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
-import org.activityinfo.ui.vdom.shared.dom.DomElement;
-import org.activityinfo.ui.vdom.shared.dom.DomNode;
-import org.activityinfo.ui.vdom.shared.dom.DomText;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
@@ -14,6 +14,8 @@ import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.google.gwt.dom.client.Node.TEXT_NODE;
 
 public class DomPatcher implements PatchOpExecutor {
 
@@ -25,15 +27,15 @@ public class DomPatcher implements PatchOpExecutor {
         this.context = context;
     }
 
-    public DomNode patch(DomNode rootNode, VPatchSet patches) {
+    public Node patch(Element rootNode, VPatchSet patches) {
         return patchRecursive(rootNode, patches);
     }
 
-    public DomNode patchRecursive(DomNode rootNode, VPatchSet patches) {
+    public Node patchRecursive(Node rootNode, VPatchSet patches) {
         int[] indices = patches.patchedIndexArray();
         if(indices.length > 0) {
 
-            Map<Integer, DomNode> index = DomIndexBuilder.domIndex(rootNode, patches.original, indices);
+            Map<Integer, Node> index = DomIndexBuilder.domIndex(rootNode, patches.original, indices);
 
             for (int i = 0; i < indices.length; ++i) {
                 int nodeIndex = indices[i];
@@ -43,9 +45,9 @@ public class DomPatcher implements PatchOpExecutor {
         return rootNode;
     }
 
-    private DomNode applyPatch(DomNode rootNode, DomNode domNode, List<PatchOp> patchList) {
+    private Node applyPatch(Node rootNode, Node domNode, List<PatchOp> patchList) {
         if(domNode != null) {
-            DomNode newNode;
+            Node newNode;
             for (int i = 0; i != patchList.size(); ++i) {
                 PatchOp op = patchList.get(i);
 
@@ -61,64 +63,64 @@ public class DomPatcher implements PatchOpExecutor {
     }
 
     @Override
-    public DomNode updateProperties(DomNode domNode, PropMap propPatch, PropMap previous) {
-        Properties.applyProperties((DomElement) domNode, propPatch, previous);
+    public Node updateProperties(Node domNode, PropMap propPatch, PropMap previous) {
+        Properties.applyProperties(domNode.cast(), propPatch, previous);
         return domNode;
     }
 
 
     @Override
-    public DomNode removeNode(VTree virtualNode, DomNode domNode) {
+    public Node removeNode(VTree virtualNode, Node Node) {
 
         fireUnmountRecursively(virtualNode);
 
-        DomNode parentNode = domNode.getParentNode();
+        Node parentNode = Node.getParentNode();
         if (parentNode != null) {
-            parentNode.removeChild(domNode);
+            parentNode.removeChild(Node);
         }
         return null;
     }
 
     @Override
-    public DomNode insertNode(DomNode parentNode, VTree newNode) {
-        DomNode domNode = domBuilder.render(newNode);
-        parentNode.appendChild(domNode);
+    public Node insertNode(Node parentNode, VTree newNode) {
+        Node Node = domBuilder.render(newNode);
+        parentNode.appendChild(Node);
         return parentNode;
     }
 
     @Override
-    public DomNode patchText(DomNode domNode, String newText) {
-        assert domNode.getNodeType() == DomNode.TEXT_NODE;
+    public Node patchText(Node domNode, String newText) {
+        assert domNode.getNodeType() == TEXT_NODE;
 
-        DomText textNode = (DomText)domNode;
+        Text textNode = domNode.cast();
         textNode.setData(newText);
 
         return domNode;
     }
 
     @Override
-    public DomNode replaceNode(VTree previousNode, VTree vNode, DomNode domNode) {
+    public Node replaceNode(VTree previousNode, VTree vNode, Node Node) {
 
         fireUnmountRecursively(previousNode);
 
-        DomNode parentNode = domNode.getParentNode();
-        DomNode newNode = domBuilder.render(vNode);
+        Node parentNode = Node.getParentNode();
+        Node newNode = domBuilder.render(vNode);
         if (parentNode != null) {
-            parentNode.replaceChild(newNode, domNode);
+            parentNode.replaceChild(newNode, Node);
         }
         return newNode;
     }
 
 
-    private void reorderChildren(DomNode domNode, int[] bIndex) {
+    private void reorderChildren(Node Node, int[] bIndex) {
         throw new UnsupportedOperationException();
 //        int[] children = new int[];
-//        var childNodes = domNode.childNodes
+//        var childNodes = Node.childNodes
 //        var len = childNodes.length
 //        var i
 //        var reverseIndex = bIndex.reverse
 //        for (i = 0; i < len; i++) {
-//            children.push(domNode.childNodes[i])
+//            children.push(Node.childNodes[i])
 //        }
 //        var insertOffset = 0
 //        var move
@@ -134,7 +136,7 @@ public class DomPatcher implements PatchOpExecutor {
 //                node = children[move]
 //                insertNode = childNodes[i + insertOffset]
 //                if (node !== insertNode) {
-//                    domNode.insertBefore(node, insertNode)
+//                    Node.insertBefore(node, insertNode)
 //                }
 //                // the moved element came from the front of the array so reduce the insert offset
 //                if (move < i) {
@@ -149,9 +151,9 @@ public class DomPatcher implements PatchOpExecutor {
     }
 
     @Override
-    public DomNode patchComponent(DomNode rootDomNode, VComponent previous, VComponent replacement, VPatchSet patch) {
+    public Node patchComponent(Node rootNode, VComponent previous, VComponent replacement, VPatchSet patch) {
 
-        DomNode newNode = patch(rootDomNode, patch);
+        Node newNode = patch(rootNode.cast(), patch);
 
         if( previous != replacement) {
             assert previous.isMounted();
@@ -169,15 +171,12 @@ public class DomPatcher implements PatchOpExecutor {
             }
         }
 
-        rootDomNode = replaceRoot(rootDomNode, newNode);
+        rootNode = replaceRoot(rootNode, newNode);
 
         if(!replacement.isMounted()) {
-            if(replacement.getEventMask() != 0) {
-                context.registerEventListener(replacement, rootDomNode);
-            }
-            replacement.fireMounted(context, rootDomNode);
+            replacement.fireMounted(context, rootNode.cast());
         }
-        return rootDomNode;
+        return rootNode;
     }
 
 
@@ -194,7 +193,7 @@ public class DomPatcher implements PatchOpExecutor {
         }
     }
 
-    public DomNode replaceRoot(DomNode oldRoot, DomNode newRoot) {
+    public Node replaceRoot(Node oldRoot, Node newRoot) {
         if ( (oldRoot != null) && (newRoot != null) &&
              (oldRoot != newRoot) && (oldRoot.getParentNode() != null)) {
 
