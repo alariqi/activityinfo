@@ -6,7 +6,7 @@ import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-public class FieldComponent extends VComponent<FieldComponent> {
+public class FieldComponent extends VComponent {
 
 
     private String name;

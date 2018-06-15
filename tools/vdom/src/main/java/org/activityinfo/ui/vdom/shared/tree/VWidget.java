@@ -44,5 +44,4 @@ public abstract class VWidget extends VComponent {
     protected VTree render() {
         return new VNode(HtmlTag.DIV);
     }
-
 }

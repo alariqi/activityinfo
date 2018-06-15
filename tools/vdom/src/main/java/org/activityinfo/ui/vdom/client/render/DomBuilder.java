@@ -64,7 +64,7 @@ public class DomBuilder {
         if(vnode.namespace == null) {
             domElement = doc.createElement(vnode.tag);
         } else {
-            throw new UnsupportedOperationException("Todo: namespaces");
+            domElement = doc.createElementNS(vnode.tag, vnode.namespace);
         }
 
         PropMap props = vnode.properties;

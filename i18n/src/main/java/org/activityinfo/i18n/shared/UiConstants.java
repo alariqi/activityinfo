@@ -361,6 +361,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Delete")
     String deleteSite();
 
+    @DefaultStringValue("Delete record")
+    String deleteRecord();
+
     @DefaultStringValue("Deleting...")
     String deleting();
 
@@ -1453,8 +1456,8 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("New Submission")
     String newSubmission();
 
-    @DefaultStringValue("Edit Submission")
-    String editSubmission();
+    @DefaultStringValue("Edit Record")
+    String editRecord();
 
     @DefaultStringValue("Barcode")
     String fieldTypeBarcode();
@@ -1925,6 +1928,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Could not reach the server. Please check your connection.")
     String saveFailedConnectionProblem();
 
-
-
+    @DefaultStringValue("Record history")
+    String recordHistory();
 }

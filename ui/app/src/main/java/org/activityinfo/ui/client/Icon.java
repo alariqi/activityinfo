@@ -35,6 +35,8 @@ public enum Icon {
 
     NIS_EMPTYSTATE;
 
+    private static final String SVG_NS = "http://www.w3.org/2000/svg";
+
     public String href() {
         return "#" + name().toLowerCase();
     }
@@ -54,9 +56,15 @@ public enum Icon {
 
     public VTree tree() {
         return new VNode(SvgTag.SVG, new PropMap()
-                .set("viewBox", "0 0 21 17")
-                .setClass("icon")
-                .set("preserveAspectRatio","xMinYMin meet"),
-                new VNode(SvgTag.USE, new PropMap().set("href", href())));
+                .trustedSet("attributes",
+                        new PropMap()
+                        .set("viewBox", "0 0 21 17")
+                        .set("preserveAspectRatio","xMinYMin meet")
+                        .set("class", "icon")),
+                new VNode[] {
+                    new VNode(SvgTag.USE, new PropMap()
+                            .trustedSet("attributes", new PropMap().set("href", href())))
+                }, "",
+                SVG_NS);
     }
 }

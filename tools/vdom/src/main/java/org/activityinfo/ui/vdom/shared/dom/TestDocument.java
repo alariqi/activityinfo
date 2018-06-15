@@ -9,6 +9,11 @@ public class TestDocument implements DomDocument {
     }
 
     @Override
+    public DomElement createElementNS(Tag tagName, String namespace) {
+        throw new UnsupportedOperationException("TODO");
+    }
+
+    @Override
     public DomText createTextNode(String text) {
         return new TestTextNode(text);
     }

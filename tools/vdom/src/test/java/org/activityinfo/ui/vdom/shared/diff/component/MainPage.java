@@ -5,7 +5,7 @@ import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import static org.activityinfo.ui.vdom.shared.html.H.div;
 
-public class MainPage extends VComponent<MainPage> {
+public class MainPage extends VComponent {
 
     private final State state;
     private final FormComponent form;

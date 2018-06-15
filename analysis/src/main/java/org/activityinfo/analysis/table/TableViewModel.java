@@ -190,6 +190,12 @@ public class TableViewModel implements TableUpdater {
                 .build());
     }
 
+    @Override
+    public void editRecord(ResourceId recordId) {
+
+
+    }
+
     public Observable<ExportViewModel> computeExportModel(
             Observable<ResourceId> selectedForm,
             Observable<ExportScope> columnScope) {

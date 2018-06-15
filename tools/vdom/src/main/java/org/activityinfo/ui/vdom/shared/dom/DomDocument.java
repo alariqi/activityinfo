@@ -14,5 +14,7 @@ public interface DomDocument {
 
     DomElement createElement(Tag tagName);
 
+    DomElement createElementNS(Tag tagName, String namespace);
+
     DomText createTextNode(String text);
 }

@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Observable class that implements the Reactive Pattern.
@@ -41,7 +43,9 @@ import java.util.function.Consumer;
  *            the type of the items emitted by the Observable
  */
 public abstract class Observable<T> {
-    
+
+    private static final Logger LOGGER = Logger.getLogger(Observable.class.getName());
+
     private final List<Observer<T>> observers = new ArrayList<>();
 
     /**
@@ -138,7 +142,12 @@ public abstract class Observable<T> {
             @SuppressWarnings("unchecked")
             protected R compute(Object[] arguments) {
                 T argumentValue = (T) arguments[0];
-                return Preconditions.checkNotNull(function.apply(argumentValue));
+                try {
+                    return Preconditions.checkNotNull(function.apply(argumentValue));
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "Unary function failed to compute", e);
+                    throw new RuntimeException(e);
+                }
             }
         };
     }
@@ -159,7 +168,12 @@ public abstract class Observable<T> {
             protected R compute(Object[] arguments) {
                 T t = (T)arguments[0];
                 U u = (U)arguments[1];
-                return function.apply(t, u);
+                try {
+                    return function.apply(t, u);
+                } catch (Exception e) {
+                    LOGGER.log(Level.SEVERE, "Binary function failed to compute");
+                    throw new RuntimeException(e);
+                }
             }
         };
     }

@@ -1,8 +1,11 @@
 .menu {
-  @include triangle($black);
   outline: 0 none;
   background-color: $black;
   overflow: visible !important;
+}
+
+.menu--arrow-top {
+  @include triangle($black);
 }
 
 /*
@@ -109,6 +112,10 @@
   color: $white;
 }
 
+.theme__border--disabled .menu__item {
+  color: #666f70
+}
+
 .menu__list__item {
   white-space: nowrap;
   display: block;
@@ -142,4 +149,9 @@
   transform 0.2s 0.15s ease;
   opacity: 1;
   transform: translateY(-50%) rotate(0) scale(1);
+}
+
+.menu__item__icon {
+  position: absolute;
+
 }

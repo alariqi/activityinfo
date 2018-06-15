@@ -27,19 +27,25 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
+import com.sencha.gxt.widget.core.client.event.BeforeShowContextMenuEvent;
 import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GridSelectionModel;
+import com.sencha.gxt.widget.core.client.menu.Menu;
+import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.TableUpdater;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
+import org.activityinfo.ui.client.base.menu.Css3MenuAppearance;
+import org.activityinfo.ui.client.base.menu.MenuArrow;
 
 import java.util.Collections;
 import java.util.logging.Logger;
@@ -61,7 +67,8 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
 
     private final EventBus eventBus = new SimpleEventBus();
 
-    public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet, TableUpdater tableUpdater) {
+    public TableGrid(final EffectiveTableModel tableModel, Observable<ColumnSet> columnSet,
+                     TableUpdater tableUpdater) {
 
         this.initialTableModel = tableModel;
         this.tableUpdater = tableUpdater;
@@ -103,13 +110,29 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
                 subscription.unsubscribe();
             }
         };
+
+        MenuItem editRecord = new MenuItem(I18N.CONSTANTS.editRecord());
+        MenuItem deleteRecord = new MenuItem(I18N.CONSTANTS.deleteRecord());
+
+        Menu contextMenu = new Menu(new Css3MenuAppearance(MenuArrow.NONE));
+        contextMenu.add(editRecord);
+        contextMenu.add(deleteRecord);
+
         grid.setLoader(loader);
         grid.setLoadMask(true);
         grid.setView(gridView);
         grid.setSelectionModel(sm);
         grid.addSortChangeHandler(this::changeSort);
+        grid.setContextMenu(contextMenu);
+        grid.addBeforeShowContextMenuHandler(new BeforeShowContextMenuEvent.BeforeShowContextMenuHandler() {
+            @Override
+            public void onBeforeShowContextMenu(BeforeShowContextMenuEvent event) {
+                boolean hasSelection = !grid.getSelectionModel().getSelectedItems().isEmpty();
+                editRecord.setEnabled(hasSelection);
+                deleteRecord.setEnabled(hasSelection);
+            }
+        });
     }
-
 
     private void changeColumnWidth(ColumnResizeEvent e) {
 

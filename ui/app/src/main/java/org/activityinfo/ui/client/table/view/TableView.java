@@ -53,6 +53,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
 
     private final SidePanel sidePanel;
     private final FullWidthPageContainer container;
+    private final TableToolBar toolBar;
     private final GridContainer gridContainer;
     private final FormOverlay formOverlay;
 
@@ -64,14 +65,12 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         this.viewModel = viewModel;
 
         formOverlay = new FormOverlay(formStore);
-
-
-        TableToolBar toolBar = new TableToolBar(formStore, viewModel, formOverlay);
+        toolBar = new TableToolBar(formStore, viewModel, formOverlay);
 
         gridContainer = new GridContainer();
         gridContainer.addStyleName("formtable__gridcontainer");
 
-        sidePanel = new SidePanel(formStore, viewModel);
+        sidePanel = new SidePanel(new RecordView(formStore, viewModel));
 
 
         this.container = new FullWidthPageContainer();
@@ -134,6 +133,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         }
 
         grid = new TableGrid(effectiveTableModel, viewModel.getColumnSet(), viewModel);
+
         grid.addSelectionChangedHandler(event -> {
             if(!event.getSelection().isEmpty()) {
                 RecordRef ref = event.getSelection().get(0);

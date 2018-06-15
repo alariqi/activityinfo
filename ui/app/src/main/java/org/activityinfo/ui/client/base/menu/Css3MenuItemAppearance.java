@@ -17,7 +17,10 @@ public class Css3MenuItemAppearance implements MenuItem.MenuItemAppearance {
 
     @Override
     public void setIcon(XElement parent, ImageResource icon) {
-
+//        if(icon instanceof SvgIcon) {
+//            SafeHtml iconHtml = ((SvgIcon) icon).getIcon().render();
+//
+//        }
     }
 
     @Override

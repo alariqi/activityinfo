@@ -38,24 +38,24 @@ public class HistoryRenderer {
     private HistoryRenderer() {}
 
     public static VTree render(com.google.common.base.Optional<RecordHistory> history) {
-        if(history.isPresent()) {
-            return render(history.get());
-        } else {
-            return new VText("No selection");
-        }
+        return new VNode(HtmlTag.DIV,
+            new VNode(HtmlTag.H2, I18N.CONSTANTS.recordHistory()),
+            history.isPresent() ? entries(history.get()) : emptyState());
     }
 
+    private static VTree emptyState() {
+        return new VText("No selection");
+    }
 
-    private static VTree render(RecordHistory history) {
+    private static VTree entries(RecordHistory history) {
         if (!history.isAvailable()) {
             return renderNoHistory();
         }
-
-        return new VNode(HtmlTag.DIV, history.getEntries().stream().map(e -> renderEntry(e)));
+        return new VNode(HtmlTag.DIV, history.getEntries().stream().map(e -> entry(e)));
     }
 
-    private static VTree renderEntry(RecordHistoryEntry e) {
-        return new VNode(HtmlTag.DIV,
+    private static VTree entry(RecordHistoryEntry e) {
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("history__entry"),
                 new VNode(HtmlTag.DIV, PropMap.withClasses("history__date"), new VText(formatTime(e))),
                 new VNode(HtmlTag.DIV, PropMap.withClasses("history__type"), new VText(formatType(e))),
                 new VNode(HtmlTag.DIV, PropMap.withClasses("history__user"), new VText(formatUser(e))));

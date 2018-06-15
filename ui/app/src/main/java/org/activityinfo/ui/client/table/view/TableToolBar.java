@@ -18,6 +18,7 @@
  */
 package org.activityinfo.ui.client.table.view;
 
+import com.google.common.base.Optional;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.http.client.UrlBuilder;
 import com.google.gwt.user.client.Window;
@@ -83,6 +84,7 @@ public class TableToolBar implements IsWidget {
         toolbar.addAction(importButton);
         toolbar.addAction(exportButton);
         toolbar.addAction(columnsButton);
+
     }
 
     private void onAttach(AttachEvent event) {
@@ -113,6 +115,16 @@ public class TableToolBar implements IsWidget {
         RecordRef newRecordRef = new RecordRef(viewModel.getFormId(), newRecordId);
 
         formOverlay.show(newRecordRef);
+    }
+
+    private void onEditRecord() {
+
+        Observable<Optional<RecordRef>> selection = viewModel.getSelectedRecordRef();
+        selection.ifLoaded(ref -> {
+            if (ref.isPresent()) {
+                formOverlay.show(ref.get());
+            }
+        });
     }
 
     private void onImport(SelectEvent event) {

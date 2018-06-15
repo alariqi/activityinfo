@@ -22,6 +22,15 @@ public class BrowserDomDocument implements DomDocument {
     }
 
     @Override
+    public DomElement createElementNS(Tag tagName, String namespace) {
+        return doCreateElementNS(tagName.name().toLowerCase(), namespace);
+    }
+
+    private static native DomElement doCreateElementNS(String name, String namespace) /*-{
+        return $wnd.document.createElementNS(namespace, name);
+    }-*/;
+
+    @Override
     public DomText createTextNode(String text) {
         return document.createTextNode(text).<BrowserTextNode>cast();
     }

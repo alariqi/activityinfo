@@ -9,7 +9,7 @@ import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class VComponent<T> extends VTree {
+public abstract class VComponent extends VTree {
 
     private static final Logger LOGGER = Logger.getLogger(VComponent.class.getName());
 

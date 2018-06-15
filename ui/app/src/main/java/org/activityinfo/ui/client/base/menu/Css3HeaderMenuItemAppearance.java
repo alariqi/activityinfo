@@ -57,7 +57,7 @@ public class Css3HeaderMenuItemAppearance implements HeaderMenuItemAppearance {
 
   public interface Css3HeaderMenuItemStyle extends CssResource {
 
-    public String menuText();
+    String menuText();
 
   }
 

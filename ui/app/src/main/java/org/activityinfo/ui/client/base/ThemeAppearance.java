@@ -34,7 +34,7 @@ public class ThemeAppearance implements ThemeStyles.ThemeAppearance {
 
         @Override
         public String disabled() {
-            return "theme__border-disabled";
+            return "theme__border--disabled";
         }
 
         @Override

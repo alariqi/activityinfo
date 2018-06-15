@@ -82,6 +82,7 @@ task appengineDevMode(type: JavaExec) {
             ":clients:gwtrest",
             ":tools:json",
             ":tools:vdom",
+            ":tools:promises",
             ":model",
             ":analysis"];
     for(sourceProject in sourceProjects) {

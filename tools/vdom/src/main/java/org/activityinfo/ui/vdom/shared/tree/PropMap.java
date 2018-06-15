@@ -1,6 +1,7 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
 import com.google.gwt.safehtml.shared.SafeUri;
+import org.activityinfo.ui.vdom.shared.dom.EventHandler;
 import org.activityinfo.ui.vdom.shared.html.AriaRole;
 import org.activityinfo.ui.vdom.shared.html.CssClass;
 
@@ -17,6 +18,7 @@ public class PropMap {
     public static final PropMap EMPTY = empty();
 
     private Map<String, Object> propMap = new HashMap<>();
+    private Map<String, EventHandler> eventHandlers = new HashMap<>();
 
     /**
      * Creates a new {@code PropMap} with the given style object.
@@ -147,14 +149,24 @@ public class PropMap {
         return propMap.isEmpty();
     }
 
-    public void trustedSet(String key, Object value) {
+    public PropMap trustedSet(String key, Object value) {
         propMap.put(key, value);
+        return this;
     }
 
     private static PropMap empty() {
         PropMap propMap = new PropMap();
         propMap.propMap = Collections.emptyMap();
         return propMap;
+    }
+
+    public PropMap onclick(EventHandler handler) {
+        eventHandlers.put("click", handler);
+        return this;
+    }
+
+    public EventHandler getEventHandler(String eventName) {
+        return eventHandlers.get(eventName);
     }
 
 

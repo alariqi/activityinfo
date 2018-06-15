@@ -22,6 +22,7 @@ import com.google.common.base.Optional;
 import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.database.Operation;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
@@ -58,6 +59,7 @@ public class EffectiveTableModel {
 
 
     public static final String ID_COLUMN_ID = "$$id";
+    public static final String EDIT_COLUMN_ID = "$$edit";
 
     private FormTree formTree;
     private TableModel tableModel;
@@ -200,10 +202,19 @@ public class EffectiveTableModel {
             queryModel.setFilter(tableModel.getFilter().get());
         }
         queryModel.selectResourceId().as(ID_COLUMN_ID);
+        queryModel.selectExpr(editRule()).as(EDIT_COLUMN_ID);
         for (EffectiveTableColumn column : columns) {
             queryModel.addColumns(column.getQueryModel());
         }
         return queryModel;
+    }
+
+    private String editRule() {
+        String formula = formTree.getRootMetadata().getPermissions().getFilter(Operation.EDIT_RECORD);
+        if(formula == null) {
+            return "TRUE";
+        }
+        return formula;
     }
 
     private QueryModel buildQuery(List<EffectiveTableColumn> columns, RecordRef recordRef) {

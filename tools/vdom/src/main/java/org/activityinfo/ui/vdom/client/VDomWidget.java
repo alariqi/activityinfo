@@ -3,6 +3,7 @@ package org.activityinfo.ui.vdom.client;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,6 +14,7 @@ import org.activityinfo.ui.vdom.shared.diff.Diff;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
 import org.activityinfo.ui.vdom.shared.dom.*;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.*;
@@ -48,14 +50,52 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
     public VDomWidget() {
         domBuilder = new DomBuilder(this);
         setElement(Document.get().createDivElement());
+
+        sinkEvents(Event.ONCLICK | Event.FOCUSEVENTS | Event.ONCHANGE);
     }
 
-    public VDomWidget(VTree vNode) {
-        domBuilder = new DomBuilder(this);
-        setElement((Element) domBuilder.render(vNode));
-        completeDetachments();
-        tree = vNode;
-        sinkEvents(Event.ONCLICK | Event.FOCUSEVENTS | Event.ONCHANGE);
+
+    /**
+     * For a given real node, find the path, from the dom node down to this
+     * event target.
+     * 
+     * @param currentEventTarget
+     */
+    private List<Integer> findParentPath(Node currentEventTarget) {
+        List<Integer> path = new ArrayList<>();
+        Node node = currentEventTarget;
+        while(node != getElement()) {
+            path.add(indexOf(node));
+            node = node.getParentElement();
+        }
+        Collections.reverse(path);
+        return path;
+    }
+
+    private int indexOf(Node node) {
+        int index = 0;
+        Node prev = node.getPreviousSibling();
+        while(prev != null) {
+            index ++;
+            prev = prev.getPreviousSibling();
+        }
+        return index;
+    }
+
+    private List<VNode> findVNodeFromParentPath(List<Integer> path) {
+        List<VNode> vPath = new ArrayList<>();
+        VTree vParent = tree;
+        for (Integer childIndex : path) {
+            vParent = vParent.childAt(childIndex);
+            while(vParent instanceof VComponent) {
+                vParent = ((VComponent) vParent).vNode;
+            }
+            if(vParent instanceof VNode) {
+                vPath.add(((VNode) vParent));
+            }
+        }
+        Collections.reverse(vPath);
+        return vPath;
     }
 
     public void update(VTree vTree) {
@@ -86,9 +126,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
      */
     private void patchTree(VTree newTree) {
         VPatchSet diff = Diff.diff(tree, newTree);
-
         patch(diff);
-
         tree = newTree;
     }
 
@@ -114,7 +152,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
 
     private BrowserDomNode getRootNode() {
-        return getElement().<BrowserDomNode>cast();
+        return getElement().cast();
     }
 
     @Override
@@ -159,18 +197,23 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     @Override
     public void onBrowserEvent(Event event) {
+
+        LOGGER.info("Event: " + event.getType());
+
         Element domNode = event.getEventTarget().cast();
-        while(true) {
-            if (domNode == getElement()) {
+
+        List<Integer> parentPath = findParentPath(domNode);
+        List<VNode> vPath = findVNodeFromParentPath(parentPath);
+
+        for (VNode vTree : vPath) {
+            EventHandler eventHandler = vTree.properties.getEventHandler(event.getType());
+            if(eventHandler != null) {
+                eventHandler.onEvent(event);
                 break;
             }
-            VComponent component = componentMap.get(domNode);
-            if(component != null) {
-                component.onBrowserEvent(BrowserDomEvent.cast(event));
-            }
-            domNode = domNode.getParentElement();
         }
     }
+    
 
     @Override
     public void componentUnmounted(VComponent component, DomNode domNode) {

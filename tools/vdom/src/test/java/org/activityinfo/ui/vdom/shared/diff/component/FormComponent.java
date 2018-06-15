@@ -6,7 +6,7 @@ import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-public class FormComponent extends VComponent<FormComponent> implements StateListener {
+public class FormComponent extends VComponent implements StateListener {
 
     private final State state;
 
