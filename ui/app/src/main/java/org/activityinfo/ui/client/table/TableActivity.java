@@ -150,4 +150,11 @@ public class TableActivity extends AbstractActivity implements TableUpdater {
     public void editRecord(RecordRef recordRef) {
         view.editRecord(recordRef);
     }
+
+    @Override
+    public void editSelection() {
+        viewModel.getSelectedRecordRef().ifLoaded(selection -> {
+            selection.toJavaUtil().ifPresent(ref -> editRecord(ref));
+        });
+    }
 }

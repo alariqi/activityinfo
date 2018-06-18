@@ -362,6 +362,19 @@ public abstract class Observable<T> {
         return new CachedObservable<>(this);
     }
 
+    /**
+     * Returns a new {@code Observable} value that does not fire any additional loading events after the initial
+     * loading event. This is useful to reduce flicker when values are frequently computed but unlikely to change.
+     */
+    public final Observable<T> optimistic() {
+        return new OptimisticObservable<>(this);
+    }
+
+    public final Observable<MaybeStale<T>> explicitlyOptimistic() {
+        return new ExplicitlyOptimisticObservable<>(this);
+    }
+
+
     public final Observable<T> debounce(int milliseconds) {
         if(!GWT.isClient()) {
             return this;

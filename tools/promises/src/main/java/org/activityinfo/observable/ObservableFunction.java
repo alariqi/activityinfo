@@ -30,6 +30,7 @@ public abstract class ObservableFunction<T> extends Observable<T> {
     private Optional<T> value = Optional.absent();
     
     private int lastUpdate = 0;
+    private boolean wasLoading = false;
     
     public ObservableFunction(Scheduler scheduler, Observable... arguments) {
         this.scheduler = scheduler;
@@ -106,11 +107,13 @@ public abstract class ObservableFunction<T> extends Observable<T> {
                 if(thisUpdate == lastUpdate) {
                     if(result.isPresent()) {
                         value = result;
+                        wasLoading = false;
                         fireChange();
                     } else {
                         // if the result is "Loading", then only fire if this is a change.
-                        if(!isLoading()) {
+                        if(!wasLoading) {
                             value = result;
+                            wasLoading = true;
                             fireChange();
                         }
                     }

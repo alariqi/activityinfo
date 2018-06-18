@@ -14,7 +14,7 @@ public class ReactiveComponent extends VComponent {
     private final String debugId;
     private Observable<VTree> observable;
 
-    private VTree loading = new VNode(HtmlTag.DIV, "Loading...");
+    private VTree loading = new VNode(HtmlTag.DIV);
 
     private Subscription subscription;
 
@@ -23,7 +23,7 @@ public class ReactiveComponent extends VComponent {
     }
 
     public ReactiveComponent(String debugId, Observable<VTree> observable) {
-        this.debugId = debugId;
+        this.debugId = debugId + "#" + debugIndex;
         this.observable = observable;
     }
 
@@ -44,7 +44,8 @@ public class ReactiveComponent extends VComponent {
         subscription = observable.subscribe(new Observer<VTree>() {
             @Override
             public void onChange(Observable<VTree> observable) {
-                LOGGER.info("Reactive[" + debugId + "] changing...");
+                LOGGER.info("Reactive[" + debugId + "] changed: " +
+                        " loaded = " + observable.isLoaded());
 
                 ReactiveComponent.this.refresh();
             }

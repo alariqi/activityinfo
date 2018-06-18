@@ -96,7 +96,6 @@ public class FormInputView implements IsWidget, InputHandler {
 
         this.container = new CssLayoutContainer();
         this.container.addStyleName("forminput__inner");
-        this.container.mask();
         this.container.addAttachHandler(event -> {
             if(event.isAttached()) {
                 structureSubscription = this.formStructure.subscribe(this::onStructureChanged);
@@ -117,7 +116,6 @@ public class FormInputView implements IsWidget, InputHandler {
 
     private void onInitialLoad(FormStructure formStructure) {
         initialLoad = true;
-        container.unmask();
 
         viewModelBuilder = new FormInputViewModelBuilder(formStructure.getFormTree());
         existingRecord = formStructure.getExistingRecord();

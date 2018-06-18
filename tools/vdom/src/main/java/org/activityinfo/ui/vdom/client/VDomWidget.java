@@ -145,7 +145,6 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     @Override
     public void detachWidget(Widget child) {
-//        pendingDetachments.add(child);
         boolean wasChild = remove(child);// detach directly
         if (!wasChild) {
             throw new IllegalArgumentException("Widget is not child of this component.");
@@ -159,12 +158,9 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
         if(!updateQueued) {
             updateQueued = true;
-            Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-                @Override
-                public void execute() {
-                    updateQueued = false;
-                    patchDirty();
-                }
+            Scheduler.get().scheduleDeferred(() -> {
+                updateQueued = false;
+                patchDirty();
             });
         }
     }

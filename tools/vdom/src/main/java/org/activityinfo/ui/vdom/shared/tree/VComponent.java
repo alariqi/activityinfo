@@ -12,7 +12,7 @@ public abstract class VComponent extends VTree {
 
     private static final Logger LOGGER = Logger.getLogger(VComponent.class.getName());
 
-    private int debugIndex = VDomLogger.nextDebugId();
+    protected final int debugIndex = VDomLogger.nextDebugId();
 
     private RenderContext context = null;
 

@@ -18,7 +18,6 @@
  */
 package org.activityinfo.analysis.table;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import org.activityinfo.analysis.ParsedFormula;
 import org.activityinfo.model.analysis.ImmutableTableColumn;
@@ -33,6 +32,7 @@ import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
@@ -40,7 +40,8 @@ import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
 
-import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -57,8 +58,9 @@ public class TableViewModel {
     private Observable<EffectiveTableModel> effectiveTable;
     private Observable<ColumnSet> columnSet;
 
+    private Observable<Map<String, Integer>> recordMap;
+
     private StatefulValue<Optional<RecordRef>> selectedRecordRef = new StatefulValue<>(Optional.absent());
-    private final Observable<Optional<SelectionViewModel>> selectionViewModel;
 
     public TableViewModel(final FormSource formStore, Observable<TableModel> tableModel) {
         this.formId = tableModel.get().getFormId();
@@ -67,8 +69,18 @@ public class TableViewModel {
         this.tableModel = tableModel;
         this.effectiveTable = computeEffectiveTableModel(this.tableModel);
 
-        this.selectionViewModel = SelectionViewModel.compute(formStore, selectedRecordRef);
         this.columnSet = this.effectiveTable.join(table -> table.getColumnSet());
+        this.recordMap = this.columnSet.transform(this::buildRecordMap);
+    }
+
+    private Map<String, Integer> buildRecordMap(ColumnSet columnSet) {
+        ColumnView columnView = columnSet.getColumns().get(EffectiveTableModel.ID_COLUMN_ID);
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < columnView.numRows(); i++) {
+            String recordId = columnView.getString(i);
+            map.put(recordId, i);
+        }
+        return map;
     }
 
     public Observable<EffectiveTableModel> computeEffectiveTableModel(Observable<TableModel> tableModel) {
@@ -84,13 +96,20 @@ public class TableViewModel {
     public Observable<Optional<RecordRef>> getSelectedRecordRef() {
         // Don't actually expose the internal selection state ...
         // the *effective* selection is a product of our model state and the record status (deleted or not)
-        return getSelectionViewModel().transform(record -> {
-            if(record.isPresent()) {
-                return Optional.of(record.get().getRef());
-            } else {
-                return Optional.absent();
-            }
+        // and filtering
+        return Observable.transform(selectedRecordRef, recordMap, (ref, map) -> {
+           if(!ref.isPresent()) {
+               return Optional.absent();
+           }
+           if(!map.containsKey(ref.get().getRecordId().asString())) {
+               return Optional.absent();
+           }
+           return ref;
         });
+    }
+
+    public Observable<Boolean> hasSelection() {
+        return getSelectedRecordRef().transform(r -> r.isPresent());
     }
 
     public Observable<Optional<RecordHistory>> getSelectedRecordHistory() {
@@ -103,19 +122,12 @@ public class TableViewModel {
         });
     }
 
-    public Observable<Optional<SelectionViewModel>> getSelectionViewModel() {
-        return selectionViewModel;
-    }
-
     public Observable<Optional<RecordTree>> getSelectedRecordTree() {
-        return getSelectionViewModel().join(new Function<Optional<SelectionViewModel>, Observable<Optional<RecordTree>>>() {
-            @Override
-            public Observable<Optional<RecordTree>> apply(@Nullable Optional<SelectionViewModel> selection) {
-                if(selection.isPresent()) {
-                    return formStore.getRecordTree(selection.get().getRef()).transform(tree -> tree.getIfVisible());
-                } else {
-                    return Observable.just(Optional.absent());
-                }
+        return getSelectedRecordRef().join(optionalRef -> {
+            if(optionalRef.isPresent()) {
+                return formStore.getRecordTree(optionalRef.get()).transform(maybe -> maybe.getIfVisible());
+            } else {
+                return Observable.just(Optional.absent());
             }
         });
     }

@@ -21,7 +21,6 @@ package org.activityinfo.observable;
 public class ChainedObservable<T> extends Observable<T> {
 
     private Observable<Observable<T>> observable = null;
-    private Observable<T> currentValue = null;
 
     private Subscription observableSubscription = null;
     private Subscription valueSubscription = null;
@@ -48,8 +47,10 @@ public class ChainedObservable<T> extends Observable<T> {
             @Override
             public void onChange(Observable<Observable<T>> observable) {
                 unsubscribeFromOldValue();
-                if(!observable.isLoading()) {
-                    subscribeToNewValue(observable.get());   
+                if(observable.isLoading()) {
+                    fireChange();
+                } else {
+                    subscribeToNewValue(observable.get());
                 }
             }
         });

@@ -33,5 +33,7 @@ public interface TableUpdater {
 
     void editRecord(RecordRef ref);
 
+    void editSelection();
+
     void newRecord();
 }

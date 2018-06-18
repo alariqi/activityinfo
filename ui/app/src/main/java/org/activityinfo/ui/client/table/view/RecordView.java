@@ -9,8 +9,9 @@ import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.type.subform.SubFormReferenceType;
+import org.activityinfo.observable.MaybeStale;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.NonIdeal;
@@ -45,19 +46,24 @@ public class RecordView implements IsWidget {
     }
 
     private VTree details(TableViewModel viewModel, TableUpdater updater) {
-        return new ReactiveComponent("details", viewModel.getSelectedRecordRef().transform(selection -> {
-            if(selection.isPresent()) {
-                return selectionDetails(viewModel, selection.get(), updater);
-            } else {
-                return noSelection();
-            }
-        }));
+
+        // Go to additional lengths to avoid flicker when changing record selection.
+        // This ensures that the selectionDetails component does not have to be unmounted/mounted every time
+        // the selection changes, and can gracefully handle its transitions between records.
+
+        VTree selection = selectionDetails(viewModel, updater);
+        VTree noSelection = noSelection();
+
+        Observable<Boolean> hasSelection = viewModel.hasSelection().optimistic();
+
+        return new ReactiveComponent("details",
+                hasSelection.transform(b -> b ? selection : noSelection));
     }
 
-    private VTree selectionDetails(TableViewModel viewModel, RecordRef selectedRef, TableUpdater tableUpdater) {
+    private VTree selectionDetails(TableViewModel viewModel, TableUpdater tableUpdater) {
         return div("details__record",
-                subFormNavigation(viewModel, selectedRef),
-                recordHeader(selectedRef, tableUpdater),
+                subFormNavigation(viewModel),
+                recordHeader(tableUpdater),
                 recordDetails(viewModel));
     }
 
@@ -77,7 +83,7 @@ public class RecordView implements IsWidget {
                 .transform(HistoryRenderer::render));
     }
 
-    private VTree subFormNavigation(TableViewModel viewModel, RecordRef selectedRef) {
+    private VTree subFormNavigation(TableViewModel viewModel) {
         return new ReactiveComponent("subFormNavigation", viewModel.getFormTree().transform(tree -> {
 
             List<VTree> subFormLinks = new ArrayList<>();
@@ -102,17 +108,17 @@ public class RecordView implements IsWidget {
         }));
     }
 
-    private VTree recordHeader(RecordRef selectedRef, TableUpdater tableUpdater) {
+    private VTree recordHeader(TableUpdater tableUpdater) {
         VNode header = new VNode(HtmlTag.H2, I18N.CONSTANTS.thisRecord());
 
         VTree editButton = button(I18N.CONSTANTS.edit())
                 .icon(Icon.BUBBLE_EDIT)
-                .onSelect(event -> tableUpdater.editRecord(selectedRef))
+                .onSelect(event -> tableUpdater.editSelection())
                 .build();
 
         VTree deleteButton = button(I18N.CONSTANTS.delete())
                 .icon(Icon.BUBBLE_CLOSE)
-                .onSelect(event -> tableUpdater.editRecord(selectedRef))
+                .onSelect(event -> tableUpdater.editSelection())
                 .build();
 
         return new VNode(HtmlTag.DIV, PropMap.withClasses("details__recordheader"),
@@ -121,17 +127,17 @@ public class RecordView implements IsWidget {
                 deleteButton);
     }
 
-
     private VTree recordDetails(TableViewModel viewModel) {
+
         Observable<DetailsRenderer> renderer = viewModel.getFormTree().transform(DetailsRenderer::new);
-        Observable<VTree> tree = viewModel.getSelectedRecordTree().join(selection -> {
-            if (!selection.isPresent()) {
-                return Observable.just(noSelection());
-            } else {
-                return renderer.transform(r -> r.render(selection.get()));
-            }
-        });
-        return new ReactiveComponent("recordDetails", tree);
+
+        Observable<MaybeStale<RecordTree>> selection = Observable
+                .flattenOptional(viewModel.getSelectedRecordTree())
+                .explicitlyOptimistic();
+
+        Observable<VTree> details = Observable.transform(renderer, selection, (r, s) -> r.render(s.getValue(), s.isStale()));
+
+        return new ReactiveComponent("details.values", details);
     }
 
     private VTree noSelection() {
@@ -150,8 +156,6 @@ public class RecordView implements IsWidget {
                 new VNode(HtmlTag.SPAN, PropMap.withClasses("button__recordcount"),
                         new VText("... records")));
     }
-
-
 
     @Override
     public Widget asWidget() {
