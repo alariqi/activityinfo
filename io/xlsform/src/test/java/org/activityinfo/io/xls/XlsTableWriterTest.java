@@ -26,6 +26,7 @@ import org.activityinfo.model.analysis.ImmutableTableModel;
 import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.server.FormSourceSyncImpl;
 import org.activityinfo.store.testing.TestingStorageProvider;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -66,7 +67,7 @@ public class XlsTableWriterTest {
 
     private HSSFWorkbook export(TableModel tableModel) throws IOException {
 
-        TableViewModel viewModel = new TableViewModel(formSource, tableModel);
+        TableViewModel viewModel = new TableViewModel(formSource, Observable.just(tableModel));
         EffectiveTableModel effectiveTableModel = viewModel.getEffectiveTable().waitFor();
 
         if(effectiveTableModel.getRootFormState() != FormTree.State.VALID) {
