@@ -24,6 +24,7 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.form.FormPermissions;
 import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormMetadataProvider;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.FormTreeBuilder;
@@ -114,5 +115,10 @@ public class FormSourceSyncImpl implements FormSource {
     @Override
     public Observable<Maybe<Analysis>> getAnalysis(String id) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Observable<RecordHistory> getFormRecordHistory(RecordRef ref) {
+        throw new UnsupportedOperationException("TODO");
     }
 }

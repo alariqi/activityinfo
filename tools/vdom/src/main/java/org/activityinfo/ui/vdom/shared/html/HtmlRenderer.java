@@ -11,6 +11,12 @@ public class HtmlRenderer implements VTreeVisitor {
     private boolean prettyPrint;
     private int currentIndentLevel;
 
+    public static String render(VTree tree) {
+        HtmlRenderer renderer = new HtmlRenderer();
+        tree.accept(renderer);
+        return renderer.getHtml();
+    }
+
     public HtmlRenderer() {
         html = new StringBuilder();
     }

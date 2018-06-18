@@ -65,6 +65,10 @@ public class H {
         return new VNode(DIV, PropMap.withStyle(style), new VText(text));
     }
 
+    public static VNode div(VTree... children) {
+        return new VNode(DIV, children);
+    }
+
     public static VNode div(String text) {
         return new VNode(DIV, new VText(text));
     }

@@ -23,6 +23,9 @@ public abstract class VComponent extends VTree {
     }
 
     public final void fireMounted(RenderContext context, Element domNode) {
+
+        LOGGER.info("fireMounted: " + debugId());
+
         assert this.domNode != domNode : this + " mounted twice to same dom node";
         assert this.context == null : this + " may only be mounted once";
         this.context = context;
@@ -38,7 +41,11 @@ public abstract class VComponent extends VTree {
 
         VDomLogger.event(this, "willUnmount");
 
-        componentWillUnmount();
+        try {
+            componentWillUnmount();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Exception thrown during componentWillUnmount()", e);
+        }
 
         this.context = null;
         this.domNode = null;
@@ -77,7 +84,7 @@ public abstract class VComponent extends VTree {
     }
 
 
-    public final boolean isMounted() { return domNode != null; }
+    public final boolean isMounted() { return context != null; }
 
     @Override
     public boolean hasComponents() {
@@ -95,16 +102,7 @@ public abstract class VComponent extends VTree {
     protected abstract VTree render();
 
     /**
-     * Invoked once, both on the client and server, immediately before the initial rendering occurs.
-     * If you call setState within this method, render() will see the updated state and will be
-     * executed only once despite the state change.
-     */
-    protected void componentWillMount() {
-
-    }
-
-    /**
-     * Called immediately after the thunk is newly added to the real
+     * Called immediately after the component is newly added to the real
      * DOM tree.
      */
     protected void componentDidMount() {
@@ -139,12 +137,18 @@ public abstract class VComponent extends VTree {
         visitor.visitComponent(this);
     }
 
+    @Override
+    public String debugId() {
+        if(vNode != null) {
+            return "Component:" + vNode.debugId();
+        } else {
+            return "Component: <unrendered>";
+        }
+    }
+
 
     public VTree ensureRendered() {
         if(vNode == null) {
-            VDomLogger.event(this, "willMount");
-            componentWillMount();
-
             vNode = invokeRender();
             assert vNode != null;
         }
@@ -152,12 +156,6 @@ public abstract class VComponent extends VTree {
     }
 
     public VTree forceRender() {
-        VDomLogger.event(this, "forceRender");
-
-        if(!isRendered()) {
-            VDomLogger.event(this, "willMount");
-            componentWillMount();
-        }
         vNode = invokeRender();
         dirty = false;
         return vNode;
@@ -185,7 +183,4 @@ public abstract class VComponent extends VTree {
         return getDebugId();
     }
 
-    public int getDebugIndex() {
-        return debugIndex;
-    }
 }

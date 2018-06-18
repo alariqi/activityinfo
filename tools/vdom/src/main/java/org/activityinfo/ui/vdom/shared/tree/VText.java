@@ -27,6 +27,11 @@ public class VText extends VTree {
         visitor.visitText(this);
     }
 
+    @Override
+    public String debugId() {
+        return "#" + text;
+    }
+
     public String getText() {
         return text;
     }

@@ -67,10 +67,15 @@ public class Properties {
         // Set attributes
         if (propName.equals("attributes")) {
             for (Map.Entry<String, Object> attr : entries(propValue)) {
+                String attributeName = attr.getKey();
                 if (attr.getValue() == null) {
-                    node.removeAttribute(attr.getKey());
+                    node.removeAttribute(attributeName);
                 } else {
-                    node.setAttribute(attr.getKey(), (String) attr.getValue());
+                    if(attributeName.equals("xlink:href")) {
+                        setAttributeNS(node, "http://www.w3.org/1999/xlink", "href", attr.getValue());
+                    } else {
+                        node.setAttribute(attributeName, (String) attr.getValue());
+                    }
                 }
             }
             return;
@@ -95,6 +100,10 @@ public class Properties {
             throw new UnsupportedOperationException(propName);
         }
     }
+
+    private native static void setAttributeNS(Element node, String namespace, String name, Object value) /*-{
+        node.setAttributeNS(namespace, name, value);
+    }-*/;
 
     private static native boolean nodeValueIsObject(Node node, String propName) /*-{
         var x = node[propName];

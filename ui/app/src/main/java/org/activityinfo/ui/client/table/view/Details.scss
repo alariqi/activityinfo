@@ -30,6 +30,27 @@
   font-size: 1rem;
 }
 
+.details__empty {
+  margin-top: 1.5rem;
+  text-align: center;
+
+  p {
+    font-family: $gretalight;
+    font-size: 1rem;
+  }
+}
+
+.details__recordheader {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.detials__recordheader h2 {
+  flex-grow: 2;
+}
+
 .details--loading .details__value {
   color: transparent;
   text-shadow: 0 0 5px rgba($white, 0.5)

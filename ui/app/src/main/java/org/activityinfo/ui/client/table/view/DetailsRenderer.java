@@ -1,7 +1,6 @@
 package org.activityinfo.ui.client.table.view;
 
 import com.google.common.base.Optional;
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
@@ -68,8 +67,6 @@ public class DetailsRenderer {
 
         List<VTree> children = new ArrayList<>();
 
-        children.add(new VNode(HtmlTag.H2, I18N.CONSTANTS.recordDetails()));
-//
 //        if (!subForms.isEmpty()) {
 //            html.appendHtmlConstant("<h3>");
 //            html.appendEscaped(I18N.CONSTANTS.subForms());

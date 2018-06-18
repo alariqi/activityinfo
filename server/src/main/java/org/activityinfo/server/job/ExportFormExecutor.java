@@ -26,6 +26,7 @@ import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.job.ExportFormJob;
 import org.activityinfo.model.job.ExportResult;
 import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.server.generated.GeneratedResource;
 import org.activityinfo.server.generated.StorageProvider;
 import org.activityinfo.store.query.shared.FormSource;
@@ -54,7 +55,7 @@ public class ExportFormExecutor implements JobExecutor<ExportFormJob, ExportResu
 
         GeneratedResource export = storageProvider.create(XlsTableWriter.EXCEL_MIME_TYPE, "Export.xls");
 
-        TableViewModel viewModel = new TableViewModel(formSource, tableModel);
+        TableViewModel viewModel = new TableViewModel(formSource, Observable.just(tableModel));
 
         EffectiveTableModel effectiveTableModel = viewModel.getEffectiveTable().waitFor();
         ColumnSet columnSet = effectiveTableModel.getColumnSet().waitFor();

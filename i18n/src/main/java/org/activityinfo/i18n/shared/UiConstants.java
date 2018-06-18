@@ -1930,4 +1930,14 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Record history")
     String recordHistory();
+
+    @DefaultStringValue("This Record")
+    String thisRecord();
+
+    @DefaultStringValue("No record selected")
+    String noRecordSelected();
+
+    @DefaultStringValue("Please select a record to see more information")
+    String pleaseSelectARecord();
+
 }

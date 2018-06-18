@@ -33,9 +33,9 @@ public enum Icon {
     EXPAND_DOWN,
     EXPAND_UP,
 
-    NIS_EMPTYSTATE;
+    NIS_EMPTYSTATE, BUBBLE_EDIT;
 
-    private static final String SVG_NS = "http://www.w3.org/2000/svg";
+    public static final String SVG_NS = "http://www.w3.org/2000/svg";
 
     public String href() {
         return "#" + name().toLowerCase();
@@ -63,7 +63,8 @@ public enum Icon {
                         .set("class", "icon")),
                 new VNode[] {
                     new VNode(SvgTag.USE, new PropMap()
-                            .trustedSet("attributes", new PropMap().set("href", href())))
+                            .trustedSet("attributes", new PropMap().set("xlink:href", href())),
+                        new VNode[0], "", Icon.SVG_NS)
                 }, "",
                 SVG_NS);
     }

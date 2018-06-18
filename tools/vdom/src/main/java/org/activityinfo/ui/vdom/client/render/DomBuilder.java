@@ -18,27 +18,6 @@ public class DomBuilder {
         this.context = context;
     }
 
-    public void updateRoot(Element rootElement, VTree vtree) {
-        if(vtree instanceof VNode) {
-            updateRootNode(rootElement, (VNode) vtree);
-        } else if(vtree instanceof VComponent) {
-            updateRootThunk(rootElement, (VComponent)vtree);
-        } else {
-            throw new IllegalStateException("Root vTree must be an element");
-        }
-    }
-
-    public void updateRootNode(Element rootElement, VNode vNode) {
-        if(!rootElement.getTagName().equalsIgnoreCase(vNode.tag.name())) {
-            throw new UnsupportedOperationException("Cannot change the tag name of the root element");
-        }
-        Properties.applyProperties(rootElement, vNode.properties, null);
-
-        rootElement.removeAllChildren();
-
-        appendChildren(rootElement, vNode);
-    }
-
     public Node render(VTree vTree) {
 
         if(vTree instanceof VComponent) {
@@ -79,6 +58,7 @@ public class DomBuilder {
         return $wnd.document.createElementNS(namespace, tagName);
     }-*/;
 
+
     private Element appendChildren(Element Element, VNode vnode) {
         VTree[] children = vnode.children;
         for (int i = 0; i < children.length; ++i) {
@@ -92,20 +72,7 @@ public class DomBuilder {
         VTree virtualNode = component.ensureRendered();
         Node domNode = render(virtualNode);
 
-        component.fireMounted(context, domNode.cast());
-
         return domNode;
-    }
-
-    private void updateRootThunk(Element rootElement, VComponent thunk) {
-        VTree tree = materializeThunk(thunk);
-        updateRoot(rootElement, tree);
-
-        thunk.fireMounted(context, rootElement);
-    }
-
-    private VTree materializeThunk(VComponent thunk) {
-        return thunk.force();
     }
 
     private Node renderText(VText vTree) {

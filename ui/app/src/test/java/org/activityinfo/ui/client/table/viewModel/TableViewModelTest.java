@@ -35,6 +35,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Connection;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Promise;
 import org.activityinfo.store.testing.IncidentForm;
 import org.activityinfo.store.testing.LocaliteForm;
@@ -63,9 +64,10 @@ public class TableViewModelTest {
 
     @Test
     public void test() {
-        TableModel tableModel = ImmutableTableModel.builder()
+        StatefulValue<TableModel> tableModel =
+                new StatefulValue<>(ImmutableTableModel.builder()
                 .formId(setup.getSurveyForm().getFormId())
-                .build();
+                .build());
 
         TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
 
@@ -85,8 +87,8 @@ public class TableViewModelTest {
             .label("MY column")
             .build();
 
-        viewModel.update(ImmutableTableModel.builder()
-            .from(tableModel)
+        tableModel.updateValue(ImmutableTableModel.builder()
+            .from(tableModel.get())
             .columns(Collections.singletonList(updatedColumn))
             .build());
 
@@ -123,9 +125,9 @@ public class TableViewModelTest {
     @Test
     public void testDeletedSelection() {
 
-        TableModel tableModel = ImmutableTableModel.builder()
+        StatefulValue<TableModel> tableModel = new StatefulValue<>(ImmutableTableModel.builder()
                 .formId(setup.getSurveyForm().getFormId())
-                .build();
+                .build());
 
         TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
 
@@ -178,7 +180,7 @@ public class TableViewModelTest {
 
         setup.deleteForm(setup.getSurveyForm().getFormId());
 
-        TableViewModel model = new TableViewModel(setup.getFormStore(), tableModel);
+        TableViewModel model = new TableViewModel(setup.getFormStore(), Observable.just(tableModel));
 
         Connection<EffectiveTableModel> view = setup.connect(model.getEffectiveTable());
 
@@ -193,12 +195,13 @@ public class TableViewModelTest {
 
         IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
 
-        TableModel tableModel = ImmutableTableModel.builder().formId(incidentForm.getFormId())
+        StatefulValue<TableModel> tableModel = new StatefulValue<>(
+            ImmutableTableModel.builder().formId(incidentForm.getFormId())
                 .addColumns(ImmutableTableColumn.builder()
                         .label("My PCODE")
                         .formula(IncidentForm.PROTECTION_CODE_FIELD_ID.asString())
                         .build())
-                .build();
+                .build());
         TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
 
         Observable<ExportViewModel> exportModel = viewModel.computeExportModel(
@@ -232,7 +235,7 @@ public class TableViewModelTest {
                         .build())
                 .filter(constructFilter())
                 .build();
-        TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
+        TableViewModel viewModel = new TableViewModel(setup.getFormStore(), Observable.just(tableModel));
 
         Connection<TableModel> exportModel = setup.connect(
                 viewModel.computeExportModel(
@@ -259,7 +262,7 @@ public class TableViewModelTest {
 
 
         TableModel tableModel = ImmutableTableModel.builder().formId(localiteForm.getFormId()).build();
-        TableViewModel viewModel = new TableViewModel(setup.getFormStore(), tableModel);
+        TableViewModel viewModel = new TableViewModel(setup.getFormStore(), Observable.just(tableModel));
 
         EffectiveTableModel effectiveTable = setup.connect(viewModel.getEffectiveTable()).assertLoaded();
 

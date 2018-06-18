@@ -14,10 +14,14 @@ import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.google.gwt.dom.client.Node.TEXT_NODE;
 
 public class DomPatcher implements PatchOpExecutor {
+
+    private static final Logger LOGGER = Logger.getLogger(DomPatcher.class.getName());
 
     private DomBuilder domBuilder;
     private RenderContext context;
@@ -83,8 +87,13 @@ public class DomPatcher implements PatchOpExecutor {
 
     @Override
     public Node insertNode(Node parentNode, VTree newNode) {
-        Node Node = domBuilder.render(newNode);
-        parentNode.appendChild(Node);
+        Node domNode = domBuilder.render(newNode);
+        parentNode.appendChild(domNode);
+
+        if(newNode.hasComponents()) {
+            fireMountRecursively(context, newNode, domNode);
+        }
+
         return parentNode;
     }
 
@@ -160,7 +169,11 @@ public class DomPatcher implements PatchOpExecutor {
 
             // Avoid firing recursively here as any child components will be
             // unmounted when _patch_ is applied
-            previous.fireWillUnmount();
+            try {
+                previous.fireWillUnmount();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Exception thrown during previous.fireWillUnmount()", e);
+            }
 
         } else {
             // same instance, is it being remounted to the
@@ -173,18 +186,34 @@ public class DomPatcher implements PatchOpExecutor {
 
         rootNode = replaceRoot(rootNode, newNode);
 
-        if(!replacement.isMounted()) {
-            replacement.fireMounted(context, rootNode.cast());
-        }
+        fireMountRecursively(context, replacement, rootNode);
+
         return rootNode;
     }
 
+    private void fireMountRecursively(RenderContext context, VTree vNode, Node node) {
+        if(vNode instanceof VComponent) {
+            VComponent component = (VComponent) vNode;
+            fireMountRecursively(context, component.vNode, node);
+
+            if(!component.isMounted()) {
+                component.fireMounted(context, node.cast());
+            }
+
+        } else if(vNode instanceof VNode && vNode.hasComponents()) {
+            VNode parent = (VNode) vNode;
+            for(int i=0;i!= parent.children.length;++i) {
+                fireMountRecursively(context, parent.children[i], node.getChild(i));
+            }
+        }
+    }
 
     private void fireUnmountRecursively(VTree vNode) {
         if(vNode instanceof VComponent) {
             VComponent component = (VComponent) vNode;
             fireUnmountRecursively(component.vNode);
             component.fireWillUnmount();
+
         } else if(vNode instanceof VNode && vNode.hasComponents()) {
             VNode parent = (VNode) vNode;
             for(int i=0;i!= parent.children.length;++i) {

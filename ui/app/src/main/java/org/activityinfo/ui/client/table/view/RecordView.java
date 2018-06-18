@@ -1,72 +1,156 @@
 package org.activityinfo.ui.client.table.view;
 
-import com.google.common.base.Optional;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import org.activityinfo.analysis.table.TableUpdater;
 import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.form.RecordHistory;
-import org.activityinfo.model.formTree.RecordTree;
+import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.StatefulValue;
-import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.tabs.TabItem;
+import org.activityinfo.ui.client.base.tabs.Tabs;
 import org.activityinfo.ui.vdom.client.VDomWidget;
+import org.activityinfo.ui.vdom.shared.html.CssClass;
+import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.activityinfo.ui.client.base.button.Buttons.button;
+import static org.activityinfo.ui.vdom.shared.html.H.div;
+
 public class RecordView implements IsWidget {
 
-    private enum Mode {
-        DETAILS,
-        HISTORY
-    }
 
     private final VDomWidget content;
 
-    public RecordView(FormStore formStore, TableViewModel viewModel) {
+    public RecordView(TableViewModel viewModel, TableUpdater tableUpdater) {
         content = new VDomWidget();
         content.addStyleName("details");
 
-        StatefulValue<Mode> mode = new StatefulValue<>(Mode.DETAILS);
-        Observable<VTree> selectorTree = mode.transform(m -> selector(mode, m));
+        VTree tree = Tabs.tabPanel(
+                new TabItem(I18N.CONSTANTS.details(), details(viewModel, tableUpdater)),
+                new TabItem(I18N.CONSTANTS.history(), history(viewModel)));
 
-        Observable<DetailsRenderer> renderer = viewModel.getFormTree().transform(DetailsRenderer::new);
-        Observable<Optional<RecordTree>> selection = viewModel.getSelectedRecordTree();
-        Observable<Optional<RecordHistory>> history = viewModel.getSelectedRecordRef().join(ref -> {
-            if (ref.isPresent()) {
-                return formStore.getFormRecordHistory(ref.get()).transform(h -> Optional.of(h));
+        content.update(tree);
+    }
+
+    private VTree details(TableViewModel viewModel, TableUpdater updater) {
+        return new ReactiveComponent("details", viewModel.getSelectedRecordRef().transform(selection -> {
+            if(selection.isPresent()) {
+                return selectionDetails(viewModel, selection.get(), updater);
             } else {
-                return Observable.just(Optional.absent());
+                return noSelection();
             }
-        });
+        }));
+    }
 
-        Observable<VTree> detailsTree = Observable.transform(renderer, selection, (r, s) -> r.render(s));
-        Observable<VTree> historyTree = history.transform(HistoryRenderer::render);
-        Observable<VTree> contentTree = mode.join(m -> {
-            switch (m) {
-                case HISTORY:
-                    return historyTree;
-                default:
-                case DETAILS:
-                    return detailsTree;
-            }
-        });
+    private VTree selectionDetails(TableViewModel viewModel, RecordRef selectedRef, TableUpdater tableUpdater) {
+        return div("details__record",
+                subFormNavigation(viewModel, selectedRef),
+                recordHeader(selectedRef, tableUpdater),
+                recordDetails(viewModel));
+    }
 
-        content.update(new VNode(HtmlTag.DIV, PropMap.withClasses("details"),
-                new ReactiveComponent(selectorTree),
-                new ReactiveComponent(contentTree)));
+    private VTree history(TableViewModel viewModel) {
+        return div(CssClass.valueOf("details__history"),
+                historyHeader(),
+                historyContent(viewModel));
     }
 
 
-    private VNode selector(StatefulValue<Mode> mode, Mode m) {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("tabstrip"),
-                new VNode(HtmlTag.BUTTON, PropMap.withClass("active", m == Mode.DETAILS)
-                        .onclick(e -> { mode.updateIfNotSame(Mode.DETAILS); }),
-                        new VText(I18N.CONSTANTS.details())),
-                new VNode(HtmlTag.BUTTON, PropMap.withClass("active", m == Mode.HISTORY)
-                        .onclick(e -> { mode.updateIfNotSame(Mode.HISTORY);}),
-                        new VText(I18N.CONSTANTS.history())));
+    private VNode historyHeader() {
+        return H.h2(I18N.CONSTANTS.recordHistory());
     }
+
+    private VTree historyContent(TableViewModel viewModel) {
+        return new ReactiveComponent("historyContent", viewModel.getSelectedRecordHistory()
+                .transform(HistoryRenderer::render));
+    }
+
+    private VTree subFormNavigation(TableViewModel viewModel, RecordRef selectedRef) {
+        return new ReactiveComponent("subFormNavigation", viewModel.getFormTree().transform(tree -> {
+
+            List<VTree> subFormLinks = new ArrayList<>();
+
+            for (FormTree.Node node : tree.getRootFields()) {
+                if(node.isSubForm() && node.isSubFormVisible()) {
+                    SubFormReferenceType subFormType = (SubFormReferenceType) node.getType();
+                    FormClass subForm = tree.getFormClass(subFormType.getClassId());
+
+                    subFormLinks.add(subFormLink(subForm));
+                }
+            }
+
+            if(subFormLinks.isEmpty()) {
+                return new VNode(HtmlTag.DIV);
+            } else {
+                return new VNode(HtmlTag.DIV,
+                        new VNode(HtmlTag.H3, "Go to subform"),
+                        new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks));
+
+            }
+        }));
+    }
+
+    private VTree recordHeader(RecordRef selectedRef, TableUpdater tableUpdater) {
+        VNode header = new VNode(HtmlTag.H2, I18N.CONSTANTS.thisRecord());
+
+        VTree editButton = button(I18N.CONSTANTS.edit())
+                .icon(Icon.BUBBLE_EDIT)
+                .onSelect(event -> tableUpdater.editRecord(selectedRef))
+                .build();
+
+        VTree deleteButton = button(I18N.CONSTANTS.delete())
+                .icon(Icon.BUBBLE_CLOSE)
+                .onSelect(event -> tableUpdater.editRecord(selectedRef))
+                .build();
+
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__recordheader"),
+                header,
+                editButton,
+                deleteButton);
+    }
+
+
+    private VTree recordDetails(TableViewModel viewModel) {
+        Observable<DetailsRenderer> renderer = viewModel.getFormTree().transform(DetailsRenderer::new);
+        Observable<VTree> tree = viewModel.getSelectedRecordTree().join(selection -> {
+            if (!selection.isPresent()) {
+                return Observable.just(noSelection());
+            } else {
+                return renderer.transform(r -> r.render(selection.get()));
+            }
+        });
+        return new ReactiveComponent("recordDetails", tree);
+    }
+
+    private VTree noSelection() {
+        return div("details__empty",
+                NonIdeal.empty(),
+                H.h2(I18N.CONSTANTS.noRecordSelected()),
+                H.p(I18N.CONSTANTS.pleaseSelectARecord()));
+    }
+
+
+    private VTree subFormLink(FormClass subForm) {
+        SafeUri link = UriUtils.fromSafeConstant("#");
+        return new VNode(HtmlTag.A, PropMap.withClasses("button button--primary button--subform").href(link),
+                Icon.BUBBLE_ARROWRIGHT.tree(),
+                new VNode(HtmlTag.SPAN, subForm.getLabel()),
+                new VNode(HtmlTag.SPAN, PropMap.withClasses("button__recordcount"),
+                        new VText("... records")));
+    }
+
 
 
     @Override

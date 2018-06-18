@@ -38,13 +38,11 @@ public class HistoryRenderer {
     private HistoryRenderer() {}
 
     public static VTree render(com.google.common.base.Optional<RecordHistory> history) {
-        return new VNode(HtmlTag.DIV,
-            new VNode(HtmlTag.H2, I18N.CONSTANTS.recordHistory()),
-            history.isPresent() ? entries(history.get()) : emptyState());
+        return history.isPresent() ? entries(history.get()) : emptyState();
     }
 
     private static VTree emptyState() {
-        return new VText("No selection");
+        return new VNode(HtmlTag.DIV, "No selection");
     }
 
     private static VTree entries(RecordHistory history) {

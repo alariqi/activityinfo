@@ -6,6 +6,7 @@ import org.activityinfo.ui.vdom.shared.tree.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 import static org.activityinfo.ui.vdom.shared.tree.PropMap.isObject;
 
@@ -25,6 +26,8 @@ import static org.activityinfo.ui.vdom.shared.tree.PropMap.isObject;
  * @see <a href="http://facebook.github.io/react/docs/reconciliation.html">Facebook's description of the algorithm</a>
  */
 public class Diff {
+
+    private static final Logger LOGGER = Logger.getLogger(Diff.class.getName());
 
     private VPatchSet patchSet;
 

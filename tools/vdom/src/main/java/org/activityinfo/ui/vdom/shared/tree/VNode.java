@@ -77,7 +77,7 @@ public class VNode extends VTree {
 
         int count = this.children.length;
         int descendants = 0;
-        boolean hasWidgets = false;
+        boolean hasComponents = false;
 
         Map<String, VHook> hooks = null;
 
@@ -98,20 +98,20 @@ public class VNode extends VTree {
                 VNode childNode = (VNode) child;
                 descendants += childNode.count;
 
-                if (!hasWidgets && childNode.hasComponents) {
-                    hasWidgets = true;
+                if (!hasComponents && childNode.hasComponents) {
+                    hasComponents = true;
                 }
                 if (!descendantHooks && (childNode.hooks || childNode.descendantHooks)) {
                     descendantHooks = true;
                 }
-            } else if (!hasWidgets && child instanceof VComponent) {
-                hasWidgets = true;
+            } else if (!hasComponents && child instanceof VComponent) {
+                hasComponents = true;
             }
         }
 
         this.count = count + descendants;
         this.descendants = descendants;
-        this.hasComponents = hasWidgets;
+        this.hasComponents = hasComponents;
     }
 
 
@@ -147,6 +147,15 @@ public class VNode extends VTree {
     @Override
     public void accept(VTreeVisitor visitor) {
         visitor.visitNode(this);
+    }
+
+    @Override
+    public String debugId() {
+        String tag = this.tag.name().toLowerCase();
+        if(properties.contains("className")) {
+            tag += "." + properties.get("className");
+        }
+        return tag;
     }
 
     @Override

@@ -21,6 +21,7 @@ package org.activityinfo.store.query.shared;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.query.ColumnSet;
@@ -46,4 +47,6 @@ public interface FormSource {
     Observable<ColumnSet> query(QueryModel queryModel);
 
     Observable<Maybe<Analysis>> getAnalysis(String id);
+
+    Observable<RecordHistory> getFormRecordHistory(RecordRef ref);
 }

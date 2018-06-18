@@ -23,7 +23,6 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.form.FormRecord;
-import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.job.JobDescriptor;
 import org.activityinfo.model.job.JobResult;
@@ -58,8 +57,6 @@ public interface FormStore extends FormSource {
     void setFormOffline(ResourceId formId, boolean offline);
 
     Observable<FormOfflineStatus> getOfflineStatus(ResourceId formId);
-
-    Observable<RecordHistory> getFormRecordHistory(RecordRef ref);
 
     /**
      * Applies an update transactionally to the Form store.

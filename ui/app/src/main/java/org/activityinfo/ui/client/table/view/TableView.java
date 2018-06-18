@@ -73,7 +73,7 @@ public class TableView implements IsWidget, HasTitle, HasFixedHeight {
         gridContainer = new GridContainer();
         gridContainer.addStyleName("formtable__gridcontainer");
 
-        sidePanel = new SidePanel(new RecordView(formStore, viewModel));
+        sidePanel = new SidePanel(new RecordView(viewModel, tableUpdater));
 
         this.container = new FullWidthPageContainer();
         this.container.addBodyStyleName("formtable");

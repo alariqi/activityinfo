@@ -25,6 +25,7 @@ import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.ImmutableTableModel;
 import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.formula.CompoundExpr;
@@ -88,6 +89,16 @@ public class TableViewModel {
                 return Optional.of(record.get().getRef());
             } else {
                 return Optional.absent();
+            }
+        });
+    }
+
+    public Observable<Optional<RecordHistory>> getSelectedRecordHistory() {
+        return getSelectedRecordRef().join(ref -> {
+            if (ref.isPresent()) {
+                return formStore.getFormRecordHistory(ref.get()).transform(h -> Optional.of(h));
+            } else {
+                return Observable.just(Optional.absent());
             }
         });
     }

@@ -35,11 +35,12 @@ public abstract class VTree {
 
 
     /**
-     * Forces a Thunk to a concrete value if this VTree is a Thunk, or
+     * Forces a {@link VComponent} to a concrete value if this VTree is a {@link VComponent}, or
      * this VTree itself is a concrete value.
      */
     public VTree force() {
         return this;
     }
 
+    public abstract String debugId();
 }

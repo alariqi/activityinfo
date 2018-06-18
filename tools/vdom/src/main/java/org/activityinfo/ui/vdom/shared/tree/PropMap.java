@@ -114,6 +114,13 @@ public class PropMap {
         return set("className", classNames);
     }
 
+    public PropMap setClass(String className, boolean add) {
+        if(add) {
+            setClass(className);
+        }
+        return this;
+    }
+
     public static boolean isObject(Object object) {
         return object instanceof PropMap;
     }

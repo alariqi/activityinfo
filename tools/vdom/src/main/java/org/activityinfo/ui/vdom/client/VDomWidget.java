@@ -12,6 +12,7 @@ import org.activityinfo.ui.vdom.client.render.DomPatcher;
 import org.activityinfo.ui.vdom.client.render.RenderContext;
 import org.activityinfo.ui.vdom.shared.diff.Diff;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.EventHandler;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
@@ -30,7 +31,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     private static final Logger LOGGER = Logger.getLogger(VDomWidget.class.getName());
 
-    private VTree tree = null;
+    private VTree tree = new VNode(HtmlTag.DIV);
 
     private boolean updating = false;
     private boolean updateQueued = false;
@@ -99,20 +100,11 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
         assert !updating : "Update already in progress";
         try {
             updating = true;
-            if (tree == null) {
-                renderInitial(vTree);
-            } else {
-                patchTree(vTree);
-            }
+            patchTree(vTree);
         } finally {
             updating = false;
             completeDetachments();
         }
-    }
-
-    private void renderInitial(VTree vNode) {
-        domBuilder.updateRoot(getElement(), vNode);
-        tree = vNode;
     }
 
     /**
@@ -137,6 +129,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
 
     private void patch(VPatchSet diff) {
+
         DomPatcher domPatcher = new DomPatcher(domBuilder, this);
         Node rootNode = domPatcher.patch(getElement(), diff);
 
@@ -161,11 +154,15 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     @Override
     public void fireUpdate(VComponent component) {
+
+        LOGGER.info("fireUpdate:" + component.debugId());
+
         if(!updateQueued) {
-            updateQueued = false;
+            updateQueued = true;
             Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                 @Override
                 public void execute() {
+                    updateQueued = false;
                     patchDirty();
                 }
             });
