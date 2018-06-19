@@ -219,7 +219,7 @@ public class TableViewModelTest {
         ColumnSet columnSet = columnsViewModel.assertLoaded();
 
         assertThat(columnSet.getColumnView("pcode").getString(0), equalTo("c899"));
-        assertThat(columnSet.getColumnView("subform").getDouble(0), equalTo(4));
+        assertThat(columnSet.getColumnView("subform").getDouble(0), equalTo(4.0));
 
     }
 

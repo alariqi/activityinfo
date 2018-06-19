@@ -23,6 +23,7 @@ import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.analysis.TableModel;
 import org.activityinfo.model.database.Operation;
+import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
@@ -212,7 +213,11 @@ public class EffectiveTableModel {
     }
 
     private String editRule() {
-        String formula = formTree.getRootMetadata().getPermissions().getFilter(Operation.EDIT_RECORD);
+        FormMetadata rootMetadata = formTree.getRootMetadata();
+        if(rootMetadata == null) {
+            return "FALSE";
+        }
+        String formula = rootMetadata.getPermissions().getFilter(Operation.EDIT_RECORD);
         if(formula == null) {
             return "TRUE";
         }
