@@ -26,15 +26,18 @@ import org.activityinfo.model.form.FormPermissions;
 import org.activityinfo.model.formTree.FormClassProvider;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.FormTreeBuilder;
+import org.activityinfo.model.formula.ConstantNode;
 import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.formula.FormulaParser;
 import org.activityinfo.model.formula.SymbolNode;
+import org.activityinfo.model.formula.functions.CountFunction;
 import org.activityinfo.model.formula.functions.SumFunction;
 import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.primitive.TextValue;
+import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.promise.BiFunction;
 import org.activityinfo.store.query.shared.columns.*;
 import org.activityinfo.store.query.shared.join.*;
@@ -131,10 +134,11 @@ public class FormScanBatch {
             if (match.isRootId()) {
                 return addIdColumn(filterLevel, match);
             } else {
-                return getDataColumn(filterLevel, match.getFormClass().getId(), match.getExpr());
+                return getDataColumn(filterLevel, match.getFormClass().getId(), match);
             }
         }
     }
+
 
     public Slot<ColumnView> addIdColumn(FilterLevel filterLevel, NodeMatch match) {
         SymbolNode matchExpr = (SymbolNode) match.getExpr();
@@ -181,7 +185,7 @@ public class FormScanBatch {
         Slot<ColumnView> column;
         switch (match.getType()) {
             case FIELD:
-                column = getDataColumn(filterLevel, match.getFormClass().getId(), match.getExpr());
+                column = getDataColumn(filterLevel, match.getFormClass().getId(), match);
                 break;
             case ID:
                 column = addResourceIdColumn(filterLevel, match.getFormClass().getId());
@@ -204,12 +208,24 @@ public class FormScanBatch {
         JoinNode node = match.getJoins().get(0);
         Slot<PrimaryKeyMap> primaryKey =  addPrimaryKey(filterLevel, node.getLeftFormId());
         Slot<ColumnView> parentColumn = addParentColumn(filterLevel, node.getRightFormId());
-        Slot<ColumnView> dataColumn = getDataColumn(filterLevel, match.getFormClass().getId(), match.getExpr());
+        Slot<ColumnView> dataColumn = getDataColumn(filterLevel, match.getFormClass().getId(), match);
 
         SubFormJoin join = new SubFormJoin(primaryKey, parentColumn);
 
         return new JoinedSubFormColumnViewSlot(Collections.singletonList(join), dataColumn,
                 node.getAggregation().or(SumFunction.INSTANCE));
+    }
+
+    private Slot<ColumnView> addSubRecordCount(FilterLevel filterLevel, ResourceId formId, NodeMatch match) {
+
+        SubFormReferenceType subFormType = (SubFormReferenceType) match.getFieldNode().getType();
+
+        Slot<PrimaryKeyMap> primaryKey = addPrimaryKey(filterLevel, formId);
+        Slot<ColumnView> parentColumn = addParentColumn(filterLevel, subFormType.getClassId());
+        SubFormJoin join = new SubFormJoin(primaryKey, parentColumn);
+        Slot<ColumnView> dataColumn = getDataColumn(filterLevel, subFormType.getClassId(), new ConstantNode(1));
+
+        return new JoinedSubFormColumnViewSlot(Collections.singletonList(join), dataColumn, CountFunction.INSTANCE);
     }
 
     private Slot<ColumnView> addParentColumn(FilterLevel filterLevel, ResourceId formId) {
@@ -252,6 +268,15 @@ public class FormScanBatch {
                 return filter.apply(foreignKey);
             }
         });
+    }
+
+
+    public Slot<ColumnView> getDataColumn(FilterLevel filterLevel, ResourceId formId, NodeMatch match) {
+        if(match.getFieldNode().isSubForm()) {
+            return addSubRecordCount(filterLevel, formId, match);
+        } else {
+            return getDataColumn(filterLevel, formId, match.getExpr());
+        }
     }
 
     public Slot<ColumnView> getDataColumn(FilterLevel filterLevel, ResourceId formId, FormulaNode fieldExpr) {

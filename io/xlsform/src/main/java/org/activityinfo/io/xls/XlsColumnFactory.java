@@ -87,6 +87,11 @@ public class XlsColumnFactory implements TableColumnVisitor<List<XlsColumn>> {
         return singleTextColumn(columnModel, singleEnumFormat);
     }
 
+    @Override
+    public List<XlsColumn> visitSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat subFormFormat) {
+        return singleColumn(columnModel, styles.getTextStyle(), new XlsNumberRenderer(with(subFormFormat.createRenderer())));
+    }
+
     private List<XlsColumn> singleTextColumn(EffectiveTableColumn columnModel, SimpleColumnFormat<String> format) {
         return singleColumn(columnModel, styles.getTextStyle(), new XlsTextRenderer(with(format.createRenderer())));
     }

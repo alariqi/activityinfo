@@ -31,6 +31,7 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formula.CompoundExpr;
 import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.query.ColumnModel;
+import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Connection;
@@ -189,6 +190,36 @@ public class TableViewModelTest {
         EffectiveTableModel effectiveTableModel = view.assertLoaded();
 
         assertThat(effectiveTableModel.getFormTree().getRootState(), equalTo(FormTree.State.DELETED));
+
+    }
+
+    @Test
+    public void testSubFormColumn() {
+
+        IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
+
+        StatefulValue<TableModel> tableModel = new StatefulValue<>(
+                ImmutableTableModel.builder().formId(incidentForm.getFormId())
+                        .addColumns(ImmutableTableColumn.builder()
+                                .id("pcode")
+                                .label("My PCODE")
+                                .formula(IncidentForm.PROTECTION_CODE_FIELD_ID.asString())
+                                .build())
+                        .addColumns(ImmutableTableColumn.builder()
+                                .id("subform")
+                                .label("Referrals")
+                                .formula(IncidentForm.REFERRAL_FIELD_ID.asString())
+                                .build())
+                        .build());
+
+        TableViewModel model = new TableViewModel(setup.getFormStore(), tableModel);
+
+        Connection<ColumnSet> columnsViewModel = setup.connect(model.getColumnSet());
+
+        ColumnSet columnSet = columnsViewModel.assertLoaded();
+
+        assertThat(columnSet.getColumnView("pcode").getString(0), equalTo("c899"));
+        assertThat(columnSet.getColumnView("subform").getDouble(0), equalTo(4));
 
     }
 

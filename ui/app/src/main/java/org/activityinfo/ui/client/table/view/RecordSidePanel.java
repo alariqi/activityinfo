@@ -15,6 +15,8 @@ import org.activityinfo.observable.MaybeStale;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.button.Buttons;
+import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.base.tabs.TabItem;
 import org.activityinfo.ui.client.base.tabs.Tabs;
 import org.activityinfo.ui.vdom.client.VDomWidget;
@@ -28,13 +30,13 @@ import java.util.List;
 
 import static org.activityinfo.ui.client.base.button.Buttons.button;
 import static org.activityinfo.ui.vdom.shared.html.H.div;
+import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
 
-public class RecordView implements IsWidget {
-
+public class RecordSidePanel implements IsWidget {
 
     private final VDomWidget content;
 
-    public RecordView(TableViewModel viewModel, TableUpdater tableUpdater) {
+    public RecordSidePanel(TableViewModel viewModel, TableUpdater tableUpdater) {
         content = new VDomWidget();
         content.addStyleName("details");
 
@@ -42,7 +44,23 @@ public class RecordView implements IsWidget {
                 new TabItem(I18N.CONSTANTS.details(), details(viewModel, tableUpdater)),
                 new TabItem(I18N.CONSTANTS.history(), history(viewModel)));
 
-        content.update(tree);
+        VTree sidePanel = new SidePanel()
+                .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
+                .header(scrollButton(viewModel))
+                .content(tree)
+                .build();
+
+        content.update(sidePanel);
+    }
+
+    private VTree scrollButton(TableViewModel viewModel) {
+
+        Observable<Boolean> hasSelection = viewModel.hasSelection().optimisticWithDefault(false);
+
+        return new ReactiveComponent("scrollto",
+                hasSelection.transform(e ->
+                    new VNode(HtmlTag.BUTTON, withClasses("details__scrollto").disabled(!e),
+                        new VText(I18N.CONSTANTS.scrollToThisRecord()))));
     }
 
     private VTree details(TableViewModel viewModel, TableUpdater updater) {
@@ -57,7 +75,9 @@ public class RecordView implements IsWidget {
         Observable<Boolean> hasSelection = viewModel.hasSelection().optimistic();
 
         return new ReactiveComponent("details",
-                hasSelection.transform(b -> b ? selection : noSelection));
+                hasSelection.transform(b ->
+                        new VNode(HtmlTag.DIV, withClasses("details"),
+                                b ? selection : noSelection)));
     }
 
     private VTree selectionDetails(TableViewModel viewModel, TableUpdater tableUpdater) {
@@ -89,7 +109,7 @@ public class RecordView implements IsWidget {
             List<VTree> subFormLinks = new ArrayList<>();
 
             for (FormTree.Node node : tree.getRootFields()) {
-                if(node.isSubForm() && node.isSubFormVisible()) {
+                if(node.isSubForm() && node.isVisibleSubForm()) {
                     SubFormReferenceType subFormType = (SubFormReferenceType) node.getType();
                     FormClass subForm = tree.getFormClass(subFormType.getClassId());
 
@@ -101,7 +121,8 @@ public class RecordView implements IsWidget {
                 return new VNode(HtmlTag.DIV);
             } else {
                 return new VNode(HtmlTag.DIV,
-                        new VNode(HtmlTag.H3, "Go to subform"),
+                        withClasses("details__subforms"),
+                        new VNode(HtmlTag.H2, I18N.CONSTANTS.goToSubforms()),
                         new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks));
 
             }
@@ -121,7 +142,7 @@ public class RecordView implements IsWidget {
                 .onSelect(event -> tableUpdater.editSelection())
                 .build();
 
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__recordheader"),
+        return new VNode(HtmlTag.DIV, withClasses("details__recordheader"),
                 header,
                 editButton,
                 deleteButton);
@@ -137,7 +158,7 @@ public class RecordView implements IsWidget {
 
         Observable<VTree> details = Observable.transform(renderer, selection, (r, s) -> r.render(s.getValue(), s.isStale()));
 
-        return new ReactiveComponent("details.values", details);
+        return new ReactiveComponent("details.values", details, DetailsRenderer.renderPlaceholder());
     }
 
     private VTree noSelection() {
@@ -150,11 +171,12 @@ public class RecordView implements IsWidget {
 
     private VTree subFormLink(FormClass subForm) {
         SafeUri link = UriUtils.fromSafeConstant("#");
-        return new VNode(HtmlTag.A, PropMap.withClasses("button button--primary button--subform").href(link),
-                Icon.BUBBLE_ARROWRIGHT.tree(),
-                new VNode(HtmlTag.SPAN, subForm.getLabel()),
-                new VNode(HtmlTag.SPAN, PropMap.withClasses("button__recordcount"),
-                        new VText("... records")));
+        return Buttons.button(subForm.getLabel())
+                .primary()
+                .block()
+                .icon(Icon.BUBBLE_ARROWRIGHT)
+                .link(link)
+                .build();
     }
 
     @Override

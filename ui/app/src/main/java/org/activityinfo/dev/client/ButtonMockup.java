@@ -11,7 +11,6 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.button.MenuButton;
-import org.activityinfo.ui.client.base.button.PlainTextButton;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.base.container.StaticHtml;
 
@@ -32,7 +31,6 @@ public class ButtonMockup implements IsWidget {
         container.add(new IconButton(Icon.BUBBLE_ADD, IconButtonStyle.SECONDARY, "Add something else"));
 
         container.add(new StaticHtml(SafeHtmlUtils.fromSafeConstant("<h2>Plain Text Button</h2>")));
-        container.add(new PlainTextButton("Scroll to this record"));
 
         container.add(new StaticHtml(SafeHtmlUtils.fromSafeConstant("<h2>Menu Button</h2>")));
         container.add(new MenuButton("Open menu", createMenu()));

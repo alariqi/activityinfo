@@ -1889,8 +1889,8 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Settings")
     String settings();
 
-    @DefaultStringValue("My Reports:")
-    String subForms();
+    @DefaultStringValue("Subform")
+    String subForm();
 
     @DefaultStringValue("Record details")
     String recordDetails();
@@ -1939,5 +1939,14 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Please select a record to see more information")
     String pleaseSelectARecord();
+
+    @DefaultStringValue("Scroll to this record...")
+    String scrollToThisRecord();
+
+    @DefaultStringValue("Details & History")
+    String detailsHistory();
+
+    @DefaultStringValue("Go to subform:")
+    String goToSubforms();
 
 }

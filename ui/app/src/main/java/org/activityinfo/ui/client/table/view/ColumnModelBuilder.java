@@ -19,10 +19,14 @@
 package org.activityinfo.ui.client.table.view;
 
 import com.google.gwt.cell.client.DateCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.shared.DateTimeFormat;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.sencha.gxt.core.client.ValueProvider;
+import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.HeaderGroupConfig;
@@ -38,10 +42,19 @@ import java.util.List;
  */
 public class ColumnModelBuilder {
 
+    interface Templates extends XTemplates {
+
+        @XTemplate("<h4>{subform}</h4>{name}")
+        SafeHtml subFormHeader(String subform, String name);
+    }
+
+    private final Templates TEMPLATES = GWT.create(Templates.class);
+
     private final ColumnSetProxy proxy;
     private final List<ColumnConfig<Integer, ?>> columnConfigs = new ArrayList<>();
     private final List<HeaderGroupConfig> headerGroupConfigs = new ArrayList<>();
     private final List<ColumnView> filters = new ArrayList<>();
+
 
     public ColumnModelBuilder(ColumnSetProxy proxy) {
         this.proxy = proxy;
@@ -98,6 +111,13 @@ public class ColumnModelBuilder {
                     addEnumType(columnModel, singleEnumFormat);
                     return null;
                 }
+
+                @Override
+                public Void visitSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat subFormFormat) {
+                    addSubFormColumn(columnModel, subFormFormat);
+                    return null;
+                }
+
             });
 
         }
@@ -108,6 +128,7 @@ public class ColumnModelBuilder {
 
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
     }
 
@@ -118,6 +139,7 @@ public class ColumnModelBuilder {
         ColumnConfig<Integer, Double> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
         config.setHeader(tableColumn.getLabel());
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
     }
 
@@ -127,6 +149,7 @@ public class ColumnModelBuilder {
 
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
 
     }
@@ -137,6 +160,7 @@ public class ColumnModelBuilder {
         ColumnConfig<Integer, Date> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
         config.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
     }
 
@@ -147,6 +171,7 @@ public class ColumnModelBuilder {
 
         ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setHeader(tableColumn.getLabel());
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
     }
 
@@ -162,11 +187,14 @@ public class ColumnModelBuilder {
         ColumnConfig<Integer, Double> latitudeConfig = new ColumnConfig<>(latProvider);
         latitudeConfig.setHeader(I18N.CONSTANTS.latitude());
         latitudeConfig.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        latitudeConfig.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+
         columnConfigs.add(latitudeConfig);
 
         ColumnConfig<Integer, Double> longitudeConfig = new ColumnConfig<>(lngProvider);
         longitudeConfig.setHeader(I18N.CONSTANTS.longitude());
         longitudeConfig.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+        longitudeConfig.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(longitudeConfig);
 
         HeaderGroupConfig groupConfig = new HeaderGroupConfig(SafeHtmlUtils.fromString(columnModel.getLabel()), 1, 2);
@@ -174,6 +202,23 @@ public class ColumnModelBuilder {
         groupConfig.setColumn(latitudeColumnIndex);
 
         headerGroupConfigs.add(groupConfig);
+    }
+
+
+    private void addSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat format) {
+        ValueProvider<Integer, Integer> countProvider =
+                proxy.getValueProvider(format.getId(), format.createRenderer());
+
+        ColumnConfig<Integer, Integer> columnConfig = new ColumnConfig<>(countProvider);
+        columnConfig.setColumnHeaderClassName("columnheader__header--subform");
+        columnConfig.setHeader(TEMPLATES.subFormHeader(I18N.CONSTANTS.subForm(), columnModel.getLabel()));
+        columnConfig.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
+        columnConfig.setCellClassName("tablegrid__cell--subform");
+        columnConfig.setCell(new SubFormCell());
+        columnConfig.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+
+        columnConfigs.add(columnConfig);
+
     }
 
     private void addErrorColumn(EffectiveTableColumn tableColumn, ErrorFormat errorFormat) {
@@ -197,6 +242,7 @@ public class ColumnModelBuilder {
         config.setHeader(tableColumn.getLabel());
         config.setCell(new ErrorCell());
         config.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LOCALE_END);
+        config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
         columnConfigs.add(config);
     }
 

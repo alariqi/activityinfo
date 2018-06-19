@@ -113,9 +113,6 @@ public class EffectiveTableModel {
 
 
     private void addDefaultColumns(FormTree formTree) {
-        if(!isSubTable() && formTree.getRootFormClass().isSubForm()) {
-            addDefaultColumns(formTree.parentTree());
-        }
         for (FormTree.Node node : formTree.getRootFields()) {
             if(node.getField().isVisible()) {
                 if (isSimple(node.getType())) {
@@ -123,10 +120,14 @@ public class EffectiveTableModel {
 
                 } else if (node.getType() instanceof ReferenceType && !node.isParentReference()) {
                     addKeyColumns(columns, node);
+
+                } else if (node.isVisibleSubForm()) {
+                    columns.add(new EffectiveTableColumn(formTree, defaultColumnModel(node)));
                 }
             }
         }
     }
+
 
     public String getTitle() {
         return formTree.getRootFormClass().getLabel();
@@ -167,6 +168,7 @@ public class EffectiveTableModel {
                 .formula(formulaString)
                 .build();
     }
+
 
     private void addKeyColumns(List<EffectiveTableColumn> columns, FormTree.Node node) {
 

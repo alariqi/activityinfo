@@ -31,6 +31,50 @@ public class DomPatcher implements PatchOpExecutor {
         this.context = context;
     }
 
+    /*
+     * Renders a full dom tree for the given virtual {@code vtree}, using
+     * {@code rootElement} as the root dom element. Any existing children
+     * of {@code rootElement} will be removed.
+     */
+    public void init(Element rootElement, VTree vtree) {
+        if(vtree instanceof VNode) {
+            initRootNode(rootElement, (VNode) vtree);
+        } else if(vtree instanceof VComponent) {
+            initRootComponent(rootElement, (VComponent)vtree);
+        } else {
+            throw new IllegalStateException("Root vTree must be an element");
+        }
+    }
+
+    private void initRootNode(Element rootElement, VNode vNode) {
+        if(!rootElement.getTagName().equalsIgnoreCase(vNode.tag.name())) {
+            throw new UnsupportedOperationException("Cannot change the tag name of the root element");
+        }
+        Properties.applyProperties(rootElement, vNode.properties, null);
+
+        rootElement.removeAllChildren();
+
+        appendChildren(rootElement, vNode);
+
+        if(vNode.hasComponents()) {
+            fireMountRecursively(context, vNode, rootElement);
+        }
+    }
+
+    private void initRootComponent(Element rootElement, VComponent component) {
+        init(rootElement, component.ensureRendered());
+
+        component.fireMounted(context, rootElement);
+    }
+
+    private void appendChildren(Element parentElement, VNode vnode) {
+        VTree[] children = vnode.children;
+        for (VTree child : children) {
+            parentElement.appendChild(domBuilder.render(child));
+        }
+    }
+
+
     public Node patch(Element rootNode, VPatchSet patches) {
         return patchRecursive(rootNode, patches);
     }

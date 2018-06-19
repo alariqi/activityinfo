@@ -296,6 +296,10 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
 
     @DefaultMessage("<strong>Update record</strong> in {0}")
     SafeHtml editRecordHeading(String formName);
+
+    @DefaultMessage("{0} records")
+    @AlternateMessage({ "one", "1 record" })
+    String recordCount(@PluralCount int count);
 }
 
 

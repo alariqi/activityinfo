@@ -30,7 +30,7 @@ import java.util.List;
 
 public class EffectiveTableColumn {
 
-    public static final int DEFAULT_COLUMN_WIDTH = 100;
+    public static final int DEFAULT_COLUMN_WIDTH = 150;
     private TableColumn model;
     private String label;
     private ParsedFormula formula;

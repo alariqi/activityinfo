@@ -1,8 +1,4 @@
 
-$BODY_BORDER_COLOR: black;
-$BODY_BORDER_WIDTH: 1px;
-$BODY_BORDER_STYLE: solid;
-
 $CELL_LINE_HEIGHT: 18.2px;
 $cell-bg-color: $white;
 $cell-bg-color-alt: #f6f9f9;
@@ -32,9 +28,6 @@ $column-line-color: $border;
 }
 
 .tablegrid__body {
-    /*border-style: BODY_BORDER_STYLE;*/
-    /*border-color: BODY_BORDER_COLOR;*/
-    /*border-width: BODY_BORDER_WIDTH;*/
 }
 
 .tablegrid_data-table table {
@@ -54,10 +47,10 @@ $column-line-color: $border;
 
 .tablegrid__cell {
     background-color: white;
-    border-top-color: $cell-bg-color;
+    border-top-color: transparent;
     border-right-color: $column-line-color;
     border-left-color: $column-line-color;
-    border-bottom-color: $cell-bg-color;
+    border-bottom-color: transparent;
     border-style: solid;
     border-width: $row-line-width 0;
     border-right-style: none;
@@ -69,7 +62,6 @@ $column-line-color: $border;
 
 .tablegrid__row--alt .tablegrid__cell {
     background-color: $cell-bg-color-alt;
-    border-top-color: $cell-bg-color-alt;
 }
 
 .tablegrid__row--highlight .tablegrid__cell {
@@ -79,6 +71,15 @@ $column-line-color: $border;
     font-family: $gretasemibold;
 }
 
+.tablegrid__row--highlight td.tablegrid__cell:first-child {
+    border-left-color: $green;
+}
+
+.tablegrid__row--highlight td.tablegrid__cell:last-child {
+    border-right-color: $green;
+}
+
+
 .tablegrid__row-wrap {
     border-color: $cell-bg-color $column-line-color $cell-bg-color;
     border-style: solid;
@@ -87,7 +88,7 @@ $column-line-color: $border;
 }
 
 .tablegrid__row--alt .tablegrid__row-wrap {
-    border-top-color: $cell-bg-color-alt;
+    border-top-color: transparent;
 }
 
 .tablegrid__row-wrap .tablegrid__cell,

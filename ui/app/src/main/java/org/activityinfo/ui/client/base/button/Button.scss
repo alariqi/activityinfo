@@ -43,6 +43,11 @@ button,
   }
 }
 
+.button--fullwidth {
+  display: block;
+  width: 100%;
+}
+
 .button:disabled {
   opacity: 0.5;
   background-color:  initial;
@@ -99,6 +104,24 @@ button,
   background-color: $white;
 }
 
+.button .icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+}
+
+.button--dropdown .icon {
+  left: initial;
+  right: 0.75rem;
+}
+
+.button--dropdown.button--active  .icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
 .button .icon ~ .button__label {
   padding-left: 1.5rem;
 }
@@ -106,4 +129,31 @@ button,
 .button--dropdown .icon ~ .button__label {
   padding-left: 0;
   padding-right: 1.5rem;
+}
+
+.button--block {
+  display: block;
+  width: 100%;
+}
+
+.button--block + .button--block {
+  margin-top: 3px;
+}
+
+
+.smallbutton {
+  font-size: 0.8rem;
+  color: $white;
+
+  &:focus {
+    outline: 0 none;
+    border: 1px solid $green;
+    box-shadow: 0 0 0.5rem 0 $green;
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    outline: 0 none;
+    pointer-events: none;
+  }
 }

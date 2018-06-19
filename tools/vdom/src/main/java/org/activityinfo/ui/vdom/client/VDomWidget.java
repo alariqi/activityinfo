@@ -12,7 +12,6 @@ import org.activityinfo.ui.vdom.client.render.DomPatcher;
 import org.activityinfo.ui.vdom.client.render.RenderContext;
 import org.activityinfo.ui.vdom.shared.diff.Diff;
 import org.activityinfo.ui.vdom.shared.diff.VPatchSet;
-import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.EventHandler;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
@@ -31,7 +30,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     private static final Logger LOGGER = Logger.getLogger(VDomWidget.class.getName());
 
-    private VTree tree = new VNode(HtmlTag.DIV);
+    private VTree tree = null;
 
     private boolean updating = false;
     private boolean updateQueued = false;
@@ -44,9 +43,12 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
     private List<Widget> pendingDetachments = new ArrayList<>();
 
     private DomBuilder domBuilder;
+    private DomPatcher domPatcher;
 
     public VDomWidget() {
         domBuilder = new DomBuilder(this);
+        domPatcher = new DomPatcher(domBuilder, this);
+
         setElement(Document.get().createDivElement());
 
         sinkEvents(Event.ONCLICK | Event.FOCUSEVENTS | Event.ONCHANGE);
@@ -83,6 +85,9 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
     private List<VNode> findVNodeFromParentPath(List<Integer> path) {
         List<VNode> vPath = new ArrayList<>();
         VTree vParent = tree;
+        while(vParent instanceof VComponent) {
+            vParent = ((VComponent) vParent).vNode;
+        }
         for (Integer childIndex : path) {
             vParent = vParent.childAt(childIndex);
             while(vParent instanceof VComponent) {
@@ -100,11 +105,20 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
         assert !updating : "Update already in progress";
         try {
             updating = true;
-            patchTree(vTree);
+            if(this.tree == null) {
+                initialUpdate(vTree);
+            } else {
+                patchTree(vTree);
+            }
         } finally {
             updating = false;
             completeDetachments();
         }
+    }
+
+    private void initialUpdate(VTree vTree) {
+        domPatcher.init(getElement(), vTree);
+        this.tree = vTree;
     }
 
     /**
@@ -130,10 +144,13 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
     private void patch(VPatchSet diff) {
 
-        DomPatcher domPatcher = new DomPatcher(domBuilder, this);
+        LOGGER.info("diff = " + diff);
+
         Node rootNode = domPatcher.patch(getElement(), diff);
 
-        if(rootNode != getElement()) {
+        Element widgetRoot = getElement();
+
+        if(rootNode != widgetRoot) {
             throw new IllegalStateException("Cannot replace the root node!");
         }
     }

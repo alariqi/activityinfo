@@ -25,6 +25,8 @@ public enum Icon {
     BUBBLE_COLUMNS,
     BUBBLE_DOWN,
 
+    CLOSE_WHITE,
+
     DATE,
 
     OPTIONS,

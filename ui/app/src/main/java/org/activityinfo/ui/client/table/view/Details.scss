@@ -24,6 +24,17 @@
   }
 }
 
+.details__scrollto {
+  font-size: 0.8rem;
+  color: $white;
+  font-family: $gretalight;
+}
+
+button.details__scrollto:disabled {
+  opacity: 0.2;
+}
+
+
 .details__empty {
   margin-top: 1.5rem;
   text-align: center;
@@ -45,6 +56,15 @@
   flex-grow: 2;
 }
 
+.details__subforms {
+
+}
+
+.details__subforms h2 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
 .details__fields {
 
 }
@@ -56,7 +76,12 @@
 }
 
 
+.details__fields--dummy h4 {
+  color: transparent;
+  text-shadow: 0 0 5px rgba($green-pale, 0.5);
+}
+
 .details__fields--loading .details__value {
   color: transparent;
-  text-shadow: 0 0 5px rgba($white, 0.5)
+  text-shadow: 0 0 5px rgba($white, 0.5);
 }

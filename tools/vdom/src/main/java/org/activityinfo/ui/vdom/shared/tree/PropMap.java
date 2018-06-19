@@ -134,6 +134,15 @@ public class PropMap {
         return this;
     }
 
+    public PropMap disabled(boolean disabled) {
+        if(disabled) {
+            propMap.put("disabled", "true");
+        } else {
+            propMap.remove("disabled");
+        }
+        return this;
+    }
+
     public Iterable<String> keys() {
         return propMap.keySet();
     }
@@ -187,4 +196,5 @@ public class PropMap {
             return new PropMap();
         }
     }
+
 }

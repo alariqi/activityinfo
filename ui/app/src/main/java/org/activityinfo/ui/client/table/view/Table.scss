@@ -21,3 +21,31 @@
   bottom: 0;
   right: 0;
 }
+
+
+/* Special Styling for Subform columns */
+
+.columnheader__header h4 {
+  color: #709396;
+  font-family: $gretasemibold;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.tablegrid__row .tablegrid__cell--subform {
+  background-color: #f4fefa;
+  position: relative;
+
+  a {
+    position: absolute;
+    right: 0.75rem;
+  }
+}
+
+.tablegrid__row--alt .tablegrid__cell--subform {
+  background-color: #ecf8f4;
+}
+
+
+

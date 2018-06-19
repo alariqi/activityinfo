@@ -36,4 +36,5 @@ public interface TableColumnVisitor<T> {
 
     T visitSingleEnumColumn(EffectiveTableColumn columnModel, SingleEnumFormat singleEnumFormat);
 
+    T visitSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat subFormFormat);
 }

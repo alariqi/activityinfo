@@ -6,8 +6,9 @@ class OptimisticObservable<T> extends Observable<T> {
     private Subscription subscription;
     private T cachedValue;
 
-    OptimisticObservable(Observable<T> observable) {
+    OptimisticObservable(Observable<T> observable, T defaultValue) {
         this.observable = observable;
+        this.cachedValue = defaultValue;
     }
 
     @Override

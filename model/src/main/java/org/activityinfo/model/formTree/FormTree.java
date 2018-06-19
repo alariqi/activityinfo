@@ -300,8 +300,10 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
             return getType() instanceof SubFormReferenceType;
         }
 
-        public boolean isSubFormVisible() {
-            assert isSubForm();
+        public boolean isVisibleSubForm() {
+            if(!isSubForm()) {
+                return false;
+            }
             SubFormReferenceType type = (SubFormReferenceType) field.getType();
             FormMetadata subForm = getFormMetadata(type.getClassId());
             return subForm.isVisible();
@@ -358,7 +360,7 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
 
     public boolean hasVisibleSubForms() {
         for (Node node : getRootFields()) {
-            if(node.isSubForm() && node.isSubFormVisible()) {
+            if(node.isSubForm() && node.isVisibleSubForm()) {
                 return true;
             }
         }

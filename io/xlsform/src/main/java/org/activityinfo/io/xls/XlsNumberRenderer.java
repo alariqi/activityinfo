@@ -23,9 +23,9 @@ import org.apache.poi.ss.usermodel.Cell;
 
 public class XlsNumberRenderer implements XlsColumnRenderer {
 
-    private final ColumnRenderer<Double> renderer;
+    private final ColumnRenderer<? extends Number> renderer;
 
-    public XlsNumberRenderer(ColumnRenderer<Double> renderer) {
+    public XlsNumberRenderer(ColumnRenderer<? extends Number> renderer) {
         this.renderer = renderer;
     }
 
@@ -36,6 +36,6 @@ public class XlsNumberRenderer implements XlsColumnRenderer {
 
     @Override
     public void setValue(Cell cell, int row) {
-        cell.setCellValue(renderer.render(row));
+        cell.setCellValue(renderer.render(row).doubleValue());
     }
 }

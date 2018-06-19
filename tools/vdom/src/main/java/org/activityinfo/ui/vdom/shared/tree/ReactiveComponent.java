@@ -12,9 +12,9 @@ public class ReactiveComponent extends VComponent {
     private static final Logger LOGGER = Logger.getLogger(ReactiveComponent.class.getName());
 
     private final String debugId;
-    private Observable<VTree> observable;
+    private final Observable<VTree> observable;
 
-    private VTree loading = new VNode(HtmlTag.DIV);
+    private final VTree loading;
 
     private Subscription subscription;
 
@@ -23,8 +23,13 @@ public class ReactiveComponent extends VComponent {
     }
 
     public ReactiveComponent(String debugId, Observable<VTree> observable) {
+        this(debugId, observable, new VNode(HtmlTag.DIV));
+    }
+
+    public ReactiveComponent(String debugId, Observable<VTree> observable, VTree loadingIndicator) {
         this.debugId = debugId + "#" + debugIndex;
         this.observable = observable;
+        this.loading = loadingIndicator;
     }
 
     @Override
@@ -61,5 +66,10 @@ public class ReactiveComponent extends VComponent {
             subscription.unsubscribe();
             subscription = null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Reactive[" + debugId + "]";
     }
 }

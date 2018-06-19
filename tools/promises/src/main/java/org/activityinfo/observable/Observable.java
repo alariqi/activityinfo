@@ -367,7 +367,15 @@ public abstract class Observable<T> {
      * loading event. This is useful to reduce flicker when values are frequently computed but unlikely to change.
      */
     public final Observable<T> optimistic() {
-        return new OptimisticObservable<>(this);
+        return new OptimisticObservable<>(this, null);
+    }
+
+    /**
+     * Returns a new {@code Observable} value that is never loading: it will will either take the default value,
+     * or the last loaded value.
+     */
+    public final Observable<T> optimisticWithDefault(T defaultValue) {
+        return new OptimisticObservable<>(this, defaultValue);
     }
 
     public final Observable<MaybeStale<T>> explicitlyOptimistic() {

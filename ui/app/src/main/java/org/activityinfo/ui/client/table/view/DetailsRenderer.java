@@ -7,12 +7,14 @@ import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DetailsRenderer {
+
 
     private static class FieldRenderer {
         private final FormTree.Node field;
@@ -44,10 +46,9 @@ public class DetailsRenderer {
         for (FieldRenderer fieldRenderer : fieldRenderers) {
             FieldValue fieldValue = record.get(fieldRenderer.field.getFieldId());
             if(fieldValue != null) {
-                children.add(new VNode(HtmlTag.DIV, PropMap.withClasses("details__field"),
-                        new VNode(HtmlTag.H4, fieldRenderer.field.getField().getLabel()),
-                        new VNode(HtmlTag.DIV, PropMap.withClasses("details__value"),
-                                fieldRenderer.renderer.render(selection, fieldValue))));
+                children.add(fieldValue(
+                        fieldRenderer.field.getField().getLabel(),
+                        fieldRenderer.renderer.render(selection, fieldValue)));
             }
         }
 
@@ -56,5 +57,22 @@ public class DetailsRenderer {
             props.addClassName("details__fields--loading");
         }
         return new VNode(HtmlTag.DIV, props, children);
+    }
+
+
+    public static VTree renderPlaceholder() {
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__fields details__fields--dummy details__fields--loading"),
+                fieldValue("Partner", new VText("Default")),
+                fieldValue("Serial Number", new VText("00000")),
+                fieldValue("Gender", new VText("Female")),
+                fieldValue("Something else", new VText("12 parsecs")));
+
+    }
+
+    private static VNode fieldValue(String label, VTree value) {
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__field"),
+                new VNode(HtmlTag.H4, label),
+                new VNode(HtmlTag.DIV, PropMap.withClasses("details__value"),
+                        value));
     }
 }
