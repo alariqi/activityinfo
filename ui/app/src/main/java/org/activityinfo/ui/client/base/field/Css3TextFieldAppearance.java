@@ -52,6 +52,11 @@ public class Css3TextFieldAppearance extends Css3ValueBaseFieldAppearance implem
         super();
     }
 
+    public Css3TextFieldAppearance(String type, String units) {
+        super(type);
+        this.units = units;
+    }
+
     /**
      *
      * @param units a string that appears at the end of the input field.

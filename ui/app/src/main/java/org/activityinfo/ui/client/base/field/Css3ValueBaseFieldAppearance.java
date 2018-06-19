@@ -48,7 +48,14 @@ import com.sencha.gxt.core.client.dom.XElement;
 public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppearance {
 
 
+    private String type;
+
     public Css3ValueBaseFieldAppearance() {
+        type = "text";
+    }
+
+    public Css3ValueBaseFieldAppearance(String type) {
+        this.type = type;
     }
 
     @Override
@@ -95,7 +102,7 @@ public abstract class Css3ValueBaseFieldAppearance implements ValueBaseFieldAppe
 
         sb.append(placeholder);
 
-        sb.append("type='text' value='").append(SafeHtmlUtils.htmlEscape(value)).append("' ");
+        sb.append("type='" + type + "' value='").append(SafeHtmlUtils.htmlEscape(value)).append("' ");
 
         sb.append("/>");
 

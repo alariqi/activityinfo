@@ -18,6 +18,7 @@
  */
 package org.activityinfo.ui.client.input.view.field;
 
+import com.sencha.gxt.core.client.GXT;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.*;
@@ -134,7 +135,11 @@ public class FieldWidgetFactory  {
 
         @Override
         public FieldWidget visitLocalDate(LocalDateType localDateType) {
-            return new LocalDateWidget(updater);
+            if(GXT.isDesktop()) {
+                return new LocalDateWidget(updater);
+            } else {
+                return new NativeLocalDateWidget(updater);
+            }
         }
 
         @Override
