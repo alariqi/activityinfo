@@ -50,11 +50,14 @@ textarea:disabled {
   border: 0;
   border-radius: $borderradius;
   font-size: 1rem;
+  font-family: $gretalight;
 }
 
 .field__wrap textarea {
   resize: vertical;
+  height: 8rem;
 }
+
 
 .field__units {
   position: relative;
