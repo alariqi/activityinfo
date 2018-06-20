@@ -21,6 +21,7 @@ package org.activityinfo.ui.client.store;
 import com.google.common.base.Optional;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormTree;
@@ -107,6 +108,11 @@ public class TestingFormStore implements FormStore {
     @Override
     public Observable<List<UserDatabaseMeta>> getDatabases() {
         throw new UnsupportedOperationException("TODO");
+    }
+
+    @Override
+    public Observable<List<DatabaseHeader>> getDatabaseList() {
+        return Observable.just(Collections.emptyList());
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.activityinfo.dev.client;
 
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.FormMetadata;
@@ -36,6 +37,11 @@ public class DevFormStore implements FormStore {
     @Override
     public Observable<List<UserDatabaseMeta>> getDatabases() {
         return Observable.just(Collections.emptyList());
+    }
+
+    @Override
+    public Observable<List<DatabaseHeader>> getDatabaseList() {
+        throw new UnsupportedOperationException("TODO");
     }
 
     @Override

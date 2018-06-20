@@ -16,6 +16,16 @@
   max-width: $formwidth;
 }
 
+@media (max-width: $formwidth) {
+
+  h1, .forminput__footer {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+}
+
+
 .forminput__inner .fieldset__radio input[type="radio"]:checked ~ label,
 .forminput__inner .fieldset__checkbox input[type="checkbox"]:checked ~ label {
   color: $green-light;

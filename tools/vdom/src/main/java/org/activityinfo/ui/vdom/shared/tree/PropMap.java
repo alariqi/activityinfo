@@ -63,6 +63,13 @@ public class PropMap {
         }
     }
 
+    public PropMap addClassName(String className, boolean add) {
+        if(add) {
+            addClassName(className);
+        }
+        return this;
+    }
+
     /**
      * Creates a new {@code PropMap} with the given value for the {@code className} property
      */

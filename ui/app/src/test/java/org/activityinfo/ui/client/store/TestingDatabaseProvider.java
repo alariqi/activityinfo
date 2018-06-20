@@ -18,6 +18,7 @@
  */
 package org.activityinfo.ui.client.store;
 
+import com.google.common.collect.Lists;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
@@ -35,13 +36,22 @@ public class TestingDatabaseProvider {
 
     public void add(UserDatabaseMeta database) {
         databases.add(database);
+        resourceMap.put(database.getDatabaseId(), database);
         for (Resource resource : database.getResources()) {
             resourceMap.put(resource.getId(), database);
         }
     }
 
+    public Optional<UserDatabaseMeta> get(ResourceId databaseId) {
+        return Optional.ofNullable(resourceMap.get(databaseId));
+    }
+
     public Optional<UserDatabaseMeta> lookupDatabase(ResourceId resourceId) {
         return Optional.ofNullable(resourceMap.get(resourceId));
+    }
+
+    public List<UserDatabaseMeta> getAll() {
+        return Lists.newArrayList(databases);
     }
 
 }

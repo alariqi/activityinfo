@@ -19,6 +19,7 @@
 package org.activityinfo.ui.client.analysis.viewModel;
 
 import com.google.common.base.Optional;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.analysis.TypedAnalysis;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
@@ -166,11 +167,7 @@ public class AnalysisViewModel {
         return pivotTable;
     }
 
-    public void updateTitle(String title) {
-        draftMetadata.updateIfNotEqual(ImmutableDraftMetadata.copyOf(draftMetadata.get()).withLabel(title));
-    }
-
-    public void updateFolderId(String folderId) {
-        draftMetadata.updateIfNotEqual(ImmutableDraftMetadata.copyOf(draftMetadata.get()).withFolderId(folderId));
+    public Observable<String> getTitle() {
+        return draftMetadata.transform(m -> m.getLabel().or(I18N.CONSTANTS.untitledReport()));
     }
 }

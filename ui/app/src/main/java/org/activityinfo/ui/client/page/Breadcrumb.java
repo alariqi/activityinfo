@@ -12,6 +12,9 @@ import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.folder.FolderPlace;
 import org.activityinfo.ui.client.table.TablePlace;
+import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.tree.VText;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,12 @@ public class Breadcrumb {
     public void renderTo(SafeHtmlBuilder html) {
         html.append(PageTemplates.TEMPLATES.breadcrumb(label, uri));
     }
-    
+
+    public VTree render() {
+        return H.li(H.link(uri, new VText(label)));
+    }
+
+
     public static List<Breadcrumb> hierarchy(UserDatabaseMeta database, ResourceId resourceId) {
         List<Breadcrumb> breadcrumbs = new ArrayList<>();
         breadcrumbs.add(DATABASES);

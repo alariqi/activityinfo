@@ -21,8 +21,6 @@ package org.activityinfo.promise;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 
-import java.util.List;
-
 /**
  * Holds either a value, or is empty because it is FORBIDDEN, DELETED, OR NOT_FOUND.
  */
@@ -111,6 +109,15 @@ public class Maybe<T> {
             return Maybe.notFound();
         }
     }
+
+    public static <T> Maybe<T> fromOptional(java.util.Optional<T> optional) {
+        if(optional.isPresent()) {
+            return Maybe.of(optional.get());
+        } else {
+            return Maybe.notFound();
+        }
+    }
+
 
     @Override
     public int hashCode() {

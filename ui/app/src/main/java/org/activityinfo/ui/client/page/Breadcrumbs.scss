@@ -9,7 +9,10 @@ ul.breadcrumbs {
 
   li {
     display: inline;
+  }
 
+  li:last-child {
+    opacity: 0.5;
   }
 
   li+li:before {

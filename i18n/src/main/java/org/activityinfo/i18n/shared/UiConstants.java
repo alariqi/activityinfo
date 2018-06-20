@@ -1949,4 +1949,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Go to subform:")
     String goToSubforms();
 
+    @DefaultStringValue("Report Design")
+    String reportDesign();
+
 }

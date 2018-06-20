@@ -61,6 +61,7 @@ public class FormStoreImpl implements FormStore {
     private final Scheduler scheduler;
 
     private final Map<ResourceId, Observable<FormTree>> formTreeCache = new HashMap<>();
+    private final Map<ResourceId, Observable<Maybe<UserDatabaseMeta>>> databaseCache = new HashMap<>();
 
     private Observable<List<UserDatabaseMeta>> cachedDatabaseList;
 
@@ -102,7 +103,7 @@ public class FormStoreImpl implements FormStore {
 
     @Override
     public Observable<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
-        return httpStore.get(new DatabaseRequest(databaseId));
+        return databaseCache.computeIfAbsent(databaseId, id -> httpStore.get(new DatabaseRequest(id)));
     }
 
     @Override
@@ -126,6 +127,11 @@ public class FormStoreImpl implements FormStore {
             });
         }
         return cachedDatabaseList;
+    }
+
+    @Override
+    public Observable<List<DatabaseHeader>> getDatabaseList() {
+        return httpStore.get(new DatabaseListRequest());
     }
 
     @Override

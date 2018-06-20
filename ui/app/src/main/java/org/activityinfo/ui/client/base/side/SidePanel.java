@@ -12,10 +12,18 @@ import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
 
 public class SidePanel {
 
+
+    public enum Side {
+        LEFT,
+        RIGHT
+    }
+
     private StatefulValue<Boolean> expanded = new StatefulValue<>(false);
     private VTree title = new VText("");
     private VTree content = new VNode(HtmlTag.DIV);
     private VTree header = new VText("");
+    private Side side = Side.RIGHT;
+    private boolean full = false;
 
     public SidePanel content(VTree tree) {
         this.content = tree;
@@ -32,6 +40,16 @@ public class SidePanel {
         return this;
     }
 
+    public SidePanel leftSide() {
+        this.side = Side.LEFT;
+        return this;
+    }
+
+    public SidePanel full() {
+        this.full = true;
+        return this;
+    }
+
     /**
      * The label of the expand button visible when the panel is collapsed.
      */
@@ -41,12 +59,26 @@ public class SidePanel {
 
     public VTree build() {
         return new ReactiveComponent("sidepanel", expanded.transform(e -> {
+            String classes = "sidepanel";
+            switch (side) {
+                case LEFT:
+                    classes += " sidepanel--left";
+                    break;
+                case RIGHT:
+                    classes += " sidepanel--right";
+                    break;
+            }
+            if(!e) {
+                classes += " sidepanel--collapsed";
+            } else if(full) {
+                classes += " sidepanel--full";
+            }
             if(e) {
-                return new VNode(HtmlTag.DIV, withClasses("sidepanel"),
+                return new VNode(HtmlTag.DIV, withClasses(classes),
                         header(),
                         content());
             } else {
-                return new VNode(HtmlTag.DIV, withClasses("sidepanel sidepanel--collapsed"), expandButton());
+                return new VNode(HtmlTag.DIV, withClasses(classes), expandButton());
             }
         }));
     }

@@ -5,6 +5,7 @@ import org.activityinfo.ui.vdom.shared.tree.*;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.activityinfo.ui.vdom.shared.html.HtmlTag.*;
 
@@ -69,6 +70,27 @@ public class H {
         return new VNode(DIV, children);
     }
 
+    public static VNode div(String className, Stream<VTree> children) {
+        return new VNode(DIV, PropMap.withClasses(className), children);
+    }
+
+    public static VTree[] nullableList(VTree... array) {
+        int count = 0;
+        for (int i = 0; i < array.length; i++) {
+            if(array[i] != null) {
+                count++;
+            }
+        }
+        VTree[] nonEmpty = new VNode[count];
+        int j = 0;
+        for (int i = 0; i < array.length; i++) {
+            if(array[i] != null) {
+                nonEmpty[j++] = array[i];
+            }
+        }
+        return nonEmpty;
+    }
+
     public static VNode div(String text) {
         return new VNode(DIV, new VText(text));
     }
@@ -130,6 +152,10 @@ public class H {
 
 
     public static VNode ul(String className, VTree... children) {
+        return new VNode(UL, PropMap.withClasses(className), children);
+    }
+
+    public static VNode ul(String className, Stream<VTree> children) {
         return new VNode(UL, PropMap.withClasses(className), children);
     }
 

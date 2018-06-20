@@ -18,161 +18,58 @@
  */
 package org.activityinfo.ui.client.analysis.view;
 
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.box.PromptMessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.info.DefaultInfoConfig;
-import com.sencha.gxt.widget.core.client.info.Info;
-import com.sencha.gxt.widget.core.client.info.InfoConfig;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.SubscriptionSet;
-import org.activityinfo.promise.Promise;
 import org.activityinfo.ui.client.HasTitle;
-import org.activityinfo.ui.client.analysis.model.Axis;
-import org.activityinfo.ui.client.analysis.model.PivotModel;
 import org.activityinfo.ui.client.analysis.viewModel.AnalysisViewModel;
-import org.activityinfo.ui.client.analysis.viewModel.WorkingModel;
+import org.activityinfo.ui.client.header.HasFixedHeight;
+import org.activityinfo.ui.client.page.Breadcrumb;
+import org.activityinfo.ui.client.page.PageBuilder;
+import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.vdom.client.VDomWidget;
+import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-public class AnalysisView implements IsWidget, HasTitle {
+import java.util.Arrays;
 
-    private BorderLayoutContainer container;
+public class AnalysisView implements IsWidget, HasTitle, HasFixedHeight {
+
+    private VDomWidget container;
     private AnalysisViewModel model;
     private PivotTableView pivotTableView;
-    private SubscriptionSet subscriptions = new SubscriptionSet();
-    private final TextButton savedButton;
 
-    public AnalysisView(AnalysisViewModel model) {
+    public AnalysisView(FormStore formStore, AnalysisViewModel model) {
         this.model = model;
-        container = new BorderLayoutContainer();
-        container.addAttachHandler(this::onAttachEvent);
-        createPanes();
+        container = new VDomWidget();
 
         AnalysisBundle.INSTANCE.getStyles().ensureInjected();
 
-        savedButton = pivotTableView.getSaveButton();
-        savedButton.addSelectHandler(this::save);
+        VTree formSelection = FormSelectionView.render(formStore);
 
+        VTree body = H.div("analysis", formSelection);
+
+        VTree page = new PageBuilder()
+                .breadcrumbs(model.getTitle().transform(t ->
+                        Arrays.asList(new Breadcrumb(I18N.CONSTANTS.reports(), UriUtils.fromSafeConstant("#")),
+                                new Breadcrumb(t, UriUtils.fromSafeConstant("#")))))
+                .heading(model.getTitle())
+                .body(formSelection)
+                .build();
+
+        container.update(page);
     }
 
-    private void onAttachEvent(AttachEvent attachEvent) {
-        if(attachEvent.isAttached()) {
-            subscriptions.add(this.model.getWorking().subscribe(this::onWorkingModelChanged));
-        } else {
-            subscriptions.unsubscribeAll();
-        }
-
-    }
-
-    private void onWorkingModelChanged(Observable<WorkingModel<PivotModel>> workingModel) {
-        if(workingModel.isLoading()) {
-            this.container.mask();
-        } else {
-            this.container.unmask();
-            savedButton.setEnabled(workingModel.get().isDirty());
-        }
-    }
-
-
-    private void createPanes() {
-
-        MeasurePane measurePane = new MeasurePane(model);
-        DimensionPane rowPane = new DimensionPane(model, Axis.ROW);
-        DimensionPane columnPane = new DimensionPane(model, Axis.COLUMN);
-        pivotTableView = new PivotTableView(model);
-
-        VerticalLayoutContainer pane = new VerticalLayoutContainer();
-        pane.add(measurePane, new VerticalLayoutContainer.VerticalLayoutData(1, 0.4));
-        pane.add(rowPane, new VerticalLayoutContainer.VerticalLayoutData(1, 0.3));
-        pane.add(columnPane, new VerticalLayoutContainer.VerticalLayoutData(1, 0.3));
-
-        BorderLayoutContainer.BorderLayoutData paneLayout = new BorderLayoutContainer.BorderLayoutData();
-        paneLayout.setSize(0.3); // 30% of view
-        paneLayout.setMaxSize(400);
-        container.setEastWidget(pane, paneLayout);
-
-        container.setCenterWidget(pivotTableView);
-    }
 
     @Override
     public Widget asWidget() {
         return container;
     }
 
-
-    private void save(SelectEvent event) {
-        ensureTitle().join(this::ensureFolder).join(this::executeSave);
-
-    }
-
-    private Promise<Void> ensureTitle() {
-        if(model.getWorking().isLoading()) {
-            return new Promise<>();
-        }
-        if(model.getWorking().get().getLabel().isPresent()) {
-            return Promise.done();
-        }
-        Promise<Void> result = new Promise<>();
-        PromptMessageBox box = new PromptMessageBox(I18N.CONSTANTS.save(), I18N.CONSTANTS.chooseReportTitle());
-        box.show();
-        box.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
-            @Override
-            public void onDialogHide(DialogHideEvent event) {
-                if (event.getHideButton() == Dialog.PredefinedButton.OK) {
-                    AnalysisView.this.model.updateTitle(box.getTextField().getValue());
-                    result.resolve(null);
-                }
-            }
-        });
-        return result;
-    }
-
-    private Promise<Void> ensureFolder(Void input) {
-
-        if(model.getWorking().get().getParentId().isPresent()) {
-            return Promise.done();
-        }
-
-        Promise<Void> result = new Promise<>();
-
-        FolderDialog dialog = new FolderDialog(model.getFormStore());
-        dialog.show();
-        dialog.getOkButton().addSelectHandler(event -> {
-            dialog.hide();
-            AnalysisView.this.model.updateFolderId(dialog.getSelected().getId());
-            result.onSuccess(null);
-        });
-        return result;
-    }
-
-    private Promise<Void> executeSave(Void input) {
-        Promise<Void> result = AnalysisView.this.model.getFormStore().updateAnalysis(model.getWorking().get().buildUpdate());
-        result.then(new AsyncCallback<Void>() {
-            @Override
-            public void onFailure(Throwable caught) {
-            }
-
-            @Override
-            public void onSuccess(Void result) {
-                DefaultInfoConfig config = new DefaultInfoConfig(I18N.CONSTANTS.saved(), I18N.CONSTANTS.savedChanges());
-                config.setPosition(InfoConfig.InfoPosition.BOTTOM_RIGHT);
-                config.setDisplay(1000);
-                Info.display(config);
-            }
-        });
-        return result;
-    }
-
     @Override
     public Observable<String> getTitle() {
-        return model.getWorking().transform(working -> working.getLabel().or(I18N.CONSTANTS.untitledReport()));
+        return model.getTitle();
     }
 }

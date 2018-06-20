@@ -3,7 +3,6 @@ $sidepanel-collapsed-width: 1.875rem;
 
 .sidepanel {
   position: absolute;
-  right: 0;
   top: 0;
   bottom: 0;
   width: 22rem;
@@ -16,11 +15,29 @@ $sidepanel-collapsed-width: 1.875rem;
   flex-direction: column;
 }
 
+.sidepanel--right {
+  right: 0;
+}
+
+.sidepanel--left {
+  left: 0;
+}
+
+.sidepanel--full {
+  left: 0;
+  right: 0;
+  width: auto;
+}
+
 .sidepanel__header {
   min-height: 2rem;
   flex-grow: 0;
   padding-left: 1rem;
   padding-top: 1rem;
+}
+
+.sidepanel__header h2 {
+  font-size: 1.5rem;
 }
 
 .sidepanel__content {
@@ -47,6 +64,13 @@ $sidepanel-collapsed-width: 1.875rem;
 .sidepanel__collapse {
   position: absolute;
   top: 1rem;
+}
+
+.sidepanel--right .sidepanel__collapse {
+  left: 1rem;
+}
+
+.sidepanel--left .sidepanel__collapse {
   right: 1rem;
 }
 

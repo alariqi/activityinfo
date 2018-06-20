@@ -40,7 +40,7 @@ public class AnalysisActivity extends AbstractActivity {
 
         AnalysisViewModel model = new AnalysisViewModel(formStore, place.getId());
 
-        AnalysisView view = new AnalysisView(model);
+        AnalysisView view = new AnalysisView(formStore, model);
         panel.setWidget(view);
     }
 }

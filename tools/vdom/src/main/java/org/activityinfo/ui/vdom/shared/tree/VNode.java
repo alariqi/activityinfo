@@ -47,6 +47,10 @@ public class VNode extends VTree {
         this(tag, null, children.toArray(VTree[]::new));
     }
 
+    public VNode(Tag tag, PropMap propMap, Stream<VTree> children) {
+        this(tag, propMap, children.toArray(VTree[]::new));
+    }
+
     public VNode(Tag tag, PropMap propMap) {
         this(tag, propMap, null, null, null);
     }

@@ -46,6 +46,7 @@ import org.activityinfo.store.spi.VersionedFormStorage;
 import org.activityinfo.store.testing.TestingStorageProvider;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AsyncClientStub implements ActivityInfoClientAsync {
 
@@ -73,12 +74,17 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
 
     @Override
     public Promise<Maybe<UserDatabaseMeta>> getDatabase(ResourceId databaseId) {
-        return Promise.rejected(new UnsupportedOperationException());
+        return Promise.resolved(Maybe.fromOptional(databaseProvider.get(databaseId)));
     }
 
     @Override
     public Promise<List<DatabaseHeader>> getDatabases() {
-        return Promise.rejected(new UnsupportedOperationException());
+        List<DatabaseHeader> list = databaseProvider.getAll()
+                .stream()
+                .map(d -> new DatabaseHeader(d.getDatabaseId(), d.getLabel(), d.getVersion()))
+                .collect(Collectors.toList());
+
+        return Promise.resolved(list);
     }
 
     @Override
