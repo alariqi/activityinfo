@@ -78,9 +78,11 @@ public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
       sb.append(options.getBoxLabel());
     }
     sb.appendHtmlConstant("</span></label>");
+    sb.appendHtmlConstant("<div class=\"checkbox\">");
     sb.appendHtmlConstant("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"40\" height=\"40\"" +
             " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
             "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + iconHref + "\"></use></svg>");
+    sb.appendHtmlConstant("</div>");
     sb.appendHtmlConstant("</fieldset>");
   }
 

@@ -172,56 +172,8 @@ textarea:disabled {
   visibility: hidden;
 }
 
-.fieldset__checkbox svg {
-  transition: opacity 0.2s ease,
-              transform 0.2s ease;
-  z-index: 1;
-  position: absolute;
-  left: 0.35rem;
-  top: 0.75rem;
-  width: 0.8rem;
-  height: 0.8rem;
-  opacity: 0;
-  transform: rotate(-20deg) scale(0.8);
-  transform-origin: 50% 100%;
-}
-
-.fieldset__checkbox input[type="checkbox"]:checked ~ svg,
-.fieldset__checkbox input[type="checkbox"]:disabled:checked ~ svg {
-  transition: opacity 0.2s 0.1s ease,
-              transform 0.2s 0.15s ease;
-  opacity: 1;
-  transform: rotate(0) scale(1);
-}
-
 .fieldset__checkbox label {
   font-family: $gretasemibold;
-
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.25rem;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  &:before {
-    transition: opacity 0.2s 0.1s ease,
-                transform 0.2s 0.1s ease;
-    background-color: $green-light;
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: 0% 100%;
-  }
-
-  &:after {
-    transition: opacity 0.4s ease;
-    border: 1px solid $black;
-    background-color: $white;
-    opacity: 1;
-  }
 
   &:focus {
     outline: 0 none;
@@ -230,50 +182,11 @@ textarea:disabled {
 
 .fieldset__checkbox input[type="checkbox"]:checked ~ label {
   color: $black;
-
-  &:before {
-    transition: opacity 0.2s 0.1s ease,
-                transform 0.2s 0.1s ease;
-    opacity: 1;
-    transform: scaleY(1);
-  }
-
-  &:after {
-    opacity: 0;
-  }
 }
 
 .fieldset__checkbox input[type="checkbox"]:disabled ~ label {
   opacity: 0.5;
   color: $grey-3;
-
-  &:before {
-    transition: opacity 0.2s 0.1s ease,
-                transform 0.2s 0.1s ease;
-    opacity: 1;
-    transform: scaleY(1);
-  }
-
-  &:after {
-    opacity: 1;
-    border: 1px solid $grey-4;
-    background-color: $black;
-  }
-}
-
-.fieldset__checkbox input[type="checkbox"]:disabled:checked ~ label {
-  &:before {
-    transition: opacity 0.2s 0.1s ease,
-                transform 0.2s 0.1s ease;
-    opacity: 1;
-    transform: scaleY(1);
-  }
-
-  &:after {
-    opacity: 1;
-    border: 1px solid $black;
-    background-color: $grey-4;
-  }
 }
 
 
