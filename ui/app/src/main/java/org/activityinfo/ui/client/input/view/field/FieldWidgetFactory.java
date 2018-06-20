@@ -135,10 +135,10 @@ public class FieldWidgetFactory  {
 
         @Override
         public FieldWidget visitLocalDate(LocalDateType localDateType) {
-            if(GXT.isDesktop()) {
-                return new LocalDateWidget(updater);
-            } else {
+            if (GXT.isAndroid() || GXT.isiOS()) {
                 return new NativeLocalDateWidget(updater);
+            } else {
+                return new LocalDateWidget(updater);
             }
         }
 
