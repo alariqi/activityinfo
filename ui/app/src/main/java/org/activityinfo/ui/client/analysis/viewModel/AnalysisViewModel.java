@@ -24,10 +24,8 @@ import org.activityinfo.model.analysis.TypedAnalysis;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.ObservableList;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.analysis.model.DimensionModel;
 import org.activityinfo.ui.client.analysis.model.ImmutablePivotModel;
 import org.activityinfo.ui.client.analysis.model.MeasureModel;
 import org.activityinfo.ui.client.analysis.model.PivotModel;
@@ -131,10 +129,6 @@ public class AnalysisViewModel {
 
         this.draftModel.updateValue(Optional.of(ImmutablePivotModel.copyOf(model)));
         return model;
-    }
-
-    public ObservableList<DimensionModel> getDimensions() {
-        throw new UnsupportedOperationException();
     }
 
     public FormStore getFormStore() {

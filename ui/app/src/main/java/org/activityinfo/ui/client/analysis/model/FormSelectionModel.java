@@ -62,6 +62,10 @@ public class FormSelectionModel {
         return new FormSelectionModel(navigationPath, newSelection);
     }
 
+    public Set<ResourceId> getSelection() {
+        return selection;
+    }
+
     public boolean isSelected(ResourceId resourceId) {
         return selection.contains(resourceId);
     }

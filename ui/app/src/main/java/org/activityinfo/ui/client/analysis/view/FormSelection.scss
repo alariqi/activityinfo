@@ -1,10 +1,7 @@
 
 
-.formselection {
-  display: flex;
-}
 
-.formselection__forms {
+.formselection {
   overflow-y: hidden;
   overflow-x: auto;
   display: flex;
@@ -13,29 +10,9 @@
   flex-grow: 1;
 }
 
-.formselection__fields {
-  flex: none;
-  width: 22rem;
-  padding: 1rem;
-
-  h3 {
-    font-size: 1.125rem;
-  }
-}
-
-.formselection__fields:before {
-  content: '';
-  width: 1rem;
-  position: absolute;
-  right: 22rem;
-  top: 0;
-  bottom: 0;
-  background-image: linear-gradient(to left, #000000 0%, rgba(52, 74, 76, 0) 100%);
-  opacity: 0.3;
-}
 
 .formselection__column {
-  width: 13rem;
+  width: 15rem;
   border-right: 1px solid #466366;
   padding: 0.5rem;
   flex: none;

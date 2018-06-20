@@ -98,6 +98,12 @@ public class H {
     public static VNode div(CssClass classNames, VTree... children) {
         return new VNode(DIV, PropMap.withClasses(classNames), children);
     }
+
+
+    public static VTree header(VTree... children) {
+        return new VNode(HtmlTag.HEADER, children);
+    }
+
     public static VNode div(PropMap propMap, VTree... children) {
         return new VNode(DIV, propMap, children);
     }
@@ -157,6 +163,9 @@ public class H {
 
     public static VNode ul(String className, Stream<VTree> children) {
         return new VNode(UL, PropMap.withClasses(className), children);
+    }
+    public static VNode ul(Stream<VTree> children) {
+        return new VNode(UL, null, children);
     }
 
     public static VNode ul(CssClass className, VTree... children) {
@@ -321,6 +330,7 @@ public class H {
     public static VNode option(String label) {
         return new VNode(HtmlTag.OPTION, new VText(label));
     }
+
 
     public interface Render<T> {
         VTree render(T item);

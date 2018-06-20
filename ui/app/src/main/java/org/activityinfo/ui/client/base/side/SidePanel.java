@@ -3,15 +3,11 @@ package org.activityinfo.ui.client.base.side;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VText;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.ui.vdom.shared.tree.*;
 
 import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
 
 public class SidePanel {
-
 
     public enum Side {
         LEFT,
@@ -24,6 +20,12 @@ public class SidePanel {
     private VTree header = new VText("");
     private Side side = Side.RIGHT;
     private boolean full = false;
+    private String expandedWidth = null;
+
+    public SidePanel expanded(StatefulValue<Boolean> expanded) {
+        this.expanded = expanded;
+        return this;
+    }
 
     public SidePanel content(VTree tree) {
         this.content = tree;
@@ -46,7 +48,16 @@ public class SidePanel {
     }
 
     public SidePanel full() {
-        this.full = true;
+        return full(true);
+    }
+
+    public SidePanel full(boolean full) {
+        this.full = full;
+        return this;
+    }
+
+    public SidePanel expandedWidth(String width) {
+        this.expandedWidth = width;
         return this;
     }
 
@@ -59,26 +70,37 @@ public class SidePanel {
 
     public VTree build() {
         return new ReactiveComponent("sidepanel", expanded.transform(e -> {
-            String classes = "sidepanel";
+
+            PropMap props = new PropMap();
+            props.addClassName("sidepanel");
             switch (side) {
                 case LEFT:
-                    classes += " sidepanel--left";
+                    props.addClassName("sidepanel--left");
                     break;
                 case RIGHT:
-                    classes += " sidepanel--right";
+                    props.addClassName("sidepanel--right");
                     break;
             }
+
             if(!e) {
-                classes += " sidepanel--collapsed";
+                props.addClassName("sidepanel--collapsed");
             } else if(full) {
-                classes += " sidepanel--full";
+                props.addClassName("sidepanel--full");
+            } else {
+                if(expandedWidth != null) {
+                    Style style = new Style();
+                    style.set("width", expandedWidth);
+
+                    props.setStyle(style);
+                }
             }
+
             if(e) {
-                return new VNode(HtmlTag.DIV, withClasses(classes),
+                return new VNode(HtmlTag.DIV, props,
                         header(),
                         content());
             } else {
-                return new VNode(HtmlTag.DIV, withClasses(classes), expandButton());
+                return new VNode(HtmlTag.DIV, props, expandButton());
             }
         }));
     }

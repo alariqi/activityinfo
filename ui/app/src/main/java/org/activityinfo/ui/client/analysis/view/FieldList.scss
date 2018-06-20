@@ -1,0 +1,55 @@
+
+
+.fieldlist {
+  flex: none;
+  width: 22rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldlist header {
+  padding: 1rem;
+}
+
+.formselection ~ .fieldlist:before {
+  content: '';
+  width: 1rem;
+  position: absolute;
+  right: 22rem;
+  top: 0;
+  bottom: 0;
+  background-image: linear-gradient(to left, #000000 0%, rgba(52, 74, 76, 0) 100%);
+  opacity: 0.3;
+}
+
+
+.fieldlist ul {
+  padding: 0rem 1rem 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.fieldlist ul li {
+  padding: 1rem;
+  background-color: $box-background;
+  margin-bottom: 0.5rem;
+}
+
+.fieldlist__item__desc {
+  color: $green-pale;
+  font-family: $gretasemibold;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.fieldlist__item__label {
+  color: $white;
+  font-family: $gretasemibold;
+  font-size: 1rem;
+  line-height: 1.125rem;
+}
+

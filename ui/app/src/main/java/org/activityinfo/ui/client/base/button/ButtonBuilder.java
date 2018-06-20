@@ -35,6 +35,12 @@ public class ButtonBuilder {
         return this;
     }
 
+
+    public ButtonBuilder enabled(Boolean enabled) {
+        buttonProps.disabled(!enabled);
+        return this;
+    }
+
     /**
      * Add an icon to this button.
      */
@@ -69,4 +75,5 @@ public class ButtonBuilder {
 
         return new VNode(buttonTag, buttonProps, children);
     }
+
 }

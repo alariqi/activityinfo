@@ -204,4 +204,8 @@ public class PropMap {
         }
     }
 
+    public PropMap draggable(boolean draggable) {
+        propMap.put("draggable", draggable ? "true" : "false");
+        return this;
+    }
 }

@@ -1952,4 +1952,15 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Report Design")
     String reportDesign();
 
+    @DefaultStringValue("Boolean")
+    String booleanFieldType();
+
+    @DefaultStringValue("Geo Area")
+    String fieldTypeGeographicArea();
+
+    @DefaultStringValue("Done")
+    String done();
+
+    @DefaultStringValue("Manage fields")
+    String manageFields();
 }

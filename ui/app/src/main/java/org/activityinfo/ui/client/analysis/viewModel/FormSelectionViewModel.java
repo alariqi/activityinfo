@@ -19,7 +19,7 @@ public class FormSelectionViewModel {
 
     private final List<Observable<FormSelectionColumn>> columns;
 
-    public FormSelectionViewModel(List<Observable<FormSelectionColumn>> columns) {
+    private FormSelectionViewModel(List<Observable<FormSelectionColumn>> columns) {
         this.columns = columns;
     }
 
@@ -43,8 +43,8 @@ public class FormSelectionViewModel {
                 model.getNavigationPath().get(0).equals(FormSelectionModel.DATABASE_ROOT_ID)) {
 
             databaseColumns(formStore, model, columns);
-
         }
+
 
         return new FormSelectionViewModel(columns);
     }

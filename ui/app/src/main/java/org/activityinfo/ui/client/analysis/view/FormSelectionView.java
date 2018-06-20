@@ -1,16 +1,12 @@
 package org.activityinfo.ui.client.analysis.view;
 
-import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.analysis.model.FormSelectionModel;
 import org.activityinfo.ui.client.analysis.model.FormSelectionUpdater;
 import org.activityinfo.ui.client.analysis.viewModel.FormSelectionColumn;
 import org.activityinfo.ui.client.analysis.viewModel.FormSelectionItem;
 import org.activityinfo.ui.client.analysis.viewModel.FormSelectionViewModel;
-import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.*;
@@ -19,46 +15,22 @@ import static org.activityinfo.ui.vdom.shared.html.H.div;
 
 public class FormSelectionView {
 
-    public static VTree render(FormStore formStore) {
+    public static VTree render(FormStore formStore,
+                               final Observable<FormSelectionModel> model,
+                               FormSelectionUpdater updater) {
 
-        StatefulValue<FormSelectionModel> model = new StatefulValue<>(new FormSelectionModel());
-        Observable<FormSelectionViewModel> viewModel = model.transform(m -> FormSelectionViewModel.compute(formStore, m));
+        Observable<FormSelectionViewModel> viewModel =
+                model.transform(m -> FormSelectionViewModel.compute(formStore, m));
 
-        FormSelectionUpdater updater = new FormSelectionUpdater() {
-            @Override
-            public void navigateTo(int columnIndex, ResourceId itemId) {
-                model.updateValue(model.get().navigateTo(columnIndex, itemId));
-            }
-
-            @Override
-            public void select(ResourceId id) {
-                model.updateValue(model.get().toggleSelection(id));
-            }
-        };
-
-        VTree formSelection = new ReactiveComponent("formSelection",
+        return new ReactiveComponent(
                 viewModel.transform(vm ->
                         div("formselection",
-                            div("formselection__forms",
-                                vm.getColumns().stream().map(c -> FormSelectionView.column(updater, c))),
-                            div("formselection__fields",
-                                H.h3(I18N.CONSTANTS.fields())))));
-
-        VTree sidePanel = new SidePanel()
-                .title(new VText(I18N.CONSTANTS.reportDesign()))
-                .header(H.h2(I18N.CONSTANTS.reportDesign()))
-                .leftSide()
-                .full()
-                .content(formSelection)
-                .build();
-
-        return sidePanel;
+                                vm.getColumns().stream().map(c -> FormSelectionView.column(updater, c)))));
     }
 
+
     private static VTree column(FormSelectionUpdater updater, Observable<FormSelectionColumn> observableColumn) {
-        return new ReactiveComponent("col", observableColumn.transform(column -> {
-            return column(column, updater);
-        }));
+        return new ReactiveComponent(observableColumn.transform(column -> column(column, updater)));
     }
 
     private static VTree column(FormSelectionColumn column, FormSelectionUpdater updater) {
