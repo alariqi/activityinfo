@@ -26,7 +26,7 @@ public class FieldListView {
         Observable<FieldListViewModel> viewModel = FieldListViewModel.compute(formStore, model);
 
         return div("fieldlist",
-                    header(
+                    div("fieldlist__header",
                             h3(I18N.CONSTANTS.fields()),
                             toggleButton(viewModel, mode, updater)),
                     new ReactiveComponent(viewModel.transform(vm ->
