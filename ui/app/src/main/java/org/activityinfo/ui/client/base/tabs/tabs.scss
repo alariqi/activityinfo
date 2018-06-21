@@ -20,6 +20,7 @@
         font-size: 1.125rem;
         background-color: #466366;
         padding: 0.5rem;
+        text-align: center;
     }
 
     button:first-child {
@@ -33,6 +34,11 @@
     button.active {
         color: $black;
         background-color: $white;
+    }
+
+    button:focus {
+        outline: 0 none;
+        border: none;
     }
 }
 

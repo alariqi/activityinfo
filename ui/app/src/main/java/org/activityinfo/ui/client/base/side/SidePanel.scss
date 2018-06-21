@@ -68,13 +68,6 @@ $sidepanel-collapsed-width: 1.875rem;
 .sidepanel__collapse {
   position: absolute;
   top: 1rem;
-}
-
-.sidepanel--right .sidepanel__collapse {
-  left: 1rem;
-}
-
-.sidepanel--left .sidepanel__collapse {
   right: 1rem;
 }
 
