@@ -11,7 +11,7 @@ ext {
     gwtVersion = '2.8.2'
     gxtVersion = project.property("gxtVersion")
     jerseyVersion = '1.19.4'
-    gaeVersion = '1.9.59'
+    gaeVersion = '1.9.64'
     jacksonVersion = '1.9.2'
     cucumberVersion = '1.2.2'
     libraries = [
