@@ -25,11 +25,11 @@ import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
 import org.activityinfo.analysis.table.ColumnRenderer;
-import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.analysis.table.SimpleColumnFormat;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +147,7 @@ class ColumnSetProxy extends RpcProxy<PagingLoadConfig, PagingLoadResult<Integer
         if(columnSet == null) {
             throw new IllegalStateException("ColumnSet not loaded");
         }
-        ColumnView idView = columnSet.getColumnView(EffectiveTableModel.ID_COLUMN_ID);
+        ColumnView idView = columnSet.getColumnView(TableViewModel.ID_COLUMN_ID);
         return ResourceId.valueOf(idView.getString(rowIndex));
     }
 

@@ -1,0 +1,19 @@
+
+button.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  img {
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+  }
+
+  .icon {
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-left: 0.5rem;
+  }
+}
+

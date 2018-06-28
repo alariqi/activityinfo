@@ -44,11 +44,6 @@ button,
   }
 }
 
-.button--fullwidth {
-  display: block;
-  width: 100%;
-}
-
 .button:disabled {
   opacity: 0.5;
   background-color:  initial;
@@ -133,8 +128,13 @@ button,
 }
 
 .button--block {
-  display: block;
+  display: flex;
   width: 100%;
+  align-items: flex-start;
+}
+
+.button--block .icon {
+  top: 1.5rem;
 }
 
 .button--block + .button--block {

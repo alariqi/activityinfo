@@ -19,8 +19,8 @@
 package org.activityinfo.model.job;
 
 import org.activityinfo.json.JsonValue;
-import org.activityinfo.model.analysis.ImmutableTableModel;
-import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.analysis.ImmutableTableAnalysisModel;
+import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.resource.ResourceId;
 
 import static org.activityinfo.json.Json.createObject;
@@ -32,9 +32,9 @@ public class ExportFormJob implements JobDescriptor<ExportResult> {
 
     public static final String TYPE = "exportForm";
 
-    private TableModel tableModel;
+    private TableAnalysisModel tableModel;
 
-    public ExportFormJob(TableModel tableModel) {
+    public ExportFormJob(TableAnalysisModel tableModel) {
         this.tableModel = tableModel;
     }
 
@@ -52,7 +52,7 @@ public class ExportFormJob implements JobDescriptor<ExportResult> {
         return ExportResult.fromJson(resultObject);
     }
 
-    public TableModel getTableModel() {
+    public TableAnalysisModel getTableModel() {
         return tableModel;
     }
 
@@ -64,13 +64,13 @@ public class ExportFormJob implements JobDescriptor<ExportResult> {
     }
 
     public static ExportFormJob fromJson(JsonValue object) {
-        TableModel tableModel;
+        TableAnalysisModel tableModel;
         if(object.hasKey("formId")) {
-            tableModel = ImmutableTableModel.builder()
+            tableModel = ImmutableTableAnalysisModel.builder()
                     .formId(ResourceId.valueOf(object.get("formId").asString()))
                     .build();
         } else {
-            tableModel = TableModel.fromJson(object.get("model"));
+            tableModel = TableAnalysisModel.fromJson(object.get("model"));
         }
         return new ExportFormJob(tableModel);
     }

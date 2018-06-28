@@ -4,10 +4,31 @@
   align-items: center;
   justify-content: space-between;
   padding: 0;
-  margin: 0 -0.25rem 0.5rem;
-  width: calc(100% + 0.5rem);
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
-.toolbar__actions div {
-  margin: 0.5rem 0.25rem;
+/*
+ * __actions contains the buttons of the toolbar and are
+ * aligned to the start of the toolbar (left)
+ */
+.toolbar__actions {
+
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: row;
 }
+
+.toolbar__actions__group {
+  border-left: 1px solid $green-pale;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.toolbar__actions__group:first-child {
+  border: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+

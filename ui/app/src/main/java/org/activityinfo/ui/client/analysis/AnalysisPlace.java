@@ -18,11 +18,11 @@
  */
 package org.activityinfo.ui.client.analysis;
 
-import com.google.gwt.place.shared.Place;
+import org.activityinfo.ui.client.Place2;
 
 import java.util.Objects;
 
-public class AnalysisPlace extends Place {
+public class AnalysisPlace extends Place2 {
 
     private String id;
 

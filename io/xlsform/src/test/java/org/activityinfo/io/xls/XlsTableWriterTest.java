@@ -21,12 +21,9 @@ package org.activityinfo.io.xls;
 import com.google.common.io.Resources;
 import net.lightoze.gwt.i18n.server.LocaleProxy;
 import org.activityinfo.analysis.table.EffectiveTableModel;
-import org.activityinfo.analysis.table.TableViewModel;
-import org.activityinfo.model.analysis.ImmutableTableModel;
-import org.activityinfo.model.analysis.TableModel;
-import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.analysis.ImmutableTableAnalysisModel;
+import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.query.ColumnSet;
-import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.server.FormSourceSyncImpl;
 import org.activityinfo.store.testing.TestingStorageProvider;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -58,23 +55,20 @@ public class XlsTableWriterTest {
     @Test
     public void surveyForm() throws IOException {
 
-        TableModel tableModel = ImmutableTableModel.builder()
+        TableAnalysisModel tableModel = ImmutableTableAnalysisModel.builder()
                 .formId(catalog.getSurvey().getFormId())
                 .build();
 
         assertThat(export(tableModel), sameWorkbook(getWorkBook("survey-expected.xls")));
     }
 
-    private HSSFWorkbook export(TableModel tableModel) throws IOException {
+    private HSSFWorkbook export(TableAnalysisModel tableModel) throws IOException {
 
-        TableViewModel viewModel = new TableViewModel(formSource, Observable.just(tableModel));
-        EffectiveTableModel effectiveTableModel = viewModel.getEffectiveTable().waitFor();
+       EffectiveTableModel effectiveTableModel = formSource.getFormTree(tableModel.getFormId())
+                .transform(tree -> new EffectiveTableModel(tree, tableModel))
+                .waitFor();
 
-        if(effectiveTableModel.getRootFormState() != FormTree.State.VALID) {
-            throw new IllegalStateException("Root Form has state: " + effectiveTableModel.getRootFormState());
-        }
-
-        ColumnSet columnSet = effectiveTableModel.getColumnSet().waitFor();
+        ColumnSet columnSet = effectiveTableModel.queryColumns(formSource).waitFor();
 
         XlsTableWriter writer = new XlsTableWriter();
         writer.addSheet(effectiveTableModel, columnSet);

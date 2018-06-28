@@ -1,74 +1,141 @@
 package org.activityinfo.ui.client.database;
 
-import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.menu.Menu;
-import com.sencha.gxt.widget.core.client.menu.MenuItem;
-import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.ui.client.Icon;
-import org.activityinfo.ui.client.base.button.IconButton;
-import org.activityinfo.ui.client.base.button.IconButtonStyle;
-import org.activityinfo.ui.client.base.button.MenuButton;
-import org.activityinfo.ui.client.base.container.StaticHtml;
+import com.google.common.collect.Ordering;
+import org.activityinfo.model.database.Resource;
+import org.activityinfo.model.database.ResourceType;
+import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.observable.Observable;
+import org.activityinfo.promise.Maybe;
+import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.avatar.Avatar;
+import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.listtable.ListItem;
-import org.activityinfo.ui.client.base.listtable.ListItemCell;
-import org.activityinfo.ui.client.base.listtable.StaticListTable;
-import org.activityinfo.ui.client.base.toolbar.Toolbar;
-import org.activityinfo.ui.client.nonideal.ViewWidget;
+import org.activityinfo.ui.client.base.listtable.ListTable;
 import org.activityinfo.ui.client.page.Breadcrumb;
-import org.activityinfo.ui.client.page.GenericAvatar;
-import org.activityinfo.ui.client.page.PageContainer;
+import org.activityinfo.ui.client.page.PageBuilder;
+import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.table.TablePlace;
+import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
-public class DatabasePage implements ViewWidget<DatabaseViewModel> {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-    private final PageContainer container;
-    private final StaticListTable<ListItem> listView;
+public class DatabasePage {
 
+    public static VTree render(FormStore store, DatabasePlace databasePlace) {
 
-    public DatabasePage() {
-
-        IconButton newFormButton = new IconButton(Icon.BUBBLE_ADD, IconButtonStyle.PRIMARY, I18N.CONSTANTS.newForm());
-        IconButton newFolderButton = new IconButton(Icon.BUBBLE_ADD, I18N.CONSTANTS.newFolder());
-
-        Menu sortMenu = new Menu();
-        sortMenu.add(new MenuItem("Sort by recent use (recent first)"));
-        sortMenu.add(new MenuItem("Sort alphabetically"));
-        sortMenu.add(new MenuItem("Sort offline first"));
-
-        MenuButton sortButton = new MenuButton("Sort by recent use (recent first)", sortMenu);
-
-        Toolbar toolbar = new Toolbar();
-        toolbar.addAction(newFormButton);
-        toolbar.addAction(newFolderButton);
-        toolbar.addSort(sortButton);
-
-        listView = new StaticListTable<>(new ListItemCell(), ListItem::getId);
-        listView.addStyleName("listview--forms");
-
-        container = new PageContainer();
-        container.getHeader().setAvatar(GenericAvatar.DATABASE);
-        container.addBodyWidget(new StaticHtml(DatabaseTemplates.TEMPLATES.header(I18N.CONSTANTS.forms())));
-        container.addBodyWidget(toolbar);
-        container.addBodyWidget(listView);
-        container.setBreadcrumbs(Breadcrumb.DATABASES);
+        Observable<Maybe<UserDatabaseMeta>> database = store.getDatabase(databasePlace.getDatabaseId());
+        return new ReactiveComponent(database.transform(d -> {
+            switch (d.getState()) {
+                case VISIBLE:
+                    return page(d.get(), databasePlace);
+                case FORBIDDEN:
+                    return NonIdeal.forbidden();
+                default:
+                case DELETED:
+                case NOT_FOUND:
+                    return NonIdeal.notFound();
+            }
+        }));
     }
 
-    @Override
-    public void updateView(DatabaseViewModel viewModel) {
-        // Update header
-        container.getHeader().setHeading(viewModel.getLabel());
-        container.getHeader().setBreadcrumbs(Breadcrumb.DATABASES, Breadcrumb.of(viewModel.getDatabase()));
+    private static VTree page(UserDatabaseMeta database, DatabasePlace databasePlace) {
 
-        // Update list of forms
-        listView.updateView(viewModel.getFormLinks());
+        if(databasePlace.getFolderId().isPresent()) {
+            return folderPage(database, databasePlace.getFolderId().get());
+        } else {
+            return rootPage(database);
+        }
     }
 
-    @Override
-    public void setVisible(boolean visible) {
-        container.setVisible(visible);
+    private static VTree rootPage(UserDatabaseMeta database) {
+
+        return new PageBuilder()
+                .padded()
+                .avatar(GenericAvatar.DATABASE)
+                .heading(database.getLabel())
+                .breadcrumbs(Breadcrumb.DATABASES, Breadcrumb.of(database))
+                .body(resourceList(database, database.getDatabaseId()))
+                .build();
     }
 
-    @Override
-    public Widget asWidget() {
-        return container.asWidget();
+    private static VTree folderPage(UserDatabaseMeta database, ResourceId folderId) {
+
+        Optional<Resource> folder = database.getResource(folderId);
+        if(!folder.isPresent()) {
+            return NonIdeal.notFound();
+        } else {
+            return folderPage(database, folder.get());
+        }
     }
+
+    private static VTree folderPage(UserDatabaseMeta database, Resource folder) {
+        return new PageBuilder()
+                .padded()
+                .avatar(GenericAvatar.DATABASE)
+                .heading(database.getLabel())
+                .breadcrumbs(folderBreadcrumbs(database, folder))
+                .body(resourceList(database, folder.getId()))
+                .build();
+    }
+
+    private static List<Breadcrumb> folderBreadcrumbs(UserDatabaseMeta database, Resource folder) {
+        List<Breadcrumb> breadcrumbs = new ArrayList<>();
+        breadcrumbs.add(Breadcrumb.DATABASES);
+        breadcrumbs.add(Breadcrumb.of(database));
+
+        while(true) {
+            breadcrumbs.add(2,
+                    new Breadcrumb(folder.getLabel(),
+                            new DatabasePlace(database.getDatabaseId(), folder.getId())));
+
+            Optional<Resource> parent = database.getResource(folder.getParentId());
+            if(!parent.isPresent()) {
+                break;
+            }
+            folder = parent.get();
+        }
+        return breadcrumbs;
+    }
+
+    private static VTree resourceList(UserDatabaseMeta database, ResourceId parentId) {
+
+        List<ListItem> items = new ArrayList<>();
+        for (Resource resource : database.getResources()) {
+            if(resource.getParentId().equals(parentId)) {
+                items.add(new ListItem(resource.getId().asString(),
+                        resource.getLabel(),
+                        place(database, resource),
+                        avatar(resource)));
+            }
+        }
+
+        Collections.sort(items, Ordering.natural().onResultOf(i -> i.getLabel()));
+
+        return new ListTable(items).render();
+    }
+
+
+    private static Place2 place(UserDatabaseMeta database, Resource resource) {
+        if(resource.getType() == ResourceType.FOLDER) {
+            return new DatabasePlace(database.getDatabaseId(), resource.getId());
+        } else {
+            return new TablePlace(resource.getId());
+        }
+    }
+
+    private static Avatar avatar(Resource resource) {
+        if(resource.getType() == ResourceType.FOLDER) {
+            return GenericAvatar.FOLDER;
+        } else {
+            return GenericAvatar.FORM;
+        }
+    }
+
+
 }

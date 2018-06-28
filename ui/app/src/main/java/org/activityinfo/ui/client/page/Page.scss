@@ -14,10 +14,12 @@
 }
 
 .page--fullwidth .page__body {
-  padding-top: 0.5rem;
-  padding-right: 1rem;
-  padding-left: 1rem;
-  padding-bottom: 2rem;
+
+  padding: 0;
+
+  // size child to fill the entire container
+  display: flex;
+  flex-direction: column;
 }
 
 .page__body__inner {
@@ -40,3 +42,4 @@
     flex-grow: 1;
   }
 }
+

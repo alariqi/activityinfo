@@ -32,6 +32,12 @@ public class ReactiveComponent extends VComponent {
         this.loading = loadingIndicator;
     }
 
+    public ReactiveComponent(Observable<VTree> observable, VTree loadingIndicator) {
+        this.observable = observable;
+        this.loading = loadingIndicator;
+        this.debugId = "anonymous";
+    }
+
     @Override
     protected VTree render() {
         if(observable.isLoaded()) {

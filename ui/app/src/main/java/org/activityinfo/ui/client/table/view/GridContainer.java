@@ -2,47 +2,78 @@ package org.activityinfo.ui.client.table.view;
 
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.XElement;
-import com.sencha.gxt.widget.core.client.container.Container;
+import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.VComponent;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.logging.Logger;
 
-class GridContainer extends Container {
+public class GridContainer extends VComponent implements ResizeHandler {
 
     private final Logger LOGGER = Logger.getLogger(GridContainer.class.getName());
+    private final TableViewModel viewModel;
+    private final TableUpdater updater;
 
     private int marginHorizontal;
     private int marginVertical;
 
-    private Widget grid;
+    private TableGrid grid;
     private boolean gridAttached;
+    private HandlerRegistration windowResizeRegistration;
 
-    public GridContainer() {
-        setElement(Document.get().createDivElement());
-        setMonitorWindowResize(true);
+    public GridContainer(TableViewModel viewModel, TableUpdater updater) {
+        this.viewModel = viewModel;
+        this.updater = updater;
     }
 
     @Override
-    protected void onAttach() {
-        super.onAttach();
+    protected VTree render() {
+        return new VNode(HtmlTag.DIV, PropMap.withClasses("formtable__gridcontainer"));
+    }
+
+    @Override
+    protected void componentDidMount() {
+        windowResizeRegistration = Window.addResizeHandler(this);
         tryMeasureAndAttach();
+    }
+
+    @Override
+    protected void componentWillUnmount() {
+        LOGGER.info("GridContainer: Detaching grid...");
+
+        if(windowResizeRegistration != null) {
+            windowResizeRegistration.removeHandler();
+            windowResizeRegistration = null;
+        }
+
+        if (grid != null) {
+            getContext().detachWidget(grid.asWidget());
+        }
     }
 
     /**
      * After this element is initially attached to the DOM, measure our size relative to the window
      * size so that we can update it later if the window is resized.
-     *
-     * <p>This assumes that the </p>
      */
     private void tryMeasureAndAttach() {
-        int offsetWidth = getElement().getOffsetWidth();
-        int offsetHeight = getElement().getOffsetHeight();
 
-        if(offsetHeight == 0) {
+        if (!isMounted()) {
+            return;
+        }
+
+        int offsetWidth = getDomNode().getOffsetWidth();
+        int offsetHeight = getDomNode().getOffsetHeight();
+
+        if (offsetHeight == 0) {
             LOGGER.info("Gridcontainer: height = zero, scheduling recheck");
             Scheduler.get().scheduleDeferred(this::tryMeasureAndAttach);
 
@@ -58,35 +89,29 @@ class GridContainer extends Container {
                     " marginHorizontal = " + marginHorizontal +
                     " marginVertical = " + marginVertical);
 
-            if (grid != null && !gridAttached) {
-                attachGrid();
-            }
-        }
-    }
-
-    public void setGrid(IsWidget newGrid) {
-        setGrid(Widget.asWidgetOrNull(newGrid));
-    }
-
-    public void setGrid(Widget newGrid) {
-        if(grid != null && gridAttached) {
-            grid.removeFromParent();
-        }
-        grid = newGrid;
-        gridAttached = false;
-
-        if(isAttached()) {
+            createGrid();
             attachGrid();
-        } else {
-            LOGGER.info("Delaying grid attachment until we have measured our size");
+        }
+    }
+
+    private void createGrid() {
+        if (grid == null) {
+
+            LOGGER.info("Creating grid...");
+
+            grid = new TableGrid(viewModel, viewModel.getEffectiveTable().get(), updater);
         }
     }
 
     private void attachGrid() {
 
+        if (gridAttached) {
+            return;
+        }
+
         LOGGER.info("Attaching grid...");
 
-        XElement gridEl = (XElement) grid.getElement();
+        XElement gridEl = (XElement) grid.asWidget().getElement();
 
         // Set the grid to "position: absolute" so that it does not
         // affect the size of this container and screw with the flexbox layout.
@@ -94,20 +119,24 @@ class GridContainer extends Container {
 
         applyGridSize();
 
-        insert(grid, 0);
+
+        getContext().attachWidget(grid.asWidget(), getDomNode());
 
         gridAttached = true;
     }
 
+
     @Override
-    protected void onWindowResize(int width, int height) {
-        if(grid != null && isAttached()) {
+    public void onResize(ResizeEvent resizeEvent) {
+        if (grid != null && isMounted()) {
             applyGridSize();
         }
     }
 
-    private void applyGridSize() {
-        grid.setPixelSize(Window.getClientWidth()  - marginHorizontal,
-                          Window.getClientHeight() - marginVertical);
+    private void applyGridSize () {
+        grid.setPixelSize(Window.getClientWidth() - marginHorizontal,
+                Window.getClientHeight() - marginVertical);
     }
+
 }
+

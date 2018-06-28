@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .page__header__titles {
@@ -14,13 +15,14 @@
   flex-direction: column;
   justify-content: center;
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .page__header__inner {
   padding: 2rem 1rem;
   display: flex;
   flex-direction: row;
-  flex-content: flex-start;
+  overflow: hidden;
 }
 
 .page--padded .page__header__inner {

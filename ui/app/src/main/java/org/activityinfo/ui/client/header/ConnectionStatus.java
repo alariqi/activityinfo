@@ -6,6 +6,10 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.XTemplates;
 import org.activityinfo.ui.client.base.container.StaticHtml;
+import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public class ConnectionStatus implements IsWidget {
 
@@ -27,4 +31,10 @@ public class ConnectionStatus implements IsWidget {
     public Widget asWidget() {
         return html;
     }
+
+    public static VTree render() {
+        return H.div("connectionstatus",
+                H.div("connectionstatus__inner", new VNode(HtmlTag.DIV)));
+    }
+
 }

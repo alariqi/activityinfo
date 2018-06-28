@@ -77,11 +77,9 @@ button.details__scrollto:disabled {
 
 
 .details__fields--dummy h4 {
-  color: transparent;
-  text-shadow: 0 0 5px rgba($green-pale, 0.5);
+  @include blur($green-pale);
 }
 
 .details__fields--loading .details__value {
-  color: transparent;
-  text-shadow: 0 0 5px rgba($white, 0.5);
+  @include blur($white);
 }

@@ -18,8 +18,6 @@
  */
 package org.activityinfo.ui.client;
 
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.DivElement;
@@ -27,27 +25,33 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.i18n.client.LocaleInfo;
-import com.google.gwt.place.shared.Place;
-import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.SimpleEventBus;
-import com.sencha.gxt.widget.core.client.container.Viewport;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
+import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.storage.LocalStorage;
+import org.activityinfo.ui.client.database.DatabaseListPage;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
-import org.activityinfo.ui.client.header.AppFrame;
+import org.activityinfo.ui.client.database.DatabasePage;
+import org.activityinfo.ui.client.database.DatabasePlace;
+import org.activityinfo.ui.client.header.ConnectionStatus;
+import org.activityinfo.ui.client.header.Header2;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.ConnectionListener;
 import org.activityinfo.ui.client.store.http.HttpStore;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.RecordSynchronizer;
+import org.activityinfo.ui.client.table.TablePlace;
+import org.activityinfo.ui.client.table.view.TableView;
+import org.activityinfo.ui.vdom.client.VDomWidget;
+import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.logging.Logger;
 
@@ -55,8 +59,6 @@ import java.util.logging.Logger;
  * GWT EntryPoint that starts the application.
  */
 public class AppEntryPoint implements EntryPoint {
-
-    public static final Place DEFAULT_PLACE = new DatabaseListPlace();
 
     private static final Logger LOGGER = Logger.getLogger(AppEntryPoint.class.getName());
 
@@ -75,9 +77,6 @@ public class AppEntryPoint implements EntryPoint {
         AppCacheMonitor3 monitor = new AppCacheMonitor3(appCache);
         monitor.start();
 
-        EventBus eventBus = new SimpleEventBus();
-        PlaceController placeController = new PlaceController(eventBus);
-
         ConnectionListener connectionListener = new ConnectionListener();
         connectionListener.start();
 
@@ -89,27 +88,25 @@ public class AppEntryPoint implements EntryPoint {
         FormStore formStore = new FormStoreImpl(httpStore, offlineStore, Scheduler.get());
         LocalStorage storage = LocalStorage.create();
 
-        AppFrame frame = new AppFrame(formStore);
-
-        ActivityMapper activityMapper = new AppActivityMapper(formStore, storage);
-        ActivityManager activityManager = new ActivityManager(activityMapper, eventBus);
-        activityManager.setDisplay(frame);
-
-        AppPlaceHistoryMapper historyMapper = new AppPlaceHistoryMapper();
-        PlaceHistoryHandler historyHandler = new PlaceHistoryHandler(historyMapper);
-        historyHandler.register(placeController, eventBus, DEFAULT_PLACE);
-
         // Start synchronizer...
         RecordSynchronizer synchronizer = new RecordSynchronizer(httpStore, offlineStore);
 
-        Viewport viewport = new Viewport();
-        viewport.add(frame);
+
+        StatefulValue<Place2> place = new StatefulValue<>(DatabaseListPlace.INSTANCE);
+        AppPlaceHistoryMapper historyMapper = new AppPlaceHistoryMapper();
+        History.addValueChangeHandler(event ->
+                place.updateIfNotSame(historyMapper.apply(event.getValue())));
+
+        History.fireCurrentHistoryState();
+
+
+
+        VDomWidget appFrame = new VDomWidget();
+        appFrame.update(renderApp(formStore, place));
 
         hideLoader();
 
-        RootPanel.get().add(viewport);
-
-        historyHandler.handleCurrentHistory();
+        RootPanel.get().add(appFrame);
 
     }
 
@@ -147,4 +144,30 @@ public class AppEntryPoint implements EntryPoint {
             return "/resources";
         }
     }
+
+    private VTree renderApp(FormStore formStore, StatefulValue<Place2> place) {
+        VTree header = Header2.render(formStore);
+        VTree connectionStatus = ConnectionStatus.render();
+        VTree page = new ReactiveComponent(place.cache().transform(p -> {
+
+            LOGGER.info("Place changed:"  + p);
+
+            if(p instanceof DatabaseListPlace) {
+                return DatabaseListPage.render(formStore);
+            } else if(p instanceof DatabasePlace) {
+                return DatabasePage.render(formStore, ((DatabasePlace) p));
+            } else if(p instanceof TablePlace) {
+                return TableView.render(formStore, (TablePlace) p);
+            } else {
+                return H.div("Nope.");
+            }
+        }));
+
+
+        return H.div("appframe appframe--fixed",
+                header,
+                connectionStatus,
+                page);
+    }
+
 }

@@ -35,8 +35,8 @@ import org.activityinfo.model.type.RecordFieldType;
 import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.model.type.expr.CalculatedFieldType;
-import org.activityinfo.model.type.geo.GeoPointType;
 import org.activityinfo.model.type.subform.SubFormReferenceType;
+import org.activityinfo.promise.Maybe;
 
 import java.util.*;
 
@@ -367,37 +367,18 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
         return false;
     }
 
-    public List<ColumnNode> getColumnNodes() {
-        List<ColumnNode> columns = Lists.newArrayList();
-        Map<ResourceId, ColumnNode> columnMap = Maps.newHashMap();
-
-        enumerateColumns(getRootFields(), columns, columnMap);
-        return columns;
-    }
-
-    private void enumerateColumns(List<FormTree.Node> fields, List<ColumnNode> columns, Map<ResourceId, ColumnNode> columnMap) {
-
-
-        for (FormTree.Node node : fields) {
-
-            if (node.getType() instanceof SubFormReferenceType) { // skip subForm fields
-                continue;
-            }
-
-            if (node.isReference()) {
-                enumerateColumns(node.getChildren(), columns, columnMap);
-
-            } else if(node.getType() instanceof GeoPointType) {
-
-            } else {
-                if (!columnMap.containsKey(node.getFieldId())) {
-                    ColumnNode col = new ColumnNode(node);
-                    columnMap.put(node.getFieldId(), col);
-                    columns.add(col);
-                }
-            }
+    public Maybe<FormTree> toMaybe() {
+        switch (getRootState()) {
+            case VALID:
+                return Maybe.of(this);
+            case FORBIDDEN:
+                return Maybe.forbidden();
+            default:
+            case DELETED:
+                return Maybe.deleted();
         }
     }
+
 
     public List<FieldPath> getRootPaths() {
         List<FieldPath> paths = Lists.newArrayList();

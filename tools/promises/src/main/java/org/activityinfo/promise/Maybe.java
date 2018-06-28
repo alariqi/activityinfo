@@ -34,6 +34,13 @@ public class Maybe<T> {
         NOT_FOUND
     }
 
+    public interface Case<T, R> {
+        R visible(T value);
+        R forbidden();
+        R deleted();
+        R notFound();
+    }
+
     private State state;
     private T value;
 
@@ -84,6 +91,19 @@ public class Maybe<T> {
         }
     }
 
+    public <R> R switch_(Case<T, R> case_) {
+        switch (state) {
+            case VISIBLE:
+                return case_.visible(value);
+            case FORBIDDEN:
+                return case_.forbidden();
+            case DELETED:
+                return case_.deleted();
+            default:
+            case NOT_FOUND:
+                return case_.notFound();
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public <R> Maybe<R> transform(Function<T, R> function) {

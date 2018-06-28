@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="16"
+     viewBox="0 0 15 16">
+    <g>
+        <g transform="translate(-1125 -350)">
+            <path fill="#243233" d="M1140.1 358a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0"/>
+        </g>
+        <g transform="translate(-1125 -350)">
+            <path fill-opacity="0" stroke="#fff" stroke-miterlimit="50" d="M1133.78 356.4l2.23 2.23-2.23 2.23"/>
+        </g>
+        <g transform="translate(-1125 -350)">
+            <path fill="#fff" fill-opacity="0" stroke="#fff" stroke-miterlimit="50"  d="M1136 358.63h-5.66v-3.5"/>
+        </g>
+    </g>
+</svg>

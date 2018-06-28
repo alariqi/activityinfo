@@ -29,6 +29,8 @@ import org.activityinfo.model.resource.ResourceId;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSetter;
 
+import java.util.Objects;
+
 import static org.activityinfo.json.Json.createObject;
 
 /**
@@ -130,4 +132,17 @@ public class ColumnModel implements JsonSerializable {
         return columnModel;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ColumnModel that = (ColumnModel) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(formula, that.formula);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, formula);
+    }
 }

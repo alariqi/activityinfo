@@ -1,8 +1,41 @@
 
 .formtable {
+  flex-grow: 1;
+  position: relative;
+}
+
+// Slide element extends of screen
+// Width will be set to n*100vw, where n is the maximum depth of subforms
+// Depending on the active table, a translate-x style property
+
+.formtable__slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+}
+
+// For each root form and subform, there will be a
+// slide that is positioned absolutely within div.formtable__slider
+// with a left position set depending on its depth in the tree
+
+.formtable__slide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+
+  padding-top: 1.25rem;
+  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-bottom: 2rem;
+
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
 .formtable__gridcontainer {

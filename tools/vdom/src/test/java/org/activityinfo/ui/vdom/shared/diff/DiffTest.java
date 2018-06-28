@@ -1,8 +1,9 @@
 package org.activityinfo.ui.vdom.shared.diff;
 
-import org.activityinfo.ui.vdom.shared.tree.Tag;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.observable.StatefulValue;
+import org.activityinfo.ui.vdom.shared.html.HtmlRenderer;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.*;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -59,6 +60,56 @@ public class DiffTest {
                 insert(updatedList.childAt(1)),
                 insert(updatedList.childAt(2)),
                 insert(updatedList.childAt(3))));
+    }
+
+    private enum Shape { RECT, CIRCLE };
+
+    private static class Model {
+        Shape shape;
+        String label;
+
+        public Model(Shape shape, String label) {
+            this.shape = shape;
+            this.label = label;
+        }
+    }
+
+    @Test
+    public void reactiveComponentDiff() {
+
+        StatefulValue<Model> model = new StatefulValue<>(new Model(Shape.RECT, "Hello"));
+
+        VTree tree = new VNode(HtmlTag.DIV,
+                new ReactiveComponent(model.transform(m -> {
+                    if(m.shape == Shape.RECT) {
+                        return new VNode(HtmlTag.DIV, PropMap.withClasses("rect"), new VText(m.label));
+                    } else {
+                        return new VNode(HtmlTag.DIV, PropMap.withClasses("circle"), new VText(m.label));
+                    }
+                })));
+
+        ensureTree(tree);
+        dumpHtml(tree);
+
+        model.updateValue(new Model(Shape.RECT, "Goodbye"));
+
+        VPatchSet patchSet = Diff.diff(tree, tree);
+
+        System.out.println(patchSet);
+    }
+
+    private void ensureTree(VTree tree) {
+        if(tree instanceof VComponent) {
+            ((VComponent) tree).ensureRendered();
+        } else if(tree instanceof VNode) {
+            for (VTree child : ((VNode) tree).children) {
+                ensureTree(child);
+            }
+        }
+    }
+
+    private void dumpHtml(VTree tree) {
+        System.out.println(HtmlRenderer.render(tree));
     }
 
     private PatchOp insert(VTree node) {

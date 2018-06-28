@@ -4,7 +4,7 @@
 }
 
 .loading .history__entry {
-  text-shadow: 0 0 5px rgba($white, 0.5)
+  @include blur($white);
 }
 
 .history__date {
@@ -12,12 +12,12 @@
   font-family: $gretasemibold;
   font-size: 0.875rem;
   text-transform: uppercase;
-}
 
 .history__type {
   color: $white;
   font-size: 1rem;
   font-family: $gretasemibold;
+}
 }
 
 .history__user {

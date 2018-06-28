@@ -108,36 +108,6 @@ gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'installGulp'
 
 
-
-task themeDevMode(type: JavaExec) {
-
-    dependsOn 'compileJava', 'gulp_build'
-
-    main = 'com.google.gwt.dev.DevMode'
-
-    // Compiled java classes and libraries second
-    classpath new File(buildDir, "assets")
-    classpath sourceSets.main.java.srcDirs
-    classpath sourceSets.main.resources.srcDirs
-    classpath sourceSets.main.runtimeClasspath
-    classpath sourceSets.main.output.generatedSourcesDir
-    classpath configurations.gwt
-    classpath configurations.gwtSdk
-
-    args '-logLevel', 'INFO'
-    args '-war', "${buildDir}/devMode"
-    args '-startupUrl', '/ThemeDev/dev.html'
-    args '-bindAddress', '0.0.0.0'
-    args 'org.activityinfo.dev.ThemeDev'
-
-    doFirst {
-        for(cp in classpath) {
-            logger.lifecycle("classpath: " + cp)
-        }
-
-    }
-}
-
 task compileApp(type: JavaExec) {
 
     dependsOn 'gulp_build'

@@ -290,7 +290,6 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("<strong>Folder</strong> in database <strong>{0}</strong>")
     SafeHtml folderDatabaseLabel(String databaseName);
 
-
     @DefaultMessage("Current column length {0} exceeds Column Export Limitation of {1} for Export Type {2}")
     String columnLimit(int colLength, int colLimit, String exportType);
 

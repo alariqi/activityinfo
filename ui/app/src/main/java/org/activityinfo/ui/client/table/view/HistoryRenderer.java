@@ -29,6 +29,7 @@ import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class HistoryRenderer {
 
@@ -37,7 +38,7 @@ public class HistoryRenderer {
 
     private HistoryRenderer() {}
 
-    public static VTree render(com.google.common.base.Optional<RecordHistory> history) {
+    public static VTree render(Optional<RecordHistory> history) {
         return history.isPresent() ? entries(history.get()) : emptyState();
     }
 

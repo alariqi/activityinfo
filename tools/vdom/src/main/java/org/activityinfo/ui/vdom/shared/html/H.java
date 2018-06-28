@@ -81,7 +81,7 @@ public class H {
                 count++;
             }
         }
-        VTree[] nonEmpty = new VNode[count];
+        VTree[] nonEmpty = new VTree[count];
         int j = 0;
         for (int i = 0; i < array.length; i++) {
             if(array[i] != null) {
@@ -215,6 +215,11 @@ public class H {
     public static VNode span(String text) {
         return new VNode(SPAN, new VText(text));
     }
+
+    public static VNode span(String classNames, String text) {
+        return new VNode(SPAN, PropMap.withClasses(classNames), new VText(text));
+    }
+
     public static VNode span(PropMap propMap, VTree... children) {
         return new VNode(SPAN, propMap, children);
     }

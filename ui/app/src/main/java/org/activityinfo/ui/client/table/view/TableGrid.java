@@ -19,7 +19,6 @@
 package org.activityinfo.ui.client.table.view;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -28,7 +27,6 @@ import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.event.BeforeShowContextMenuEvent;
-import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -38,8 +36,6 @@ import com.sencha.gxt.widget.core.client.menu.MenuItem;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
-import org.activityinfo.analysis.table.TableUpdater;
-import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.type.RecordRef;
@@ -47,12 +43,13 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.Subscription;
 import org.activityinfo.ui.client.base.menu.Css3MenuAppearance;
 import org.activityinfo.ui.client.base.menu.MenuArrow;
+import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 
-import java.util.Collections;
 import java.util.logging.Logger;
 
 
-public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionChangedHandlers<RecordRef> {
+public class TableGrid implements IsWidget {
 
     private static final Logger LOGGER = Logger.getLogger(TableGrid.class.getName());
 
@@ -138,7 +135,7 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
 
     private void onEditSelectedRecord(TableViewModel viewModel, TableUpdater tableUpdater) {
         viewModel.getSelectedRecordRef().ifLoaded(selection -> {
-            selection.toJavaUtil().ifPresent(ref -> tableUpdater.editRecord(ref));
+            selection.ifPresent(ref -> tableUpdater.editRecord(ref));
         });
     }
 
@@ -160,13 +157,9 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
             if(!event.getSelection().isEmpty()) {
                 int rowIndex = event.getSelection().get(0);
                 RecordRef selectedRef = new RecordRef(initialTableModel.getFormId(), proxy.getRecordId(rowIndex));
-                eventBus.fireEvent(new SelectionChangedEvent<>(Collections.singletonList(selectedRef)));
+                tableUpdater.selectRecord(selectedRef);
             }
         }
-    }
-
-    public HandlerRegistration addRowClickHandler(RowClickEvent.RowClickHandler handler) {
-        return grid.addRowClickHandler(handler);
     }
 
     /**
@@ -222,10 +215,6 @@ public class TableGrid implements IsWidget, SelectionChangedEvent.HasSelectionCh
         return grid;
     }
 
-    @Override
-    public HandlerRegistration addSelectionChangedHandler(SelectionChangedEvent.SelectionChangedHandler<RecordRef> handler) {
-        return eventBus.addHandler(SelectionChangedEvent.getType(), handler);
-    }
 
     public void setPixelSize(int width, int height) {
         grid.setPixelSize(width, height);

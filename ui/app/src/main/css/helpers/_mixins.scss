@@ -18,3 +18,8 @@
     border-right: 0.5rem solid transparent;
   }
 }
+
+@mixin blur($color: 'black') {
+  color: transparent;
+  text-shadow: 0 0 5px rgba($color, 0.5);
+}

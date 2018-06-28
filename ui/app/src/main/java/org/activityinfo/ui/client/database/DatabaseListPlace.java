@@ -1,8 +1,14 @@
 package org.activityinfo.ui.client.database;
 
-import com.google.gwt.place.shared.Place;
+import org.activityinfo.ui.client.Place2;
 
-public class DatabaseListPlace extends Place {
+public class DatabaseListPlace extends Place2 {
+
+    public static final DatabaseListPlace INSTANCE = new DatabaseListPlace();
+
+    public DatabaseListPlace() {
+
+    }
 
     @Override
     public int hashCode() {

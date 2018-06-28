@@ -6,12 +6,16 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.form.ComboBox;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.database.Resource;
+import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.ClassNames;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.folder.FolderPlace;
+import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchBox implements IsWidget {
@@ -19,6 +23,9 @@ public class SearchBox implements IsWidget {
     private final ComboBox<SearchResult> comboBox;
     private final ListStore<SearchResult> store;
 
+    public SearchBox(FormStore formStore) {
+        this(resourceList(formStore));
+    }
 
     public SearchBox(Observable<List<SearchResult>> resourceList) {
         store = new ListStore<>(SearchResult::getKey);
@@ -34,11 +41,24 @@ public class SearchBox implements IsWidget {
             event.cancel();
         });
 
-        // Keep the list of search options ready at all times
-        resourceList.subscribe(observable -> {
+        // Start loading the list when the box is focused
+        comboBox.addFocusHandler(event -> resourceList.subscribe(observable -> {
             if(observable.isLoaded()) {
                 store.replaceAll(observable.get());
             }
+        }));
+    }
+
+    private static Observable<List<SearchResult>> resourceList(FormStore formStore) {
+        return formStore.getDatabases().transform(databases -> {
+            List<SearchResult> results = new ArrayList<>();
+            for (UserDatabaseMeta database : databases) {
+                results.add(new SearchResult(database));
+                for (Resource resource : database.getResources()) {
+                    results.add(new SearchResult(database, resource));
+                }
+            }
+            return results;
         });
     }
 

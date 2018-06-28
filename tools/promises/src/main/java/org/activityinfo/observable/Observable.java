@@ -307,6 +307,20 @@ public abstract class Observable<T> {
         });
     }
 
+    public static <T> Observable<T> flattenUtilOptional(Observable<java.util.Optional<T>> observable) {
+        return observable.join(new Function<java.util.Optional<T>, Observable<T>>() {
+            @Override
+            public Observable<T> apply(java.util.Optional<T> value) {
+                if(value.isPresent()) {
+                    return Observable.just(value.get());
+                } else {
+                    return Observable.loading();
+                }
+            }
+        });
+    }
+
+
     @GwtIncompatible
     public final T waitFor() {
         final List<T> collector = new ArrayList<>();

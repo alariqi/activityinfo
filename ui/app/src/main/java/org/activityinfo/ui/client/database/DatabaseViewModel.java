@@ -4,6 +4,7 @@ import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.ui.client.PlaceLinks;
+import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.listtable.ListItem;
 import org.activityinfo.ui.client.table.TablePlace;
 
@@ -35,7 +36,7 @@ public class DatabaseViewModel {
                         resource.getId().asString(),
                         resource.getLabel(),
                         PlaceLinks.toUri(new TablePlace(resource.getId())),
-                        "#type_form", false));
+                        GenericAvatar.FORM, false));
             }
         }
         return items;

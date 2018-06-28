@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.XElement;
 import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer.HtmlData;
 import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
+import org.activityinfo.ui.client.base.avatar.Avatar;
 
 import java.util.Arrays;
 import java.util.List;

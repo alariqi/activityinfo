@@ -20,13 +20,11 @@ package org.activityinfo.server.job;
 
 import com.google.inject.Inject;
 import org.activityinfo.analysis.table.EffectiveTableModel;
-import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.io.xls.XlsTableWriter;
-import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.job.ExportFormJob;
 import org.activityinfo.model.job.ExportResult;
 import org.activityinfo.model.query.ColumnSet;
-import org.activityinfo.observable.Observable;
 import org.activityinfo.server.generated.GeneratedResource;
 import org.activityinfo.server.generated.StorageProvider;
 import org.activityinfo.store.query.shared.FormSource;
@@ -51,14 +49,15 @@ public class ExportFormExecutor implements JobExecutor<ExportFormJob, ExportResu
     @Override
     public ExportResult execute(ExportFormJob descriptor) throws IOException {
 
-        TableModel tableModel = descriptor.getTableModel();
+        TableAnalysisModel tableModel = descriptor.getTableModel();
 
         GeneratedResource export = storageProvider.create(XlsTableWriter.EXCEL_MIME_TYPE, "Export.xls");
 
-        TableViewModel viewModel = new TableViewModel(formSource, Observable.just(tableModel));
+        EffectiveTableModel effectiveTableModel = formSource.getFormTree(tableModel.getFormId())
+                .transform(tree -> new EffectiveTableModel(tree, tableModel))
+                .waitFor();
 
-        EffectiveTableModel effectiveTableModel = viewModel.getEffectiveTable().waitFor();
-        ColumnSet columnSet = effectiveTableModel.getColumnSet().waitFor();
+        ColumnSet columnSet = effectiveTableModel.queryColumns(formSource).waitFor();
 
         if (columnSet.getColumns().size() > XLS_COLUMN_LIMITATION) {
             throw new IOException("Current column length " + columnSet.getColumns().size() + " exceeds XLS Column Limitation of " + XLS_COLUMN_LIMITATION);

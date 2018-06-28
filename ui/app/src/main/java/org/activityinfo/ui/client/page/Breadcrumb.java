@@ -1,18 +1,17 @@
 package org.activityinfo.ui.client.page;
 
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeUri;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.ui.client.PlaceLinks;
+import org.activityinfo.ui.client.Place2;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.folder.FolderPlace;
 import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
@@ -24,14 +23,30 @@ public class Breadcrumb {
 
     public static final Breadcrumb DATABASES = new Breadcrumb(
             I18N.CONSTANTS.databases(),
-            PlaceLinks.toUri(new DatabaseListPlace()));
+            DatabaseListPlace.INSTANCE.toUri());
 
     private final String label;
     private final SafeUri uri;
+    private final boolean loading;
+
+    private Breadcrumb(String label) {
+        this.label = label;
+        this.uri = null;
+        this.loading = true;
+    }
 
     public Breadcrumb(String label, SafeUri uri) {
         this.label = label;
         this.uri = uri;
+        this.loading = false;
+    }
+
+    public static Breadcrumb loadingPlaceholder(String dummyText) {
+        return new Breadcrumb(dummyText);
+    }
+
+    public Breadcrumb(String label, Place2 place) {
+        this(label, place.toUri());
     }
 
     public String getLabel() {
@@ -42,14 +57,21 @@ public class Breadcrumb {
         return uri;
     }
 
+    public boolean isLoading() {
+        return loading;
+    }
+
     public void renderTo(SafeHtmlBuilder html) {
         html.append(PageTemplates.TEMPLATES.breadcrumb(label, uri));
     }
 
     public VTree render() {
-        return H.li(H.link(uri, new VText(label)));
+        if(loading) {
+            return H.li(PropMap.withClasses("breadcrumb--loading"), new VText(label));
+        } else {
+            return H.li(H.link(uri, new VText(label)));
+        }
     }
-
 
     public static List<Breadcrumb> hierarchy(UserDatabaseMeta database, ResourceId resourceId) {
         List<Breadcrumb> breadcrumbs = new ArrayList<>();
@@ -62,7 +84,7 @@ public class Breadcrumb {
             if(!parent.isPresent()) {
                 break;
             }
-            breadcrumbs.add(2, of(parent.get()));
+            breadcrumbs.add(2, breadcrumb(database, parent.get()));
 
             parentId = parent.get().getParentId();
         }
@@ -70,23 +92,24 @@ public class Breadcrumb {
     }
 
     public static Breadcrumb of(UserDatabaseMeta database) {
-        return new Breadcrumb(database.getLabel(), PlaceLinks.toUri(new DatabasePlace(database.getDatabaseId())));
+        return new Breadcrumb(database.getLabel(), new DatabasePlace(database.getDatabaseId()));
     }
 
-    private static Breadcrumb of(Resource resource) {
-        return new Breadcrumb(resource.getLabel(), PlaceLinks.toUri(placeOf(resource)));
+    private static Breadcrumb breadcrumb(UserDatabaseMeta database, Resource resource) {
+        return new Breadcrumb(resource.getLabel(), placeOf(database, resource));
     }
 
-    private static Place placeOf(Resource resource) {
+
+    private static Place2 placeOf(UserDatabaseMeta database, Resource resource) {
         switch (resource.getType()) {
             case DATABASE:
                 return new DatabasePlace(resource.getId());
             case FOLDER:
-                return new FolderPlace(resource.getId());
+                return new DatabasePlace(database.getDatabaseId(), resource.getId());
             case FORM:
                 return new TablePlace(resource.getId());
             default:
-                return new DatabaseListPlace();
+                return DatabaseListPlace.INSTANCE;
         }
     }
 }

@@ -186,6 +186,26 @@ public class PropMap {
         return this;
     }
 
+    public PropMap oninput(EventHandler handler) {
+        eventHandlers.put("input", handler);
+        return this;
+    }
+
+    public void onkeyup(EventHandler handler) {
+        eventHandlers.put("keyup", handler);
+    }
+
+
+    public PropMap onfocus(EventHandler handler) {
+        eventHandlers.put("focus", handler);
+        return this;
+    }
+
+    public PropMap onblur(EventHandler handler) {
+        eventHandlers.put("blur", handler);
+        return this;
+    }
+
     public EventHandler getEventHandler(String eventName) {
         return eventHandlers.get(eventName);
     }
@@ -208,4 +228,10 @@ public class PropMap {
         propMap.put("draggable", draggable ? "true" : "false");
         return this;
     }
+
+    public PropMap placeholder(String text) {
+        propMap.put("placeholder", text);
+        return this;
+    }
+
 }

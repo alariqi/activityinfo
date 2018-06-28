@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.table.view;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import org.activityinfo.i18n.shared.I18N;
@@ -11,7 +12,7 @@ public class SubFormCell extends AbstractCell<Integer> {
     private SafeHtml iconHtml;
 
     public SubFormCell() {
-        super();
+        super(BrowserEvents.CLICK);
         iconHtml = Icon.BUBBLE_ARROWRIGHT.render(16, 16);
     }
 

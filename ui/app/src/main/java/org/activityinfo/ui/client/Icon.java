@@ -8,6 +8,7 @@ import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public enum Icon {
+    HEADER_DATABASES,
     HEADER_REPORTS,
     HEADER_NOTIFICATION,
     HEADER_SETTINGS,
@@ -18,6 +19,8 @@ public enum Icon {
     BUBBLE_ARROWLEFT,
     BUBBLE_ARROWRIGHT,
     BUBBLE_ATTACHMENT,
+    BUBBLE_EXPORT,
+    BUBBLE_IMPORT,
     BUBBLE_CLOSE,
     BUBBLE_CLOSE_ERROR,
     BUBBLE_CHECKMARK,
@@ -36,7 +39,7 @@ public enum Icon {
     EXPAND_DOWN,
     EXPAND_UP,
 
-    NIS_EMPTYSTATE, BUBBLE_EDIT;
+    NIS_EMPTYSTATE, BUBBLE_EDIT, BUBBLE_USER, BUBBLE_FULLSCREEN, BUBBLE_SUBFORM;
 
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
 

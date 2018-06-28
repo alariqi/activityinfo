@@ -91,6 +91,11 @@
     border-radius: 50%;
     background-color: $background;
   }
+
+  svg {
+    width: 18px;
+    height: 27px;
+  }
 }
 
 .listtable--forms .listtable__item__avatar {

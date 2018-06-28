@@ -1,16 +1,10 @@
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.safehtml.shared.SafeUri;
-import com.google.gwt.safehtml.shared.UriUtils;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
-import org.activityinfo.analysis.table.TableUpdater;
-import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
-import org.activityinfo.model.type.subform.SubFormReferenceType;
+import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.MaybeStale;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
@@ -19,41 +13,36 @@ import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.base.tabs.TabItem;
 import org.activityinfo.ui.client.base.tabs.Tabs;
-import org.activityinfo.ui.vdom.client.VDomWidget;
+import org.activityinfo.ui.client.table.TablePlace;
+import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.CssClass;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.activityinfo.ui.client.base.button.Buttons.button;
 import static org.activityinfo.ui.vdom.shared.html.H.div;
 import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
 
-public class RecordSidePanel implements IsWidget {
+public class RecordSidePanel {
 
-    private final VDomWidget content;
-
-    public RecordSidePanel(TableViewModel viewModel, TableUpdater tableUpdater) {
-        content = new VDomWidget();
-        content.addStyleName("details");
-
+    public static VTree render(TableViewModel viewModel, TableUpdater tableUpdater) {
         VTree tree = Tabs.tabPanel(
                 new TabItem(I18N.CONSTANTS.details(), details(viewModel, tableUpdater)),
                 new TabItem(I18N.CONSTANTS.history(), history(viewModel)));
 
-        VTree sidePanel = new SidePanel()
+        return new SidePanel()
                 .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
                 .header(scrollButton(viewModel))
                 .content(tree)
                 .build();
-
-        content.update(sidePanel);
     }
 
-    private VTree scrollButton(TableViewModel viewModel) {
+    private static VTree scrollButton(TableViewModel viewModel) {
 
         Observable<Boolean> hasSelection = viewModel.hasSelection().optimisticWithDefault(false);
 
@@ -63,7 +52,7 @@ public class RecordSidePanel implements IsWidget {
                         new VText(I18N.CONSTANTS.scrollToThisRecord()))));
     }
 
-    private VTree details(TableViewModel viewModel, TableUpdater updater) {
+    private static VTree details(TableViewModel viewModel, TableUpdater updater) {
 
         // Go to additional lengths to avoid flicker when changing record selection.
         // This ensures that the selectionDetails component does not have to be unmounted/mounted every time
@@ -80,56 +69,70 @@ public class RecordSidePanel implements IsWidget {
                                 b ? selection : noSelection)));
     }
 
-    private VTree selectionDetails(TableViewModel viewModel, TableUpdater tableUpdater) {
+    private static VTree selectionDetails(TableViewModel viewModel, TableUpdater tableUpdater) {
         return div("details__record",
-                subFormNavigation(viewModel),
-                recordHeader(tableUpdater),
-                recordDetails(viewModel));
+                    parentLinks(viewModel),
+                    subformLinks(viewModel),
+                    recordHeader(tableUpdater),
+                    recordDetails(viewModel));
     }
 
-    private VTree history(TableViewModel viewModel) {
+    private static VTree history(TableViewModel viewModel) {
         return div(CssClass.valueOf("details__history"),
                 historyHeader(),
                 historyContent(viewModel));
     }
 
 
-    private VNode historyHeader() {
+    private static VNode historyHeader() {
         return H.h2(I18N.CONSTANTS.recordHistory());
     }
 
-    private VTree historyContent(TableViewModel viewModel) {
+    private static VTree historyContent(TableViewModel viewModel) {
         return new ReactiveComponent("historyContent", viewModel.getSelectedRecordHistory()
                 .transform(HistoryRenderer::render));
     }
 
-    private VTree subFormNavigation(TableViewModel viewModel) {
-        return new ReactiveComponent("subFormNavigation", viewModel.getFormTree().transform(tree -> {
-
-            List<VTree> subFormLinks = new ArrayList<>();
-
-            for (FormTree.Node node : tree.getRootFields()) {
-                if(node.isSubForm() && node.isVisibleSubForm()) {
-                    SubFormReferenceType subFormType = (SubFormReferenceType) node.getType();
-                    FormClass subForm = tree.getFormClass(subFormType.getClassId());
-
-                    subFormLinks.add(subFormLink(subForm));
-                }
+    private static VTree parentLinks(TableViewModel viewModel) {
+        FormTree tree = viewModel.getFormTree();
+        FormClass form = tree.getRootFormClass();
+        if (form.isSubForm()) {
+            Optional<FormClass> parentForm = tree.getFormClassIfPresent(form.getParentFormId().get()).toJavaUtil();
+            if (parentForm.isPresent()) {
+                return H.div("details__subforms",
+                        H.h2(I18N.CONSTANTS.goBackTo()),
+                        parentLink(parentForm.get()));
             }
+        }
+        return new VNode(HtmlTag.DIV);
+    }
 
-            if(subFormLinks.isEmpty()) {
-                return new VNode(HtmlTag.DIV);
-            } else {
+    private static VTree subformLinks(TableViewModel viewModel) {
+
+        if(viewModel.getSubForms().isEmpty()) {
+            return new VNode(HtmlTag.DIV);
+        } else {
+            Observable<RecordRef> selectedRecordRef = Observable.flattenUtilOptional(viewModel.getSelectedRecordRef());
+            return new ReactiveComponent(selectedRecordRef.transform(ref -> {
                 return new VNode(HtmlTag.DIV,
                         withClasses("details__subforms"),
                         new VNode(HtmlTag.H2, I18N.CONSTANTS.goToSubforms()),
-                        new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks));
+                        new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks(viewModel, ref)));
+            }));
 
-            }
-        }));
+        }
     }
 
-    private VTree recordHeader(TableUpdater tableUpdater) {
+    private static Stream<VTree> subFormLinks(TableViewModel viewModel, RecordRef ref) {
+
+        return viewModel.getSubForms().stream()
+                .map(subForm -> {
+                    TablePlace place = new TablePlace(viewModel.getRootFormId()).subform(subForm.getId(), ref);
+                    return subFormLink(subForm, place);
+                });
+    }
+
+    private static VTree recordHeader(TableUpdater tableUpdater) {
         VNode header = new VNode(HtmlTag.H2, I18N.CONSTANTS.thisRecord());
 
         VTree editButton = button(I18N.CONSTANTS.edit())
@@ -148,39 +151,41 @@ public class RecordSidePanel implements IsWidget {
                 deleteButton);
     }
 
-    private VTree recordDetails(TableViewModel viewModel) {
-
-        Observable<DetailsRenderer> renderer = viewModel.getFormTree().transform(DetailsRenderer::new);
+    private static VTree recordDetails(TableViewModel viewModel) {
+        DetailsRenderer renderer = new DetailsRenderer(viewModel.getFormTree());
 
         Observable<MaybeStale<RecordTree>> selection = Observable
-                .flattenOptional(viewModel.getSelectedRecordTree())
+                .flattenUtilOptional(viewModel.getSelectedRecordTree())
                 .explicitlyOptimistic();
 
-        Observable<VTree> details = Observable.transform(renderer, selection, (r, s) -> r.render(s.getValue(), s.isStale()));
+        Observable<VTree> details = selection.transform(s -> renderer.render(s.getValue(), s.isStale()));
 
         return new ReactiveComponent("details.values", details, DetailsRenderer.renderPlaceholder());
     }
 
-    private VTree noSelection() {
+    private static VTree noSelection() {
         return div("details__empty",
                 NonIdeal.empty(),
                 H.h2(I18N.CONSTANTS.noRecordSelected()),
                 H.p(I18N.CONSTANTS.pleaseSelectARecord()));
     }
 
-
-    private VTree subFormLink(FormClass subForm) {
-        SafeUri link = UriUtils.fromSafeConstant("#");
-        return Buttons.button(subForm.getLabel())
+    private static VTree parentLink(FormClass parentForm) {
+        return Buttons.button(parentForm.getLabel())
                 .primary()
                 .block()
-                .icon(Icon.BUBBLE_ARROWRIGHT)
-                .link(link)
+                .link(new TablePlace(parentForm.getId()).toUri())
                 .build();
     }
 
-    @Override
-    public Widget asWidget() {
-        return content;
+
+    private static VTree subFormLink(FormClass subForm, TablePlace place) {
+        return Buttons.button(subForm.getLabel())
+                .primary()
+                .block()
+                .icon(Icon.BUBBLE_SUBFORM)
+                .link(place.toUri())
+                .build();
     }
+
 }

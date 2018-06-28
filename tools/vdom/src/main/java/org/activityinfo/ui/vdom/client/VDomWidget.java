@@ -51,7 +51,7 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
 
         setElement(Document.get().createDivElement());
 
-        sinkEvents(Event.ONCLICK | Event.FOCUSEVENTS | Event.ONCHANGE);
+        sinkEvents(Event.ONCLICK);
     }
 
 
@@ -89,6 +89,11 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
             vParent = ((VComponent) vParent).vNode;
         }
         for (Integer childIndex : path) {
+            if(vParent == null) {
+                // mostly likely an event bubbling up from a widget that has built out it's own
+                // dom tree beneath our VTree. abort.
+                return Collections.emptyList();
+            }
             vParent = vParent.childAt(childIndex);
             while(vParent instanceof VComponent) {
                 vParent = ((VComponent) vParent).vNode;

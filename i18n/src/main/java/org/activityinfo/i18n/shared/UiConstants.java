@@ -184,6 +184,9 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("« Back")
     String backButton();
 
+    @DefaultStringValue("Back")
+    String back();
+
     @DefaultStringValue("Bars")
     String bars();
 
@@ -1963,4 +1966,20 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Manage fields")
     String manageFields();
+
+    @DefaultStringValue("This could be because:")
+    String dataNotFoundReason();
+
+    @DefaultStringValue("It has been deleted")
+    String dataNotFoundReasonDeleted();
+
+    @DefaultStringValue("There is a typo in the address")
+    String dataNotFoundReasonTypo();
+
+    @DefaultStringValue("Fullscreen")
+    String fullscreen();
+
+    @DefaultStringValue("Search for a database, folder or form...")
+    String formSearchPlaceholder();
+
 }

@@ -1,166 +1,143 @@
-/*
- * ActivityInfo
- * Copyright (C) 2009-2013 UNICEF
- * Copyright (C) 2014-2018 BeDataDriven Groep B.V.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
-import org.activityinfo.analysis.table.EffectiveTableModel;
-import org.activityinfo.analysis.table.TableUpdater;
-import org.activityinfo.analysis.table.TableViewModel;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.HasTitle;
-import org.activityinfo.ui.client.header.HasFixedHeight;
-import org.activityinfo.ui.client.input.view.FormOverlay;
-import org.activityinfo.ui.client.page.Breadcrumb;
-import org.activityinfo.ui.client.page.FullWidthPageContainer;
-import org.activityinfo.ui.client.page.GenericAvatar;
+import org.activityinfo.ui.client.Icon;
+import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.avatar.GenericAvatar;
+import org.activityinfo.ui.client.base.button.Buttons;
+import org.activityinfo.ui.client.base.toolbar.ToolbarBuilder;
+import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.table.TablePlace;
+import org.activityinfo.ui.client.table.model.TableModelStore;
+import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.viewModel.TableSliderViewModel;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
+import org.activityinfo.ui.vdom.shared.html.H;
+import org.activityinfo.ui.vdom.shared.html.HtmlTag;
+import org.activityinfo.ui.vdom.shared.tree.*;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Displays a Form as a Table.
- */
-public class TableView implements IsWidget, HasTitle, HasFixedHeight {
+public class TableView {
 
-    private static final Logger LOGGER = Logger.getLogger(TableView.class.getName());
+    public static VTree render(FormStore formStore, TablePlace place) {
 
-    private final TableViewModel viewModel;
+        Observable<Maybe<TableSliderViewModel>> viewModel =
+                TableSliderViewModel.compute(formStore, TableModelStore.STORE, place);
 
-    private TableGrid grid;
+        return new ReactiveComponent(viewModel.transform(vm ->
+            vm.switch_(new Maybe.Case<TableSliderViewModel, VTree>() {
+                @Override
+                public VTree visible(TableSliderViewModel value) {
+                    return render(formStore, value);
+                }
 
-    private final RecordSidePanel sidePanel;
-    private final FullWidthPageContainer container;
-    private final TableToolBar toolBar;
-    private final GridContainer gridContainer;
-    private final FormOverlay formOverlay;
+                @Override
+                public VTree forbidden() {
+                    return NonIdeal.forbidden();
+                }
 
-    private final SubscriptionSet subscriptions = new SubscriptionSet();
-    private TableUpdater tableUpdater;
+                @Override
+                public VTree deleted() {
+                    return NonIdeal.notFound();
+                }
 
-
-    public TableView(FormStore formStore, final TableViewModel viewModel, TableUpdater tableUpdater) {
-
-        this.viewModel = viewModel;
-
-        formOverlay = new FormOverlay(formStore);
-        this.tableUpdater = tableUpdater;
-        toolBar = new TableToolBar(formStore, viewModel, tableUpdater);
-
-        gridContainer = new GridContainer();
-        gridContainer.addStyleName("formtable__gridcontainer");
-
-        sidePanel = new RecordSidePanel(viewModel, tableUpdater);
-
-        this.container = new FullWidthPageContainer();
-        this.container.addBodyStyleName("formtable");
-        this.container.getHeader().setAvatar(GenericAvatar.FORM);
-        this.container.addBodyWidget(toolBar);
-        this.container.addBodyWidget(gridContainer);
-        this.container.addBodyWidget(sidePanel);
-        this.container.addBodyWidget(formOverlay);
-        this.container.getHeader().setBreadcrumbs(Breadcrumb.DATABASES);
-
-        subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> effectiveModelChanged()));
-        subscriptions.add(viewModel.getDatabase().subscribe(observable -> updateBreadcrumbs(observable)));
+                @Override
+                public VTree notFound() {
+                    return NonIdeal.notFound();
+                }
+            })));
     }
 
-    private void updateBreadcrumbs(Observable<Maybe<UserDatabaseMeta>> observable) {
-        if(observable.isLoaded() && observable.get().isVisible()) {
-            UserDatabaseMeta database = observable.get().get();
-            container.getHeader().setBreadcrumbs(Breadcrumb.hierarchy(database, viewModel.getFormId()));
-        }
+    private static VTree render(FormStore formStore, TableSliderViewModel viewModel) {
+
+        return new PageBuilder()
+                .avatar(GenericAvatar.DATABASE)
+                .heading(viewModel.getPageTitle())
+                .breadcrumbs(viewModel.getBreadcrumbs())
+                .body(body(formStore, viewModel))
+                .build();
     }
 
-    @Override
-    public Widget asWidget() {
-        return container.asWidget();
+
+
+    private static VTree body(FormStore formStore, TableSliderViewModel viewModel) {
+        // This renders the child of page__body, which uses flexbox to size it's only child
+        // to it size.
+
+        // We will create a single outer "slider" element which will be absolutely positioned based
+        // on its depth in the form tree
+
+        Style sliderStyle = new Style();
+        sliderStyle.set("width", (viewModel.getSlideCount() * 100) + "vw");
+        sliderStyle.set("transform", "translateX(-" + (viewModel.getSlideIndex() * 100) + "vw)");
+
+        PropMap sliderProps = new PropMap();
+        sliderProps.setStyle(sliderStyle);
+        sliderProps.setClass("formtable__slider");
+
+        return H.div("formtable",
+                new VNode(HtmlTag.DIV, sliderProps, slides(viewModel)));
     }
 
-    private void effectiveModelChanged() {
-        if(viewModel.getEffectiveTable().isLoading()) {
-//            this.container.mask();
-        } else {
-//            this.container.unmask();
+    private static List<VTree> slides(TableSliderViewModel viewModel) {
+        List<VTree> slides = new ArrayList<>();
+        for (TableViewModel table : viewModel.getTables()) {
 
-            switch (viewModel.getEffectiveTable().get().getRootFormState()) {
-                case FORBIDDEN:
-                case DELETED:
-                    showErrorState(viewModel.getEffectiveTable().get().getRootFormState());
-                    break;
-                case VALID:
-                    updateGrid(viewModel.getEffectiveTable().get());
-                    break;
-            }
-        }
-    }
+            Style slideStyle = new Style();
+            slideStyle.set("left", (table.getDepth() * 100) + "vw");
 
-    private void showErrorState(FormTree.State rootFormState) {
+            PropMap slideProps = new PropMap();
+            slideProps.setClass("formtable__slide");
+            slideProps.setStyle(slideStyle);
 
-    }
+            TableUpdater updater = TableModelStore.STORE.getTableUpdater(table.getFormId());
 
-    private void updateGrid(EffectiveTableModel effectiveTableModel) {
-
-        LOGGER.log(Level.INFO, "updating grid");
-
-        container.getHeader().setHeading(effectiveTableModel.getFormLabel());
-
-        // If the grid is already displayed, try to update without
-        // destroying everything
-        if(grid != null && grid.updateView(effectiveTableModel)) {
-            return;
+            slides.add(new VNode(HtmlTag.DIV, slideProps,
+                    toolbar(table),
+                    grid(table, updater),
+                    RecordSidePanel.render(table, updater)));
         }
 
-        grid = new TableGrid(viewModel, effectiveTableModel, tableUpdater);
-
-        grid.addSelectionChangedHandler(event -> {
-            if(!event.getSelection().isEmpty()) {
-                RecordRef ref = event.getSelection().get(0);
-                viewModel.select(ref);
-            }
-        });
-        gridContainer.setGrid(grid);
+        return slides;
     }
 
-    @Override
-    public Observable<String> getTitle() {
-        return viewModel.getFormTree().transform(formTree -> {
-            switch (formTree.getRootState()) {
-                case VALID:
-                    return formTree.getRootFormClass().getLabel();
-                case DELETED:
-                    return I18N.CONSTANTS.deletedForm();
-                case FORBIDDEN:
-                    return I18N.CONSTANTS.forbiddenForm();
-            }
-            return I18N.CONSTANTS.notFound();
-        });
+
+    private static VTree toolbar(TableViewModel tableViewModel) {
+
+        VTree newButton = Buttons.button(I18N.CONSTANTS.newRecord())
+                .primary()
+                .icon(Icon.BUBBLE_ADD)
+                .build();
+
+        VTree importButton = Buttons.button(I18N.CONSTANTS.importText())
+                .icon(Icon.BUBBLE_IMPORT)
+                .build();
+
+        VTree columnsButton = Buttons.button(I18N.CONSTANTS.chooseColumns())
+                .icon(Icon.BUBBLE_COLUMNS)
+                .build();
+
+        VTree exportButton = Buttons.button(I18N.CONSTANTS.export())
+                .icon(Icon.BUBBLE_EXPORT)
+                .build();
+
+        VTree fullscreenButton = Buttons.button(I18N.CONSTANTS.fullscreen())
+                .icon(Icon.BUBBLE_FULLSCREEN)
+                .build();
+
+        return new ToolbarBuilder()
+                .group(newButton, importButton, exportButton)
+                .group(columnsButton, fullscreenButton)
+                .build();
+
+    }
+    private static VTree grid(TableViewModel viewModel, TableUpdater updater) {
+        return new GridContainer(viewModel, updater);
     }
 
-    public void editRecord(RecordRef recordRef) {
-        formOverlay.show(recordRef);
-    }
 }

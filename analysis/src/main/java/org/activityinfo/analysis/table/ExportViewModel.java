@@ -1,22 +1,22 @@
 package org.activityinfo.analysis.table;
 
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.analysis.TableModel;
+import org.activityinfo.model.analysis.TableAnalysisModel;
 
 public class ExportViewModel {
 
     public static final int XLS_COLUMN_LIMIT = 256;
     public static final String XLS_EXPORT = "XLS";
 
-    private TableModel tableModel;
+    private TableAnalysisModel tableModel;
     private boolean columnLimitExceeded;
 
-    public ExportViewModel(TableModel tableModel, boolean columnLimitExceeded) {
+    public ExportViewModel(TableAnalysisModel tableModel, boolean columnLimitExceeded) {
         this.tableModel = tableModel;
         this.columnLimitExceeded = columnLimitExceeded;
     }
 
-    public TableModel getTableModel() {
+    public TableAnalysisModel getTableModel() {
         return tableModel;
     }
 
