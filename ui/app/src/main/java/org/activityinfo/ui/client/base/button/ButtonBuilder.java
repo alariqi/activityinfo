@@ -13,7 +13,7 @@ public class ButtonBuilder {
     private Tag buttonTag = HtmlTag.BUTTON;
     private VTree iconNode;
     private String label;
-    private PropMap buttonProps = PropMap.withClasses("button");
+    private PropMap buttonProps = Props.withClass("button");
 
     public ButtonBuilder(String label) {
         this.label = label;
@@ -71,7 +71,7 @@ public class ButtonBuilder {
         if(iconNode != null) {
             children.add(iconNode);
         }
-        children.add(new VNode(HtmlTag.SPAN, PropMap.withClasses("button__label"), new VText(label)));
+        children.add(new VNode(HtmlTag.SPAN, Props.withClass("button__label"), new VText(label)));
 
         return new VNode(buttonTag, buttonProps, children);
     }

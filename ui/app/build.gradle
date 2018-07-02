@@ -91,6 +91,7 @@ dependencies {
     // Sources need for compiling to JavaScript
     gwt 'com.google.guava:guava-gwt:21.0'
     gwt libraries.gwt.gson
+//    gwt 'com.github.gwtreact:gwt-react:1.0.0'
 
     // Sources need for compiling tests to JavaScript
     gwtTestCompile libraries.gwt.user

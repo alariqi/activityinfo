@@ -11,7 +11,7 @@ import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.vdom.shared.html.H;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
@@ -67,7 +67,7 @@ public class Breadcrumb {
 
     public VTree render() {
         if(loading) {
-            return H.li(PropMap.withClasses("breadcrumb--loading"), new VText(label));
+            return H.li(Props.withClass("breadcrumb--loading"), new VText(label));
         } else {
             return H.li(H.link(uri, new VText(label)));
         }

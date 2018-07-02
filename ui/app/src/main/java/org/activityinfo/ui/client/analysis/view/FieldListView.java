@@ -11,6 +11,7 @@ import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
@@ -63,7 +64,7 @@ public class FieldListView {
 
     private static VTree fieldItem(SelectedFieldViewModel field) {
 
-        PropMap itemProps = new PropMap().draggable(true);
+        PropMap itemProps = Props.create().draggable(true);
 
         return H.li(itemProps,
                 div("fieldlist__item__desc", t(field.getType() + " - " + field.getFormLabel())),

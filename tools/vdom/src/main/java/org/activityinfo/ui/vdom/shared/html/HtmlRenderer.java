@@ -88,7 +88,7 @@ public class HtmlRenderer implements VTreeVisitor {
     private void appendStyleProperty(PropMap styleMap) {
         // NOTE: Styles are assumed to be NOT user provided
         // and so were are not escaping/checking. is that right?
-        if(!styleMap.isEmpty()) {
+        if(!styleMap.keys().isEmpty()) {
             html.append(" style=\"");
             for(String name : styleMap.keys()) {
                 String value = (String) styleMap.get(name);

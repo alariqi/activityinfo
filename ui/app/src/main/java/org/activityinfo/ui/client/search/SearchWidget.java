@@ -3,7 +3,7 @@ package org.activityinfo.ui.client.search;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 import org.activityinfo.ui.vdom.shared.tree.VWidget;
@@ -23,6 +23,6 @@ public class SearchWidget extends VWidget {
 
     @Override
     protected VTree render() {
-         return new VNode(HtmlTag.DIV, PropMap.withClasses("search__container"));
+         return new VNode(HtmlTag.DIV, Props.withClass("search__container"));
     }
 }

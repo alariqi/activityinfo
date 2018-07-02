@@ -4,9 +4,7 @@ import org.activityinfo.ui.vdom.shared.html.Children;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 public class VNode extends VTree {
@@ -17,7 +15,6 @@ public class VNode extends VTree {
      */
     public static final VTree[] NO_CHILDREN = new VTree[0];
 
-
     public final Tag tag;
     public final PropMap properties;
     public final VTree[] children;
@@ -25,18 +22,10 @@ public class VNode extends VTree {
     @Nullable
     public final String key;
 
-    @Nullable
-    public final String namespace;
-
-
-    private int count;
     private boolean hasComponents;
-    private boolean hooks = false;
-    private int descendants = 0;
-    private boolean descendantHooks = false;
 
     public VNode(Tag tag, VTree... children) {
-        this(tag, null, children, null, null);
+        this(tag, null, children, null);
     }
 
     public VNode(Tag tag, String text) {
@@ -52,7 +41,7 @@ public class VNode extends VTree {
     }
 
     public VNode(Tag tag, PropMap propMap) {
-        this(tag, propMap, null, null, null);
+        this(tag, propMap, null, null);
     }
 
     public VNode(Tag tag, PropMap properties, VTree child) {
@@ -60,62 +49,32 @@ public class VNode extends VTree {
     }
 
     public VNode(Tag tag, PropMap properties, VTree... children) {
-        this(tag, properties, children, null, null);
+        this(tag, properties, children, null);
     }
 
     public VNode(Tag tag, PropMap properties, List<VTree> children) {
-        this(tag, properties, Children.toArray(children), null, null);
+        this(tag, properties, Children.toArray(children), null);
     }
 
     public VNode(@Nonnull Tag tag,
                  @Nullable PropMap properties,
                  @Nullable VTree[] children,
-                 @Nullable String key,
-                 @Nullable String namespace) {
+                 @Nullable String key) {
 
         this.tag = tag;
         this.properties = properties == null ? PropMap.EMPTY : properties;
         this.children = children == null ? NO_CHILDREN : children;
         this.key = key;
-        this.namespace = namespace;
+        this.hasComponents = false;
 
-        int count = this.children.length;
-        int descendants = 0;
-        boolean hasComponents = false;
+        assert PropMap.EMPTY.isEmpty();
 
-        Map<String, VHook> hooks = null;
-
-        if(properties != null) {
-            for (Map.Entry<String, Object> prop : properties.entrySet()) {
-                if (prop.getValue() instanceof VHook) {
-                    if (hooks == null) {
-                        hooks = new HashMap<>();
-                    }
-                    hooks.put(prop.getKey(), (VHook) prop.getValue());
-                }
-            }
-        }
-
-        for (int i = 0; i < count; ++i) {
-            VTree child = children[i];
-            if (child instanceof VNode) {
-                VNode childNode = (VNode) child;
-                descendants += childNode.count;
-
-                if (!hasComponents && childNode.hasComponents) {
-                    hasComponents = true;
-                }
-                if (!descendantHooks && (childNode.hooks || childNode.descendantHooks)) {
-                    descendantHooks = true;
-                }
-            } else if (!hasComponents && child instanceof VComponent) {
+        for (VTree child : this.children) {
+            if(child.hasComponents()) {
                 hasComponents = true;
+                break;
             }
         }
-
-        this.count = count + descendants;
-        this.descendants = descendants;
-        this.hasComponents = hasComponents;
     }
 
 
@@ -130,22 +89,8 @@ public class VNode extends VTree {
     }
 
     @Override
-    public int count() {
-        return count;
-    }
-
-    @Override
     public String key() {
         return key;
-    }
-
-    @Override
-    public PropMap properties() {
-        return properties;
-    }
-
-    public PropMap hooks() {
-        return null;
     }
 
     @Override
@@ -156,8 +101,9 @@ public class VNode extends VTree {
     @Override
     public String debugId() {
         String tag = this.tag.name().toLowerCase();
-        if(properties.contains("className")) {
-            tag += "." + properties.get("className");
+        Object className = properties.get("className");
+        if(className instanceof String) {
+            tag += "." + className;
         }
         return tag;
     }

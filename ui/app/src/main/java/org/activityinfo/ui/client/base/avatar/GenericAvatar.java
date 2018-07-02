@@ -1,7 +1,7 @@
 package org.activityinfo.ui.client.base.avatar;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
-import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.client.page.PageTemplates;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
@@ -18,7 +18,7 @@ public enum GenericAvatar implements Avatar {
 
     @Override
     public VTree renderTree() {
-        return NonIdeal.svg("avatar", "#type_" + name().toLowerCase(), "0 0 18 27");
+        return Svg.svg("avatar", "#type_" + name().toLowerCase(), "0 0 18 27");
     }
 
     public String href() {

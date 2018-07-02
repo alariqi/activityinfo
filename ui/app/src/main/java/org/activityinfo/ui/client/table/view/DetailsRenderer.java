@@ -5,10 +5,7 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VText;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +49,7 @@ public class DetailsRenderer {
             }
         }
 
-        PropMap props = PropMap.withClasses("details__fields");
+        PropMap props = Props.withClass("details__fields");
         if(loading) {
             props.addClassName("details__fields--loading");
         }
@@ -61,7 +58,7 @@ public class DetailsRenderer {
 
 
     public static VTree renderPlaceholder() {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__fields details__fields--dummy details__fields--loading"),
+        return new VNode(HtmlTag.DIV, Props.withClass("details__fields details__fields--dummy details__fields--loading"),
                 fieldValue("Partner", new VText("Default")),
                 fieldValue("Serial Number", new VText("00000")),
                 fieldValue("Gender", new VText("Female")),
@@ -70,9 +67,9 @@ public class DetailsRenderer {
     }
 
     private static VNode fieldValue(String label, VTree value) {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("details__field"),
+        return new VNode(HtmlTag.DIV, Props.withClass("details__field"),
                 new VNode(HtmlTag.H4, label),
-                new VNode(HtmlTag.DIV, PropMap.withClasses("details__value"),
+                new VNode(HtmlTag.DIV, Props.withClass("details__value"),
                         value));
     }
 }

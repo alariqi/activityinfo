@@ -52,7 +52,7 @@ import org.activityinfo.model.type.time.*;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.input.view.field.Blobs;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
@@ -205,7 +205,7 @@ public class ValueRendererFactory {
 
             return new VNode(HtmlTag.DIV, attachments.getValues().stream().map(a ->
                     new VNode(HtmlTag.A,
-                        new PropMap().href(Blobs.getAttachmentUri(formId, a.getBlobId())),
+                        Props.create().href(Blobs.getAttachmentUri(formId, a.getBlobId())),
                         new VText(a.getFilename()))));
         }
     }

@@ -6,7 +6,6 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.ui.RootPanel;
-import org.activityinfo.ui.vdom.client.render.DomBuilder;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import static org.activityinfo.ui.vdom.shared.html.H.*;
@@ -21,8 +20,8 @@ public class DomBuilderTest extends GWTTestCase {
     public void testDomBuilder() {
         VTree vtree = renderTree();
 
-        DomBuilder builder = new DomBuilder(new SimpleRenderContext());
-        Node node = builder.render(vtree);
+        DomBuilder builder = new DomBuilder();
+        Node node = builder.render(vtree,false);
 
         validateDom(node);
 

@@ -1,7 +1,7 @@
 package org.activityinfo.ui.vdom.shared.tree;
 
 import com.google.gwt.dom.client.Element;
-import org.activityinfo.ui.vdom.client.render.RenderContext;
+import org.activityinfo.ui.vdom.client.RenderContext;
 import org.activityinfo.ui.vdom.shared.VDomLogger;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 

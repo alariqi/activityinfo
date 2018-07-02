@@ -27,23 +27,12 @@ public class H {
         return new VNode(HtmlTag.META, propMap);
     }
 
-    public static PropMap charset(String charset) {
-        return new PropMap().set("charset", charset);
-    }
-
-    public static PropMap viewport(String width, double initialScale, double maximumScale) {
-        return new PropMap()
-                .set("name", "viewport")
-                .set("content", "width=" + width + ", initial-scale=" + initialScale +
-                                ", maximum-scale=" + maximumScale);
-    }
-
     public static VNode link(PropMap propMap) {
         return new VNode(HtmlTag.LINK, propMap);
     }
 
     public static PropMap stylesheet(String href) {
-        return new PropMap().set("rel", "stylesheet").set("href", href);
+        return Props.create().set("rel", "stylesheet").set("href", href);
     }
 
     public static VNode title(String title) {
@@ -59,11 +48,11 @@ public class H {
     }
 
     public static VNode body(@Nonnull Style style, VTree... children) {
-        return new VNode(HtmlTag.BODY, PropMap.withStyle(style), children);
+        return new VNode(HtmlTag.BODY, Props.withStyle(style), children);
     }
 
     public static VNode div(@Nonnull Style style, String text) {
-        return new VNode(DIV, PropMap.withStyle(style), new VText(text));
+        return new VNode(DIV, Props.withStyle(style), new VText(text));
     }
 
     public static VNode div(VTree... children) {
@@ -71,7 +60,7 @@ public class H {
     }
 
     public static VNode div(String className, Stream<VTree> children) {
-        return new VNode(DIV, PropMap.withClasses(className), children);
+        return new VNode(DIV, Props.withClass(className), children);
     }
 
     public static VTree[] nullableList(VTree... array) {
@@ -95,10 +84,6 @@ public class H {
         return new VNode(DIV, new VText(text));
     }
 
-    public static VNode div(CssClass classNames, VTree... children) {
-        return new VNode(DIV, PropMap.withClasses(classNames), children);
-    }
-
 
     public static VTree header(VTree... children) {
         return new VNode(HtmlTag.HEADER, children);
@@ -109,7 +94,7 @@ public class H {
     }
 
     public static VNode div(String className, VTree... children) {
-        return new VNode(DIV, PropMap.withClasses(className), children);
+        return new VNode(DIV, Props.withClass(className), children);
     }
 
     public static VNode table(PropMap propMap, VTree... children) {
@@ -145,7 +130,7 @@ public class H {
     }
 
     public static PropMap props() {
-        return new PropMap();
+        return Props.create();
     }
 
     public static VNode ul() {
@@ -158,18 +143,14 @@ public class H {
 
 
     public static VNode ul(String className, VTree... children) {
-        return new VNode(UL, PropMap.withClasses(className), children);
+        return new VNode(UL, Props.withClass(className), children);
     }
 
     public static VNode ul(String className, Stream<VTree> children) {
-        return new VNode(UL, PropMap.withClasses(className), children);
+        return new VNode(UL, Props.withClass(className), children);
     }
     public static VNode ul(Stream<VTree> children) {
         return new VNode(UL, null, children);
-    }
-
-    public static VNode ul(CssClass className, VTree... children) {
-        return new VNode(UL, PropMap.withClasses(className.getClassNames()), children);
     }
 
     public static VNode ul(PropMap propMap, VTree... children) {
@@ -197,15 +178,11 @@ public class H {
     }
 
     public static PropMap href(SafeUri uri) {
-        return new PropMap().set("href", uri.asString());
+        return Props.create().href(uri);
     }
 
     public static VText t(String text) {
         return new VText(text);
-    }
-
-    public static VNode select(CssClass classNames, VNode... children) {
-        return new VNode(SELECT, PropMap.withClasses(classNames), children);
     }
 
     public static VText space() {
@@ -217,19 +194,11 @@ public class H {
     }
 
     public static VNode span(String classNames, String text) {
-        return new VNode(SPAN, PropMap.withClasses(classNames), new VText(text));
+        return new VNode(SPAN, Props.withClass(classNames), new VText(text));
     }
 
     public static VNode span(PropMap propMap, VTree... children) {
         return new VNode(SPAN, propMap, children);
-    }
-
-    public static VNode span(CssClass classNames, String text) {
-        return new VNode(SPAN, PropMap.withClasses(classNames), new VText(text));
-    }
-
-    public static VTree span(CssClass classNames, VTree... children) {
-        return new VNode(SPAN, PropMap.withClasses(classNames), children);
     }
 
     public static VNode h1(VTree... children) {
@@ -294,42 +263,20 @@ public class H {
 
     public static VNode p(PropMap propMap, VTree... children) { return new VNode(P, propMap, children); }
 
-    public static VNode strong(String text) { return new VNode(STRONG, t(text)); }
-
-    public static VNode form(PropMap propMap, VTree... children) {
-        return new VNode(HtmlTag.FORM, propMap, children);
-    }
-
-    public static VNode form(CssClass className, VTree... children) {
-        return form(PropMap.withClasses(className), children);
-    }
-
     public static VNode form(VTree... children) {
         return new VNode(HtmlTag.FORM, children);
-    }
-
-    public static VNode label(CssClass className, VTree... children) {
-        return new VNode(HtmlTag.LABEL, PropMap.withClasses(className), children);
     }
 
     public static VNode label(PropMap propMap, VTree... children) {
         return new VNode(HtmlTag.LABEL, propMap, children);
     }
 
-    public static PropMap className(CssClass className) {
-        return PropMap.withClasses(className.getClassNames());
-    }
-
     public static PropMap className(String className) {
-        return PropMap.withClasses(className);
-    }
-
-    public static PropMap classNames(CssClass class1, CssClass class2) {
-        return PropMap.withClasses(class1.getClassNames() + " " + class2.getClassNames());
+        return Props.withClass(className);
     }
 
     public static VNode option(String value, String label) {
-        return new VNode(HtmlTag.OPTION, new PropMap().set("value", value), new VText(label));
+        return new VNode(HtmlTag.OPTION, Props.create().set("value", value), new VText(label));
     }
 
     public static VNode option(String label) {
@@ -351,27 +298,9 @@ public class H {
 
     public static VNode script(String src) {
         return new VNode(HtmlTag.SCRIPT,
-                new PropMap()
-                .set("language", "javascript")
+                Props.create()
+                        .set("language", "javascript")
                 .set("src", src));
-    }
-
-    public static PropMap classNames(CssClass class1, CssClass class2, CssClass class3) {
-        return PropMap.withClasses(
-                class1.getClassNames() + " " +
-                class2.getClassNames() + " " +
-                class3.getClassNames());
-    }
-
-    public static PropMap classNames(CssClass class1,
-                                     CssClass class2,
-                                     CssClass class3,
-                                     CssClass class4) {
-        return PropMap.withClasses(
-                class1.getClassNames() + " " +
-                class2.getClassNames() + " " +
-                class3.getClassNames() + " " +
-                class4.getClassNames());
     }
 
     public static PropMap id(String id) {
@@ -382,19 +311,4 @@ public class H {
         return new VNode(HtmlTag.I, propMap, children);
     }
 
-    public static PropMap classNames(CssClass class1,
-                                     CssClass class2,
-                                     CssClass class3,
-                                     CssClass class4,
-                                     CssClass... classNames) {
-        StringBuilder className = new StringBuilder(class1.getClassNames());
-        className.append(" ").append(class2.getClassNames());
-        className.append(" ").append(class3.getClassNames());
-        className.append(" ").append(class4.getClassNames());
-        for(CssClass name : classNames) {
-            className.append(" ");
-            className.append(name.getClassNames());
-        }
-        return PropMap.withClasses(className.toString());
-    }
 }

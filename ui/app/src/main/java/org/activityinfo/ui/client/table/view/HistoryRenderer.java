@@ -23,7 +23,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.form.RecordHistoryEntry;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
@@ -54,10 +54,10 @@ public class HistoryRenderer {
     }
 
     private static VTree entry(RecordHistoryEntry e) {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("history__entry"),
-                new VNode(HtmlTag.DIV, PropMap.withClasses("history__date"), new VText(formatTime(e))),
-                new VNode(HtmlTag.DIV, PropMap.withClasses("history__type"), new VText(formatType(e))),
-                new VNode(HtmlTag.DIV, PropMap.withClasses("history__user"), new VText(formatUser(e))));
+        return new VNode(HtmlTag.DIV, Props.withClass("history__entry"),
+                new VNode(HtmlTag.DIV, Props.withClass("history__date"), new VText(formatTime(e))),
+                new VNode(HtmlTag.DIV, Props.withClass("history__type"), new VText(formatType(e))),
+                new VNode(HtmlTag.DIV, Props.withClass("history__user"), new VText(formatUser(e))));
     }
 
     private static String formatTime(RecordHistoryEntry e) {

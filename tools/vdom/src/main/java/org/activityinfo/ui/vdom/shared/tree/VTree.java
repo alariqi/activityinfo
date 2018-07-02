@@ -6,20 +6,7 @@ public abstract class VTree {
         return false;
     }
 
-    /**
-     *
-     * @return the total number of {@code VNode}s among this tree's children and descendants.
-     *
-     * <p>Supports DOM node indexing</p>
-     */
-    public int count() {
-        return 0;
-    }
-
-
     public String key() { throw new UnsupportedOperationException(); }
-
-    public PropMap properties() { throw new UnsupportedOperationException(); }
 
     public String text() { throw new UnsupportedOperationException(); }
 

@@ -26,17 +26,18 @@ public class ReactiveComponent extends VComponent {
         this(debugId, observable, new VNode(HtmlTag.DIV));
     }
 
+    public ReactiveComponent(Observable<VTree> observable, VTree loadingIndicator) {
+        this("anonymous", observable, loadingIndicator);
+    }
+
     public ReactiveComponent(String debugId, Observable<VTree> observable, VTree loadingIndicator) {
         this.debugId = debugId + "#" + debugIndex;
         this.observable = observable;
         this.loading = loadingIndicator;
+
+        LOGGER.info("Reactive[" + this.debugId + "] created");
     }
 
-    public ReactiveComponent(Observable<VTree> observable, VTree loadingIndicator) {
-        this.observable = observable;
-        this.loading = loadingIndicator;
-        this.debugId = "anonymous";
-    }
 
     @Override
     protected VTree render() {
@@ -72,6 +73,11 @@ public class ReactiveComponent extends VComponent {
             subscription.unsubscribe();
             subscription = null;
         }
+    }
+
+    @Override
+    public String getDebugId() {
+        return toString();
     }
 
     @Override

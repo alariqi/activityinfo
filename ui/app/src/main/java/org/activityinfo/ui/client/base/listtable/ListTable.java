@@ -2,10 +2,7 @@ package org.activityinfo.ui.client.base.listtable;
 
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
-import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.List;
 
@@ -31,7 +28,7 @@ public class ListTable {
     }
 
     public VTree render() {
-        return new ReactiveComponent(listItems.transform(items ->
+        return new ReactiveComponent("listtable", listItems.transform(items ->
                 div("listtable",
                         items.stream().map(this::renderItem))));
     }
@@ -62,7 +59,7 @@ public class ListTable {
 </div>
 
  */
-        PropMap labelProps = PropMap.withClasses("listtable__item__label").href(item.getHref());
+        PropMap labelProps = Props.withClass("listtable__item__label").href(item.getHref());
 
         return div("listtable__item",
                 new VNode(HtmlTag.A, labelProps,

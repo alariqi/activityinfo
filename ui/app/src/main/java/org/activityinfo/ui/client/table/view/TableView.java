@@ -76,7 +76,7 @@ public class TableView {
         sliderStyle.set("width", (viewModel.getSlideCount() * 100) + "vw");
         sliderStyle.set("transform", "translateX(-" + (viewModel.getSlideIndex() * 100) + "vw)");
 
-        PropMap sliderProps = new PropMap();
+        PropMap sliderProps = Props.create();
         sliderProps.setStyle(sliderStyle);
         sliderProps.setClass("formtable__slider");
 
@@ -91,7 +91,7 @@ public class TableView {
             Style slideStyle = new Style();
             slideStyle.set("left", (table.getDepth() * 100) + "vw");
 
-            PropMap slideProps = new PropMap();
+            PropMap slideProps = Props.create();
             slideProps.setClass("formtable__slide");
             slideProps.setStyle(slideStyle);
 

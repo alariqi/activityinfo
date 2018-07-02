@@ -2,9 +2,7 @@ package org.activityinfo.ui.client;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
-import org.activityinfo.ui.vdom.shared.html.SvgTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 public enum Icon {
@@ -61,17 +59,6 @@ public enum Icon {
     }
 
     public VTree tree() {
-        return new VNode(SvgTag.SVG, new PropMap()
-                .trustedSet("attributes",
-                        new PropMap()
-                        .set("viewBox", "0 0 21 17")
-                        .set("preserveAspectRatio","xMinYMin meet")
-                        .set("class", "icon")),
-                new VNode[] {
-                    new VNode(SvgTag.USE, new PropMap()
-                            .trustedSet("attributes", new PropMap().set("xlink:href", href())),
-                        new VNode[0], "", Icon.SVG_NS)
-                }, "",
-                SVG_NS);
+        return Svg.svg("icon", href(), "0 0 21 17");
     }
 }

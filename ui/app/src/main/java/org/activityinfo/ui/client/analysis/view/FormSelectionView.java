@@ -40,12 +40,12 @@ public class FormSelectionView {
 
     private static VNode item(FormSelectionColumn column, FormSelectionItem item, FormSelectionUpdater updater) {
 
-        PropMap itemProps = new PropMap();
+        PropMap itemProps = Props.create();
         itemProps.addClassName("formselection__item");
         itemProps.addClassName("formselection__item--selected", column.isSelected(item));
         itemProps.onclick(event -> updater.navigateTo(column.getColumnIndex(), item.getId()));
 
-        PropMap checkboxProps = new PropMap();
+        PropMap checkboxProps = Props.create();
         checkboxProps.addClassName("checkbox");
         checkboxProps.addClassName("checkbox--checked",
                     item.getSelected() == FormSelectionItem.Selection.ALL);

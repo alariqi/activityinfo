@@ -3,7 +3,7 @@ package org.activityinfo.ui.client.header;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.Place2;
-import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.avatar.Gravatar;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
@@ -13,6 +13,7 @@ import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
@@ -36,7 +37,7 @@ public class Header2 {
 
     private static VTree logo() {
         return div("logo",
-                NonIdeal.svg("#logo"),
+                Svg.svg("#logo"),
                 span("logo__name", "ActivityInfo"));
     }
 
@@ -51,8 +52,8 @@ public class Header2 {
     }
 
     private static VTree navButton(Icon icon, String label, Place2 place) {
-        PropMap buttonProps = PropMap
-                .withClasses("nav__button")
+        PropMap buttonProps = Props
+                .withClass("nav__button")
                 .href(place.toUri());
 
         return new VNode(HtmlTag.A, buttonProps,
@@ -65,7 +66,7 @@ public class Header2 {
         Avatar avatar = new Gravatar();
 
         return new VNode(HtmlTag.BUTTON,
-                PropMap.withClasses("profile"),
+                Props.withClass("profile"),
                 avatar.renderTree(),
                 Icon.EXPAND_DOWN.tree());
 

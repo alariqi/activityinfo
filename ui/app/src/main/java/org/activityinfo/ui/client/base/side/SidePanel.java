@@ -1,11 +1,11 @@
 package org.activityinfo.ui.client.base.side;
 
 import org.activityinfo.observable.StatefulValue;
-import org.activityinfo.ui.client.base.NonIdeal;
+import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
-import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
+import static org.activityinfo.ui.vdom.shared.tree.Props.withClass;
 
 public class SidePanel {
 
@@ -71,7 +71,7 @@ public class SidePanel {
     public VTree build() {
         return new ReactiveComponent("sidepanel", expanded.transform(e -> {
 
-            PropMap props = new PropMap();
+            PropMap props = Props.create();
             props.addClassName("sidepanel");
             switch (side) {
                 case LEFT:
@@ -108,25 +108,25 @@ public class SidePanel {
 
 
     private VNode expandButton() {
-        return new VNode(HtmlTag.BUTTON, withClasses("sidepanel__expand").onclick(event -> {
+        return new VNode(HtmlTag.BUTTON, withClass("sidepanel__expand").onclick(event -> {
             expanded.updateIfNotEqual(true);
         }), title, new VText(" ▲"));
     }
 
     private VNode collapseButton() {
-        return new VNode(HtmlTag.BUTTON, withClasses("sidepanel__collapse").onclick(event -> {
+        return new VNode(HtmlTag.BUTTON, withClass("sidepanel__collapse").onclick(event -> {
             expanded.updateIfNotEqual(false);
-        }), NonIdeal.svg(null, "#close_white"));
+        }), Svg.svg(null, "#close_white"));
     }
 
 
     private VTree header() {
-        return new VNode(HtmlTag.DIV, withClasses("sidepanel__header"),
+        return new VNode(HtmlTag.DIV, withClass("sidepanel__header"),
                 header,
                 collapseButton());
     }
 
     private VNode content() {
-        return new VNode(HtmlTag.DIV, withClasses("sidepanel__content"), this.content);
+        return new VNode(HtmlTag.DIV, withClass("sidepanel__content"), this.content);
     }
 }

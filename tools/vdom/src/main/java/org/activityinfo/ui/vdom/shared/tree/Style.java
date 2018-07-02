@@ -2,7 +2,7 @@ package org.activityinfo.ui.vdom.shared.tree;
 
 public class Style {
 
-    private PropMap declarations = new PropMap();
+    private PropMap declarations = Props.create();
 
     public Style textAlign(String align) {
         return set("textAlign", "center");

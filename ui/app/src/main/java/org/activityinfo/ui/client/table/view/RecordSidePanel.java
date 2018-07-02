@@ -16,7 +16,6 @@ import org.activityinfo.ui.client.base.tabs.Tabs;
 import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.client.table.model.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
-import org.activityinfo.ui.vdom.shared.html.CssClass;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
@@ -26,7 +25,7 @@ import java.util.stream.Stream;
 
 import static org.activityinfo.ui.client.base.button.Buttons.button;
 import static org.activityinfo.ui.vdom.shared.html.H.div;
-import static org.activityinfo.ui.vdom.shared.tree.PropMap.withClasses;
+import static org.activityinfo.ui.vdom.shared.tree.Props.withClass;
 
 public class RecordSidePanel {
 
@@ -48,7 +47,7 @@ public class RecordSidePanel {
 
         return new ReactiveComponent("scrollto",
                 hasSelection.transform(e ->
-                    new VNode(HtmlTag.BUTTON, withClasses("details__scrollto").disabled(!e),
+                    new VNode(HtmlTag.BUTTON, withClass("details__scrollto").disabled(!e),
                         new VText(I18N.CONSTANTS.scrollToThisRecord()))));
     }
 
@@ -65,7 +64,7 @@ public class RecordSidePanel {
 
         return new ReactiveComponent("details",
                 hasSelection.transform(b ->
-                        new VNode(HtmlTag.DIV, withClasses("details"),
+                        new VNode(HtmlTag.DIV, withClass("details"),
                                 b ? selection : noSelection)));
     }
 
@@ -78,7 +77,7 @@ public class RecordSidePanel {
     }
 
     private static VTree history(TableViewModel viewModel) {
-        return div(CssClass.valueOf("details__history"),
+        return div("details__history",
                 historyHeader(),
                 historyContent(viewModel));
     }
@@ -115,7 +114,7 @@ public class RecordSidePanel {
             Observable<RecordRef> selectedRecordRef = Observable.flattenUtilOptional(viewModel.getSelectedRecordRef());
             return new ReactiveComponent(selectedRecordRef.transform(ref -> {
                 return new VNode(HtmlTag.DIV,
-                        withClasses("details__subforms"),
+                        withClass("details__subforms"),
                         new VNode(HtmlTag.H2, I18N.CONSTANTS.goToSubforms()),
                         new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks(viewModel, ref)));
             }));
@@ -145,7 +144,7 @@ public class RecordSidePanel {
                 .onSelect(event -> tableUpdater.editSelection())
                 .build();
 
-        return new VNode(HtmlTag.DIV, withClasses("details__recordheader"),
+        return new VNode(HtmlTag.DIV, withClass("details__recordheader"),
                 header,
                 editButton,
                 deleteButton);

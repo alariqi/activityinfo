@@ -1,9 +1,10 @@
-package org.activityinfo.ui.vdom.client.render;
+package org.activityinfo.ui.vdom.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
+import org.activityinfo.ui.vdom.shared.html.SvgTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
 /**
@@ -11,47 +12,50 @@ import org.activityinfo.ui.vdom.shared.tree.*;
  */
 public class DomBuilder {
 
-    private RenderContext context;
+    public static final String SVG_NS = "http://www.w3.org/2000/svg";
 
-
-    public DomBuilder(RenderContext context) {
-        this.context = context;
+    public DomBuilder() {
     }
 
-    public Node render(VTree vTree) {
+    public Node render(VTree vTree, boolean isSvg) {
 
         if(vTree instanceof VComponent) {
-            return renderComponent((VComponent) vTree);
+            return renderComponent((VComponent) vTree, isSvg);
 
         } else if(vTree instanceof VText) {
             return renderText((VText) vTree);
 
         } else if(vTree instanceof VNode) {
-            return renderTree((VNode) vTree);
+            return renderTree((VNode) vTree, isSvg);
 
         } else {
             throw new IllegalArgumentException("Unknown virtual node " + vTree);
         }
     }
 
-    private Element renderTree(VNode vnode) {
-        Element Element;
-        if(vnode.namespace == null) {
-            Element = Document.get().createElement(vnode.tag.name());
+    private Element renderTree(VNode vnode, boolean isSvg) {
+        Element dom;
+
+        if(vnode.tag == SvgTag.SVG) {
+            isSvg = true;
+        }
+
+        if(isSvg) {
+            dom = createElementNS(vnode.tag.name().toLowerCase(), SVG_NS);
         } else {
-            Element = createElementNS(vnode.tag.name().toLowerCase(), vnode.namespace);
+            dom = Document.get().createElement(vnode.tag.name());
         }
 
         PropMap props = vnode.properties;
         if(props != null) {
             try {
-                Properties.applyProperties(Element, props, null);
+                Properties.apply(dom, props, isSvg);
             } catch(Exception e) {
                 GWT.log("Exception thrown while setting properties of " + vnode + ": " + e.getMessage(), e);
             }
         }
 
-        return appendChildren(Element, vnode);
+        return appendChildren(dom, vnode, isSvg);
     }
 
     private static native Element createElementNS(String tagName, String namespace) /*-{
@@ -59,18 +63,18 @@ public class DomBuilder {
     }-*/;
 
 
-    private Element appendChildren(Element Element, VNode vnode) {
+    private Element appendChildren(Element Element, VNode vnode, boolean isSvg) {
         VTree[] children = vnode.children;
         for (int i = 0; i < children.length; ++i) {
-            Element.appendChild(render(children[i]));
+            Element.appendChild(render(children[i], isSvg));
         }
 
         return Element;
     }
 
-    private Node renderComponent(VComponent component) {
+    private Node renderComponent(VComponent component, boolean isSvg) {
         VTree virtualNode = component.ensureRendered();
-        Node domNode = render(virtualNode);
+        Node domNode = render(virtualNode, isSvg);
 
         return domNode;
     }

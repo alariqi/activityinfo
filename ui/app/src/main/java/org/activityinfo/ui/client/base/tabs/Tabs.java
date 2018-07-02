@@ -20,7 +20,7 @@ public class Tabs {
 
     @VisibleForTesting
     static VNode tabPanel(StatefulValue<Integer> active, TabItem... tabs) {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("tabpanel"),
+        return new VNode(HtmlTag.DIV, Props.withClass("tabpanel"),
                 selectorButtons(active, tabs),
                 body(active, tabs));
     }
@@ -37,12 +37,12 @@ public class Tabs {
                         event -> active.updateIfNotEqual(finalTabIndex)));
             }
 
-            return new VNode(HtmlTag.DIV, PropMap.withClasses("tabpanel__strip"), buttons);
+            return new VNode(HtmlTag.DIV, Props.withClass("tabpanel__strip"), buttons);
         }));
     }
 
     private static VTree selectorButton(String label, boolean active, EventHandler clickHandler) {
-        PropMap propMap = new PropMap();
+        PropMap propMap = Props.create();
         propMap.setClass("active", active);
         propMap.onclick(clickHandler);
 
@@ -52,7 +52,7 @@ public class Tabs {
 
     private static VTree body(Observable<Integer> active, TabItem[] tabs) {
         return new ReactiveComponent("tabs.body", active.transform(activeIndex -> {
-            return new VNode(HtmlTag.DIV, PropMap.withClasses("tabpanel__body"), tabs[activeIndex].getContent());
+            return new VNode(HtmlTag.DIV, Props.withClass("tabpanel__body"), tabs[activeIndex].getContent());
         }));
     }
 }

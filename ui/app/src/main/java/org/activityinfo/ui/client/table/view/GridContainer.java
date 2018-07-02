@@ -10,7 +10,7 @@ import com.sencha.gxt.core.client.dom.XElement;
 import org.activityinfo.ui.client.table.model.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
 import org.activityinfo.ui.vdom.shared.tree.VComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
@@ -37,7 +37,7 @@ public class GridContainer extends VComponent implements ResizeHandler {
 
     @Override
     protected VTree render() {
-        return new VNode(HtmlTag.DIV, PropMap.withClasses("formtable__gridcontainer"));
+        return new VNode(HtmlTag.DIV, Props.withClass("formtable__gridcontainer"));
     }
 
     @Override

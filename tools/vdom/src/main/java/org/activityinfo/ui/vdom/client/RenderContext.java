@@ -1,4 +1,4 @@
-package org.activityinfo.ui.vdom.client.render;
+package org.activityinfo.ui.vdom.client;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.Widget;

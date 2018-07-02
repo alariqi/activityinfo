@@ -102,7 +102,6 @@ public enum HtmlTag implements Tag {
     CANVAS,
     MAP,
     AREA,
-    SVG,
     MATH,
 
     // Tabular Data
