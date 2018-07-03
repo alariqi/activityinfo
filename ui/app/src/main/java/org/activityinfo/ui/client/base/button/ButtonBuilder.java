@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ButtonBuilder {
 
-    private Tag buttonTag = HtmlTag.BUTTON;
+    private String buttonTag = HtmlTag.BUTTON;
     private VTree iconNode;
     private String label;
     private PropMap buttonProps = Props.withClass("button");

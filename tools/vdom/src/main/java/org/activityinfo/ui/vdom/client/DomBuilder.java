@@ -36,14 +36,14 @@ public class DomBuilder {
     private Element renderTree(VNode vnode, boolean isSvg) {
         Element dom;
 
-        if(vnode.tag == SvgTag.SVG) {
+        if(vnode.tag.equals(SvgTag.SVG)) {
             isSvg = true;
         }
 
         if(isSvg) {
-            dom = createElementNS(vnode.tag.name().toLowerCase(), SVG_NS);
+            dom = createElementNS(vnode.tag, SVG_NS);
         } else {
-            dom = Document.get().createElement(vnode.tag.name());
+            dom = Document.get().createElement(vnode.tag);
         }
 
         PropMap props = vnode.properties;

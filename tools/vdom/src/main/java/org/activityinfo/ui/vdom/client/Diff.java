@@ -119,7 +119,7 @@ public class Diff {
     }
 
     private void diffVNodes(VNode previous, VNode updated, Element dom) {
-        if (previous.tag == updated.tag &&
+        if (previous.tag.equals(updated.tag) &&
             Objects.equals(previous.key, updated.key)) {
 
             Properties.diffProperties(dom, updated.properties, previous.properties, isSvgMode);

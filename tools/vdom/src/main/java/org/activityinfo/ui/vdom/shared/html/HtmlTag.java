@@ -1,159 +1,137 @@
 package org.activityinfo.ui.vdom.shared.html;
 
-import org.activityinfo.ui.vdom.shared.tree.Tag;
-import org.activityinfo.ui.vdom.shared.tree.VNode;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+@SuppressWarnings("spellcheckinginspection")
+public final class HtmlTag {
 
-@SuppressWarnings("SpellCheckingInspection")
-public enum HtmlTag implements Tag {
+    private HtmlTag() {}
 
     // Sourced from: https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list
 
     // Document metadata
 
-    HTML,
-    HEAD,
-    META(true),
-    LINK(true),
-    TITLE,
-    BASE,
-    STYLE,
+    public static final String HTML = "html";
+    public static final String HEAD = "head";
+    public static final String META = "meta";
+    public static final String LINK = "link";
+    public static final String TITLE = "title";
+    public static final String BASE = "base";
+    public static final String STYLE = "style";
 
     // Scripting
-    SCRIPT,
-    NOSCRIPT,
+    public static final String SCRIPT = "script";
+    public static final String NOSCRIPT = "noscript";
 
     // Sections
 
-    BODY,
-    SECTION,
-    NAV,
-    ARTICLE,
-    ASIDE,
-    H1,
-    H2,
-    H3,
-    H4,
-    H5,
-    H6,
-    HEADER,
-    FOOTER,
-    ADDRESS,
-    MAIN,
+    public static final String BODY = "body";
+    public static final String SECTION = "section";
+    public static final String NAV = "nav";
+    public static final String ARTICLE = "article";
+    public static final String ASIDE = "aside";
+    public static final String H1 = "h1";
+    public static final String H2 = "h2";
+    public static final String H3 = "h3";
+    public static final String H4 = "h4";
+    public static final String H5 = "h5";
+    public static final String H6 = "h6";
+    public static final String HEADER = "header";
+    public static final String FOOTER = "footer";
+    public static final String ADDRESS = "address";
+    public static final String MAIN = "main";
 
     // Grouping content
 
-    P,
-    HR(true),
-    PRE,
-    BLOCKQUOTE,
-    OL,
-    UL,
-    LI,
-    DL,
-    DT,
-    DD,
-    FIGURE,
-    FIGCAPTION,
-    DIV,
+    public static final String P = "p";
+    public static final String HR = "hr";
+    public static final String PRE = "pre";
+    public static final String BLOCKQUOTE = "blockquote";
+    public static final String OL = "ol";
+    public static final String UL = "ul";
+    public static final String LI = "li";
+    public static final String DL = "dl";
+    public static final String DT = "dt";
+    public static final String DD = "dd";
+    public static final String FIGURE = "figure";
+    public static final String FIGCAPTION = "figcaption";
+    public static final String DIV = "div";
 
     // Text-level semantics
 
-    A,
-    EM,
-    STRONG,
-    SMALL,
-    S,
-    CITE,
-    Q,
-    DFN,
-    ABBR,
-    DATA,
-    TIME,
-    CODE,
-    VAR,
-    SAMP,
-    KBD,
-    SUB,
-    SUP,
-    I,
-    B,
-    U,
-    MARK,
-    RUBY,
-    RT,
-    RP,
-    BDI,
-    BDO,
-    SPAN,
-    BR(true),
-    WBR(true),
+    public static final String A = "a";
+    public static final String EM = "em";
+    public static final String STRONG = "strong";
+    public static final String SMALL = "small";
+    public static final String S = "s";
+    public static final String CITE = "cite";
+    public static final String Q = "q";
+    public static final String DFN = "dfn";
+    public static final String ABBR = "abbr";
+    public static final String DATA = "data";
+    public static final String TIME = "time";
+    public static final String CODE = "code";
+    public static final String VAR = "var";
+    public static final String SAMP = "samp";
+    public static final String KBD = "kbd";
+    public static final String SUB = "sub";
+    public static final String SUP = "sup";
+    public static final String I = "i";
+    public static final String B = "b";
+    public static final String U = "u";
+    public static final String MARK = "mark";
+    public static final String RUBY = "ruby";
+    public static final String RT = "rt";
+    public static final String RP = "rp";
+    public static final String BDI = "bdi";
+    public static final String BDO = "bdo";
+    public static final String SPAN = "span";
+    public static final String BR = "br";
+    public static final String WBR = "wbr";
 
     // Embedded content
 
-    IMG(true),
-    IFRAME,
-    EMBED(true),
-    PARAM(true),
-    VIDEO,
-    AUDIO,
-    SOURCE(true),
-    TRACK,
-    CANVAS,
-    MAP,
-    AREA,
-    MATH,
+    public static final String IMG = "img";
+    public static final String IFRAME = "iframe";
+    public static final String EMBED = "embed";
+    public static final String PARAM = "param";
+    public static final String VIDEO = "video";
+    public static final String AUDIO = "audio";
+    public static final String SOURCE = "source";
+    public static final String TRACK = "track";
+    public static final String CANVAS = "canvas";
+    public static final String MAP = "map";
+    public static final String AREA = "area";
+    public static final String MATH = "math";
 
     // Tabular Data
 
-    TABLE,
-    CAPTION,
-    COLGROUP,
-    COL(true),
-    TBODY,
-    THEAD,
-    TFOOT,
-    TR,
-    TD,
-    TH,
+    public static final String TABLE = "table";
+    public static final String CAPTION = "caption";
+    public static final String COLGROUP = "colgroup";
+    public static final String COL = "col";
+    public static final String TBODY = "tbody";
+    public static final String THEAD = "thead";
+    public static final String TFOOT = "tfoot";
+    public static final String TR = "tr";
+    public static final String TD = "td";
+    public static final String TH = "th";
 
     // Forms
 
-    FORM,
-    FIELDSET,
-    LEGEND,
-    LABEL,
-    INPUT(true),
-    BUTTON,
-    SELECT,
-    DATALIST,
-    OPTGROUP,
-    OPTION,
-    TEXTAREA,
-    KEYGEN,
-    OUTPUT,
-    PROGRESS,
-    METER
-    ;
+    public static final String FORM = "form";
+    public static final String FIELDSET = "fieldset";
+    public static final String LEGEND = "legend";
+    public static final String LABEL = "label";
+    public static final String INPUT = "input";
+    public static final String BUTTON = "button";
+    public static final String SELECT = "select";
+    public static final String DATALIST = "datalist";
+    public static final String OPTGROUP = "optgroup";
+    public static final String OPTION = "option";
+    public static final String TEXTAREA = "textarea";
+    public static final String KEYGEN = "keygen";
+    public static final String OUTPUT = "output";
+    public static final String PROGRESS = "progress";
+    public static final String METER = "meter";
 
-    private boolean singleton;
-
-    HtmlTag() {
-        this(false);
-    }
-
-    HtmlTag(boolean singleton) {
-        this.singleton = singleton;
-    }
-
-    public boolean isSingleton() {
-        return singleton;
-    }
-
-    public VNode create(VTree... children) {
-        assert !singleton;
-
-        return new VNode(this, children);
-    }
 
 }

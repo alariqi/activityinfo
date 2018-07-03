@@ -1,11 +1,27 @@
 package org.activityinfo.ui.vdom.shared.html;
 
+import com.google.common.collect.Sets;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import org.activityinfo.ui.vdom.shared.tree.*;
+
+import java.util.Set;
 
 public class HtmlRenderer implements VTreeVisitor {
 
     public static final String QUOTE = "\"";
+
+    private static final Set<String> SINGLETON_TAGS = Sets.newHashSet(
+            HtmlTag.META,
+            HtmlTag.LINK,
+            HtmlTag.HR,
+            HtmlTag.BR,
+            HtmlTag.WBR,
+            HtmlTag.IMG,
+            HtmlTag.EMBED,
+            HtmlTag.PARAM,
+            HtmlTag.SOURCE,
+            HtmlTag.COL,
+            HtmlTag.INPUT);
 
     private StringBuilder html;
     private boolean prettyPrint;
@@ -26,13 +42,12 @@ public class HtmlRenderer implements VTreeVisitor {
     }
 
     public void visitNode(VNode node) {
-        String tagName = node.tag.name().toLowerCase();
-        html.append("<").append(tagName);
+        html.append("<").append(node.tag);
 
         appendProperties(node);
         html.append(">");
 
-        if(node.tag.isSingleton()) {
+        if(SINGLETON_TAGS.contains(node.tag)) {
             // Tags like <input> and <br> are not closed...
             // but they also don't have children
             assert node.children.length == 0 : node.tag + " is a singleton";
@@ -40,7 +55,7 @@ public class HtmlRenderer implements VTreeVisitor {
         } else {
 
             appendChildren(node.children);
-            html.append("</").append(tagName).append(">");
+            html.append("</").append(node.tag).append(">");
         }
     }
 

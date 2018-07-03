@@ -15,7 +15,7 @@ public class VNode extends VTree {
      */
     public static final VTree[] NO_CHILDREN = new VTree[0];
 
-    public final Tag tag;
+    public final String tag;
     public final PropMap properties;
     public final VTree[] children;
 
@@ -24,39 +24,39 @@ public class VNode extends VTree {
 
     private boolean hasComponents;
 
-    public VNode(Tag tag, VTree... children) {
+    public VNode(String tag, VTree... children) {
         this(tag, null, children, null);
     }
 
-    public VNode(Tag tag, String text) {
+    public VNode(String tag, String text) {
         this(tag, null, new VText(text));
     }
 
-    public VNode(Tag tag, Stream<VTree> children) {
+    public VNode(String tag, Stream<VTree> children) {
         this(tag, null, children.toArray(VTree[]::new));
     }
 
-    public VNode(Tag tag, PropMap propMap, Stream<VTree> children) {
+    public VNode(String tag, PropMap propMap, Stream<VTree> children) {
         this(tag, propMap, children.toArray(VTree[]::new));
     }
 
-    public VNode(Tag tag, PropMap propMap) {
+    public VNode(String tag, PropMap propMap) {
         this(tag, propMap, null, null);
     }
 
-    public VNode(Tag tag, PropMap properties, VTree child) {
+    public VNode(String tag, PropMap properties, VTree child) {
         this(tag, properties, new VTree[] { child });
     }
 
-    public VNode(Tag tag, PropMap properties, VTree... children) {
+    public VNode(String tag, PropMap properties, VTree... children) {
         this(tag, properties, children, null);
     }
 
-    public VNode(Tag tag, PropMap properties, List<VTree> children) {
+    public VNode(String tag, PropMap properties, List<VTree> children) {
         this(tag, properties, Children.toArray(children), null);
     }
 
-    public VNode(@Nonnull Tag tag,
+    public VNode(@Nonnull String tag,
                  @Nullable PropMap properties,
                  @Nullable VTree[] children,
                  @Nullable String key) {
@@ -100,7 +100,7 @@ public class VNode extends VTree {
 
     @Override
     public String debugId() {
-        String tag = this.tag.name().toLowerCase();
+        String tag = this.tag;
         Object className = properties.get("className");
         if(className instanceof String) {
             tag += "." + className;
@@ -110,7 +110,7 @@ public class VNode extends VTree {
 
     @Override
     public String toString() {
-        String tag = this.tag.name().toLowerCase();
+        String tag = this.tag.toLowerCase();
         if(children.length == 1 && children[0] instanceof VText) {
             return "<" + tag + ">" + children[0].text() + "</" + tag + "/>";
         } else if(children.length > 0) {

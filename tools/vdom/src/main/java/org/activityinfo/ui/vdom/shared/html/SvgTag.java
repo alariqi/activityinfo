@@ -1,14 +1,9 @@
 package org.activityinfo.ui.vdom.shared.html;
 
-import org.activityinfo.ui.vdom.shared.tree.Tag;
+public final class SvgTag  {
 
-public enum SvgTag implements Tag {
+    private SvgTag() {}
 
-    SVG,
-    USE;
-
-    @Override
-    public boolean isSingleton() {
-        return false;
-    }
+    public static final String SVG = "svg";
+    public static final String USE = "use";
 }
