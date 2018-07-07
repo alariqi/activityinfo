@@ -25,7 +25,10 @@ import com.google.gwt.event.shared.SimpleEventBus;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
-import org.activityinfo.model.form.*;
+import org.activityinfo.model.form.FormMetadata;
+import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.form.FormSyncSet;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.job.JobDescriptor;
 import org.activityinfo.model.job.JobResult;
@@ -37,19 +40,20 @@ import org.activityinfo.model.resource.RecordTransaction;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.observable.ObservableTree;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 import org.activityinfo.ui.client.store.AnalysisChangeEvent;
 import org.activityinfo.ui.client.store.FormChange;
 import org.activityinfo.ui.client.store.FormChangeEvent;
 import org.activityinfo.ui.client.store.FormTreeLoader;
-import org.activityinfo.observable.ObservableTree;
 import org.activityinfo.ui.client.store.tasks.NullWatcher;
 import org.activityinfo.ui.client.store.tasks.ObservableTask;
 import org.activityinfo.ui.client.store.tasks.Watcher;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -66,6 +70,7 @@ public class HttpStore {
     private Observable<Boolean> online;
     private final HttpBus httpBus;
 
+    private Map<ResourceId, Observable<FormMetadata>> formCache = new HashMap<>();
 
     public HttpStore(Observable<Boolean> online, ActivityInfoClientAsync client, Scheduler scheduler) {
         this.online = online;
@@ -115,10 +120,11 @@ public class HttpStore {
 
         // We consider the version range request to be immutable, as old versions
         // don't change, so refeching shouldn't be necessary
-        return get(new FormMetadataRequest(formId),
-            new FormChangeWatcher(eventBus, change -> {
-                return change.isFormChanged(formId);
-            }));
+        return formCache.computeIfAbsent(formId, id ->
+             get(new FormMetadataRequest(id),
+                new FormChangeWatcher(eventBus, change -> {
+                    return change.isFormChanged(id);
+                })));
     }
 
     public Observable<ColumnSet> query(QueryModel queryModel) {

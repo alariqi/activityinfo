@@ -94,6 +94,7 @@ public final class ObservableTree<KeyT, NodeT, TreeT> extends Observable<TreeT> 
     @Override
     protected void onConnect() {
         connectTo(loader.getRootKey());
+        recrawl();
     }
 
     @Override
@@ -106,20 +107,28 @@ public final class ObservableTree<KeyT, NodeT, TreeT> extends Observable<TreeT> 
         subscriptions.clear();
     }
 
-    private void connectTo(KeyT nodeKey) {
-        if(!nodes.containsKey(nodeKey)) {
+    private Observable<NodeT> connectTo(KeyT nodeKey) {
+        Observable<NodeT> node = nodes.get(nodeKey);
+        if(node == null) {
+            node = loader.get(nodeKey);
+            Subscription subscription = node.subscribe(new Observer<NodeT>() {
 
-            Observable<NodeT> metadata = loader.get(nodeKey);
-            Subscription subscription = metadata.subscribe(new Observer<NodeT>() {
+                private boolean onConnect = true;
+
                 @Override
                 public void onChange(Observable<NodeT> formClass) {
-                    ObservableTree.this.onNodeChanged(formClass);
+                    if(onConnect) {
+                        onConnect = false;
+                    } else {
+                        ObservableTree.this.onNodeChanged(formClass);
+                    }
                 }
             });
 
-            nodes.put(nodeKey, metadata);
+            nodes.put(nodeKey, node);
             subscriptions.put(nodeKey, subscription);
         }
+        return node;
     }
 
     private void disconnectFrom(KeyT nodeKey) {
@@ -147,7 +156,6 @@ public final class ObservableTree<KeyT, NodeT, TreeT> extends Observable<TreeT> 
         LOGGER.info("Tree " + loader + ": Recrawl starting...");
 
         Set<KeyT> reachable = new HashSet<>();
-        Set<KeyT> missing = new HashSet<>();
         Set<KeyT> loading = new HashSet<>();
 
         crawling = true;
@@ -155,7 +163,7 @@ public final class ObservableTree<KeyT, NodeT, TreeT> extends Observable<TreeT> 
 
         try {
 
-            crawl(loader.getRootKey(), reachable, missing, loading);
+            crawl(loader.getRootKey(), reachable, loading);
 
             // First clean up forms that are no longer reachable
             List<KeyT> connectedForms = new ArrayList<>(nodes.keySet());
@@ -166,55 +174,57 @@ public final class ObservableTree<KeyT, NodeT, TreeT> extends Observable<TreeT> 
             }
 
             LOGGER.info("Tree " + loader + ": reachable = " + reachable +
-                    ", missing = " + missing + ", " +
                     ", loading = " + loading);
 
 
-            // Start listening to any new nodes that we have just discovered.
-            for (KeyT nodeKey : missing) {
-                connectTo(nodeKey);
-            }
-
             // Otherwise if we've got everything, we can build the tree
-            if (missing.isEmpty() && loading.isEmpty()) {
+            if (loading.isEmpty()) {
                 rebuildTree();
-
-            } else if(crawlPending) {
-                scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        ObservableTree.this.recrawl();
-                    }
-                });
-                crawlPending = false;
             }
+
+            // Otherwise we have to wait for one of our pending nodes to load
+            // and then we can recrawl.
 
         } finally {
             crawling = false;
+        }
+
+        // Was there a change to one of the nodes while we crawling?
+        // Restart a crawl now
+
+        if(crawlPending) {
+            scheduler.scheduleDeferred(new Scheduler.ScheduledCommand() {
+                @Override
+                public void execute() {
+                    ObservableTree.this.recrawl();
+                }
+            });
+            crawlPending = false;
         }
     }
 
     /**
      * Recursively search the tree of forms for those that are reachable, missing, and still loading.
      */
-    private void crawl(KeyT parentKey, Set<KeyT> reachable, Set<KeyT> missing, Set<KeyT> loading) {
+    private void crawl(KeyT parentKey, Set<KeyT> reachable, Set<KeyT> loading) {
         boolean seenForFirstTime = reachable.add(parentKey);
 
         if(!seenForFirstTime) {
             return;
         }
 
-        Observable<NodeT> node = nodes.get(parentKey);
+        Observable<NodeT> node = connectTo(parentKey);
         if(node == null) {
-            missing.add(parentKey);
+            node = connectTo(parentKey);
+        }
 
-        } else if(node.isLoading()) {
+        if(node.isLoading()) {
             loading.add(parentKey);
 
         } else if(node.isLoaded()) {
 
             for (KeyT childKey : loader.getChildren(node.get())) {
-                crawl(childKey, reachable, missing, loading);
+                crawl(childKey, reachable, loading);
             }
         }
     }
