@@ -38,6 +38,10 @@ public class DateFormat extends SimpleColumnFormat<Date> {
         return new LocalDateRenderer(getId());
     }
 
+    public TextFormat asTextFormat() {
+        return new TextFormat(getId(), getFormula());
+    }
+
     @Override
     public <T> T accept(EffectiveTableColumn columnModel, TableColumnVisitor<T> visitor) {
         return visitor.visitDateColumn(columnModel, this);

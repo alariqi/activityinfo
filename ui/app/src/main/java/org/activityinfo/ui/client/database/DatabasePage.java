@@ -7,7 +7,9 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.AppFrame;
+import org.activityinfo.ui.client.Page;
+import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
@@ -25,15 +27,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class DatabasePage {
+public class DatabasePage extends Page {
 
-    public static VTree render(FormStore store, DatabasePlace databasePlace) {
+    private final FormStore formStore;
+    private final DatabasePlace place;
 
-        Observable<Maybe<UserDatabaseMeta>> database = store.getDatabase(databasePlace.getDatabaseId());
-        return new ReactiveComponent(database.transform(d -> {
+    public DatabasePage(FormStore formStore, DatabasePlace place) {
+        this.formStore = formStore;
+        this.place = place;
+    }
+
+    @Override
+    public VTree render() {
+        Observable<Maybe<UserDatabaseMeta>> database = formStore.getDatabase(place.getDatabaseId());
+
+        return AppFrame.render(formStore, new ReactiveComponent(database.transform(d -> {
             switch (d.getState()) {
                 case VISIBLE:
-                    return page(d.get(), databasePlace);
+                    return page(d.get(), place);
                 case FORBIDDEN:
                     return NonIdeal.forbidden();
                 default:
@@ -41,7 +52,7 @@ public class DatabasePage {
                 case NOT_FOUND:
                     return NonIdeal.notFound();
             }
-        }));
+        })));
     }
 
     private static VTree page(UserDatabaseMeta database, DatabasePlace databasePlace) {
@@ -121,7 +132,7 @@ public class DatabasePage {
     }
 
 
-    private static Place2 place(UserDatabaseMeta database, Resource resource) {
+    private static Place place(UserDatabaseMeta database, Resource resource) {
         if(resource.getType() == ResourceType.FOLDER) {
             return new DatabasePlace(database.getDatabaseId(), resource.getId());
         } else {

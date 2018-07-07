@@ -28,11 +28,14 @@ public interface TableUpdater {
 
     void updateColumnWidth(String columnId, int width);
 
-    void editRecord(RecordRef ref);
+    void newRecord();
 
     void editSelection();
 
-    void newRecord();
+    void stopEditing();
 
     void selectRecord(RecordRef selectedRef);
+
+    void expandRecordPanel(boolean expanded);
+
 }

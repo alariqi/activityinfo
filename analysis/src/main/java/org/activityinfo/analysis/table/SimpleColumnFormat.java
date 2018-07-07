@@ -33,6 +33,10 @@ public abstract class SimpleColumnFormat<T> implements ColumnFormat {
         return id;
     }
 
+    public FormulaNode getFormula() {
+        return formula;
+    }
+
     protected SimpleColumnFormat(String id, FormulaNode formula) {
         this.id = id;
         this.formula = formula;

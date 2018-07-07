@@ -8,10 +8,10 @@ import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.toolbar.ToolbarBuilder;
+import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
-import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableModelStore;
+import org.activityinfo.ui.client.table.model.SliderUpdater;
 import org.activityinfo.ui.client.table.model.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableSliderViewModel;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
@@ -24,16 +24,13 @@ import java.util.List;
 
 public class TableView {
 
-    public static VTree render(FormStore formStore, TablePlace place) {
+    public static VTree render(FormStore formStore, Observable<Maybe<TableSliderViewModel>> viewModel, SliderUpdater updater) {
 
-        Observable<Maybe<TableSliderViewModel>> viewModel =
-                TableSliderViewModel.compute(formStore, TableModelStore.STORE, place);
-
-        return new ReactiveComponent(viewModel.transform(vm ->
+        return new ReactiveComponent("tableview.page", viewModel.transform(vm ->
             vm.switch_(new Maybe.Case<TableSliderViewModel, VTree>() {
                 @Override
                 public VTree visible(TableSliderViewModel value) {
-                    return render(formStore, value);
+                    return render(formStore, value, updater);
                 }
 
                 @Override
@@ -53,19 +50,17 @@ public class TableView {
             })));
     }
 
-    private static VTree render(FormStore formStore, TableSliderViewModel viewModel) {
+    private static VTree render(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
 
         return new PageBuilder()
                 .avatar(GenericAvatar.DATABASE)
                 .heading(viewModel.getPageTitle())
                 .breadcrumbs(viewModel.getBreadcrumbs())
-                .body(body(formStore, viewModel))
+                .body(body(formStore, viewModel, updater))
                 .build();
     }
 
-
-
-    private static VTree body(FormStore formStore, TableSliderViewModel viewModel) {
+    private static VTree body(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
         // This renders the child of page__body, which uses flexbox to size it's only child
         // to it size.
 
@@ -81,10 +76,10 @@ public class TableView {
         sliderProps.setClass("formtable__slider");
 
         return H.div("formtable",
-                new VNode(HtmlTag.DIV, sliderProps, slides(viewModel)));
+                new VNode(HtmlTag.DIV, sliderProps, slides(formStore, viewModel, updater)));
     }
 
-    private static List<VTree> slides(TableSliderViewModel viewModel) {
+    private static List<VTree> slides(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
         List<VTree> slides = new ArrayList<>();
         for (TableViewModel table : viewModel.getTables()) {
 
@@ -95,17 +90,17 @@ public class TableView {
             slideProps.setClass("formtable__slide");
             slideProps.setStyle(slideStyle);
 
-            TableUpdater updater = TableModelStore.STORE.getTableUpdater(table.getFormId());
+            TableUpdater updater = sliderUpdater.getTableUpdater(table.getFormId());
 
             slides.add(new VNode(HtmlTag.DIV, slideProps,
                     toolbar(table),
                     grid(table, updater),
-                    RecordSidePanel.render(table, updater)));
+                    RecordSidePanel.render(table, updater),
+                    editForm(formStore, table, updater)));
         }
 
         return slides;
     }
-
 
     private static VTree toolbar(TableViewModel tableViewModel) {
 
@@ -134,10 +129,21 @@ public class TableView {
                 .group(newButton, importButton, exportButton)
                 .group(columnsButton, fullscreenButton)
                 .build();
-
     }
+
+
+    private static VTree editForm(FormStore formStore, TableViewModel table, TableUpdater updater) {
+        if(table.getInputModel().isPresent()) {
+            return new FormOverlay(formStore, table.getSelectedRecordRef().get().get(), updater);
+        }
+        switch (table.getEditMode()) {
+            case EDIT_SELECTED:
+            default:
+                return H.div("forminput", VNode.NO_CHILDREN);
+        }
+    }
+
     private static VTree grid(TableViewModel viewModel, TableUpdater updater) {
         return new GridContainer(viewModel, updater);
     }
-
 }

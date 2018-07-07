@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.base.side;
 
+import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
@@ -14,7 +15,8 @@ public class SidePanel {
         RIGHT
     }
 
-    private StatefulValue<Boolean> expanded = new StatefulValue<>(false);
+    private Observable<Boolean> expanded;
+    private SidePanelUpdater updater;
     private VTree title = new VText("");
     private VTree content = new VNode(HtmlTag.DIV);
     private VTree header = new VText("");
@@ -22,8 +24,19 @@ public class SidePanel {
     private boolean full = false;
     private String expandedWidth = null;
 
+    public SidePanel expanded(Observable<Boolean> expanded, SidePanelUpdater updater) {
+        this.expanded = expanded;
+        this.updater = updater;
+        return this;
+    }
+
+    public SidePanel expanded(boolean expanded, SidePanelUpdater updater) {
+        return expanded(Observable.just(expanded), updater);
+    }
+
     public SidePanel expanded(StatefulValue<Boolean> expanded) {
         this.expanded = expanded;
+        this.updater = newExpanded -> expanded.updateIfNotEqual(newExpanded);
         return this;
     }
 
@@ -69,6 +82,11 @@ public class SidePanel {
     }
 
     public VTree build() {
+
+        if(expanded == null) {
+            this.expanded(new StatefulValue<>(false));
+        }
+
         return new ReactiveComponent("sidepanel", expanded.transform(e -> {
 
             PropMap props = Props.create();
@@ -106,16 +124,15 @@ public class SidePanel {
     }
 
 
-
     private VNode expandButton() {
         return new VNode(HtmlTag.BUTTON, withClass("sidepanel__expand").onclick(event -> {
-            expanded.updateIfNotEqual(true);
+            updater.expand(true);
         }), title, new VText(" ▲"));
     }
 
     private VNode collapseButton() {
         return new VNode(HtmlTag.BUTTON, withClass("sidepanel__collapse").onclick(event -> {
-            expanded.updateIfNotEqual(false);
+            updater.expand(false);
         }), Svg.svg(null, "#close_white"));
     }
 

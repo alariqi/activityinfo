@@ -18,13 +18,12 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.XTemplates;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -32,9 +31,9 @@ import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.HeaderGroupConfig;
 import org.activityinfo.analysis.table.*;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -155,12 +154,10 @@ public class ColumnModelBuilder {
     }
 
     private void addDateColumn(EffectiveTableColumn tableColumn, DateFormat dateFormat) {
-        ValueProvider<Integer, Date> valueProvider = proxy.getValueProvider(dateFormat);
-
-        ColumnConfig<Integer, Date> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
-        config.setHeader(tableColumn.getLabel());
-        config.setCell(new DateCell(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
+        ValueProvider<Integer, String> valueProvider = proxy.getValueProvider(dateFormat.asTextFormat());
+        ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, tableColumn.getWidth());
         config.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+        config.setHeader(tableColumn.getLabel());
         columnConfigs.add(config);
     }
 
@@ -209,12 +206,15 @@ public class ColumnModelBuilder {
         ValueProvider<Integer, Integer> countProvider =
                 proxy.getValueProvider(format.getId(), format.createRenderer());
 
-        ColumnConfig<Integer, Integer> columnConfig = new ColumnConfig<>(countProvider);
+        ValueProvider<Integer, String> idProvider =
+                proxy.getValueProvider(TableViewModel.ID_COLUMN_ID, new StringRenderer(TableViewModel.ID_COLUMN_ID));
+
+        ColumnConfig<Integer, Integer> columnConfig = new ColumnConfig<>(new IdentityValueProvider<>());
         columnConfig.setColumnHeaderClassName("columnheader__header--subform");
         columnConfig.setHeader(TEMPLATES.subFormHeader(I18N.CONSTANTS.subForm(), columnModel.getLabel()));
         columnConfig.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
         columnConfig.setCellClassName("tablegrid__cell--subform");
-        columnConfig.setCell(new SubFormCell());
+        columnConfig.setCell(new SubFormCell(format.getSubFormId(), idProvider, countProvider));
         columnConfig.setVerticalHeaderAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
 
         columnConfigs.add(columnConfig);

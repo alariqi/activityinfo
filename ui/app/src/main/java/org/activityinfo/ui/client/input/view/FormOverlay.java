@@ -19,43 +19,38 @@
 package org.activityinfo.ui.client.input.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.event.CloseEvent;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.vdom.shared.tree.VWidget;
 
-public class FormOverlay implements IsWidget {
+public class FormOverlay extends VWidget {
 
     private final FormStore formStore;
-    private ResourceId formId;
-    private FormInputView formInputView;
-    private CssLayoutContainer container;
+    private final RecordRef recordRef;
+    private final TableUpdater tableUpdater;
 
-    public FormOverlay(FormStore formStore) {
+    public FormOverlay(FormStore formStore, RecordRef recordRef, TableUpdater tableUpdater) {
         this.formStore = formStore;
-        this.container = new CssLayoutContainer();
-        this.container.addStyleName("forminput");
-        this.container.setVisible(false);
+        this.recordRef = recordRef;
+        this.tableUpdater = tableUpdater;
     }
 
-    public void show(RecordRef recordRef) {
-        container.clear();
-        container.setVisible(true);
+    @Override
+    public IsWidget createWidget() {
 
         FormInputView view = new FormInputView(formStore, recordRef, new CloseEvent.CloseHandler() {
             @Override
             public void onClose(CloseEvent event) {
-                container.setVisible(false);
-                container.clear();
+                tableUpdater.stopEditing();
             }
         });
+        CssLayoutContainer container = new CssLayoutContainer();
+        container.addStyleName("forminput");
+        container.addStyleName("forminput--visible");
         container.add(view);
-    }
-
-    @Override
-    public Widget asWidget() {
         return container;
     }
 }

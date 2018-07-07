@@ -3,7 +3,7 @@ package org.activityinfo.ui.client.page;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
@@ -22,7 +22,7 @@ public class PageBuilder {
     private Avatar avatar;
     private VTree heading;
     private VTree body;
-    private Place2 parentPlace;
+    private Place parentPlace;
 
     private boolean padded = false;
 

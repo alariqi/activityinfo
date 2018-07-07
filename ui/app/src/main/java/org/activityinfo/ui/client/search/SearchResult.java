@@ -10,19 +10,14 @@ import org.activityinfo.model.resource.ResourceId;
 
 public class SearchResult {
     private ResourceId id;
+    private ResourceId databaseId;
     private String label;
     private ResourceType resourceType;
     private String databaseName;
 
-    public SearchResult(ResourceId id, String label, ResourceType type, String databaseName) {
-        this.id = id;
-        this.label = label;
-        resourceType = type;
-        this.databaseName = databaseName;
-    }
-
     public SearchResult(UserDatabaseMeta database) {
         this.id = database.getDatabaseId();
+        this.databaseId = database.getDatabaseId();
         this.resourceType = ResourceType.DATABASE;
         this.label = database.getLabel();
         this.databaseName = database.getLabel();
@@ -30,6 +25,7 @@ public class SearchResult {
 
     public SearchResult(UserDatabaseMeta database, Resource resource) {
         this.id = resource.getId();
+        this.databaseId = database.getDatabaseId();
         this.resourceType = resource.getType();
         this.label = resource.getLabel();
         this.databaseName = database.getLabel();
@@ -37,6 +33,10 @@ public class SearchResult {
 
     public ResourceId getId() {
         return id;
+    }
+
+    public ResourceId getDatabaseId() {
+        return databaseId;
     }
 
     public String getKey() {

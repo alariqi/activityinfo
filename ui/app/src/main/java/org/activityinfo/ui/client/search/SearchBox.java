@@ -11,7 +11,6 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.ClassNames;
 import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.folder.FolderPlace;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
 
@@ -71,7 +70,7 @@ public class SearchBox implements IsWidget {
                 History.newItem(new DatabasePlace(item.getId()).toString());
                 break;
             case FOLDER:
-                History.newItem(new FolderPlace(item.getId()).toString());
+                History.newItem(new DatabasePlace(item.getDatabaseId(), item.getId()).toString());
                 break;
         }
     }

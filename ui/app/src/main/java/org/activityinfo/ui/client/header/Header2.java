@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.header;
 
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.ui.client.Icon;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.base.Svg;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.avatar.Gravatar;
@@ -51,7 +51,7 @@ public class Header2 {
                 new ReportListPlace());
     }
 
-    private static VTree navButton(Icon icon, String label, Place2 place) {
+    private static VTree navButton(Icon icon, String label, Place place) {
         PropMap buttonProps = Props
                 .withClass("nav__button")
                 .href(place.toUri());

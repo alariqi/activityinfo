@@ -23,7 +23,6 @@ public abstract class VWidget extends VComponent {
         visitor.visitWidget(this);
     }
 
-
     @Override
     protected final void componentDidMount() {
         assert widget == null : "component/widget has already been mounted";

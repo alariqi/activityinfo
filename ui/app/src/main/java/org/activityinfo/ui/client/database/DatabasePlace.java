@@ -1,12 +1,12 @@
 package org.activityinfo.ui.client.database;
 
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class DatabasePlace extends Place2 {
+public class DatabasePlace extends Place {
 
     private ResourceId databaseId;
     private Optional<ResourceId> folderId;

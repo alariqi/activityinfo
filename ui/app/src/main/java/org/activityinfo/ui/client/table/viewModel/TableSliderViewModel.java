@@ -1,27 +1,22 @@
 package org.activityinfo.ui.client.table.viewModel;
 
 import com.google.common.base.Optional;
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableModelStore;
+import org.activityinfo.ui.client.table.model.TableModel;
 import org.activityinfo.ui.client.table.model.TableSliderModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TableSliderViewModel {
-
-
     private final FormTree formTree;
     private final TablePlace place;
     private final Observable<List<Breadcrumb>> breadcrumbs;
@@ -31,52 +26,55 @@ public class TableSliderViewModel {
 
     public static Observable<Maybe<TableSliderViewModel>> compute(
             FormStore formStore,
-            TableModelStore modelStore,
-            TablePlace tablePlace) {
+            Observable<TableSliderModel> model) {
 
-        Observable<FormTree> formTree = formStore.getFormTree(tablePlace.getRootFormId());
-        Observable<TableSliderModel> model = modelStore.getTableTreeModel(tablePlace.getRootFormId());
-
-        return Observable.transform(formTree, model, (maybeTree, m) -> {
-            return maybeTree.toMaybe().transform(tree -> {
-                return new TableSliderViewModel(formStore, tree, m, tablePlace, computeBreadcrumbs(formStore, tree, tablePlace));
-            });
-        });
+        return model.join(m -> formStore.getFormTree(m.getPlace().getFormId()).transform(
+                  maybe -> maybe.toMaybe().transform(
+                  tree -> new TableSliderViewModel(formStore, tree, m))));
     }
 
-    private TableSliderViewModel(FormStore formStore, FormTree tree, TableSliderModel model, TablePlace tablePlace, Observable<List<Breadcrumb>> breadcrumbs) {
+    private TableSliderViewModel(FormStore formStore, FormTree tree, TableSliderModel model) {
         this.formTree = tree;
-        this.place = tablePlace;
-        this.breadcrumbs = breadcrumbs;
+        this.place = model.getPlace();
+        this.breadcrumbs = computeBreadcrumbs(formStore, tree);
 
         // Find the path from this subform to the root form.
         // Tables on this path will be visible so that if we navigate to the left
         // they will appear in the transition
-        List<ResourceId> path = findFormPath(formTree, tablePlace.getActiveFormId());
+        List<ResourceId> path = findFormPath(formTree, place.getFormId());
 
-        this.slideIndex = path.size() - 1;
+        // Find all the sub(forms) in this hierarchy and their depth relative to the root form
+        Map<ResourceId, Integer> depthMap = collectSubForms(formTree, path.get(0));
 
-        TableModelStore modelStore = TableModelStore.STORE;
+        // Keep track of parents of forms
+        // TODO: parents of parents...?
+        Map<ResourceId, String> parentMap = new HashMap<>();
+        place.getParentId().ifPresent(parentId -> {
+            parentMap.put(place.getFormId(), parentId);
+        });
 
-        this.tables.add(new TableViewModel(formStore, tree, formTree.getRootFormId(), modelStore.getTableModel(formTree.getRootFormClass().getId()), true, 0));
+        // Add a view model for each table visited so far
+        for (TableModel tableModel : model.getTables()) {
+            ResourceId formId = tableModel.getFormId();
+            int depth = depthMap.get(formId);
+            boolean visible = path.contains(formId);
+            FormTree relativeTree = tree.subTree(formId);
+            java.util.Optional<String> parentRecordId = java.util.Optional.ofNullable(parentMap.get(formId));
 
-        // find subforms
-        // TODO: actually support multi-level subforms
-        for (FormTree.Node node : tree.getRootFields()) {
-            if(node.isVisibleSubForm()) {
-                SubFormReferenceType subFormType = (SubFormReferenceType) node.getType();
-                ResourceId subFormId = subFormType.getClassId();
-                FormTree subTree = tree.subTree(subFormId);
-                boolean visible = path.contains(subFormId);
-                int depth = 1;
-
-                this.tables.add(new TableViewModel(formStore, subTree, formTree.getRootFormId(), modelStore.getTableModel(subFormId), visible, depth));
-            }
+            this.tables.add(new TableViewModel(formStore, relativeTree, tableModel, visible, depth, parentRecordId));
         }
 
-        this.slideCount = (tables.size() == 1) ? 1 : 2;
+        // The total number of "slides" is equal to the maximum depth of the hierarchy
+        // and our current slide index is equal to the active form's position in the path
+        this.slideCount = maxDepth(depthMap) + 1;
+        this.slideIndex = path.indexOf(place.getFormId());
+
     }
 
+
+    /**
+     * Finds a path of forms, from the current, active form to the root form if it has any parents.
+     */
     private List<ResourceId> findFormPath(FormTree formTree, ResourceId activeFormId) {
         List<ResourceId> path = new ArrayList<>();
         FormClass form = formTree.getFormClass(activeFormId);
@@ -90,26 +88,49 @@ public class TableSliderViewModel {
         return path;
     }
 
-    public String getPageTitle() {
-        return place.switchCase(new TablePlace.Case<String>() {
-            @Override
-            public String rootTable(ResourceId formId) {
-                return formTree.getRootFormClass().getLabel();
-            }
+    /**
+     * Find any subforms of the active form, recursively.
+     */
+    private Map<ResourceId, Integer> collectSubForms(FormTree formTree, ResourceId rootFormId) {
+        Map<ResourceId, Integer> depthMap = new HashMap<>();
+        depthMap.put(rootFormId, 0);
 
-            @Override
-            public String subFormTable(ResourceId formId, ResourceId subFormId, RecordRef parentRef) {
-                return formTree.getFormClass(subFormId).getLabel();
-            }
-
-            @Override
-            public String editForm(ResourceId formId, RecordRef ref) {
-                return I18N.CONSTANTS.addRecord();
-            }
-        });
+        collectSubForms(formTree, rootFormId, depthMap, 1);
+        return depthMap;
     }
 
-    private static Observable<List<Breadcrumb>> computeBreadcrumbs(FormStore formStore, FormTree tree, TablePlace place) {
+    private void collectSubForms(FormTree tree, ResourceId parentFormId, Map<ResourceId, Integer> depthMap, int depth) {
+        FormClass parentSchema = tree.getFormClass(parentFormId);
+
+        for (FormField field : parentSchema.getFields()) {
+            if(field.getType() instanceof SubFormReferenceType) {
+                SubFormReferenceType subFormType = (SubFormReferenceType) field.getType();
+                ResourceId subFormId = subFormType.getClassId();
+                if(tree.getFormClassIfPresent(subFormId).isPresent()) {
+                    depthMap.put(subFormId, depth);
+                    collectSubForms(tree, subFormId, depthMap, depth + 1);
+                }
+            }
+        }
+    }
+
+    private int maxDepth(Map<ResourceId, Integer> depthMap) {
+        Iterator<Integer> it = depthMap.values().iterator();
+        int maxDepth = it.next();
+        while(it.hasNext()) {
+            int depth = it.next();
+            if(depth > maxDepth) {
+                maxDepth = depth;
+            }
+        }
+        return maxDepth;
+    }
+
+    public String getPageTitle() {
+        return formTree.getFormClass(place.getFormId()).getLabel();
+    }
+
+    private static Observable<List<Breadcrumb>> computeBreadcrumbs(FormStore formStore, FormTree tree) {
 
         ResourceId formId = tree.getRootFormId();
         ResourceId databaseId = tree.getRootFormClass().getDatabaseId();

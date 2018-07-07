@@ -80,11 +80,6 @@ public class H {
         return nonEmpty;
     }
 
-    public static VNode div(String text) {
-        return new VNode(DIV, new VText(text));
-    }
-
-
     public static VTree header(VTree... children) {
         return new VNode(HtmlTag.HEADER, children);
     }

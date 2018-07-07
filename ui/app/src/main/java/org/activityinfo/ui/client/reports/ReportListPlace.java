@@ -1,8 +1,8 @@
 package org.activityinfo.ui.client.reports;
 
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 
-public class ReportListPlace extends Place2 {
+public class ReportListPlace extends Place {
 
     @Override
     public String toString() {

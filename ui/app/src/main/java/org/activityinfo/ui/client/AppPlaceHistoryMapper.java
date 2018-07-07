@@ -29,11 +29,11 @@ import org.activityinfo.ui.client.table.TablePlace;
 
 import javax.annotation.Nullable;
 
-public class AppPlaceHistoryMapper implements Function<String, Place2> {
+public class AppPlaceHistoryMapper implements Function<String, Place> {
 
 
     @Override
-    public Place2 apply(@Nullable String token) {
+    public Place apply(@Nullable String token) {
 
         if(token != null) {
 

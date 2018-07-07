@@ -20,9 +20,9 @@ package org.activityinfo.analysis.table;
 
 import org.activityinfo.model.query.ColumnView;
 
-class StringRenderer extends AbstractRenderer<String> {
+public class StringRenderer extends AbstractRenderer<String> {
 
-    protected StringRenderer(String columnId) {
+    public StringRenderer(String columnId) {
         super(columnId);
     }
 

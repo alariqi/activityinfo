@@ -18,11 +18,11 @@
  */
 package org.activityinfo.ui.client.analysis;
 
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 
 import java.util.Objects;
 
-public class AnalysisPlace extends Place2 {
+public class AnalysisPlace extends Place {
 
     private String id;
 

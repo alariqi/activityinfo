@@ -123,15 +123,6 @@ public abstract class VComponent extends VTree {
         return context;
     }
 
-
-    /**
-     * @return the event mask to sink
-     * @see com.google.gwt.user.client.Event
-     */
-    public int getEventMask() {
-        return 0;
-    }
-
     @Override
     public void accept(VTreeVisitor visitor) {
         visitor.visitComponent(this);
@@ -145,7 +136,6 @@ public abstract class VComponent extends VTree {
             return "Component: <unrendered>";
         }
     }
-
 
     public VTree ensureRendered() {
         if(vNode == null) {
@@ -183,4 +173,10 @@ public abstract class VComponent extends VTree {
         return getDebugId();
     }
 
+    /**
+     * Attempt to update this component in place, using the previous component.
+     */
+    public boolean executeUpdate(VComponent prevComponent) {
+        return false;
+    }
 }

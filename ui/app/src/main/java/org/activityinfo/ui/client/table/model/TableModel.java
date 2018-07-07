@@ -5,12 +5,18 @@ import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.annotation.AutoBuilder;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 
 import java.util.Optional;
 
 @AutoBuilder
 public class TableModel {
 
+    public enum EditMode {
+        NONE,
+        EDIT_SELECTED,
+        NEW
+    }
 
     TableAnalysisModel analysisModel;
 
@@ -28,6 +34,8 @@ public class TableModel {
      * True if the column selection panel is selected.
      */
     boolean columnSelectionExpanded;
+
+    Optional<FormInputModel> inputModel = Optional.empty();
 
     private TableModel() {
     }
@@ -51,6 +59,10 @@ public class TableModel {
         return recordPanelExpanded;
     }
 
+    public Optional<FormInputModel> getInputModel() {
+        return inputModel;
+    }
+
     public boolean isColumnSelectionExpanded() {
         return columnSelectionExpanded;
     }
@@ -60,11 +72,38 @@ public class TableModel {
     }
 
     public TableModel withSelection(RecordRef selectedRef) {
+
+        if(this.selected.isPresent() && this.selected.get().equals(selectedRef)) {
+            return this;
+        }
+
         TableModel updatedModel = new TableModel();
         updatedModel.analysisModel = this.analysisModel;
         updatedModel.selected = Optional.of(selectedRef);
         updatedModel.recordPanelExpanded = this.recordPanelExpanded;
         updatedModel.columnSelectionExpanded = this.columnSelectionExpanded;
+        return updatedModel;
+    }
+
+    public TableModel withRecordPanelExpanded(boolean expanded) {
+        if(this.recordPanelExpanded == expanded) {
+            return this;
+        }
+        TableModel updatedModel = new TableModel();
+        updatedModel.analysisModel = this.analysisModel;
+        updatedModel.selected = this.selected;
+        updatedModel.recordPanelExpanded = expanded;
+        updatedModel.columnSelectionExpanded = this.columnSelectionExpanded;
+        return updatedModel;
+    }
+
+    public TableModel withInputModel(Optional<FormInputModel> inputModel) {
+        TableModel updatedModel = new TableModel();
+        updatedModel.analysisModel = this.analysisModel;
+        updatedModel.selected = this.selected;
+        updatedModel.recordPanelExpanded = this.recordPanelExpanded;
+        updatedModel.columnSelectionExpanded = this.columnSelectionExpanded;
+        updatedModel.inputModel = inputModel;
         return updatedModel;
     }
 }

@@ -32,26 +32,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
-import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.storage.LocalStorage;
-import org.activityinfo.ui.client.database.DatabaseListPage;
-import org.activityinfo.ui.client.database.DatabaseListPlace;
-import org.activityinfo.ui.client.database.DatabasePage;
-import org.activityinfo.ui.client.database.DatabasePlace;
-import org.activityinfo.ui.client.header.ConnectionStatus;
-import org.activityinfo.ui.client.header.Header2;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.ConnectionListener;
 import org.activityinfo.ui.client.store.http.HttpStore;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.RecordSynchronizer;
-import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.view.TableView;
-import org.activityinfo.ui.vdom.client.VDomWidget;
-import org.activityinfo.ui.vdom.shared.html.H;
-import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
-import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.logging.Logger;
 
@@ -91,22 +78,19 @@ public class AppEntryPoint implements EntryPoint {
         // Start synchronizer...
         RecordSynchronizer synchronizer = new RecordSynchronizer(httpStore, offlineStore);
 
+        AppHolder appHolder = new AppHolder(formStore);
 
-        StatefulValue<Place2> place = new StatefulValue<>(DatabaseListPlace.INSTANCE);
         AppPlaceHistoryMapper historyMapper = new AppPlaceHistoryMapper();
-        History.addValueChangeHandler(event ->
-                place.updateIfNotSame(historyMapper.apply(event.getValue())));
+
+        History.addValueChangeHandler(event -> {
+            appHolder.navigateTo(historyMapper.apply(event.getValue()));
+        });
 
         History.fireCurrentHistoryState();
 
-
-
-        VDomWidget appFrame = new VDomWidget();
-        appFrame.update(renderApp(formStore, place));
-
         hideLoader();
 
-        RootPanel.get().add(appFrame);
+        RootPanel.get().add(appHolder);
 
     }
 
@@ -145,29 +129,5 @@ public class AppEntryPoint implements EntryPoint {
         }
     }
 
-    private VTree renderApp(FormStore formStore, StatefulValue<Place2> place) {
-        VTree header = Header2.render(formStore);
-        VTree connectionStatus = ConnectionStatus.render();
-        VTree page = new ReactiveComponent(place.cache().transform(p -> {
-
-            LOGGER.info("Place changed:"  + p);
-
-            if(p instanceof DatabaseListPlace) {
-                return DatabaseListPage.render(formStore);
-            } else if(p instanceof DatabasePlace) {
-                return DatabasePage.render(formStore, ((DatabasePlace) p));
-            } else if(p instanceof TablePlace) {
-                return TableView.render(formStore, (TablePlace) p);
-            } else {
-                return H.div("Nope.");
-            }
-        }));
-
-
-        return H.div("appframe appframe--fixed",
-                header,
-                connectionStatus,
-                page);
-    }
 
 }

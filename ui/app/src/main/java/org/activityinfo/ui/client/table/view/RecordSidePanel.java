@@ -37,6 +37,7 @@ public class RecordSidePanel {
         return new SidePanel()
                 .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
                 .header(scrollButton(viewModel))
+                .expanded(viewModel.isRecordPanelExpanded(), expanded -> tableUpdater.expandRecordPanel(expanded))
                 .content(tree)
                 .build();
     }
@@ -126,7 +127,7 @@ public class RecordSidePanel {
 
         return viewModel.getSubForms().stream()
                 .map(subForm -> {
-                    TablePlace place = new TablePlace(viewModel.getRootFormId()).subform(subForm.getId(), ref);
+                    TablePlace place = new TablePlace(subForm.getId(), ref);
                     return subFormLink(subForm, place);
                 });
     }

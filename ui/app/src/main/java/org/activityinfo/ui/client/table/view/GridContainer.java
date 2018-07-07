@@ -99,7 +99,7 @@ public class GridContainer extends VComponent implements ResizeHandler {
 
             LOGGER.info("Creating grid...");
 
-            grid = new TableGrid(viewModel, viewModel.getEffectiveTable().get(), updater);
+            grid = new TableGrid(viewModel, viewModel.getEffectiveTable(), updater);
         }
     }
 

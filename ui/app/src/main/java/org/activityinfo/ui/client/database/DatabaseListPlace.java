@@ -1,8 +1,8 @@
 package org.activityinfo.ui.client.database;
 
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 
-public class DatabaseListPlace extends Place2 {
+public class DatabaseListPlace extends Place {
 
     public static final DatabaseListPlace INSTANCE = new DatabaseListPlace();
 

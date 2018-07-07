@@ -27,6 +27,9 @@ import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
+import org.activityinfo.model.formula.ConstantNode;
+import org.activityinfo.model.formula.Formulas;
+import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.query.QueryModel;
@@ -36,6 +39,7 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.table.model.TableModel;
 
 import java.util.*;
@@ -50,30 +54,29 @@ public class TableViewModel {
     public static final String ID_COLUMN_ID = "$$id";
     private static final String EDIT_COLUMN_ID = "$$edit";
 
-
     private final FormSource formStore;
     private ResourceId formId;
     private FormTree formTree;
     private boolean visible;
-    private final ResourceId rootFormId;
-    private Observable<TableModel> tableModel;
-    private Observable<EffectiveTableModel> effectiveTable;
+    private TableModel tableModel;
+    private EffectiveTableModel effectiveTable;
     private Observable<ColumnSet> columnSet;
+    private final Optional<String> parentRecordId;
     private final int depth;
     private final List<FormClass> subForms;
 
     private Observable<Map<String, Integer>> recordMap;
 
-    public TableViewModel(final FormSource formStore, FormTree formTree, ResourceId rootFormId, Observable<TableModel> tableModel, boolean visible, int depth) {
+    public TableViewModel(final FormSource formStore, FormTree formTree, TableModel tableModel, boolean visible, int depth, Optional<String> parentRecordId) {
         this.formId = formTree.getRootFormId();
         this.formStore = formStore;
         this.formTree = formTree;
-        this.rootFormId = rootFormId;
         this.tableModel = tableModel;
         this.visible = visible;
         this.depth = depth;
-        this.effectiveTable = this.tableModel.transform(m -> m.getAnalysisModel()).cache().transform(m -> new EffectiveTableModel(formTree, m));
-        this.columnSet = effectiveTable.join(t -> queryColumns(formStore, t));
+        this.effectiveTable = new EffectiveTableModel(formTree, tableModel.getAnalysisModel());
+        this.parentRecordId = parentRecordId;
+        this.columnSet = queryColumns(formStore, effectiveTable);
         this.recordMap = this.columnSet.transform(this::buildRecordMap);
         this.subForms = new ArrayList<>();
         for (FormTree.Node node : formTree.getRootFields()) {
@@ -84,10 +87,21 @@ public class TableViewModel {
         }
     }
 
+    public boolean isRecordPanelExpanded() {
+        return tableModel.isRecordPanelExpanded();
+    }
+
+    public Optional<String> getParentRecordId() {
+        return parentRecordId;
+    }
+
     private Observable<ColumnSet> queryColumns(FormSource formStore, EffectiveTableModel table) {
         QueryModel queryModel = new QueryModel(table.getFormId());
         queryModel.selectResourceId().as(ID_COLUMN_ID);
         queryModel.selectExpr(editRule()).as(EDIT_COLUMN_ID);
+        parentRecordId.ifPresent(parentId -> {
+            queryModel.setFilter(Formulas.equals(new SymbolNode("@parent"), new ConstantNode(parentId)));
+        });
         for (EffectiveTableColumn column : table.getColumns()) {
             queryModel.addColumns(column.getQueryModel());
         }
@@ -129,8 +143,10 @@ public class TableViewModel {
         // Don't actually expose the internal selection state ...
         // the *effective* selection is a product of our model state and the record status (deleted or not)
         // and filtering
-        Observable<java.util.Optional<RecordRef>> selectedRef = tableModel.transform(m -> m.getSelected()).cache();
-        return Observable.transform(selectedRef, recordMap, (ref, map) -> {
+
+        Optional<RecordRef> ref = tableModel.getSelected();
+
+        return recordMap.transform(map -> {
            if(!ref.isPresent()) {
                return java.util.Optional.empty();
            }
@@ -165,12 +181,16 @@ public class TableViewModel {
         });
     }
 
-    public Observable<EffectiveTableModel> getEffectiveTable() {
+    public EffectiveTableModel getEffectiveTable() {
         return effectiveTable;
     }
 
     public Observable<Maybe<UserDatabaseMeta>> getDatabase() {
-        return effectiveTable.join(t -> formStore.getDatabase(t.getDatabaseId()));
+        return formStore.getDatabase(effectiveTable.getDatabaseId());
+    }
+
+    public Optional<FormInputModel> getInputModel() {
+        return tableModel.getInputModel();
     }
 
     public Observable<ColumnSet> getColumnSet() {
@@ -193,7 +213,7 @@ public class TableViewModel {
         return subForms;
     }
 
-    public ResourceId getRootFormId() {
-        return rootFormId;
+    public TableModel.EditMode getEditMode() {
+        return tableModel.getEditMode();
     }
 }

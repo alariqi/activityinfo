@@ -130,8 +130,7 @@ public class Diff {
         }
     }
 
-
-    public void diffChildren(VTree previous, VTree updated, Element parent, boolean isSvgMode) {
+    private void diffChildren(VTree previous, VTree updated, Element parent, boolean isSvgMode) {
         VTree[] prevChildren = previous.children();
         VTree[] updatedChildren = updated.children();
 
@@ -197,11 +196,16 @@ public class Diff {
     }
 
 
-    public void diffComponents(VComponent prevComponent, VComponent updatedComponent, Element dom) {
+    private void diffComponents(VComponent prevComponent, VComponent updatedComponent, Element dom) {
 
         assert prevComponent != null;
         assert updatedComponent != null;
         assert prevComponent.isRendered();
+
+        if(updatedComponent.executeUpdate(prevComponent)) {
+            return;
+        }
+
 
         VTree prevTree = prevComponent.vNode;
         VTree updatedTree = updatedComponent.ensureRendered();
@@ -210,6 +214,7 @@ public class Diff {
         assert updatedTree != null;
 
         walk(prevTree, updatedTree, dom, isSvgMode);
+
 
         fireMountRecursively(updatedComponent, dom);
 

@@ -26,7 +26,6 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.loader.PagingLoadConfig;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
-import com.sencha.gxt.widget.core.client.event.BeforeShowContextMenuEvent;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -109,7 +108,7 @@ public class TableGrid implements IsWidget {
         };
 
         MenuItem editRecord = new MenuItem(I18N.CONSTANTS.editRecord(),
-                selectionEvent -> onEditSelectedRecord(viewModel, tableUpdater));
+                selectionEvent -> tableUpdater.editSelection());
 
         MenuItem deleteRecord = new MenuItem(I18N.CONSTANTS.deleteRecord());
 
@@ -123,19 +122,14 @@ public class TableGrid implements IsWidget {
         grid.setSelectionModel(sm);
         grid.addSortChangeHandler(this::changeSort);
         grid.setContextMenu(contextMenu);
-        grid.addBeforeShowContextMenuHandler(new BeforeShowContextMenuEvent.BeforeShowContextMenuHandler() {
-            @Override
-            public void onBeforeShowContextMenu(BeforeShowContextMenuEvent event) {
-                boolean hasSelection = !grid.getSelectionModel().getSelectedItems().isEmpty();
-                editRecord.setEnabled(hasSelection);
-                deleteRecord.setEnabled(hasSelection);
-            }
+        grid.addBeforeShowContextMenuHandler(event -> {
+            boolean hasSelection = !grid.getSelectionModel().getSelectedItems().isEmpty();
+            editRecord.setEnabled(hasSelection);
+            deleteRecord.setEnabled(hasSelection);
         });
-    }
 
-    private void onEditSelectedRecord(TableViewModel viewModel, TableUpdater tableUpdater) {
-        viewModel.getSelectedRecordRef().ifLoaded(selection -> {
-            selection.ifPresent(ref -> tableUpdater.editRecord(ref));
+        grid.addRowClickHandler(event -> {
+            tableUpdater.expandRecordPanel(true);
         });
     }
 

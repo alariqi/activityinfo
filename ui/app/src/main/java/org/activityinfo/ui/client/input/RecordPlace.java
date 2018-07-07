@@ -1,11 +1,11 @@
 package org.activityinfo.ui.client.input;
 
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 
 import java.util.Objects;
 
-public class RecordPlace extends Place2 {
+public class RecordPlace extends Place {
     private RecordRef ref;
 
     public RecordPlace(RecordRef ref) {

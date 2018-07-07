@@ -110,7 +110,7 @@ public class ColumnFormatFactory implements FieldTypeVisitor<ColumnFormat> {
 
     @Override
     public ColumnFormat visitSubForm(SubFormReferenceType subFormReferenceType) {
-        return new SubFormFormat(columnId, formula);
+        return new SubFormFormat(columnId, formula, subFormReferenceType.getClassId());
     }
 
     @Override

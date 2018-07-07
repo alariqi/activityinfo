@@ -1,7 +1,7 @@
 package org.activityinfo.ui.client.base.listtable;
 
 import com.google.gwt.safehtml.shared.SafeUri;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 
@@ -23,7 +23,7 @@ public class ListItem {
         this.availableOffline = availableOffline;
     }
 
-    public ListItem(String id, String label, Place2 place, Avatar avatar) {
+    public ListItem(String id, String label, Place place, Avatar avatar) {
         this.id = id;
         this.label = label;
         this.href = place.toUri();

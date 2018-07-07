@@ -6,7 +6,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.ui.client.Place2;
+import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.table.TablePlace;
@@ -45,7 +45,7 @@ public class Breadcrumb {
         return new Breadcrumb(dummyText);
     }
 
-    public Breadcrumb(String label, Place2 place) {
+    public Breadcrumb(String label, Place place) {
         this(label, place.toUri());
     }
 
@@ -100,7 +100,7 @@ public class Breadcrumb {
     }
 
 
-    private static Place2 placeOf(UserDatabaseMeta database, Resource resource) {
+    private static Place placeOf(UserDatabaseMeta database, Resource resource) {
         switch (resource.getType()) {
             case DATABASE:
                 return new DatabasePlace(resource.getId());

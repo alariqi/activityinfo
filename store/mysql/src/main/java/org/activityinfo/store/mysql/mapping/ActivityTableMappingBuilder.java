@@ -216,12 +216,12 @@ public class ActivityTableMappingBuilder {
         siteField.setCode("site");
         siteField.setType(ReferenceType.single(CuidAdapter.activityFormClass(activity.getId())));
         siteField.setRequired(true);
-        
-        formClass.addElement(siteField);
+
+//        formClass.addElement(siteField);
         mappings.add(new FieldMapping(siteField, "siteId",
             new ReferenceConverter(activity.getSiteFormClassId(), SITE_DOMAIN)));
     }
-    
+
     public void addLocationField() {
         FormField locationField = new FormField(field(classId, LOCATION_FIELD));
         locationField.setLabel(activity.getLocationTypeName());
