@@ -18,14 +18,11 @@
  */
 package org.activityinfo.model.formTree;
 
-import com.google.common.collect.Multimap;
 import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.promise.Maybe;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,14 +64,12 @@ public class RecordTree {
     private final FormInstance root;
 
     private final Map<RecordRef, Maybe<FormInstance>> relatedRecords;
-    private final Multimap<ParentKey, FormInstance> subRecords;
 
     public RecordTree(FormTree formTree,
                       RecordRef rootRecordRef,
-                      Map<RecordRef, Maybe<FormInstance>> records, Multimap<ParentKey, FormInstance> subRecords) {
+                      Map<RecordRef, Maybe<FormInstance>> records) {
         this.formTree = formTree;
         this.relatedRecords = records;
-        this.subRecords = subRecords;
         this.root = records.get(rootRecordRef).get();
     }
 
@@ -102,27 +97,8 @@ public class RecordTree {
         return formTree;
     }
 
-    public Iterable<FormInstance> getSubRecords(RecordRef parentRef, ResourceId formId) {
-        return subRecords.get(new ParentKey(parentRef, formId));
-    }
-
-    public Iterable<FormInstance> getSubRecords(ResourceId subFormId) {
-        return getSubRecords(root.getRef(), subFormId);
-    }
-
     public RecordTree subTree(RecordRef ref) {
-        return new RecordTree(formTree.subTree(ref.getFormId()), ref, this.relatedRecords, this.subRecords);
-    }
-
-    public List<RecordTree> buildSubTrees(RecordRef parentRef, FormTree subTree) {
-
-        List<RecordTree> recordTrees = new ArrayList<>();
-        Iterable<FormInstance> subRecords = getSubRecords(parentRef, subTree.getRootFormId());
-
-        for (FormInstance subRecord : subRecords) {
-            recordTrees.add(new RecordTree(subTree, subRecord.getRef(), this.relatedRecords, this.subRecords));
-        }
-        return recordTrees;
+        return new RecordTree(formTree.subTree(ref.getFormId()), ref, this.relatedRecords);
     }
 
 }

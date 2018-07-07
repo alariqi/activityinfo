@@ -20,7 +20,10 @@ package org.activityinfo.ui.client.store;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import org.activityinfo.model.form.*;
+import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.form.FormInstance;
+import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.resource.ResourceId;
@@ -246,7 +249,7 @@ public class RecordTreeLoader implements ObservableTree.TreeLoader<
         for (Observable<Node> node : nodes.values()) {
             node.get().addTo(records, subRecords);
         }
-        return new RecordTree(formTree, rootRecordRef, records, subRecords);
+        return new RecordTree(formTree, rootRecordRef, records);
     }
 
     @Override

@@ -18,9 +18,7 @@
  */
 package org.activityinfo.ui.client.store;
 
-import com.google.common.collect.Iterables;
 import net.lightoze.gwt.i18n.server.LocaleProxy;
-import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.type.RecordRef;
@@ -31,7 +29,6 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.testing.BioDataForm;
 import org.activityinfo.store.testing.IncidentForm;
-import org.activityinfo.store.testing.ReferralSubForm;
 import org.activityinfo.store.testing.Survey;
 import org.junit.Before;
 import org.junit.Test;
@@ -96,9 +93,6 @@ public class RecordTreeLoaderTest {
         Observable<Maybe<RecordTree>> recordTree = setup.getFormStore().getRecordTree(rootRecordRef);
         Connection<Maybe<RecordTree>> recordTreeView = setup.connect(recordTree);
 
-        Iterable<FormInstance> subRecords = recordTreeView.assertLoaded().get().getSubRecords(rootRecordRef, ReferralSubForm.FORM_ID);
-
-        assertThat(Iterables.size(subRecords), equalTo(4));
 
     }
 
