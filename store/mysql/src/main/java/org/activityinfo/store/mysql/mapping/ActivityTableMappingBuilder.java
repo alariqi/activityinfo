@@ -22,14 +22,12 @@ import com.google.common.collect.Lists;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormElement;
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.model.form.SubFormKind;
 import org.activityinfo.model.legacy.CuidAdapter;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.NarrativeType;
 import org.activityinfo.model.type.NarrativeValue;
 import org.activityinfo.model.type.ReferenceType;
-import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.model.type.time.LocalDateType;
 import org.activityinfo.store.mysql.Join;
 import org.activityinfo.store.mysql.metadata.Activity;
@@ -102,14 +100,6 @@ public class ActivityTableMappingBuilder {
 
         sortFormClassFields(mapping.formClass, activity.getFieldsOrder());
 
-
-        if(activity.isMonthly()) {
-            mapping.formClass.addField(CuidAdapter.field(mapping.classId, CuidAdapter.MONTHLY_SUBFORM_FIELD))
-                    .setLabel("Monthly Reports")
-                    .setType(new SubFormReferenceType(CuidAdapter.reportingPeriodFormClass(activity.getId())));
-        }
-
-
         return mapping;
     }
 
@@ -155,10 +145,8 @@ public class ActivityTableMappingBuilder {
         mapping.baseFilter = "base.deleted=0 AND base.activityId=" + activity.getId();
         mapping.classId = CuidAdapter.reportingPeriodFormClass(activity.getId());
         mapping.formClass = new FormClass(mapping.classId);
-        mapping.formClass.setLabel("Monthly Reports");
+        mapping.formClass.setLabel(activity.getName() + " Monthly Reports");
         mapping.formClass.setDatabaseId(activity.getDatabaseId());
-        mapping.formClass.setSubFormKind(SubFormKind.MONTHLY);
-        mapping.formClass.setParentFormId(CuidAdapter.activityFormClass(activity.getId()));
         mapping.primaryKeyMapping = new PrimaryKeyMapping(CuidAdapter.MONTHLY_REPORT, "reportingPeriodId");
         
         mapping.addSiteField();
@@ -211,13 +199,13 @@ public class ActivityTableMappingBuilder {
     }
 
     public void addSiteField() {
-        FormField siteField = new FormField(ResourceId.valueOf("@parent"));
+        FormField siteField = new FormField(field(classId, SITE_FIELD));
         siteField.setLabel("Site");
         siteField.setCode("site");
         siteField.setType(ReferenceType.single(CuidAdapter.activityFormClass(activity.getId())));
         siteField.setRequired(true);
 
-//        formClass.addElement(siteField);
+        formClass.addElement(siteField);
         mappings.add(new FieldMapping(siteField, "siteId",
             new ReferenceConverter(activity.getSiteFormClassId(), SITE_DOMAIN)));
     }
