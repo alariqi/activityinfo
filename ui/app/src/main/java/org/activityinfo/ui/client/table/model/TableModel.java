@@ -5,12 +5,12 @@ import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.annotation.AutoBuilder;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.ui.client.input.model.FormInputModel;
 
 import java.util.Optional;
 
 @AutoBuilder
 public class TableModel {
+
 
     public enum EditMode {
         NONE,
@@ -35,7 +35,6 @@ public class TableModel {
      */
     boolean columnSelectionExpanded;
 
-    Optional<FormInputModel> inputModel = Optional.empty();
 
     private TableModel() {
     }
@@ -57,10 +56,6 @@ public class TableModel {
 
     public boolean isRecordPanelExpanded() {
         return recordPanelExpanded;
-    }
-
-    public Optional<FormInputModel> getInputModel() {
-        return inputModel;
     }
 
     public boolean isColumnSelectionExpanded() {
@@ -97,14 +92,16 @@ public class TableModel {
         return updatedModel;
     }
 
-    public TableModel withInputModel(Optional<FormInputModel> inputModel) {
+
+    public TableModel withAnalysisModel(TableAnalysisModel analysisModel) {
         TableModel updatedModel = new TableModel();
-        updatedModel.analysisModel = this.analysisModel;
+        updatedModel.analysisModel = analysisModel;
         updatedModel.selected = this.selected;
         updatedModel.recordPanelExpanded = this.recordPanelExpanded;
         updatedModel.columnSelectionExpanded = this.columnSelectionExpanded;
-        updatedModel.inputModel = inputModel;
         return updatedModel;
     }
+
+
 }
 

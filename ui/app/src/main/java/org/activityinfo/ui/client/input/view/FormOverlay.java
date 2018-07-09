@@ -19,34 +19,27 @@
 package org.activityinfo.ui.client.input.view;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.sencha.gxt.widget.core.client.event.CloseEvent;
-import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.store.FormStore;
-import org.activityinfo.ui.client.table.model.TableUpdater;
 import org.activityinfo.ui.vdom.shared.tree.VWidget;
 
 public class FormOverlay extends VWidget {
 
     private final FormStore formStore;
-    private final RecordRef recordRef;
-    private final TableUpdater tableUpdater;
+    private final InputHandler inputHandler;
+    private final Observable<FormInputModel> inputModel;
 
-    public FormOverlay(FormStore formStore, RecordRef recordRef, TableUpdater tableUpdater) {
+    public FormOverlay(FormStore formStore, Observable<FormInputModel> inputModel, InputHandler inputHandler) {
         this.formStore = formStore;
-        this.recordRef = recordRef;
-        this.tableUpdater = tableUpdater;
+        this.inputModel = inputModel;
+        this.inputHandler = inputHandler;
     }
 
     @Override
     public IsWidget createWidget() {
-
-        FormInputView view = new FormInputView(formStore, recordRef, new CloseEvent.CloseHandler() {
-            @Override
-            public void onClose(CloseEvent event) {
-                tableUpdater.stopEditing();
-            }
-        });
+        FormInputView view = new FormInputView(formStore, inputModel, inputHandler);
         CssLayoutContainer container = new CssLayoutContainer();
         container.addStyleName("forminput");
         container.addStyleName("forminput--visible");

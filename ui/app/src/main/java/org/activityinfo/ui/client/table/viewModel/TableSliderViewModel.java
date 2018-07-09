@@ -6,6 +6,7 @@ import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
@@ -24,6 +25,8 @@ public class TableSliderViewModel {
     private final Observable<String> title;
     private final List<TableViewModel> tables = new ArrayList<>();
     private final Observable<SliderPos> position;
+    private final Observable<Boolean> inputVisible;
+    private final Observable<java.util.Optional<FormInputModel>> inputModel;
 
     public static Observable<Maybe<TableSliderViewModel>> compute(FormStore formStore, Observable<TableSliderModel> state) {
 
@@ -54,6 +57,10 @@ public class TableSliderViewModel {
         // Breadcrumbs and title also change based on edit status
         this.title = computeTitle(formTree, model);
         this.breadcrumbs = computeBreadcrumbs(formStore, formTree, model);
+
+
+        this.inputModel = model.transform(m -> m.getInput()).cache();
+        this.inputVisible = inputModel.transform(m -> m.isPresent()).cache();
     }
 
     private static Observable<String> computeTitle(Observable<FormTree> formTree, Observable<TableSliderModel> model) {
@@ -117,5 +124,13 @@ public class TableSliderViewModel {
 
     public int getSlideCount() {
         return sliderTree.getSlideCount();
+    }
+
+    public Observable<java.util.Optional<FormInputModel>> getInputModel() {
+        return inputModel;
+    }
+
+    public Observable<Boolean> isInputVisible() {
+        return inputVisible;
     }
 }

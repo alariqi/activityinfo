@@ -29,6 +29,7 @@ body {
   line-height: $lineheight;
   color: $black;
   background-color: $background;
+  overflow-y: hidden;
 }
 
 *:focus {

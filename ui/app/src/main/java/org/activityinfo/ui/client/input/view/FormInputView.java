@@ -23,16 +23,13 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.event.CloseEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.json.Json;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.resource.RecordTransaction;
-import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.Subscription;
+import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.IconButton;
@@ -42,7 +39,6 @@ import org.activityinfo.ui.client.base.container.StaticHtml;
 import org.activityinfo.ui.client.base.info.Alert;
 import org.activityinfo.ui.client.base.info.ErrorConfig;
 import org.activityinfo.ui.client.base.info.SuccessConfig;
-import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
 import org.activityinfo.ui.client.input.viewModel.FormInputViewModelBuilder;
@@ -54,7 +50,7 @@ import java.util.logging.Logger;
 /**
  * Root view for a {@link FormInputModel}
  */
-public class FormInputView implements IsWidget, InputHandler {
+public class FormInputView implements IsWidget {
 
     private static final Logger LOGGER = Logger.getLogger(FormInputView.class.getName());
 
@@ -70,9 +66,9 @@ public class FormInputView implements IsWidget, InputHandler {
     private FormPanel formPanel = null;
 
     private FormStore formStore;
-    private final CloseEvent.CloseHandler closeHandler;
     private Maybe<RecordTree> existingRecord;
-    private FormInputModel inputModel;
+    private InputHandler inputHandler;
+    private Observable<FormInputModel> inputModel;
     private FormInputViewModelBuilder viewModelBuilder = null;
 
     private FormInputViewModel viewModel = null;
@@ -81,15 +77,15 @@ public class FormInputView implements IsWidget, InputHandler {
 
     private CssLayoutContainer container;
 
-    private Subscription structureSubscription;
+    private SubscriptionSet subscriptions = new SubscriptionSet();
     private IconButton saveButton;
     private IconButton cancelButton;
 
-    public FormInputView(FormStore formStore, RecordRef recordRef, CloseEvent.CloseHandler closeHandler) {
+    public FormInputView(FormStore formStore, Observable<FormInputModel> inputModel, InputHandler inputHandler) {
         this.formStore = formStore;
-        this.closeHandler = closeHandler;
-        this.formStructure = FormStructure.fetch(formStore, recordRef);
-        this.inputModel = new FormInputModel(recordRef);
+        this.formStructure = inputModel.join(m -> FormStructure.fetch(formStore, m.getRecordRef()));
+        this.inputModel = inputModel;
+        this.inputHandler = inputHandler;
 
         this.errorMessage = new Alert(Alert.Type.ERROR, I18N.CONSTANTS.formError());
         this.errorMessage.setVisible(false);
@@ -98,10 +94,10 @@ public class FormInputView implements IsWidget, InputHandler {
         this.container.addStyleName("forminput__inner");
         this.container.addAttachHandler(event -> {
             if(event.isAttached()) {
-                structureSubscription = this.formStructure.subscribe(this::onStructureChanged);
+                subscriptions.add(this.formStructure.subscribe(this::onStructureChanged));
+                subscriptions.add(this.inputModel.subscribe(this::update));
             } else {
-                structureSubscription.unsubscribe();
-                structureSubscription = null;
+                subscriptions.unsubscribeAll();
             }
         });
     }
@@ -127,14 +123,14 @@ public class FormInputView implements IsWidget, InputHandler {
             heading = I18N.MESSAGES.editRecordHeading(formStructure.getFormLabel());
         }
 
-        formPanel = new FormPanel(formStore, formStructure.getFormTree(), inputModel.getRecordRef(), this);
+        formPanel = new FormPanel(formStore, formStructure.getFormTree(), inputModel.get().getRecordRef(), inputHandler);
 
-        viewModel = viewModelBuilder.build(inputModel, existingRecord);
+        viewModel = viewModelBuilder.build(inputModel.get(), existingRecord);
         formPanel.init(viewModel);
         updateView();
 
         cancelButton = new IconButton(Icon.BUBBLE_CLOSE, I18N.CONSTANTS.cancel());
-        cancelButton.addSelectHandler(event -> closeHandler.onClose(new CloseEvent(null)));
+        cancelButton.addSelectHandler(event -> inputHandler.cancelEditing());
         saveButton = new IconButton(Icon.BUBBLE_CHECKMARK, IconButtonStyle.PRIMARY, I18N.CONSTANTS.save());
         saveButton.addSelectHandler(event -> save());
 
@@ -154,27 +150,17 @@ public class FormInputView implements IsWidget, InputHandler {
         return container;
     }
 
-    @Override
-    public void updateField(RecordRef recordRef, ResourceId fieldId, FieldInput value) {
-        update(inputModel.update(fieldId, value));
-    }
-
-    @Override
-    public void touchField(RecordRef recordRef, ResourceId fieldId) {
-        update(inputModel.touch(fieldId));
-    }
-
-    private void update(FormInputModel updatedModel) {
-        if(this.inputModel != updatedModel) {
-            this.inputModel = updatedModel;
-            this.viewModel = viewModelBuilder.build(inputModel, existingRecord);
+    private void update(Observable<FormInputModel> observable) {
+        if(observable.isLoaded()) {
+            FormInputModel updatedModel = observable.get();
+            this.viewModel = viewModelBuilder.build(updatedModel, existingRecord);
             updateView();
         }
     }
 
     private void updateView() {
         formPanel.updateView(viewModel);
-        errorMessage.setVisible(!viewModel.isValid() && inputModel.isValidationRequested());
+        errorMessage.setVisible(!viewModel.isValid() && inputModel.get().isValidationRequested());
     }
 
     public void save() {
@@ -216,7 +202,7 @@ public class FormInputView implements IsWidget, InputHandler {
 
                 Info.display(new SuccessConfig(I18N.CONSTANTS.changesSaved()));
 
-                closeHandler.onClose(new CloseEvent(null));
+                inputHandler.savedRecord(viewModel.getRecordRef());
             }
         });
     }
@@ -226,7 +212,7 @@ public class FormInputView implements IsWidget, InputHandler {
      */
     private void onInvalidSubmission() {
 
-        update(inputModel.validationRequested());
+        inputHandler.requestValidation();
 
         com.google.gwt.core.client.Scheduler.get().scheduleDeferred(() -> {
             formPanel.scrollToFirstError();

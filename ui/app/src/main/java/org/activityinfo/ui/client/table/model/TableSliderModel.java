@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.table.model;
 
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.table.TablePlace;
 
 import java.util.HashMap;
@@ -12,6 +13,8 @@ public class TableSliderModel {
     private TablePlace place;
 
     private Map<ResourceId, TableModel> tableMap;
+
+    private Optional<FormInputModel> inputModel = Optional.empty();
 
     private TableSliderModel() {
     }
@@ -44,26 +47,10 @@ public class TableSliderModel {
             return this;
         }
 
-        Map<ResourceId, TableModel> updatedTables = new HashMap<>();
-
-        // If we are navigating to a new table within this tree,
-        // then add it to the model
-
-        if(!tableMap.containsKey(tablePlace.getFormId())) {
-            updatedTables.put(tablePlace.getFormId(), new TableModel(tablePlace.getFormId()));
-        }
-
-        // Update the other tables to close any open data entry
-        // forms
-
-        for (TableModel tableModel : tableMap.values()) {
-            updatedTables.put(tableModel.getFormId(), tableModel.withInputModel(Optional.empty()));
-        }
-
         TableSliderModel model = new TableSliderModel();
         model.place = tablePlace;
-        model.tableMap = updatedTables;
-
+        model.tableMap = this.tableMap;
+        model.inputModel = Optional.empty();
         return model;
     }
 
@@ -71,12 +58,31 @@ public class TableSliderModel {
         if(tableMap.get(tableModel.getFormId()) == tableModel) {
             return this;
         }
-        Map<ResourceId, TableModel> updatedTables = new HashMap<>();
+        Map<ResourceId, TableModel> updatedTables = new HashMap<>(this.tableMap);
         updatedTables.put(tableModel.getFormId(), tableModel);
 
         TableSliderModel model = new TableSliderModel();
         model.place = this.place;
         model.tableMap = updatedTables;
         return model;
+    }
+
+    public TableSliderModel withInput(Optional<FormInputModel> inputModel) {
+        TableSliderModel model = new TableSliderModel();
+        model.place = this.place;
+        model.tableMap = this.tableMap;
+        model.inputModel = inputModel;
+        return model;
+    }
+
+    public TableSliderModel withInput(FormInputModel inputModel) {
+        if(this.inputModel.isPresent() && this.inputModel.get() == inputModel) {
+            return this;
+        }
+        return withInput(Optional.of(inputModel));
+    }
+
+    public Optional<FormInputModel> getInput() {
+        return inputModel;
     }
 }

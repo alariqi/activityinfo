@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.table.view;
 
+import com.google.common.base.Optional;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
@@ -8,6 +9,7 @@ import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.toolbar.ToolbarBuilder;
+import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
@@ -62,6 +64,13 @@ public class TableView {
 
     private static VTree body(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
 
+        return H.div("formtable",
+                slider(formStore, viewModel, updater),
+                editForm(formStore, viewModel, updater));
+    }
+
+    private static VTree slider(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
+
         // Make sure we re-use table components to avoid having to create/tear down the grid widgets
         // too often
         List<VTree> slides = slides(formStore, viewModel, updater);
@@ -82,8 +91,7 @@ public class TableView {
             sliderProps.setStyle(sliderStyle);
             sliderProps.setClass("formtable__slider");
 
-            return H.div("formtable",
-                    new VNode(HtmlTag.DIV, sliderProps, slides));
+            return new VNode(HtmlTag.DIV, sliderProps, slides);
 
         }));
     }
@@ -102,20 +110,20 @@ public class TableView {
             TableUpdater updater = sliderUpdater.getTableUpdater(table.getFormId());
 
             slides.add(new VNode(HtmlTag.DIV, slideProps,
-                    toolbar(table),
+                    toolbar(table, updater),
                     grid(table, updater),
-                    RecordSidePanel.render(table, updater),
-                    editForm(formStore, table, updater)));
+                    RecordSidePanel.render(table, updater)));
         }
 
         return slides;
     }
 
-    private static VTree toolbar(TableViewModel tableViewModel) {
+    private static VTree toolbar(TableViewModel tableViewModel, TableUpdater updater) {
 
         VTree newButton = Buttons.button(I18N.CONSTANTS.newRecord())
                 .primary()
                 .icon(Icon.BUBBLE_ADD)
+                .onSelect(event -> updater.newRecord())
                 .build();
 
         VTree importButton = Buttons.button(I18N.CONSTANTS.importText())
@@ -141,12 +149,26 @@ public class TableView {
     }
 
 
-    private static VTree editForm(FormStore formStore, TableViewModel table, TableUpdater updater) {
-        if(table.getInputModel().isPresent()) {
-            return new FormOverlay(formStore, table.getSelectedRecordRef().get().get(), updater);
-        } else {
-            return H.div("forminput", VNode.NO_CHILDREN);
-        }
+
+    private static VTree editForm(FormStore formStore, TableSliderViewModel table, SliderUpdater updater) {
+
+        return new ReactiveComponent(table.isInputVisible().transform(visible -> {
+            if(visible) {
+                Observable<FormInputModel> inputModel = table.getInputModel().transformIf(x -> {
+                    if(x.isPresent()) {
+                        return Optional.fromJavaUtil(x);
+                    } else {
+                        return Optional.absent();
+                    }
+                });
+
+                return new FormOverlay(formStore, inputModel, updater.getInputHandler());
+
+            } else {
+                return H.div("forminput", VNode.NO_CHILDREN);
+
+            }
+        }));
     }
 
     private static VTree grid(TableViewModel viewModel, TableUpdater updater) {

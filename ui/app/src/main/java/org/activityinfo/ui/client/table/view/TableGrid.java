@@ -44,6 +44,8 @@ import org.activityinfo.ui.client.base.menu.MenuArrow;
 import org.activityinfo.ui.client.table.model.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 
@@ -108,6 +110,7 @@ public class TableGrid implements IsWidget {
                     }
                 }));
                 subscriptions.add(viewModel.getColumnSet().subscribe(observable -> updateColumnView(observable)));
+                subscriptions.add(viewModel.getSelectedRowIndex().subscribe(observable -> updateSelection(observable)));
                 TableGrid.this.loader.load(0, gridView.getCacheSize());
             }
 
@@ -151,6 +154,7 @@ public class TableGrid implements IsWidget {
         });
     }
 
+
     private void changeColumnWidth(ColumnResizeEvent e) {
 
         ColumnConfig<Integer, Object> column = grid.getColumnModel().getColumn(e.getColumnIndex());
@@ -166,7 +170,22 @@ public class TableGrid implements IsWidget {
      */
     private void changeRowSelection(SelectionChangedEvent<Integer> event) {
         if(proxy.isLoaded()) {
-            if(!event.getSelection().isEmpty()) {
+
+            if(event.getSelection().isEmpty()) {
+                // The LiveGrid clears the store when the set of loaded rows is refreshed.
+                // This has the side effect of clearing the selection, which we do not want.
+                // So if the grid decides to clear the selection but our state still has one, fix the grid
+                Observable<Optional<Integer>> selectedIndex = viewModel.getSelectedRowIndex();
+                selectedIndex.ifLoaded(optional -> {
+                    optional.ifPresent(index -> {
+//                        com.google.gwt.core.client.Scheduler.get().scheduleDeferred(() -> {
+                            grid.getSelectionModel().setSelection(Collections.singletonList(index));
+//                        });
+                    });
+                });
+
+            } else {
+                // This is fired in response to a user event, so update our state
                 int rowIndex = event.getSelection().get(0);
                 RecordRef selectedRef = new RecordRef(viewModel.getFormId(), proxy.getRecordId(rowIndex));
                 tableUpdater.selectRecord(selectedRef);
@@ -233,9 +252,23 @@ public class TableGrid implements IsWidget {
         return true;
     }
 
+
+    private void updateSelection(Observable<Optional<Integer>> observable) {
+        if(observable.isLoaded()) {
+            Optional<Integer> selectedRow = observable.get();
+            if(selectedRow.isPresent()) {
+                grid.getSelectionModel().setSelection(Collections.singletonList(selectedRow.get()));
+            } else {
+                grid.getSelectionModel().setSelection(Collections.emptyList());
+            }
+        }
+    }
+
     private void updateColumnView(Observable<ColumnSet> columnSet) {
         if(columnSet.isLoaded()) {
+            LOGGER.info("TableGrid " + this.viewModel.getFormId() + ": ColumnSet updated");
             if(!proxy.push(columnSet.get())) {
+                LOGGER.info("TableGrid " + this.viewModel.getFormId() + ": Executing loader.load()");
                 loader.load();
             }
         }

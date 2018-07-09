@@ -40,7 +40,6 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
-import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.client.table.model.TableModel;
 
@@ -63,6 +62,7 @@ public class TableViewModel {
     private final Observable<TableModel> tableModel;
     private final Observable<FormTree> formTree;
     private final Observable<Optional<RecordRef>> selection;
+    private final Observable<Optional<Integer>> selectedRowIndex;
     private final Observable<TableAnalysisModel> analysisModel;
     private final Observable<EffectiveTableModel> effectiveTable;
     private final Observable<ColumnSet> columnSet;
@@ -86,7 +86,7 @@ public class TableViewModel {
                 } else {
                     return com.google.common.base.Optional.<String>absent();
                 }
-            });
+            }).cache();
         } else {
             this.parentRef = Observable.just("");
         }
@@ -94,7 +94,17 @@ public class TableViewModel {
         this.columnSet = Observable.join(effectiveTable, parentRef, (t, p) -> queryColumns(formStore, t, p));
         this.recordMap = this.columnSet.transform(this::buildRecordMap);
 
-        this.selection = Observable.transform(recordMap, tableModel.transform(m -> m.getSelected()).cache(), (m, s) -> {
+        Observable<Optional<RecordRef>> selectedRef = tableModel.transform(m -> m.getSelected()).cache();
+
+        this.selectedRowIndex = Observable.transform(recordMap, selectedRef, (map, s) -> {
+            if(s.isPresent()) {
+                return Optional.ofNullable(map.get(s.get().getRecordId().asString()));
+            } else {
+                return Optional.empty();
+            }
+        });
+
+        this.selection = Observable.transform(recordMap, selectedRef, (m, s) -> {
             if(s.isPresent() && m.containsKey(s.get().getRecordId().asString())) {
                 return s;
             } else {
@@ -159,6 +169,10 @@ public class TableViewModel {
         return getSelectedRecordRef().transform(r -> r.isPresent());
     }
 
+    public Observable<Optional<Integer>> getSelectedRowIndex() {
+        return selectedRowIndex;
+    }
+
     public Observable<Optional<RecordHistory>> getSelectedRecordHistory() {
         return getSelectedRecordRef().join(ref -> {
             if (ref.isPresent()) {
@@ -185,10 +199,6 @@ public class TableViewModel {
 
     public Observable<Maybe<UserDatabaseMeta>> getDatabase() {
         return effectiveTable.join(t -> formStore.getDatabase(t.getDatabaseId()));
-    }
-
-    public Optional<FormInputModel> getInputModel() {
-        return Optional.empty();
     }
 
     public Observable<ColumnSet> getColumnSet() {

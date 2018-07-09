@@ -30,4 +30,11 @@ public interface InputHandler {
     void updateField(RecordRef record, ResourceId fieldId, FieldInput value);
 
     void touchField(RecordRef recordRef, ResourceId fieldId);
+
+    void requestValidation();
+
+    void cancelEditing();
+
+    void savedRecord(RecordRef recordRef);
+
 }
