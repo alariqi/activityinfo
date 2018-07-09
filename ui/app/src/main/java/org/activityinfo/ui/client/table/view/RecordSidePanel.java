@@ -1,10 +1,7 @@
 package org.activityinfo.ui.client.table.view;
 
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.form.FormClass;
-import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.MaybeStale;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
@@ -13,15 +10,12 @@ import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.base.tabs.TabItem;
 import org.activityinfo.ui.client.base.tabs.Tabs;
-import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.viewModel.FormLink;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
-
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.activityinfo.ui.client.base.button.Buttons.button;
 import static org.activityinfo.ui.vdom.shared.html.H.div;
@@ -94,42 +88,29 @@ public class RecordSidePanel {
     }
 
     private static VTree parentLinks(TableViewModel viewModel) {
-        FormTree tree = viewModel.getFormTree();
-        FormClass form = tree.getRootFormClass();
-        if (form.isSubForm()) {
-            Optional<FormClass> parentForm = tree.getFormClassIfPresent(form.getParentFormId().get()).toJavaUtil();
-            if (parentForm.isPresent()) {
+
+        return new ReactiveComponent(viewModel.getParentRecords().transform(parents -> {
+            if(parents.isEmpty()) {
+                return new VNode(HtmlTag.DIV);
+            } else {
                 return H.div("details__subforms",
                         H.h2(I18N.CONSTANTS.goBackTo()),
-                        parentLink(parentForm.get()));
+                        parentLink(parents.get(0)));
             }
-        }
-        return new VNode(HtmlTag.DIV);
+        }));
     }
 
     private static VTree subformLinks(TableViewModel viewModel) {
-
-        if(viewModel.getSubForms().isEmpty()) {
-            return new VNode(HtmlTag.DIV);
-        } else {
-            Observable<RecordRef> selectedRecordRef = Observable.flattenUtilOptional(viewModel.getSelectedRecordRef());
-            return new ReactiveComponent(selectedRecordRef.transform(ref -> {
+        return new ReactiveComponent(viewModel.getSubForms().transform(subForms -> {
+            if(subForms.isEmpty()) {
+                return new VNode(HtmlTag.DIV);
+            } else {
                 return new VNode(HtmlTag.DIV,
                         withClass("details__subforms"),
                         new VNode(HtmlTag.H2, I18N.CONSTANTS.goToSubforms()),
-                        new VNode(HtmlTag.DIV, PropMap.EMPTY, subFormLinks(viewModel, ref)));
-            }));
-
-        }
-    }
-
-    private static Stream<VTree> subFormLinks(TableViewModel viewModel, RecordRef ref) {
-
-        return viewModel.getSubForms().stream()
-                .map(subForm -> {
-                    TablePlace place = new TablePlace(subForm.getId(), ref);
-                    return subFormLink(subForm, place);
-                });
+                        new VNode(HtmlTag.DIV, PropMap.EMPTY, subForms.stream().map(RecordSidePanel::subFormLink)));
+            }
+        }));
     }
 
     private static VTree recordHeader(TableUpdater tableUpdater) {
@@ -152,13 +133,16 @@ public class RecordSidePanel {
     }
 
     private static VTree recordDetails(TableViewModel viewModel) {
-        DetailsRenderer renderer = new DetailsRenderer(viewModel.getFormTree());
 
-        Observable<MaybeStale<RecordTree>> selection = Observable
-                .flattenUtilOptional(viewModel.getSelectedRecordTree())
-                .explicitlyOptimistic();
+        Observable<VTree> details = viewModel.getFormTree().join(tree -> {
+            DetailsRenderer renderer = new DetailsRenderer(tree);
 
-        Observable<VTree> details = selection.transform(s -> renderer.render(s.getValue(), s.isStale()));
+            Observable<MaybeStale<RecordTree>> selection = Observable
+                    .flattenUtilOptional(viewModel.getSelectedRecordTree())
+                    .explicitlyOptimistic();
+
+            return selection.transform(s -> renderer.render(s.getValue(), s.isStale()));
+        });
 
         return new ReactiveComponent("details.values", details, DetailsRenderer.renderPlaceholder());
     }
@@ -170,21 +154,21 @@ public class RecordSidePanel {
                 H.p(I18N.CONSTANTS.pleaseSelectARecord()));
     }
 
-    private static VTree parentLink(FormClass parentForm) {
-        return Buttons.button(parentForm.getLabel())
+    private static VTree parentLink(FormLink parentLink) {
+        return Buttons.button(parentLink.getFormLabel())
                 .primary()
                 .block()
-                .link(new TablePlace(parentForm.getId()).toUri())
+                .link(parentLink.toUri())
                 .build();
     }
 
 
-    private static VTree subFormLink(FormClass subForm, TablePlace place) {
-        return Buttons.button(subForm.getLabel())
+    private static VTree subFormLink(FormLink link) {
+        return Buttons.button(link.getFormLabel())
                 .primary()
                 .block()
                 .icon(Icon.BUBBLE_SUBFORM)
-                .link(place.toUri())
+                .link(link.toUri())
                 .build();
     }
 

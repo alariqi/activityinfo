@@ -52,11 +52,37 @@ public class ColumnModelBuilder {
     private final ColumnSetProxy proxy;
     private final List<ColumnConfig<Integer, ?>> columnConfigs = new ArrayList<>();
     private final List<HeaderGroupConfig> headerGroupConfigs = new ArrayList<>();
-    private final List<ColumnView> filters = new ArrayList<>();
 
 
     public ColumnModelBuilder(ColumnSetProxy proxy) {
         this.proxy = proxy;
+    }
+
+    /**
+     * Add loading place holder columns
+     */
+    public void addLoadingColumns() {
+        ValueProvider<Integer, String> valueProvider = new ValueProvider<Integer, String>() {
+            @Override
+            public String getValue(Integer object) {
+                return null;
+            }
+
+            @Override
+            public void setValue(Integer object, String value) {
+            }
+
+            @Override
+            public String getPath() {
+                return "loading";
+            }
+        };
+
+        for (int i = 0; i < 5; i++) {
+            ColumnConfig<Integer, String> config = new ColumnConfig<>(valueProvider, 100);
+            config.setHeader("Loading...");
+            columnConfigs.add(config);
+        }
     }
 
     public void addAll(List<EffectiveTableColumn> columns) {

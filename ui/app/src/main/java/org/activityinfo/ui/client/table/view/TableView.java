@@ -61,22 +61,31 @@ public class TableView {
     }
 
     private static VTree body(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
+
+        // Make sure we re-use table components to avoid having to create/tear down the grid widgets
+        // too often
+        List<VTree> slides = slides(formStore, viewModel, updater);
+
         // This renders the child of page__body, which uses flexbox to size it's only child
         // to it size.
 
         // We will create a single outer "slider" element which will be absolutely positioned based
         // on its depth in the form tree
 
-        Style sliderStyle = new Style();
-        sliderStyle.set("width", (viewModel.getSlideCount() * 100) + "vw");
-        sliderStyle.set("transform", "translateX(-" + (viewModel.getSlideIndex() * 100) + "vw)");
+        return new ReactiveComponent("slider", viewModel.getSliderPosition().transform(pos -> {
 
-        PropMap sliderProps = Props.create();
-        sliderProps.setStyle(sliderStyle);
-        sliderProps.setClass("formtable__slider");
+            Style sliderStyle = new Style();
+            sliderStyle.set("width", (viewModel.getSlideCount() * 100) + "vw");
+            sliderStyle.set("transform", "translateX(-" + (pos.getSlideIndex() * 100) + "vw)");
 
-        return H.div("formtable",
-                new VNode(HtmlTag.DIV, sliderProps, slides(formStore, viewModel, updater)));
+            PropMap sliderProps = Props.create();
+            sliderProps.setStyle(sliderStyle);
+            sliderProps.setClass("formtable__slider");
+
+            return H.div("formtable",
+                    new VNode(HtmlTag.DIV, sliderProps, slides));
+
+        }));
     }
 
     private static List<VTree> slides(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
@@ -84,7 +93,7 @@ public class TableView {
         for (TableViewModel table : viewModel.getTables()) {
 
             Style slideStyle = new Style();
-            slideStyle.set("left", (table.getDepth() * 100) + "vw");
+            slideStyle.set("left", (table.getSlideIndex() * 100) + "vw");
 
             PropMap slideProps = Props.create();
             slideProps.setClass("formtable__slide");
@@ -135,11 +144,8 @@ public class TableView {
     private static VTree editForm(FormStore formStore, TableViewModel table, TableUpdater updater) {
         if(table.getInputModel().isPresent()) {
             return new FormOverlay(formStore, table.getSelectedRecordRef().get().get(), updater);
-        }
-        switch (table.getEditMode()) {
-            case EDIT_SELECTED:
-            default:
-                return H.div("forminput", VNode.NO_CHILDREN);
+        } else {
+            return H.div("forminput", VNode.NO_CHILDREN);
         }
     }
 

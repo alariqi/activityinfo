@@ -18,8 +18,6 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.data.shared.ListStore;
@@ -28,6 +26,7 @@ import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoader;
 import com.sencha.gxt.widget.core.client.event.SortChangeEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.GridSelectionModel;
 import com.sencha.gxt.widget.core.client.menu.Menu;
@@ -39,7 +38,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.observable.Subscription;
+import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.base.menu.Css3MenuAppearance;
 import org.activityinfo.ui.client.base.menu.MenuArrow;
 import org.activityinfo.ui.client.table.model.TableUpdater;
@@ -52,21 +51,21 @@ public class TableGrid implements IsWidget {
 
     private static final Logger LOGGER = Logger.getLogger(TableGrid.class.getName());
 
-    private final EffectiveTableModel initialTableModel;
-    private TableUpdater tableUpdater;
+    private final TableViewModel viewModel;
+    private final TableUpdater tableUpdater;
 
     private final ListStore<Integer> store;
     private final Grid<Integer> grid;
 
-    private Subscription subscription;
+    private final SubscriptionSet subscriptions = new SubscriptionSet();
     private final ColumnSetProxy proxy;
     private final PagingLoader<PagingLoadConfig, PagingLoadResult<Integer>> loader;
 
-    private final EventBus eventBus = new SimpleEventBus();
+    private EffectiveTableModel currentTableModel = null;
+    private ColumnModel<Integer> pendingColumnModel = null;
 
-    public TableGrid(TableViewModel viewModel, final EffectiveTableModel tableModel, TableUpdater tableUpdater) {
-
-        this.initialTableModel = tableModel;
+    public TableGrid(TableViewModel viewModel, TableUpdater tableUpdater) {
+        this.viewModel = viewModel;
         this.tableUpdater = tableUpdater;
 
         // GXT Grid's are built around row-major data storage, while AI uses
@@ -81,7 +80,14 @@ public class TableGrid implements IsWidget {
 
         // Build a grid column model based on the user's selection of columns
         ColumnModelBuilder columns = new ColumnModelBuilder(proxy);
-        columns.addAll(tableModel.getColumns());
+        if(viewModel.getEffectiveTable().isLoaded()) {
+            EffectiveTableModel table = viewModel.getEffectiveTable().get();
+            columns.addAll(table.getColumns());
+            currentTableModel = table;
+
+        } else {
+            columns.addLoadingColumns();
+        }
 
         LiveRecordGridView gridView = new LiveRecordGridView();
         gridView.setColumnLines(true);
@@ -96,14 +102,19 @@ public class TableGrid implements IsWidget {
             @Override
             protected void onAttach() {
                 super.onAttach();
-                subscription = viewModel.getColumnSet().subscribe(observable -> updateColumnView(observable));
+                subscriptions.add(viewModel.getEffectiveTable().subscribe(observable -> {
+                    if(observable.isLoaded()) {
+                        updateView(observable.get());
+                    }
+                }));
+                subscriptions.add(viewModel.getColumnSet().subscribe(observable -> updateColumnView(observable)));
                 TableGrid.this.loader.load(0, gridView.getCacheSize());
             }
 
             @Override
             protected void onDetach() {
                 super.onDetach();
-                subscription.unsubscribe();
+                subscriptions.unsubscribeAll();
             }
         };
 
@@ -131,6 +142,13 @@ public class TableGrid implements IsWidget {
         grid.addRowClickHandler(event -> {
             tableUpdater.expandRecordPanel(true);
         });
+
+        grid.addViewReadyHandler(event -> {
+            if(pendingColumnModel != null) {
+                grid.reconfigure(store, pendingColumnModel);
+                pendingColumnModel = null;
+            }
+        });
     }
 
     private void changeColumnWidth(ColumnResizeEvent e) {
@@ -150,7 +168,7 @@ public class TableGrid implements IsWidget {
         if(proxy.isLoaded()) {
             if(!event.getSelection().isEmpty()) {
                 int rowIndex = event.getSelection().get(0);
-                RecordRef selectedRef = new RecordRef(initialTableModel.getFormId(), proxy.getRecordId(rowIndex));
+                RecordRef selectedRef = new RecordRef(viewModel.getFormId(), proxy.getRecordId(rowIndex));
                 tableUpdater.selectRecord(selectedRef);
             }
         }
@@ -163,23 +181,38 @@ public class TableGrid implements IsWidget {
         // TODO
     }
 
-    public boolean updateView(EffectiveTableModel tableModel) {
+    public void updateView(EffectiveTableModel tableModel) {
 
         // Check to see if we can update columns in place
-        if (!tryUpdateColumnsView(tableModel)) {
-            LOGGER.info("Columns have changed, rebuild required.");
-            return false;
+        if (tryUpdateColumnsView(tableModel)) {
+            return;
         }
 
-        return true;
+        LOGGER.info("Columns have changed, rebuild required.");
+
+        ColumnModelBuilder builder = new ColumnModelBuilder(proxy);
+        builder.addAll(tableModel.getColumns());
+
+        if(grid.isViewReady()) {
+            grid.reconfigure(store, builder.buildColumnModel());
+        } else {
+            pendingColumnModel = builder.buildColumnModel();
+        }
+
+        currentTableModel = tableModel;
     }
 
     private boolean tryUpdateColumnsView(EffectiveTableModel tableModel) {
-        if(tableModel.getColumns().size() != initialTableModel.getColumns().size()) {
+
+        if(currentTableModel == null) {
+            return false;
+        }
+
+        if(tableModel.getColumns().size() != currentTableModel.getColumns().size()) {
             return false;
         }
         for (int i = 0; i < tableModel.getColumns().size(); i++) {
-            EffectiveTableColumn initialColumn = initialTableModel.getColumns().get(i);
+            EffectiveTableColumn initialColumn = currentTableModel.getColumns().get(i);
             EffectiveTableColumn updatedColumn = tableModel.getColumns().get(i);
 
             // Check for incompatible changes. Changing the id or the
@@ -193,6 +226,10 @@ public class TableGrid implements IsWidget {
                 return false;
             }
         }
+
+
+        currentTableModel = tableModel;
+
         return true;
     }
 

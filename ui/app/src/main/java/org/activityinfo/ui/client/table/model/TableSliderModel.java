@@ -3,9 +3,9 @@ package org.activityinfo.ui.client.table.model;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.ui.client.table.TablePlace;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class TableSliderModel {
 
@@ -26,12 +26,16 @@ public class TableSliderModel {
         return place;
     }
 
-    public Collection<TableModel> getTables() {
-        return tableMap.values();
+    public TableModel getTable(ResourceId formId) {
+        TableModel tableModel = tableMap.get(formId);
+        if(tableModel == null) {
+            return new TableModel(formId);
+        }
+        return tableModel;
     }
 
-    public TableModel getTable(ResourceId formId) {
-        return tableMap.get(formId);
+    public TableModel getActiveTable() {
+        return tableMap.get(place.getFormId());
     }
 
     public TableSliderModel withNewPlace(TablePlace tablePlace) {
@@ -53,7 +57,7 @@ public class TableSliderModel {
         // forms
 
         for (TableModel tableModel : tableMap.values()) {
-            updatedTables.put(tableModel.getFormId(), tableModel.withoutEditing());
+            updatedTables.put(tableModel.getFormId(), tableModel.withInputModel(Optional.empty()));
         }
 
         TableSliderModel model = new TableSliderModel();
