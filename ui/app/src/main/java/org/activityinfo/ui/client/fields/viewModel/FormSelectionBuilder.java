@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.analysis.viewModel;
+package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.Resource;
@@ -6,7 +6,7 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.analysis.model.FormSelectionModel;
+import org.activityinfo.ui.client.fields.model.FormSelectionModel;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.ArrayList;
@@ -15,17 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class FormSelectionViewModel {
+public class FormSelectionBuilder {
 
-    private final List<Observable<FormSelectionColumn>> columns;
-
-    private FormSelectionViewModel(List<Observable<FormSelectionColumn>> columns) {
-        this.columns = columns;
-    }
-
-    public List<Observable<FormSelectionColumn>> getColumns() {
-        return columns;
-    }
 
     public static FormSelectionViewModel compute(FormStore formStore, FormSelectionModel model) {
 

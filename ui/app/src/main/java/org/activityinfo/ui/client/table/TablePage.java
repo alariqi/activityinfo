@@ -11,6 +11,8 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.AppFrame;
 import org.activityinfo.ui.client.Page;
 import org.activityinfo.ui.client.Place;
+import org.activityinfo.ui.client.fields.model.DesignMode;
+import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.InputHandler;
@@ -123,6 +125,31 @@ public class TablePage extends Page implements SliderUpdater {
             @Override
             public void showColumnOptions(boolean expanded) {
                 updateTable(state.get().getTable(formId).withColumnOptions(expanded));
+            }
+
+            @Override
+            public FieldChoiceUpdater fieldChoiceUpdater() {
+                return new FieldChoiceUpdater() {
+                    @Override
+                    public void navigateToForm(int columnIndex, ResourceId itemId) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public void selectForm(ResourceId id) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public void designMode(DesignMode visible) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                    @Override
+                    public void expandPanel(boolean expanded) {
+                        showColumnOptions(expanded);
+                    }
+                };
             }
         };
     }

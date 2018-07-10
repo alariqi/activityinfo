@@ -1,8 +1,8 @@
-package org.activityinfo.ui.client.analysis.viewModel;
+package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.observable.Connection;
 import org.activityinfo.store.testing.IraqDatabase;
-import org.activityinfo.ui.client.analysis.model.FormSelectionModel;
+import org.activityinfo.ui.client.fields.model.FormSelectionModel;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 
@@ -17,7 +17,7 @@ public class FormSelectionViewModelTest {
     @Test
     public void start() {
         FormSelectionModel model = new FormSelectionModel();
-        FormSelectionViewModel viewModel = FormSelectionViewModel.compute(setup.getFormStore(), model);
+        FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
         assertThat(viewModel.getColumns(), hasSize(1));
     }
@@ -30,7 +30,7 @@ public class FormSelectionViewModelTest {
         FormSelectionModel model = new FormSelectionModel()
                 .navigateTo(0, FormSelectionModel.DATABASE_ROOT_ID);
 
-        FormSelectionViewModel viewModel = FormSelectionViewModel.compute(setup.getFormStore(), model);
+        FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
         assertThat(viewModel.getColumns(), hasSize(2));
 

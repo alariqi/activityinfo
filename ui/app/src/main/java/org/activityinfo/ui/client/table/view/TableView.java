@@ -9,6 +9,7 @@ import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.toolbar.ToolbarBuilder;
+import org.activityinfo.ui.client.fields.view.FieldChoiceView;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.PageBuilder;
@@ -116,7 +117,7 @@ public class TableView {
                     toolbar(table, updater),
                     grid(table, updater),
                     RecordSidePanel.render(table, updater),
-                    ColumnOptionsPanel.render(table, updater)));
+                    FieldChoiceView.render(table.getColumnOptions(), updater.fieldChoiceUpdater())));
         }
 
         return slides;

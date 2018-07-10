@@ -30,6 +30,7 @@ import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.client.VDomWidget;
+import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class AnalysisView implements IsWidget, HasTitle, HasFixedHeight {
 
         AnalysisBundle.INSTANCE.getStyles().ensureInjected();
 
-        VTree formSelection = PivotSidePanel.render(formStore);
+        VTree formSelection = H.div();
 
         VTree page = new PageBuilder()
                 .breadcrumbs(model.getTitle().transform(t ->

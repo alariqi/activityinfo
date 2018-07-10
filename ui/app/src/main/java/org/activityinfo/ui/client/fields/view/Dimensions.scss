@@ -3,15 +3,13 @@
   padding: 1rem;
   flex: none;
   width: 21.5rem;
-}
 
-.dimensions {
   h3 ~ h3 {
     margin-top: 1rem;
   }
 }
 
-.fieldlist ~ .dimensions:before {
+.fieldlist ~ .fieldlist:before {
   content: '';
   width: 1rem;
   position: absolute;

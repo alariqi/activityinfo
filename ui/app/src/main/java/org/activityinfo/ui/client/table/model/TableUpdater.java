@@ -21,6 +21,7 @@ package org.activityinfo.ui.client.table.model;
 import com.google.common.base.Optional;
 import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
 
 public interface TableUpdater {
 
@@ -39,4 +40,6 @@ public interface TableUpdater {
     void expandRecordPanel(boolean expanded);
 
     void showColumnOptions(boolean expanded);
+
+    FieldChoiceUpdater fieldChoiceUpdater();
 }

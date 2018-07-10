@@ -44,19 +44,20 @@ body {
   background-color: rgba($teal, 0.4);
 }
 
-/* Disabled for review */
-/* ::-webkit-scrollbar {
-  width: 0.5rem;
-  height: 0.5rem;
+
+.darkscroll::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
 }
 
-::-webkit-scrollbar-track {
-  background-color: $background;
+.darkscroll::-webkit-scrollbar-track {
+  background-color: #466366;
 }
 
-::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(to bottom right, $green, $teal);
-} */
+.darkscroll::-webkit-scrollbar-thumb {
+  box-shadow: 0 3px 10px rgba(8, 8, 8, 0.4);
+  background-color: $green;
+}
 
 @media print {
   @page {

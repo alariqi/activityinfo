@@ -10,9 +10,15 @@ import static org.activityinfo.ui.vdom.shared.tree.Props.withClass;
 
 public class SidePanel {
 
+
     public enum Side {
         LEFT,
         RIGHT
+    }
+
+    public enum HideMode {
+        CLOSE,
+        COLLAPSE
     }
 
     private Observable<Boolean> expanded;
@@ -23,6 +29,7 @@ public class SidePanel {
     private Side side = Side.RIGHT;
     private boolean full = false;
     private String expandedWidth = null;
+    private HideMode hideMode;
 
     public SidePanel expanded(Observable<Boolean> expanded, SidePanelUpdater updater) {
         this.expanded = expanded;
@@ -57,6 +64,11 @@ public class SidePanel {
 
     public SidePanel leftSide() {
         this.side = Side.LEFT;
+        return this;
+    }
+
+    public SidePanel hideMode(HideMode hideMode) {
+        this.hideMode = hideMode;
         return this;
     }
 
@@ -106,7 +118,11 @@ public class SidePanel {
             }
 
             if(!e) {
-                props.addClassName("sidepanel--collapsed");
+                if(hideMode == HideMode.COLLAPSE) {
+                    props.addClassName("sidepanel--collapsed");
+                } else {
+                    props.addClassName("sidepanel--closed");
+                }
             } else if(full) {
                 props.addClassName("sidepanel--full");
             } else {

@@ -40,6 +40,7 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
+import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.client.table.model.TableModel;
 
@@ -245,5 +246,9 @@ public class TableViewModel {
 
     public Observable<Boolean> isColumnOptionsVisible() {
         return tableModel.transform(m -> m.isColumnSelectionExpanded()).cache();
+    }
+
+    public FieldChoiceViewModel getColumnOptions() {
+        return new ColumnChoiceViewModel(this);
     }
 }
