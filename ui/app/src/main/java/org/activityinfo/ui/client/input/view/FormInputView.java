@@ -151,10 +151,13 @@ public class FormInputView implements IsWidget {
     }
 
     private void update(Observable<FormInputModel> observable) {
+        LOGGER.info("FormInputView.update()");
         if(observable.isLoaded()) {
             FormInputModel updatedModel = observable.get();
-            this.viewModel = viewModelBuilder.build(updatedModel, existingRecord);
-            updateView();
+            if(viewModelBuilder != null) {
+                this.viewModel = viewModelBuilder.build(updatedModel, existingRecord);
+                updateView();
+            }
         }
     }
 

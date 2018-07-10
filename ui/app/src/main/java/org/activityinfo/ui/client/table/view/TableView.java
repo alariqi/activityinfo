@@ -23,8 +23,11 @@ import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class TableView {
+
+    private static final Logger LOGGER = Logger.getLogger(TableView.class.getName());
 
     public static VTree render(FormStore formStore, Observable<Maybe<TableSliderViewModel>> viewModel, SliderUpdater updater) {
 
@@ -154,13 +157,7 @@ public class TableView {
 
         return new ReactiveComponent(table.isInputVisible().transform(visible -> {
             if(visible) {
-                Observable<FormInputModel> inputModel = table.getInputModel().transformIf(x -> {
-                    if(x.isPresent()) {
-                        return Optional.fromJavaUtil(x);
-                    } else {
-                        return Optional.absent();
-                    }
-                });
+                Observable<FormInputModel> inputModel = table.getInputModel().transformIf(x -> Optional.fromJavaUtil(x));
 
                 return new FormOverlay(formStore, inputModel, updater.getInputHandler());
 
