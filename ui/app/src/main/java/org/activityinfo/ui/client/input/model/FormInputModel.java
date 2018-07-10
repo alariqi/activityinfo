@@ -124,4 +124,8 @@ public class FormInputModel {
             return newSet;
         }
     }
+
+    public boolean isEmpty() {
+        return fieldInputs.isEmpty();
+    }
 }

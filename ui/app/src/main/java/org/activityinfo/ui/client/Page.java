@@ -13,5 +13,10 @@ public abstract class Page {
         return false;
     }
 
-
+    /**
+     * Called when the window is about to close, or when we are about to navigate away.
+     */
+    public String mayStop() {
+        return null;
+    }
 }

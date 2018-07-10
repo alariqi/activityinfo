@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.table;
 
 import com.google.common.base.Optional;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
@@ -48,6 +49,17 @@ public class TablePage extends Page implements SliderUpdater {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public String mayStop() {
+        if(state.get().getInput().isPresent()) {
+            FormInputModel inputModel = state.get().getInput().get();
+            if(!inputModel.isEmpty()) {
+                return I18N.CONSTANTS.unsavedChangesWarning();
+            }
+        }
+        return null;
     }
 
     @Override

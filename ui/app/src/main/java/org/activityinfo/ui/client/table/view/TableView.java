@@ -165,7 +165,6 @@ public class TableView {
 
             } else {
                 return H.div("forminput", VNode.NO_CHILDREN);
-
             }
         }));
     }
