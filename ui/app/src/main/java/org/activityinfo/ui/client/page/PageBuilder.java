@@ -120,7 +120,7 @@ public class PageBuilder {
 
     private VTree maybeAvatar() {
         if(avatar != null) {
-            return div("page__header__avatar", avatar.renderTree());
+            return div("page__header__avatar", avatar.render());
         } else {
             return null;
         }

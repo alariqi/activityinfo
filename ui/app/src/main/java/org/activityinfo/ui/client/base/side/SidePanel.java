@@ -69,6 +69,11 @@ public class SidePanel {
         return this;
     }
 
+    public SidePanel expandedWidth(int numColumns) {
+        this.expandedWidth = (23*numColumns) + "rem";
+        return this;
+    }
+
     public SidePanel expandedWidth(String width) {
         this.expandedWidth = width;
         return this;

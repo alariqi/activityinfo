@@ -30,8 +30,12 @@ public class FieldListView {
                     div("fieldlist__header",
                             h3(I18N.CONSTANTS.fields()),
                             toggleButton(viewModel, mode, updater)),
-                    new ReactiveComponent(viewModel.transform(vm ->
-                            ul(vm.getFields().stream().map(FieldListView::fieldItem)))));
+                            fieldList(viewModel));
+    }
+
+    public static ReactiveComponent fieldList(Observable<FieldListViewModel> viewModel) {
+        return new ReactiveComponent(viewModel.transform(vm ->
+                ul(vm.getFields().stream().map(FieldListView::fieldItem))));
     }
 
     private static VTree toggleButton(Observable<FieldListViewModel> viewModel,
@@ -64,7 +68,7 @@ public class FieldListView {
 
     private static VTree fieldItem(SelectedFieldViewModel field) {
 
-        PropMap itemProps = Props.create().draggable(true);
+        PropMap itemProps = Props.create().draggable(true).setClass("fieldlist__item");
 
         return H.li(itemProps,
                 div("fieldlist__item__desc", t(field.getType() + " - " + field.getFormLabel())),

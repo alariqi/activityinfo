@@ -127,4 +127,8 @@ public class ParsedFormula {
         }
         return formula;
     }
+
+    public boolean isSimpleReference() {
+        return simpleReference;
+    }
 }

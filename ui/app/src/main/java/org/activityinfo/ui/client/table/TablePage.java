@@ -107,6 +107,11 @@ public class TablePage extends Page implements SliderUpdater {
             public void expandRecordPanel(boolean expanded) {
                 updateTable(state.get().getTable(formId).withRecordPanelExpanded(expanded));
             }
+
+            @Override
+            public void showColumnOptions(boolean expanded) {
+                updateTable(state.get().getTable(formId).withColumnOptions(expanded));
+            }
         };
     }
 

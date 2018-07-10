@@ -1,5 +1,8 @@
 package org.activityinfo.ui.client.analysis.viewModel;
 
+import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
@@ -35,6 +38,27 @@ public class FieldListViewModel {
         return formTrees.transform(FieldListViewModel::distinctFields);
     }
 
+    /**
+     * Constructs a FieldListViewModel for a single form.
+     */
+    public static FieldListViewModel formFields(FormTree formTree) {
+        List<SelectedFieldViewModel> fields = new ArrayList<>();
+
+        for (FormTree.Node node : formTree.getRootFields()) {
+            fields.add(new SelectedFieldViewModel(I18N.CONSTANTS.thisForm(), node.getField()));
+        }
+        for (FormMetadata form : formTree.getForms()) {
+            if(!form.getId().equals(formTree.getRootFormId())) {
+                if(form.isVisible()) {
+                    for (FormField field : form.getFields()) {
+                        fields.add(new SelectedFieldViewModel(form.getSchema().getLabel(), field));
+                    }
+                }
+            }
+        }
+
+        return new FieldListViewModel(fields);
+    }
 
 
     private static FieldListViewModel distinctFields(List<FormTree> trees) {

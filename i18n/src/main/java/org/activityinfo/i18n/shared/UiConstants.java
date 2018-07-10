@@ -1982,4 +1982,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Search for a database, folder or form...")
     String formSearchPlaceholder();
 
+    @DefaultStringValue("This Form")
+    String thisForm();
 }

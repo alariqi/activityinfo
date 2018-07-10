@@ -1,6 +1,5 @@
 package org.activityinfo.ui.client.page;
 
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeUri;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.Resource;
@@ -59,10 +58,6 @@ public class Breadcrumb {
 
     public boolean isLoading() {
         return loading;
-    }
-
-    public void renderTo(SafeHtmlBuilder html) {
-        html.append(PageTemplates.TEMPLATES.breadcrumb(label, uri));
     }
 
     public VTree render() {

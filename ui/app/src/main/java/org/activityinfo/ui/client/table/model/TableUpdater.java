@@ -38,4 +38,5 @@ public interface TableUpdater {
 
     void expandRecordPanel(boolean expanded);
 
+    void showColumnOptions(boolean expanded);
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 public class TableModel {
 
 
+
     public enum EditMode {
         NONE,
         EDIT_SELECTED,
@@ -92,6 +93,17 @@ public class TableModel {
         return updatedModel;
     }
 
+    public TableModel withColumnOptions(boolean expanded) {
+        if(this.columnSelectionExpanded == expanded) {
+            return this;
+        }
+        TableModel updatedModel = new TableModel();
+        updatedModel.analysisModel = this.analysisModel;
+        updatedModel.selected = this.selected;
+        updatedModel.recordPanelExpanded = this.recordPanelExpanded;
+        updatedModel.columnSelectionExpanded = expanded;
+        return updatedModel;
+    }
 
     public TableModel withAnalysisModel(TableAnalysisModel analysisModel) {
         TableModel updatedModel = new TableModel();
@@ -101,6 +113,8 @@ public class TableModel {
         updatedModel.columnSelectionExpanded = this.columnSelectionExpanded;
         return updatedModel;
     }
+
+
 
 
 }

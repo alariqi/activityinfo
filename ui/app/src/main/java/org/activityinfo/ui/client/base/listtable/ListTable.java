@@ -64,7 +64,7 @@ public class ListTable {
         return div("listtable__item",
                 new VNode(HtmlTag.A, labelProps,
                     div("listtable__item__avatar",
-                        item.getAvatar().renderTree()),
+                        item.getAvatar().render()),
                     span("listtable__item__title", item.getLabel())));
     }
 }

@@ -68,15 +68,15 @@ public class TableView {
     private static VTree body(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
 
         return H.div("formtable",
-                slider(formStore, viewModel, updater),
+                slider(viewModel, updater),
                 editForm(formStore, viewModel, updater));
     }
 
-    private static VTree slider(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater updater) {
+    private static VTree slider(TableSliderViewModel viewModel, SliderUpdater updater) {
 
         // Make sure we re-use table components to avoid having to create/tear down the grid widgets
         // too often
-        List<VTree> slides = slides(formStore, viewModel, updater);
+        List<VTree> slides = slides(viewModel, updater);
 
         // This renders the child of page__body, which uses flexbox to size it's only child
         // to it size.
@@ -99,7 +99,7 @@ public class TableView {
         }));
     }
 
-    private static List<VTree> slides(FormStore formStore, TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
+    private static List<VTree> slides(TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
         List<VTree> slides = new ArrayList<>();
         for (TableViewModel table : viewModel.getTables()) {
 
@@ -115,7 +115,8 @@ public class TableView {
             slides.add(new VNode(HtmlTag.DIV, slideProps,
                     toolbar(table, updater),
                     grid(table, updater),
-                    RecordSidePanel.render(table, updater)));
+                    RecordSidePanel.render(table, updater),
+                    ColumnOptionsPanel.render(table, updater)));
         }
 
         return slides;
@@ -135,6 +136,7 @@ public class TableView {
 
         VTree columnsButton = Buttons.button(I18N.CONSTANTS.chooseColumns())
                 .icon(Icon.BUBBLE_COLUMNS)
+                .onSelect(event -> updater.showColumnOptions(true))
                 .build();
 
         VTree exportButton = Buttons.button(I18N.CONSTANTS.export())

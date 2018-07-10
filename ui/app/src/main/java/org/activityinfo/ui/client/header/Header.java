@@ -20,7 +20,7 @@ import org.activityinfo.ui.vdom.shared.tree.VTree;
 import static org.activityinfo.ui.vdom.shared.html.H.div;
 import static org.activityinfo.ui.vdom.shared.html.H.span;
 
-public class Header2 {
+public class Header {
 
     public static VTree render(FormStore formStore) {
 
@@ -58,7 +58,6 @@ public class Header2 {
 
         return new VNode(HtmlTag.A, buttonProps,
                 icon.tree(), H.span("button__label", label));
-
     }
 
 
@@ -67,7 +66,7 @@ public class Header2 {
 
         return new VNode(HtmlTag.BUTTON,
                 Props.withClass("profile"),
-                avatar.renderTree(),
+                avatar.render(),
                 Icon.EXPAND_DOWN.tree());
 
     }

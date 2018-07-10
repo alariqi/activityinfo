@@ -243,4 +243,7 @@ public class TableViewModel {
         });
     }
 
+    public Observable<Boolean> isColumnOptionsVisible() {
+        return tableModel.transform(m -> m.isColumnSelectionExpanded()).cache();
+    }
 }
