@@ -6,7 +6,7 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.fields.model.FormSelectionModel;
+import org.activityinfo.ui.client.fields.state.FormSelectionModel;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Window;
 import com.sencha.gxt.core.client.dom.XElement;
-import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.state.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.Props;

@@ -1,6 +1,8 @@
-package org.activityinfo.ui.client.fields.model;
+package org.activityinfo.ui.client.fields.state;
 
 import org.activityinfo.model.resource.ResourceId;
+
+import java.util.function.Function;
 
 public interface FieldChoiceUpdater {
 
@@ -8,7 +10,7 @@ public interface FieldChoiceUpdater {
 
     void selectForm(ResourceId id);
 
-    void designMode(DesignMode visible);
+    void update(Function<FieldChoiceState, FieldChoiceState> function);
 
-    void expandPanel(boolean expanded);
+
 }

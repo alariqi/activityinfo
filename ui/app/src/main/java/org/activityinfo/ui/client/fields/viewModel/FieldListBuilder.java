@@ -79,6 +79,7 @@ public class FieldListBuilder {
                         .form(formClass.getLabel())
                         .field(field)
                         .included(includedFormulas.contains(formula))
+                        .formula(formula)
                         .build());
             }
         }

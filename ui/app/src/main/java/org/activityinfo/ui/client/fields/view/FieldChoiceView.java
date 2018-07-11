@@ -1,8 +1,8 @@
 package org.activityinfo.ui.client.fields.view;
 
 import org.activityinfo.ui.client.base.side.SidePanel;
-import org.activityinfo.ui.client.fields.model.DesignMode;
-import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
+import org.activityinfo.ui.client.fields.state.DesignMode;
+import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
@@ -20,13 +20,14 @@ public class FieldChoiceView {
 
         VTree formList = FormSelectionView.render(viewModel.getFormSelection(), updater);
         VTree availableList = FieldListView.available(viewModel, updater);
-        VTree selectedList = FieldListView.selected(viewModel, updater);
+        VTree selectedList = ReportElementView.render(viewModel, updater);
 
         return new ReactiveComponent(viewModel.getMode().transform(m ->
                 new SidePanel()
                 .title(new VText(viewModel.getPanelTitle()))
                 .header(H.h2(viewModel.getPanelTitle()))
-                .expanded(viewModel.isExpanded(), updater::expandPanel)
+                .expanded(viewModel.isExpanded(),
+                        expanded -> updater.update(s -> s.expanded(expanded)))
                 .hideMode(viewModel.getPanelHideMode())
                 .leftSide()
                 .full(m == DesignMode.EXPANDED)

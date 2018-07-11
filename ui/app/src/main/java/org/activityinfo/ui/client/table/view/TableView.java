@@ -14,8 +14,8 @@ import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
-import org.activityinfo.ui.client.table.model.SliderUpdater;
-import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.state.SliderUpdater;
+import org.activityinfo.ui.client.table.state.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableSliderViewModel;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.H;
@@ -137,7 +137,7 @@ public class TableView {
 
         VTree columnsButton = Buttons.button(I18N.CONSTANTS.chooseColumns())
                 .icon(Icon.BUBBLE_COLUMNS)
-                .onSelect(event -> updater.showColumnOptions(true))
+                .onSelect(event -> updater.update(s -> s.updateColumnOptions(cs -> cs.expanded(true))))
                 .build();
 
         VTree exportButton = Buttons.button(I18N.CONSTANTS.export())

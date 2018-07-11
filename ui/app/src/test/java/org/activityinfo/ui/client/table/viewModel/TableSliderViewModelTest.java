@@ -8,7 +8,7 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.testing.ReferralSubForm;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableSliderModel;
+import org.activityinfo.ui.client.table.state.SliderState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class TableSliderViewModelTest {
         String parentRecordId = referralSubForm.getRecords().get(0).getParentRecordId().asString();
 
         TablePlace tablePlace = new TablePlace(referralSubForm.getFormId(), parentRecordId);
-        StatefulValue state = new StatefulValue(new TableSliderModel(tablePlace));
+        StatefulValue state = new StatefulValue(new SliderState(tablePlace));
 
         Observable<Maybe<TableSliderViewModel>> viewModel = TableSliderViewModel.compute(setup.getFormStore(), state);
         Connection<Maybe<TableSliderViewModel>> view = setup.connect(viewModel);

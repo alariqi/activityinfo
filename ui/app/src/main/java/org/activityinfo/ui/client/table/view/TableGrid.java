@@ -41,7 +41,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.SubscriptionSet;
 import org.activityinfo.ui.client.base.menu.Css3MenuAppearance;
 import org.activityinfo.ui.client.base.menu.MenuArrow;
-import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.state.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 
 import java.util.Collections;
@@ -143,7 +143,7 @@ public class TableGrid implements IsWidget {
         });
 
         grid.addRowClickHandler(event -> {
-            tableUpdater.expandRecordPanel(true);
+            tableUpdater.update(s -> s.withRecordPanelExpanded(true));
         });
 
         grid.addViewReadyHandler(event -> {
@@ -159,9 +159,12 @@ public class TableGrid implements IsWidget {
 
         ColumnConfig<Integer, Object> column = grid.getColumnModel().getColumn(e.getColumnIndex());
 
-        LOGGER.info("Column " + column.getValueProvider().getPath() + " resized to " + e.getColumnWidth() + "px");
+        String columnId = column.getValueProvider().getPath();
+        int newWidth = e.getColumnWidth();
 
-        tableUpdater.updateColumnWidth(column.getValueProvider().getPath(), e.getColumnWidth());
+        LOGGER.info("Column " + columnId + " resized to " + newWidth + "px");
+
+        tableUpdater.update(s -> s.withColumnWidth(columnId, newWidth));
     }
 
     /**
@@ -188,7 +191,7 @@ public class TableGrid implements IsWidget {
                 // This is fired in response to a user event, so update our state
                 int rowIndex = event.getSelection().get(0);
                 RecordRef selectedRef = new RecordRef(viewModel.getFormId(), proxy.getRecordId(rowIndex));
-                tableUpdater.selectRecord(selectedRef);
+                tableUpdater.update(s -> s.withSelection(selectedRef));
             }
         }
     }

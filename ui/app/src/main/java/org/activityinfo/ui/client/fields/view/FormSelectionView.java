@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.fields.view;
 
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
-import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
+import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.fields.viewModel.FormSelectionColumn;
 import org.activityinfo.ui.client.fields.viewModel.FormSelectionItem;
 import org.activityinfo.ui.client.fields.viewModel.FormSelectionViewModel;

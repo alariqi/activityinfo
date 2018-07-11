@@ -42,7 +42,7 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableModel;
+import org.activityinfo.ui.client.table.state.TableState;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -60,7 +60,7 @@ public class TableViewModel {
     private final ResourceId formId;
     private final int slideIndex;
     private final boolean subForm;
-    private final Observable<TableModel> tableModel;
+    private final Observable<TableState> tableModel;
     private final Observable<FormTree> formTree;
     private final Observable<Optional<RecordRef>> selection;
     private final Observable<Optional<Integer>> selectedRowIndex;
@@ -70,7 +70,7 @@ public class TableViewModel {
     private final Observable<Map<String, Integer>> recordMap;
     private final Observable<String> parentRef;
 
-    public TableViewModel(final FormSource formStore, SliderTree sliderTree, ResourceId formId, Observable<TableModel> tableModel, Observable<TablePlace> place) {
+    public TableViewModel(final FormSource formStore, SliderTree sliderTree, ResourceId formId, Observable<TableState> tableModel, Observable<TablePlace> place) {
         this.formStore = formStore;
         this.formId = formId;
         this.slideIndex = sliderTree.getSlideIndex(formId);
@@ -112,6 +112,10 @@ public class TableViewModel {
                 return Optional.empty();
             }
         });
+    }
+
+    public Observable<TableState> getModel() {
+        return tableModel;
     }
 
     public int getSlideIndex() {

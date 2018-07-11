@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.side.SidePanel;
-import org.activityinfo.ui.client.fields.model.DesignMode;
+import org.activityinfo.ui.client.fields.state.DesignMode;
 
 import java.util.Optional;
 
@@ -21,7 +21,7 @@ public interface FieldChoiceViewModel {
     /**
      * @return an optional heading for the selected fields column.
      */
-    Optional<String> getSelectedFieldsHeading();
+    Optional<String> getReportElementHeader();
 
     Observable<DesignMode> getMode();
 
@@ -29,7 +29,7 @@ public interface FieldChoiceViewModel {
 
     Observable<FieldListViewModel> getAvailableFields();
 
-    Observable<FieldListViewModel> getSelectedFields();
+    Observable<ReportElementListView> getReportElements();
 
     Observable<Boolean> isExpanded();
 }

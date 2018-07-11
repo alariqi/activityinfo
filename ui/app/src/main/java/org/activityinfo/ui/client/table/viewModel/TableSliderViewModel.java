@@ -10,8 +10,8 @@ import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableModel;
-import org.activityinfo.ui.client.table.model.TableSliderModel;
+import org.activityinfo.ui.client.table.state.SliderState;
+import org.activityinfo.ui.client.table.state.TableState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class TableSliderViewModel {
     private final Observable<Boolean> inputVisible;
     private final Observable<java.util.Optional<FormInputModel>> inputModel;
 
-    public static Observable<Maybe<TableSliderViewModel>> compute(FormStore formStore, Observable<TableSliderModel> state) {
+    public static Observable<Maybe<TableSliderViewModel>> compute(FormStore formStore, Observable<SliderState> state) {
 
         // Recompute the root TableSliderViewModel only if we navigate to a completely different
         // tree of forms, or if permissions change.
@@ -40,7 +40,7 @@ public class TableSliderViewModel {
         return sliderTree.cache().transform(maybe -> maybe.transform(st -> new TableSliderViewModel(formStore, st, state)));
     }
 
-    private TableSliderViewModel(FormStore formStore, SliderTree tree, Observable<TableSliderModel> model) {
+    private TableSliderViewModel(FormStore formStore, SliderTree tree, Observable<SliderState> model) {
 
         this.sliderTree = tree;
         this.formTree = formStore.getFormTree(sliderTree.getRootFormId());
@@ -48,7 +48,7 @@ public class TableSliderViewModel {
         this.position = this.place.transform(p -> new SliderPos(sliderTree, p));
 
         for (ResourceId formId : sliderTree.getFormIds()) {
-            Observable<TableModel> tableState = model.transform(m -> m.getTable(formId));
+            Observable<TableState> tableState = model.transform(m -> m.getTable(formId));
             TableViewModel tableViewModel = new TableViewModel(formStore, sliderTree, formId, tableState, place);
 
             tables.add(tableViewModel);
@@ -63,7 +63,7 @@ public class TableSliderViewModel {
         this.inputVisible = inputModel.transform(m -> m.isPresent()).cache();
     }
 
-    private static Observable<String> computeTitle(Observable<FormTree> formTree, Observable<TableSliderModel> model) {
+    private static Observable<String> computeTitle(Observable<FormTree> formTree, Observable<SliderState> model) {
         Observable<ResourceId> formId = model.transform(m -> m.getPlace().getFormId()).cache();
         return Observable.transform(formTree, formId, (tree, id) -> {
             FormClass formClass = tree.getFormClass(id);
@@ -79,7 +79,7 @@ public class TableSliderViewModel {
         return title;
     }
 
-    private static Observable<List<Breadcrumb>> computeBreadcrumbs(FormStore formStore, Observable<FormTree> formTree, Observable<TableSliderModel> model) {
+    private static Observable<List<Breadcrumb>> computeBreadcrumbs(FormStore formStore, Observable<FormTree> formTree, Observable<SliderState> model) {
 
         return Observable.join(formTree, model, (tree, m) -> {
 

@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.observable.Connection;
 import org.activityinfo.store.testing.IraqDatabase;
-import org.activityinfo.ui.client.fields.model.FormSelectionModel;
+import org.activityinfo.ui.client.fields.state.FormSelectionModel;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 

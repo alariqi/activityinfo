@@ -16,30 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.activityinfo.ui.client.table.model;
+package org.activityinfo.ui.client.table.state;
 
-import com.google.common.base.Optional;
-import org.activityinfo.model.formula.FormulaNode;
-import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
+import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
+
+import java.util.function.Function;
 
 public interface TableUpdater {
 
-    void updateFilter(Optional<FormulaNode> filterFormula);
-
-    void updateColumnWidth(String columnId, int width);
+    void update(Function<TableState, TableState> function);
 
     void newRecord();
 
     void editSelection();
-
-    void stopEditing();
-
-    void selectRecord(RecordRef selectedRef);
-
-    void expandRecordPanel(boolean expanded);
-
-    void showColumnOptions(boolean expanded);
 
     FieldChoiceUpdater fieldChoiceUpdater();
 }

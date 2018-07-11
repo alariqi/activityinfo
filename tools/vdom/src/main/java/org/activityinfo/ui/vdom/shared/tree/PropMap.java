@@ -35,6 +35,10 @@ public interface PropMap {
 
     PropMap oninput(EventHandler handler);
 
+    PropMap ondragstart(EventHandler handler);
+
+    PropMap ondragend(EventHandler handler);
+
     EventHandler getEventHandler(String eventName);
 
     PropMap draggable(boolean draggable);

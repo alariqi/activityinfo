@@ -44,10 +44,7 @@ import org.activityinfo.model.type.time.MonthType;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The effective description of a table
@@ -196,4 +193,14 @@ public class EffectiveTableModel {
         return formSource.query(buildQuery(columns));
     }
 
+    /**
+     * @return the set of formulas which are used as columns in this table
+     */
+    public Set<String> getIncludedFormulas() {
+        Set<String> includedFormulas = new HashSet<>();
+        for (EffectiveTableColumn column : columns) {
+            includedFormulas.add(column.getFormulaString());
+        }
+        return includedFormulas;
+    }
 }

@@ -10,7 +10,7 @@ import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.base.tabs.TabItem;
 import org.activityinfo.ui.client.base.tabs.Tabs;
-import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.state.TableUpdater;
 import org.activityinfo.ui.client.table.viewModel.FormLink;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.H;
@@ -31,7 +31,8 @@ public class RecordSidePanel {
         return new SidePanel()
                 .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
                 .header(scrollButton(viewModel))
-                .expanded(viewModel.isRecordPanelExpanded(), expanded -> tableUpdater.expandRecordPanel(expanded))
+                .expanded(viewModel.isRecordPanelExpanded(),
+                        expanded -> tableUpdater.update(s -> s.withRecordPanelExpanded(expanded)))
                 .content(tree)
                 .build();
     }

@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.fields.model;
+package org.activityinfo.ui.client.fields.state;
 
 public enum DesignMode {
     NORMAL,

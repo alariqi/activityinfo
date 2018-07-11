@@ -142,6 +142,16 @@ final class PropMapJre implements PropMap {
         return set("oninput", handler);
     }
 
+    @Override
+    public PropMap ondragstart(EventHandler handler) {
+        return set("ondragstart", handler);
+    }
+
+    @Override
+    public PropMap ondragend(EventHandler handler) {
+        return set("ondragend", handler);
+    }
+
 
     @Override
     public EventHandler getEventHandler(String eventName) {

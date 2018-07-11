@@ -144,6 +144,16 @@ public final class PropMapJs extends JavaScriptObject implements PropMap {
         return set("oninput", handler);
     }
 
+    @Override
+    public PropMap ondragstart(EventHandler handler) {
+        return set("ondragstart", handler);
+    }
+
+    @Override
+    public PropMap ondragend(EventHandler handler) {
+        return set("ondragend", handler);
+    }
+
 
     public EventHandler getEventHandler(String eventName) {
         return null;

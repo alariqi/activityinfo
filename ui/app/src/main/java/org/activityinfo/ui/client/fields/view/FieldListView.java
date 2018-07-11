@@ -4,8 +4,8 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.button.Buttons;
-import org.activityinfo.ui.client.fields.model.DesignMode;
-import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
+import org.activityinfo.ui.client.fields.state.DesignMode;
+import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.client.fields.viewModel.FieldListGroup;
 import org.activityinfo.ui.client.fields.viewModel.FieldListItem;
@@ -26,7 +26,7 @@ public class FieldListView {
 
         return div("fieldlist",
                  header(viewModel, updater),
-                 fieldList(viewModel.getAvailableFields()));
+                 fieldList(viewModel.getAvailableFields(), updater));
     }
 
     private static VNode header(FieldChoiceViewModel viewModel, FieldChoiceUpdater updater) {
@@ -36,24 +36,6 @@ public class FieldListView {
                toggleButton(viewModel, updater)));
     }
 
-
-    /**
-     * Renders the list of selected fields/measures/layers/etc
-     */
-    public static VTree selected(FieldChoiceViewModel viewModel, FieldChoiceUpdater updater) {
-        return div("fieldlist",
-                nullableList(
-                    selectedHeader(viewModel),
-                    fieldList(viewModel.getSelectedFields())));
-    }
-
-    private static VTree selectedHeader(FieldChoiceViewModel viewModel) {
-        if(viewModel.getSelectedFieldsHeading().isPresent()) {
-            return div("fieldlist__header", h3(viewModel.getSelectedFieldsHeading().get()));
-        }
-
-        return null;
-    }
 
     /**
      * Button to toggle between choosing forms and assigning fields to the report.
@@ -76,29 +58,30 @@ public class FieldListView {
                         .primary()
                         .block()
                         .enabled(enabled)
-                        .onSelect(event -> updater.designMode(DesignMode.NORMAL))
+                        .onSelect(event -> updater.update(s -> s.withMode(DesignMode.NORMAL)))
                         .build();
             } else {
                 return Buttons.button(I18N.CONSTANTS.manageFields())
                         .icon(Icon.BUBBLE_EDIT)
                         .primary()
                         .block()
-                        .onSelect(event -> updater.designMode(DesignMode.EXPANDED))
+                        .onSelect(event -> updater.update(s -> s.withMode(DesignMode.EXPANDED)))
                         .build();
             }
         }));
     }
 
-    public static VTree fieldList(Observable<FieldListViewModel> viewModel) {
+    public static VTree fieldList(Observable<FieldListViewModel> viewModel, FieldChoiceUpdater updater) {
         return new ReactiveComponent(viewModel.transform(vm ->
-                div("fieldlist__body darkscroll",
-                        vm.getGroups().stream().map(FieldListView::fieldGroup))));
+                div("fieldlist__body",
+                        vm.getGroups().stream().map(group -> {
+                            return fieldGroup(vm, group, updater);
+                        }))));
     }
 
-    private static VTree fieldGroup(FieldListGroup group) {
+    private static VTree fieldGroup(FieldListViewModel listView, FieldListGroup group, FieldChoiceUpdater updater) {
 
-
-        VNode list = ul(group.getItems().stream().map(FieldListView::fieldItem));
+        VNode list = ul(group.getItems().stream().map(field -> fieldItem(listView, field, updater)));
 
         if(group.hasHeader()) {
             return H.div("fieldlist__group", h3(group.getHeading()), list);
@@ -107,17 +90,33 @@ public class FieldListView {
         }
     }
 
-    private static VTree fieldItem(FieldListItem field) {
+    private static VTree fieldItem(FieldListViewModel listView, FieldListItem field, FieldChoiceUpdater updater) {
 
-        PropMap itemProps = Props.create().draggable(true).setClass("fieldlist__item");
+        PropMap itemProps = Props.create()
+                .draggable(true)
+                .ondragstart(event -> onDragStart(field, updater))
+                .ondragend(event -> onDragEnd(updater))
+                .setClass("fieldlist__item");
+
+        if(listView.isDragging(field)) {
+            itemProps.addClassName("fieldlist__item--dragging");
+        }
 
         if(field.isIncluded()) {
             itemProps.addClassName("fieldlist__item--included");
         }
 
         return H.li(itemProps,
-                div("fieldlist__item__desc", t(field.getType() + " - " + field.getFormLabel())),
+                div("surtitle", t(field.getType() + " - " + field.getFormLabel())),
                 div("fieldlist__item__label", t(field.getFieldLabel())));
+    }
+
+    private static void onDragStart(FieldListItem field, FieldChoiceUpdater updater) {
+        updater.update(s -> s.fieldDragStart(field.getFormula()));
+    }
+
+    private static void onDragEnd(FieldChoiceUpdater updater) {
+        updater.update(s -> s.draggingEnd());
     }
 
 }

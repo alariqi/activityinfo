@@ -45,19 +45,7 @@ body {
 }
 
 
-.darkscroll::-webkit-scrollbar {
-  width: 11px;
-  height: 11px;
-}
 
-.darkscroll::-webkit-scrollbar-track {
-  background-color: #466366;
-}
-
-.darkscroll::-webkit-scrollbar-thumb {
-  box-shadow: 0 3px 10px rgba(8, 8, 8, 0.4);
-  background-color: $green;
-}
 
 @media print {
   @page {

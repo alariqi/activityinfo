@@ -21,6 +21,7 @@ package org.activityinfo.observable;
 import com.google.common.base.Preconditions;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 public class StatefulValue<T> extends Observable<T> {
     
@@ -37,6 +38,11 @@ public class StatefulValue<T> extends Observable<T> {
     @Override
     public boolean isLoading() {
         return value == null;
+    }
+
+
+    public void update(Function<T, T> function) {
+        updateIfNotSame(function.apply(value));
     }
 
     /**

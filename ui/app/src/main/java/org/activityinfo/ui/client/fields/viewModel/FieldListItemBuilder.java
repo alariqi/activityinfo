@@ -19,6 +19,7 @@ public class FieldListItemBuilder {
 
     public FieldListItemBuilder rootField(FormField field) {
         item.formLabel = I18N.CONSTANTS.thisForm();
+        item.formula = field.getName();
         return field(field);
     }
 
@@ -34,6 +35,7 @@ public class FieldListItemBuilder {
     }
 
     public FieldListItem build() {
+        assert item.formula != null : "formula not set";
         return item;
     }
 

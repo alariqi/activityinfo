@@ -3,10 +3,11 @@ package org.activityinfo.ui.client.analysis.viewModel;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.side.SidePanel;
-import org.activityinfo.ui.client.fields.model.DesignMode;
+import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.client.fields.viewModel.FieldListViewModel;
 import org.activityinfo.ui.client.fields.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.fields.viewModel.ReportElementListView;
 
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class PivotFieldViewModel implements FieldChoiceViewModel {
     }
 
     @Override
-    public Optional<String> getSelectedFieldsHeading() {
+    public Optional<String> getReportElementHeader() {
         return Optional.empty();
     }
 
@@ -48,7 +49,7 @@ public class PivotFieldViewModel implements FieldChoiceViewModel {
     }
 
     @Override
-    public Observable<FieldListViewModel> getSelectedFields() {
+    public Observable<ReportElementListView> getReportElements() {
         throw new UnsupportedOperationException("TODO");
     }
 

@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.fields.model;
+package org.activityinfo.ui.client.fields.state;
 
 import org.activityinfo.model.resource.ResourceId;
 

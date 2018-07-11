@@ -38,8 +38,8 @@ import org.activityinfo.promise.Promise;
 import org.activityinfo.store.testing.IncidentForm;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.activityinfo.ui.client.table.TablePlace;
-import org.activityinfo.ui.client.table.model.TableModel;
-import org.activityinfo.ui.client.table.model.TableSliderModel;
+import org.activityinfo.ui.client.table.state.SliderState;
+import org.activityinfo.ui.client.table.state.TableState;
 import org.activityinfo.ui.client.table.view.DeleteRecordAction;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,8 +64,8 @@ public class TableViewModelTest {
 
     @Test
     public void test() {
-        StatefulValue<TableModel> tableModel =
-                new StatefulValue<>(new TableModel(setup.getSurveyForm().getFormId()));
+        StatefulValue<TableState> tableModel =
+                new StatefulValue<>(new TableState(setup.getSurveyForm().getFormId()));
 
         TableViewModel viewModel = viewModel(setup.getSurveyForm().getFormId(), tableModel);
 
@@ -126,7 +126,7 @@ public class TableViewModelTest {
     public void testDeletedSelection() {
 
         ResourceId formId = setup.getSurveyForm().getFormId();
-        StatefulValue<TableModel> tableModel = new StatefulValue<>(new TableModel(formId));
+        StatefulValue<TableState> tableModel = new StatefulValue<>(new TableState(formId));
 
         TableViewModel viewModel = viewModel(formId, tableModel);
 
@@ -177,7 +177,7 @@ public class TableViewModelTest {
 
     }
 
-    private TableViewModel viewModel(ResourceId formId, StatefulValue<TableModel> tableModel) {
+    private TableViewModel viewModel(ResourceId formId, StatefulValue<TableState> tableModel) {
         return new TableViewModel(setup.getFormStore(),
                 new SliderTree(setup.getFormTree(formId)),
                 formId,
@@ -188,7 +188,7 @@ public class TableViewModelTest {
     @Test
     public void testDeletedForm() {
 
-        StatefulValue<TableSliderModel> tableModel = new StatefulValue<>(new TableSliderModel(new TablePlace(setup.getSurveyForm().getFormId())));
+        StatefulValue<SliderState> tableModel = new StatefulValue<>(new SliderState(new TablePlace(setup.getSurveyForm().getFormId())));
 
         setup.deleteForm(setup.getSurveyForm().getFormId());
 
@@ -205,8 +205,8 @@ public class TableViewModelTest {
 
         IncidentForm incidentForm = setup.getCatalog().getIncidentForm();
 
-        StatefulValue<TableModel> tableModel = new StatefulValue<>(
-                new TableModel(incidentForm.getFormId())
+        StatefulValue<TableState> tableModel = new StatefulValue<>(
+                new TableState(incidentForm.getFormId())
                 .withAnalysisModel(ImmutableTableAnalysisModel.builder()
                         .formId(incidentForm.getFormId())
                         .addColumns(ImmutableTableColumn.builder()

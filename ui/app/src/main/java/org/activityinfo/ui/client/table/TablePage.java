@@ -1,8 +1,6 @@
 package org.activityinfo.ui.client.table;
 
-import com.google.common.base.Optional;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
@@ -11,16 +9,16 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.AppFrame;
 import org.activityinfo.ui.client.Page;
 import org.activityinfo.ui.client.Place;
-import org.activityinfo.ui.client.fields.model.DesignMode;
-import org.activityinfo.ui.client.fields.model.FieldChoiceUpdater;
+import org.activityinfo.ui.client.fields.state.FieldChoiceState;
+import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.input.model.FieldInput;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.InputHandler;
 import org.activityinfo.ui.client.store.FormStore;
-import org.activityinfo.ui.client.table.model.SliderUpdater;
-import org.activityinfo.ui.client.table.model.TableModel;
-import org.activityinfo.ui.client.table.model.TableSliderModel;
-import org.activityinfo.ui.client.table.model.TableUpdater;
+import org.activityinfo.ui.client.table.state.SliderState;
+import org.activityinfo.ui.client.table.state.SliderUpdater;
+import org.activityinfo.ui.client.table.state.TableState;
+import org.activityinfo.ui.client.table.state.TableUpdater;
 import org.activityinfo.ui.client.table.view.TableView;
 import org.activityinfo.ui.client.table.viewModel.TableSliderViewModel;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
@@ -31,12 +29,12 @@ public class TablePage extends Page implements SliderUpdater {
 
     private final FormStore formStore;
 
-    private StatefulValue<TableSliderModel> state;
+    private StatefulValue<SliderState> state;
     private Observable<Maybe<TableSliderViewModel>> viewModel;
 
     public TablePage(FormStore formStore, TablePlace tablePlace) {
         this.formStore = formStore;
-        this.state = new StatefulValue<>(new TableSliderModel(tablePlace));
+        this.state = new StatefulValue<>(new SliderState(tablePlace));
         this.viewModel = TableSliderViewModel.compute(formStore, state);
     }
 
@@ -70,22 +68,17 @@ public class TablePage extends Page implements SliderUpdater {
     }
 
     @Override
+    public void update(Function<SliderState, SliderState> function) {
+        state.update(function);
+    }
+
+    @Override
     public TableUpdater getTableUpdater(ResourceId formId) {
         return new TableUpdater() {
 
-            private void updateTable(TableModel tableModel) {
-                TableSliderModel model = TablePage.this.state.get();
-                TableSliderModel updatedModel = model.withTableModel(tableModel);
-                TablePage.this.state.updateIfNotSame(updatedModel);
-            }
-
             @Override
-            public void updateFilter(Optional<FormulaNode> filterFormula) {
-                throw new UnsupportedOperationException("TODO");
-            }
-
-            @Override
-            public void updateColumnWidth(String columnId, int width) {
+            public void update(Function<TableState, TableState> function) {
+                state.update(s -> s.updateTable(formId, function));
             }
 
             @Override
@@ -93,38 +86,17 @@ public class TablePage extends Page implements SliderUpdater {
                 ResourceId newRecordId = ResourceId.generateSubmissionId(formId);
                 FormInputModel inputModel = new FormInputModel(new RecordRef(formId, newRecordId));
 
-                state.updateIfNotSame(state.get().withInput(inputModel));
+                state.update(s -> s.withInput(inputModel));
             }
 
             @Override
             public void editSelection() {
-
-                TableModel tableModel = state.get().getTable(formId);
-                tableModel.getSelected().ifPresent(selectedRef -> {
+                TableState tableState = state.get().getTable(formId);
+                tableState.getSelected().ifPresent(selectedRef -> {
                     FormInputModel inputModel = new FormInputModel(selectedRef);
 
                     state.updateIfNotSame(state.get().withInput(inputModel));
                 });
-            }
-
-            @Override
-            public void stopEditing() {
-                state.updateIfNotSame(state.get().withInput(java.util.Optional.empty()));
-            }
-
-            @Override
-            public void selectRecord(RecordRef selectedRef) {
-                updateTable(state.get().getTable(formId).withSelection(selectedRef));
-            }
-
-            @Override
-            public void expandRecordPanel(boolean expanded) {
-                updateTable(state.get().getTable(formId).withRecordPanelExpanded(expanded));
-            }
-
-            @Override
-            public void showColumnOptions(boolean expanded) {
-                updateTable(state.get().getTable(formId).withColumnOptions(expanded));
             }
 
             @Override
@@ -141,13 +113,8 @@ public class TablePage extends Page implements SliderUpdater {
                     }
 
                     @Override
-                    public void designMode(DesignMode visible) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public void expandPanel(boolean expanded) {
-                        showColumnOptions(expanded);
+                    public void update(Function<FieldChoiceState, FieldChoiceState> function) {
+                        state.update(slider -> slider.updateTable(formId, t -> t.updateColumnOptions(function)));
                     }
                 };
             }
