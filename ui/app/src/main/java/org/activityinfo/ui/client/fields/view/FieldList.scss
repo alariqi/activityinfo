@@ -3,11 +3,12 @@
 // Provides a list of fields available to be used in the report
 
 .fieldlist {
-  flex: none;
+  flex: 1 1;
   width: 22rem;
 
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .fieldlist ~ .fieldlist:before {
@@ -27,6 +28,8 @@
 
 .fieldlist__body {
   @include darkscrollbars();
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .formselection ~ .fieldlist:before {
@@ -56,6 +59,11 @@
   background-color: $box-background;
   margin-bottom: 0.5rem;
   position: relative;
+}
+
+.fieldlist__item--placeholder {
+  background-color: #466366;
+  height: 5rem;
 }
 
 .fieldlist__item--dragging {

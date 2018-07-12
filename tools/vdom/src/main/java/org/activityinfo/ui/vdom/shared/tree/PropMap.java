@@ -39,14 +39,23 @@ public interface PropMap {
 
     PropMap ondragend(EventHandler handler);
 
+    PropMap ondragover(EventHandler handler);
+
+    PropMap ondragleave(EventHandler handler);
+
+    PropMap ondrop(EventHandler handler);
+
     EventHandler getEventHandler(String eventName);
 
     PropMap draggable(boolean draggable);
 
     PropMap placeholder(String text);
 
+    PropMap setData(String name, String value);
+
     @GwtIncompatible
     Set<String> keys();
 
     boolean isEmpty();
+
 }

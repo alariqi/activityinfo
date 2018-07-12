@@ -29,7 +29,7 @@ public interface FieldChoiceViewModel {
 
     Observable<FieldListViewModel> getAvailableFields();
 
-    Observable<ReportElementListView> getReportElements();
+    Observable<ReportListViewModel> getReportElements();
 
     Observable<Boolean> isExpanded();
 }

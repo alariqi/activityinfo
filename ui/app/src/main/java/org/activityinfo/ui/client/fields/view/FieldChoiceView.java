@@ -20,7 +20,7 @@ public class FieldChoiceView {
 
         VTree formList = FormSelectionView.render(viewModel.getFormSelection(), updater);
         VTree availableList = FieldListView.available(viewModel, updater);
-        VTree selectedList = ReportElementView.render(viewModel, updater);
+        VTree selectedList = ReportListView.render(viewModel, updater);
 
         return new ReactiveComponent(viewModel.getMode().transform(m ->
                 new SidePanel()
@@ -31,7 +31,7 @@ public class FieldChoiceView {
                 .hideMode(viewModel.getPanelHideMode())
                 .leftSide()
                 .full(m == DesignMode.EXPANDED)
-                .expandedWidth("45rem")
+                .expandedWidth("46rem")
                 .content(m == DesignMode.EXPANDED ?
                         div("fieldpanel", formList, availableList) :
                         div("fieldpanel", availableList, selectedList))

@@ -19,7 +19,9 @@
 package org.activityinfo.analysis.table;
 
 import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.model.query.ColumnType;
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.model.query.EmptyColumnView;
 
 public abstract class AbstractRenderer<T> implements ColumnRenderer<T> {
 
@@ -43,6 +45,10 @@ public abstract class AbstractRenderer<T> implements ColumnRenderer<T> {
     @Override
     public final void updateColumnSet(ColumnSet columnSet) {
         this.view = columnSet.getColumnView(columnId);
-        assert this.view != null : "missing column " + columnId;
+
+        // The ColumnSet may need to reload after a change to EffectiveTableModel
+        if(this.view == null) {
+            this.view = new EmptyColumnView(ColumnType.STRING, columnSet.getNumRows());
+        }
     }
 }

@@ -11,7 +11,7 @@ public class ReportElement {
     
     ReportElement() {}
 
-    public ReportElement(String id, String label, String type, String formLabel) {
+    public ReportElement(String id, String formLabel, String type, String label) {
         this.id = id;
         this.label = label;
         this.type = type;

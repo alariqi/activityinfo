@@ -15,8 +15,13 @@ import org.activityinfo.ui.client.fields.viewModel.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 public class ColumnChoiceViewModel implements FieldChoiceViewModel {
+
+    private static final Logger LOGGER = Logger.getLogger(ColumnChoiceViewModel.class.getName());
+
+    private final String GROUP_ID = "columns";
 
     private final TableViewModel tableModel;
 
@@ -74,13 +79,24 @@ public class ColumnChoiceViewModel implements FieldChoiceViewModel {
     }
 
     @Override
-    public Observable<ReportElementListView> getReportElements() {
-        return tableModel.getEffectiveTable().transform(table -> {
+    public Observable<ReportListViewModel> getReportElements() {
+        Observable<EffectiveTableModel> table = tableModel.getEffectiveTable();
+        Observable<FieldChoiceState> state = tableModel.getModel().transform(m -> m.getColumnOptions());
+
+        return Observable.transform(table, state, (t, s) -> {
            List<ReportElement> items = new ArrayList<>();
-            for (EffectiveTableColumn column : table.getColumns()) {
-                items.add(reportElement(table.getFormTree(), column));
+            for (EffectiveTableColumn column : t.getColumns()) {
+                items.add(reportElement(t.getFormTree(), column));
             }
-            return new ReportElementListView(new ReportElementGroup("", items));
+
+            int dropIndex = -1;
+            if(s.isDragging() && s.getDropTarget().isPresent()) {
+                dropIndex = s.getDropTarget().get().getIndex();
+            }
+
+            LOGGER.info("ColumnChoiceViewModel: dropIndex = " + dropIndex);
+
+            return new ReportListViewModel(new ReportElementGroup(GROUP_ID,"", items, dropIndex));
         });
     }
 

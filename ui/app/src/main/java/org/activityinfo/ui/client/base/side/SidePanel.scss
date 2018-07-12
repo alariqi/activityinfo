@@ -46,13 +46,15 @@ $sidepanel-collapsed-width: 1.875rem;
 }
 
 .sidepanel__content {
-  flex-grow: 1;
+  flex: 1 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .sidepanel__content > div {
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .sidepanel__expand {

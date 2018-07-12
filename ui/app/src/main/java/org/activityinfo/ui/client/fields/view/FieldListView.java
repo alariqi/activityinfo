@@ -1,5 +1,8 @@
 package org.activityinfo.ui.client.fields.view;
 
+import com.google.gwt.user.client.Event;
+import elemental2.dom.DragEvent;
+import jsinterop.base.Js;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
@@ -13,9 +16,13 @@ import org.activityinfo.ui.client.fields.viewModel.FieldListViewModel;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
+import java.util.logging.Logger;
+
 import static org.activityinfo.ui.vdom.shared.html.H.*;
 
 public class FieldListView {
+
+    private static final Logger LOGGER = Logger.getLogger(FieldListView.class.getName());
 
 
     /**
@@ -94,7 +101,7 @@ public class FieldListView {
 
         PropMap itemProps = Props.create()
                 .draggable(true)
-                .ondragstart(event -> onDragStart(field, updater))
+                .ondragstart(event -> onDragStart(event, field, updater))
                 .ondragend(event -> onDragEnd(updater))
                 .setClass("fieldlist__item");
 
@@ -111,7 +118,14 @@ public class FieldListView {
                 div("fieldlist__item__label", t(field.getFieldLabel())));
     }
 
-    private static void onDragStart(FieldListItem field, FieldChoiceUpdater updater) {
+    private static void onDragStart(Event event, FieldListItem field, FieldChoiceUpdater updater) {
+
+        LOGGER.info("FieldListView: onDragStart");
+
+        DragEvent dragEvent = Js.cast(event);
+        dragEvent.dataTransfer.setData("text/plain", field.getFormula());
+        dragEvent.dataTransfer.dropEffect = "copy";
+
         updater.update(s -> s.fieldDragStart(field.getFormula()));
     }
 

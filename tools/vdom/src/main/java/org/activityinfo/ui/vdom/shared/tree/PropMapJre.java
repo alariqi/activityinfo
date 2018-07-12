@@ -152,6 +152,20 @@ final class PropMapJre implements PropMap {
         return set("ondragend", handler);
     }
 
+    @Override
+    public PropMap ondragover(EventHandler handler) {
+        return set("ondragover", handler);
+    }
+
+    @Override
+    public PropMap ondragleave(EventHandler handler) {
+        return set("ondragleave", handler);
+    }
+
+    @Override
+    public PropMap ondrop(EventHandler handler) {
+        return set("ondrop", handler);
+    }
 
     @Override
     public EventHandler getEventHandler(String eventName) {
@@ -166,5 +180,10 @@ final class PropMapJre implements PropMap {
     @Override
     public PropMap placeholder(String text) {
         return set("placeholder", text);
+    }
+
+    @Override
+    public PropMap setData(String name, String value) {
+        return set("data-" + name, value);
     }
 }

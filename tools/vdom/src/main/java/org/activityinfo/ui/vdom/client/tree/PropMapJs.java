@@ -154,6 +154,21 @@ public final class PropMapJs extends JavaScriptObject implements PropMap {
         return set("ondragend", handler);
     }
 
+    @Override
+    public PropMap ondragover(EventHandler handler) {
+        return set("ondragover", handler);
+    }
+
+    @Override
+    public PropMap ondragleave(EventHandler handler) {
+        return set("ondragleave", handler);
+    }
+
+    @Override
+    public PropMap ondrop(EventHandler handler) {
+        return set("ondrop", handler);
+    }
+
 
     public EventHandler getEventHandler(String eventName) {
         return null;
@@ -165,5 +180,10 @@ public final class PropMapJs extends JavaScriptObject implements PropMap {
 
     public PropMapJs placeholder(String text) {
         return set("placeholder", text);
+    }
+
+    @Override
+    public PropMap setData(String name, String value) {
+        return set("data-" + name, value);
     }
 }

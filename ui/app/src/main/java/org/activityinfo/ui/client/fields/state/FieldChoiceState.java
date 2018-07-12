@@ -7,6 +7,7 @@ public class FieldChoiceState {
     private DesignMode mode;
     private Optional<String> draggingFieldId;
     private Optional<String> draggingColumnId;
+    private Optional<DropTarget> dropTarget;
 
 
     public FieldChoiceState(boolean expanded) {
@@ -14,12 +15,14 @@ public class FieldChoiceState {
         this.mode = DesignMode.NORMAL;
         this.draggingFieldId = Optional.empty();
         this.draggingColumnId = Optional.empty();
+        this.dropTarget = Optional.empty();
     }
 
     private FieldChoiceState(FieldChoiceState from) {
         this.expanded = from.expanded;
         this.draggingFieldId = from.draggingFieldId;
         this.draggingColumnId = from.draggingColumnId;
+        this.dropTarget = from.dropTarget;
     }
 
     public boolean isExpanded() {
@@ -69,5 +72,26 @@ public class FieldChoiceState {
         updated.draggingFieldId = Optional.empty();
         updated.draggingColumnId = Optional.empty();
         return updated;
+    }
+
+    public FieldChoiceState withDropTarget(DropTarget dropTarget) {
+        return withDropTarget(Optional.of(dropTarget));
+    }
+
+    public FieldChoiceState withDropTarget(Optional<DropTarget> dropTarget) {
+        if(this.dropTarget.equals(dropTarget)) {
+            return this;
+        }
+        FieldChoiceState updated = new FieldChoiceState(this);
+        updated.dropTarget = dropTarget;
+        return updated;
+    }
+
+    public boolean isDragging() {
+        return draggingFieldId.isPresent() || draggingColumnId.isPresent();
+    }
+
+    public Optional<DropTarget> getDropTarget() {
+        return dropTarget;
     }
 }

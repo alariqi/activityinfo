@@ -18,19 +18,21 @@
  */
 package org.activityinfo.analysis.table;
 
+import org.activityinfo.model.analysis.ImmutableTableAnalysisModel;
 import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.analysis.TableColumn;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
-import org.activityinfo.model.formula.ConstantNode;
 import org.activityinfo.model.formula.FormulaNode;
-import org.activityinfo.model.formula.Formulas;
-import org.activityinfo.model.formula.SymbolNode;
-import org.activityinfo.model.query.*;
+import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.*;
+import org.activityinfo.model.type.FieldType;
+import org.activityinfo.model.type.NarrativeType;
+import org.activityinfo.model.type.ReferenceType;
+import org.activityinfo.model.type.SerialNumberType;
 import org.activityinfo.model.type.barcode.BarcodeType;
 import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.model.type.expr.CalculatedFieldType;
@@ -45,6 +47,7 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The effective description of a table
@@ -70,6 +73,10 @@ public class EffectiveTableModel {
                 }
             }
         }
+    }
+
+    public TableAnalysisModel getModel() {
+        return tableModel;
     }
 
     private void addDefaultColumns(FormTree formTree) {
@@ -158,25 +165,6 @@ public class EffectiveTableModel {
         return queryModel;
     }
 
-    private QueryModel buildQuery(List<EffectiveTableColumn> columns, RecordRef recordRef) {
-        QueryModel queryModel = buildQuery(columns);
-        queryModel.setFilter(Formulas.equals(new SymbolNode("@parent"), new ConstantNode(recordRef.getRecordId().asString())));
-
-        return queryModel;
-    }
-
-    private ColumnSet emptyColumnSet(List<EffectiveTableColumn> columns) {
-
-        Map<String, ColumnView> columnMap = new HashMap<>();
-        for (EffectiveTableColumn column : columns) {
-            for (ColumnModel columnModel : column.getQueryModel()) {
-                columnMap.put(columnModel.getId(), new EmptyColumnView(ColumnType.STRING, 0));
-            }
-        }
-
-        return new ColumnSet(0, columnMap);
-    }
-
     public FormTree getFormTree() {
         return formTree;
     }
@@ -202,5 +190,11 @@ public class EffectiveTableModel {
             includedFormulas.add(column.getFormulaString());
         }
         return includedFormulas;
+    }
+
+    public ImmutableTableAnalysisModel.Builder buildNewModel() {
+        return ImmutableTableAnalysisModel.builder()
+                .from(tableModel)
+                .columns(columns.stream().map(c -> c.getModel()).collect(Collectors.toList()));
     }
 }

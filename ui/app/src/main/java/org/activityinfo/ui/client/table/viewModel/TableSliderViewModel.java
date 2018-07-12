@@ -75,6 +75,15 @@ public class TableSliderViewModel {
         });
     }
 
+    public java.util.Optional<TableViewModel> getTableViewModel(ResourceId formId) {
+        for (TableViewModel table : tables) {
+            if(table.getFormId().equals(formId)) {
+                return java.util.Optional.of(table);
+            }
+        }
+        return java.util.Optional.empty();
+    }
+
     public Observable<String> getPageTitle() {
         return title;
     }
@@ -133,4 +142,5 @@ public class TableSliderViewModel {
     public Observable<Boolean> isInputVisible() {
         return inputVisible;
     }
+
 }
