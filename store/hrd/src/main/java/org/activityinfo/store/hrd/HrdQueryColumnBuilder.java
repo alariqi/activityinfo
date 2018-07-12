@@ -44,6 +44,7 @@ class HrdQueryColumnBuilder implements ColumnQueryBuilder {
     private List<CursorObserver<ResourceId>> idObservers = Lists.newArrayList();
     private List<FieldObserver> fieldObservers = Lists.newArrayList();
     private List<CursorObserver<FieldValue>> parentFieldObservers = null;
+    private List<PeriodObserver> periodObservers = new ArrayList<>();
     private List<CursorObserver<?>> observers = Lists.newArrayList();
 
     HrdQueryColumnBuilder(FormClass formClass) {
@@ -64,7 +65,6 @@ class HrdQueryColumnBuilder implements ColumnQueryBuilder {
     @Override
     public void addField(ResourceId fieldId, CursorObserver<FieldValue> observer) {
 
-        FieldObserver fieldObserver;
         if(fieldId.equals(FormClass.PARENT_FIELD_ID)) {
             if (parentFieldObservers == null) {
                 parentFieldObservers = new ArrayList<>();
@@ -73,10 +73,15 @@ class HrdQueryColumnBuilder implements ColumnQueryBuilder {
             observers.add(observer);
 
         } else if(fieldId.equals(SubFormPatch.PERIOD_FIELD_ID)) {
-            addResourceId(SubFormPatch.fromRecordId(formClass, observer));
+            PeriodObserver periodObserver = new PeriodObserver(formClass, observer);
+            if (periodObservers == null) {
+                periodObservers = new ArrayList<>();
+            }
+            periodObservers.add(periodObserver);
+            observers.add(periodObserver);
 
         } else {
-
+            FieldObserver fieldObserver;
             FormField field = formClass.getField(fieldId);
             FieldConverter converter = FieldConverters.forType(field.getType());
             fieldObserver = new FieldObserver(field.getName(), converter, observer);
@@ -100,6 +105,11 @@ class HrdQueryColumnBuilder implements ColumnQueryBuilder {
             }
             for (FieldObserver fieldObserver : fieldObservers) {
                 fieldObserver.onNext(entity.getFieldValues());
+            }
+            if(periodObservers != null) {
+                for (PeriodObserver periodObserver : periodObservers) {
+                    periodObserver.onNext(entity);
+                }
             }
             if(parentFieldObservers != null) {
                 ResourceId parentRecordId = ResourceId.valueOf(entity.getParentRecordId());

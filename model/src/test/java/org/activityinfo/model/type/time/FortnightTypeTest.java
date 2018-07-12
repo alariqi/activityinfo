@@ -34,9 +34,15 @@ public class FortnightTypeTest {
 
     }
 
+    @Test
+    public void parse() {
+        assertThat(FortnightType.INSTANCE.parseString("2018W9-W10"), equalTo(new FortnightValue(2018, 9)));
+    }
 
     private FortnightValue parseSubFormKey(String subFormId) {
         return FortnightType.INSTANCE.fromSubFormKey(
                 new RecordRef(ResourceId.valueOf("FORM"), ResourceId.valueOf(subFormId)));
     }
+
+
 }

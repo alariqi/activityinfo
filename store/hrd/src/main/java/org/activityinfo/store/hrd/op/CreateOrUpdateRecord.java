@@ -64,6 +64,7 @@ public class CreateOrUpdateRecord extends VoidWork {
         long newVersion = currentVersion + 1;
 
         rootEntity.setVersion(newVersion);
+        rootEntity.setActiveColumnStorage(null);
 
         FormRecordEntity existingEntity = ofy().load().key(FormRecordEntity.key(formClass, update.getRecordId())).now();
         FormRecordEntity updated;
@@ -101,7 +102,7 @@ public class CreateOrUpdateRecord extends VoidWork {
         List<Key> toDelete = new ArrayList<>();
 
         // Update column-based storage, if active
-        if(rootEntity.getActiveColumnStorage() != null) {
+        if(false) {
 
             FormColumnStorage columnStorage = ofy().load().key(FormColumnStorage.key(rootEntity)).safe();
             columnStorage.setVersion(newVersion);
