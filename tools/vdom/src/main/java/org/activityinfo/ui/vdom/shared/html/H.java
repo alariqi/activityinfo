@@ -96,11 +96,25 @@ public class H {
         return new VNode(TABLE, propMap, children);
     }
 
+
+    public static VNode table(VTree... children) {
+        return new VNode(TABLE, children);
+    }
+
+
+    public static VNode tableHead(VTree... children) {
+        return new VNode(THEAD, children);
+    }
+
     public static VNode tableBody(VTree... children) {
         return new VNode(TBODY, children);
     }
 
     public static VNode tableRow(VTree... children) {
+        return new VNode(TR, children);
+    }
+
+    public static VNode tableRow(Stream<VTree> children) {
         return new VNode(TR, children);
     }
 
@@ -277,7 +291,6 @@ public class H {
     public static VNode option(String label) {
         return new VNode(HtmlTag.OPTION, new VText(label));
     }
-
 
     public interface Render<T> {
         VTree render(T item);

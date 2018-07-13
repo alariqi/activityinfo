@@ -26,7 +26,7 @@ public class DoubleRenderer implements ColumnRenderer<Double> {
     private String id;
     private ColumnView view;
 
-    DoubleRenderer(String id) {
+    public DoubleRenderer(String id) {
         this.id = id;
     }
 

@@ -10,12 +10,6 @@ import static org.activityinfo.ui.vdom.shared.tree.Props.withClass;
 
 public class SidePanel {
 
-
-    public enum Side {
-        LEFT,
-        RIGHT
-    }
-
     public enum HideMode {
         CLOSE,
         COLLAPSE
@@ -26,7 +20,6 @@ public class SidePanel {
     private VTree title = new VText("");
     private VTree content = new VNode(HtmlTag.DIV);
     private VTree header = new VText("");
-    private Side side = Side.RIGHT;
     private boolean full = false;
     private String expandedWidth = null;
     private HideMode hideMode;
@@ -63,7 +56,6 @@ public class SidePanel {
     }
 
     public SidePanel leftSide() {
-        this.side = Side.LEFT;
         return this;
     }
 
@@ -108,14 +100,6 @@ public class SidePanel {
 
             PropMap props = Props.create();
             props.addClassName("sidepanel");
-            switch (side) {
-                case LEFT:
-                    props.addClassName("sidepanel--left");
-                    break;
-                case RIGHT:
-                    props.addClassName("sidepanel--right");
-                    break;
-            }
 
             if(!e) {
                 if(hideMode == HideMode.COLLAPSE) {

@@ -24,12 +24,14 @@ import static org.activityinfo.ui.vdom.shared.tree.Props.withClass;
 public class RecordSidePanel {
 
     public static VTree render(TableViewModel viewModel, TableUpdater tableUpdater) {
+
         VTree tree = Tabs.tabPanel(
                 new TabItem(I18N.CONSTANTS.details(), details(viewModel, tableUpdater)),
                 new TabItem(I18N.CONSTANTS.history(), history(viewModel)));
 
         return new SidePanel()
                 .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
+                .hideMode(SidePanel.HideMode.COLLAPSE)
                 .header(scrollButton(viewModel))
                 .expanded(viewModel.isRecordPanelExpanded(),
                         expanded -> tableUpdater.update(s -> s.withRecordPanelExpanded(expanded)))

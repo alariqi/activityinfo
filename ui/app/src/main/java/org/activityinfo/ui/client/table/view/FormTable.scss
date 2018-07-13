@@ -29,22 +29,33 @@
   left: 0;
   width: 100vw;
 
-  padding-top: 1.25rem;
-  padding-right: 1rem;
-  padding-left: 2rem;
-  padding-bottom: 2rem;
-
   display: flex;
   flex-direction: column;
 }
 
-.formtable__gridcontainer {
-  background-color: red;
-  flex-grow: 1;
-  position: relative;
-  width: calc(100% - #{$sidepanel-collapsed-width});
+.formtable__slide .toolbar {
+  flex: none;
+  padding-right: 1rem;
+  padding-left: 2rem;
 }
 
+// Contains the column options panel, the datatable, and the record panel,
+// layed out from left to right
+
+.formtable__slide__body {
+
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+
+.formtable__slide__body .datatable {
+  flex-grow: 1;
+  flex-shrink: 1;
+  overflow: hidden;
+}
 
 .formtable__formcontainer {
   position: absolute;

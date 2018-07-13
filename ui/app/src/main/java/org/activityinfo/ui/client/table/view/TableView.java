@@ -2,7 +2,6 @@ package org.activityinfo.ui.client.table.view;
 
 import com.google.common.base.Optional;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.Icon;
@@ -24,9 +23,7 @@ import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class TableView {
@@ -105,12 +102,6 @@ public class TableView {
 
     private static List<VTree> slides(TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
 
-        Map<ResourceId, VTree> grids = new HashMap<>();
-
-        // Avoid re-creating the grids by keeping the instances fixed
-        for (TableViewModel table : viewModel.getTables()) {
-            grids.put(table.getFormId(), grid(table, sliderUpdater.getTableUpdater(table.getFormId())));
-        }
 
         List<VTree> slides = new ArrayList<>();
 
@@ -132,9 +123,10 @@ public class TableView {
 
                 return new VNode(HtmlTag.DIV, slideProps,
                         toolbar(table, updater),
-                        grids.get(table.getFormId()),
-                        RecordSidePanel.render(table, updater),
-                        FieldChoiceView.render(table.getColumnOptions(), updater.fieldChoiceUpdater()));
+                        H.div("formtable__slide__body",
+                            FieldChoiceView.render(table.getColumnOptions(), updater.fieldChoiceUpdater()),
+                            DataTableView.render(table, updater),
+                            RecordSidePanel.render(table, updater)));
             })));
         }
         return slides;
@@ -187,7 +179,4 @@ public class TableView {
         }));
     }
 
-    private static VTree grid(TableViewModel viewModel, TableUpdater updater) {
-        return new GridContainer(viewModel, updater);
-    }
 }

@@ -29,6 +29,10 @@ public interface PropMap {
 
     PropMap setStyle(Style style);
 
+    default PropMap setStyle(PropMap style) {
+        return set("style", style);
+    }
+
     PropMap disabled(boolean disabled);
 
     PropMap onclick(EventHandler handler);
