@@ -1693,7 +1693,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Fortnightly Sub-Form")
     String fortnightlySubform();
 
-    @DefaultStringValue("{0,number,#}W{1}-{2}")
+    @DefaultStringValue("Fortnight")
     String fortnight();
 
     @DefaultStringValue("Daily Sub-Form")

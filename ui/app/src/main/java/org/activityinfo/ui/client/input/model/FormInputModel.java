@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.activityinfo.ui.client.input.model;
-
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
@@ -30,22 +29,30 @@ import java.util.*;
 public class FormInputModel {
 
     private final RecordRef recordRef;
+    private final Optional<String> parentId;
     private final Map<ResourceId, FieldInput> fieldInputs;
     private final Set<ResourceId> touchedFields;
     private final boolean validationRequested;
 
     public FormInputModel(RecordRef recordRef) {
+        this(recordRef, Optional.empty());
+    }
+
+    public FormInputModel(RecordRef recordRef, Optional<String> parentId) {
         this.recordRef = recordRef;
+        this.parentId = parentId;
         fieldInputs = Collections.emptyMap();
         touchedFields = Collections.emptySet();
         validationRequested = false;
     }
 
     private FormInputModel(RecordRef recordRef,
+                           Optional<String> parentId,
                            Map<ResourceId, FieldInput> fieldInputs,
                            Set<ResourceId> touchedFields,
                            boolean validationRequested) {
         this.recordRef = recordRef;
+        this.parentId = parentId;
         this.fieldInputs = fieldInputs;
         this.touchedFields = touchedFields;
         this.validationRequested = validationRequested;
@@ -80,7 +87,7 @@ public class FormInputModel {
 
         Set<ResourceId> updatedTouchSet = add(this.touchedFields, fieldId);
 
-        return new FormInputModel(this.recordRef, updatedInputs, updatedTouchSet, this.validationRequested);
+        return new FormInputModel(this.recordRef, parentId, updatedInputs, updatedTouchSet, this.validationRequested);
     }
 
     public FormInputModel update(ResourceId fieldId, FieldValue value) {
@@ -91,12 +98,12 @@ public class FormInputModel {
         if(this.touchedFields.contains(fieldId)) {
             return this;
         } else {
-            return new FormInputModel(recordRef, fieldInputs, add(touchedFields, fieldId), validationRequested);
+            return new FormInputModel(recordRef, parentId, fieldInputs, add(touchedFields, fieldId), validationRequested);
         }
     }
 
     public FormInputModel validationRequested() {
-        return new FormInputModel(recordRef, fieldInputs, touchedFields, true);
+        return new FormInputModel(recordRef, parentId, fieldInputs, touchedFields, true);
     }
 
     /**
@@ -127,5 +134,9 @@ public class FormInputModel {
 
     public boolean isEmpty() {
         return fieldInputs.isEmpty();
+    }
+
+    public Optional<String> getParentId() {
+        return parentId;
     }
 }

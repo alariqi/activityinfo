@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.type.RecordRef;
-import org.activityinfo.model.type.time.PeriodType;
 import org.activityinfo.store.query.shared.FormSource;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.input.model.FieldInput;
@@ -70,7 +69,7 @@ public class FormPanel implements IsWidget {
                 // ignore
             } else if(node.isParentReference()) {
                 // ignore
-            } else if(node.getField().isVisible() && !isSubFormKey(node)) {
+            } else if(node.getField().isVisible()) {
                 FieldWidget fieldWidget = widgetFactory.create(node.getField(), new FieldUpdater() {
                     @Override
                     public void update(FieldInput input) {
@@ -89,11 +88,6 @@ public class FormPanel implements IsWidget {
                 }
             }
         }
-    }
-
-    private boolean isSubFormKey(FormTree.Node node) {
-        return node.getDefiningFormClass().isSubForm() && node.getField().isKey() &&
-                node.getType() instanceof PeriodType;
     }
 
     public RecordRef getRecordRef() {

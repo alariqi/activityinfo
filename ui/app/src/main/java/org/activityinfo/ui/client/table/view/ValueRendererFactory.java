@@ -158,7 +158,7 @@ public class ValueRendererFactory {
         @Override
         public VTree render(RecordTree recordTree, FieldValue fieldValue) {
             FortnightValue fortnight = (FortnightValue) fieldValue;
-            return new VText(I18N.MESSAGES.fortnight(
+            return new VText(I18N.MESSAGES.fortnightFormat(
                     fortnight.getYear(),
                     fortnight.getWeekInYear(),
                     fortnight.getWeekInYear() + 1));

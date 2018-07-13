@@ -159,4 +159,14 @@ public class SliderTree {
     public boolean isSubForm(ResourceId formId) {
         return depthMap.getOrDefault(formId, 0) > 0;
     }
+
+    public boolean isOnPathFrom(ResourceId formId, ResourceId activeFormId) {
+        while(activeFormId != null) {
+            if(activeFormId.equals(formId)) {
+                return true;
+            }
+            activeFormId = parentMap.get(activeFormId);
+        }
+        return false;
+    }
 }

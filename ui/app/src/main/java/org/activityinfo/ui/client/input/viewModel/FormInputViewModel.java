@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client.input.viewModel;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import org.activityinfo.json.Json;
 import org.activityinfo.model.formTree.FormTree;
@@ -98,14 +97,11 @@ public class FormInputViewModel {
         return fieldValueMap.get(fieldId);
     }
 
-    public RecordUpdate buildUpdate(Optional<RecordRef> parentRef) {
+    public RecordUpdate buildUpdate() {
         RecordUpdate update = new RecordUpdate();
         update.setRecordId(inputModel.getRecordRef().getRecordId());
         update.setFormId(inputModel.getRecordRef().getFormId());
-
-        if(parentRef.isPresent()) {
-            update.setParentRecordId(parentRef.get().getRecordId().asString());
-        }
+        update.setParentRecordId(inputModel.getParentId());
 
         for (FormTree.Node node : formTree.getRootFields()) {
             FieldInput newInput = inputModel.get(node.getFieldId());
@@ -134,7 +130,7 @@ public class FormInputViewModel {
 
     public RecordTransaction buildTransaction() {
         RecordTransactionBuilder tx = new RecordTransactionBuilder();
-        tx.add(buildUpdate(Optional.absent()));
+        tx.add(buildUpdate());
         return tx.build();
     }
 

@@ -100,8 +100,8 @@ public class MonthWidget implements PeriodFieldWidget {
 
     @Override
     public void setRelevant(boolean relevant) {
-        yearBox.setEnabled(false);
-        monthBox.setEnabled(false);
+        yearBox.setEnabled(relevant);
+        monthBox.setEnabled(relevant);
     }
 
     @Override

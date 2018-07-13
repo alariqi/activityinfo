@@ -69,6 +69,7 @@ public class TableViewModel {
     private final Observable<ColumnSet> columnSet;
     private final Observable<Map<String, Integer>> recordMap;
     private final Observable<String> parentRef;
+    private final Observable<Boolean> visible;
 
     public TableViewModel(final FormSource formStore, SliderTree sliderTree, ResourceId formId, Observable<TableState> tableModel, Observable<TablePlace> place) {
         this.formStore = formStore;
@@ -78,6 +79,7 @@ public class TableViewModel {
         this.analysisModel = tableModel.transform(m -> m.getAnalysisModel()).cache();
         this.formTree = formStore.getFormTree(formId).transformIf(t -> t.toMaybe().getIfVisible());
         this.effectiveTable = Observable.transform(analysisModel, formTree, (a, t) -> new EffectiveTableModel(t, a));
+        this.visible = place.transform(p -> sliderTree.isOnPathFrom(formId, p.getFormId()));
 
         this.subForm = sliderTree.isSubForm(formId);
         if(subForm) {
@@ -254,5 +256,9 @@ public class TableViewModel {
 
     public FieldChoiceViewModel getColumnOptions() {
         return new ColumnChoiceViewModel(this);
+    }
+
+    public Observable<Boolean> isVisible() {
+        return visible;
     }
 }

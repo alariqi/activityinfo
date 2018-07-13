@@ -2,6 +2,7 @@ package org.activityinfo.ui.client.table.view;
 
 import com.google.common.base.Optional;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.Icon;
@@ -23,7 +24,9 @@ import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class TableView {
@@ -101,25 +104,39 @@ public class TableView {
     }
 
     private static List<VTree> slides(TableSliderViewModel viewModel, SliderUpdater sliderUpdater) {
-        List<VTree> slides = new ArrayList<>();
+
+        Map<ResourceId, VTree> grids = new HashMap<>();
+
+        // Avoid re-creating the grids by keeping the instances fixed
         for (TableViewModel table : viewModel.getTables()) {
-
-            Style slideStyle = new Style();
-            slideStyle.set("left", (table.getSlideIndex() * 100) + "vw");
-
-            PropMap slideProps = Props.create();
-            slideProps.setClass("formtable__slide");
-            slideProps.setStyle(slideStyle);
-
-            TableUpdater updater = sliderUpdater.getTableUpdater(table.getFormId());
-
-            slides.add(new VNode(HtmlTag.DIV, slideProps,
-                    toolbar(table, updater),
-                    grid(table, updater),
-                    RecordSidePanel.render(table, updater),
-                    FieldChoiceView.render(table.getColumnOptions(), updater.fieldChoiceUpdater())));
+            grids.put(table.getFormId(), grid(table, sliderUpdater.getTableUpdater(table.getFormId())));
         }
 
+        List<VTree> slides = new ArrayList<>();
+
+        for (TableViewModel table : viewModel.getTables()) {
+            slides.add(new ReactiveComponent(table.isVisible().transform(visible -> {
+
+                Style slideStyle = new Style();
+                slideStyle.set("left", (table.getSlideIndex() * 100) + "vw");
+
+                if(!visible) {
+                    slideStyle.set("visibility", "hidden");
+                }
+
+                PropMap slideProps = Props.create();
+                slideProps.setClass("formtable__slide");
+                slideProps.setStyle(slideStyle);
+
+                TableUpdater updater = sliderUpdater.getTableUpdater(table.getFormId());
+
+                return new VNode(HtmlTag.DIV, slideProps,
+                        toolbar(table, updater),
+                        grids.get(table.getFormId()),
+                        RecordSidePanel.render(table, updater),
+                        FieldChoiceView.render(table.getColumnOptions(), updater.fieldChoiceUpdater()));
+            })));
+        }
         return slides;
     }
 

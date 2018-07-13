@@ -28,6 +28,7 @@ import org.activityinfo.ui.client.table.viewModel.TableSliderViewModel;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -89,10 +90,14 @@ public class TablePage extends Page implements SliderUpdater {
 
             @Override
             public void newRecord() {
+
                 ResourceId newRecordId = ResourceId.generateSubmissionId(formId);
-                FormInputModel inputModel = new FormInputModel(new RecordRef(formId, newRecordId));
+                Optional<String> parentId = state.get().getPlace().getParentId();
+
+                FormInputModel inputModel = new FormInputModel(new RecordRef(formId, newRecordId), parentId);
 
                 state.update(s -> s.withInput(inputModel));
+
             }
 
             @Override
