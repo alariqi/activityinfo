@@ -21,13 +21,11 @@ public class DataTableView {
 
         return new DataTable()
                 .setColumns(renderer.transform(r -> r.getColumns()))
-                .setRowRenderer(range -> renderer.join(r -> r.renderRows(columnSet, range)))
+                .setRowRenderer(range -> renderer.join(r -> r.renderRows(columnSet, range, viewModel.getSelectedRecordRef())))
                 .setRowClickHandler(rowId -> {
                     RecordRef ref = new RecordRef(viewModel.getFormId(), ResourceId.valueOf(rowId));
                     updater.update(s -> s.withSelection(ref).withRecordPanelExpanded(true));
                 })
-                .setSelectedRow(viewModel.getSelectedRecordRef().transform(o ->
-                        o.map(ref -> ref.getRecordId().asString()).orElse("")))
                 .build();
 
     }

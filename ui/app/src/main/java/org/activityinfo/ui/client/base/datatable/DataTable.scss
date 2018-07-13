@@ -73,6 +73,13 @@
   tr.selected {
     border: 2px solid $green;
   }
-
-
 }
+
+.datatable__body__inner {
+  position: relative;
+
+  table {
+    position: absolute;
+  }
+}
+

@@ -18,17 +18,16 @@
  */
 package org.activityinfo.ui.client.table.view;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
-import com.sencha.gxt.core.client.XTemplates;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import org.activityinfo.analysis.table.*;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.datatable.DataTableColumn;
 import org.activityinfo.ui.client.base.datatable.DataTableColumnBuilder;
 import org.activityinfo.ui.client.base.datatable.RowRange;
+import org.activityinfo.ui.client.base.datatable.TableSlice;
 import org.activityinfo.ui.client.table.view.columns.ColumnRenderer;
 import org.activityinfo.ui.client.table.view.columns.DoubleRenderer;
 import org.activityinfo.ui.client.table.view.columns.StringColumnRenderer;
@@ -40,18 +39,12 @@ import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Constructs a GXT Grid column model from our EffectiveTableModel.
  */
 public class DataTableRenderer {
-
-
-    interface Templates extends XTemplates {
-
-        @XTemplate("<h4>{subform}</h4>{name}")
-        SafeHtml subFormHeader(String subform, String name);
-    }
 
 
     private final List<DataTableColumn> columns = new ArrayList<>();
@@ -241,16 +234,14 @@ public class DataTableRenderer {
     }
 
 
-    public ColumnModel<Integer> buildColumnModel() {
-        throw new UnsupportedOperationException();
-    }
-
     public List<DataTableColumn> getColumns() {
         return columns;
     }
 
-    public Observable<VTree> renderRows(Observable<ColumnSet> columnSet, Observable<RowRange> range) {
-        return columnSet.transform(columns -> {
+    public Observable<TableSlice> renderRows(Observable<ColumnSet> columnSet,
+                                             Observable<RowRange> range,
+                                             Observable<Optional<RecordRef>> selectedRef) {
+        return Observable.transform(columnSet, range, (columns, r) -> {
             int numRows = columns.getNumRows();
             int numCols = this.cells.size();
 
@@ -260,21 +251,37 @@ public class DataTableRenderer {
 
             ColumnView idColumn = columns.getColumnView(TableViewModel.ID_COLUMN_ID);
 
-            VTree[] rows = new VTree[numRows];
 
-            for (int i = 0; i < numRows; i++) {
+            int startIndex = r.getStartIndex();
+            int endIndex = Math.min(numRows, startIndex + r.getRowCount());
+            int rowCount = (endIndex - startIndex);
+            VTree[] rows = new VTree[rowCount];
+
+            for (int i = 0; i < rowCount; i++) {
+                int rowIndex = startIndex + i;
+                String rowId = idColumn.getString(rowIndex);
 
                 PropMap rowProps = Props.create();
-                rowProps.setData("row", idColumn.getString(i));
+                rowProps.setData("row", rowId);
 
                 VTree[] cells = new VTree[numCols];
                 for (int j = 0; j < numCols; j++) {
-                    cells[j] = this.cells.get(j).renderCell(i);
+                    cells[j] = this.cells.get(j).renderCell(rowIndex);
                 }
-                rows[i] = new VNode(HtmlTag.TR, rowProps, cells);
+                rows[i] = new VNode(HtmlTag.TR, rowProps, cells, rowId);
             }
-            return new VNode(HtmlTag.TBODY, rows);
+
+            return new TableSlice(startIndex, numRows,
+                    new VNode(HtmlTag.TBODY, rows));
+
+        }).join(slice -> {
+
+           // Apply selection style if present
+           return selectedRef.transform(optional -> {
+                return slice.applySelectionClass(optional.map(ref -> ref.getRecordId().asString()));
+           });
         });
     }
+
 
 }
