@@ -1,5 +1,6 @@
 package org.activityinfo.ui.vdom.client;
 
+import com.google.gwt.animation.client.AnimationScheduler;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -32,15 +33,23 @@ public class VDomWidget extends ComplexPanel implements RenderContext {
     private List<Widget> pendingAttachments = new ArrayList<>();
     private List<Widget> pendingDetachments = new ArrayList<>();
 
-    private DomBuilder domBuilder;
-
     public VDomWidget() {
-        domBuilder = new DomBuilder();
-
         setElement(Document.get().createDivElement());
     }
 
     public void update(VTree vTree) {
+        if(!updateQueued) {
+            AnimationScheduler.get().requestAnimationFrame(timestamp -> doUpdate(vTree), getElement());
+            updateQueued = true;
+        }
+
+        doUpdate(vTree);
+    }
+
+    private void doUpdate(VTree vTree) {
+
+        updateQueued = false;
+
         assert !updating : "Update already in progress";
         try {
             updating = true;
