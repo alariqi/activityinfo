@@ -20,14 +20,12 @@ package org.activityinfo.model.formula;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.PeekingIterator;
+import org.activityinfo.model.formula.diagnostic.FormulaException;
 import org.activityinfo.model.formula.diagnostic.FormulaSyntaxException;
 import org.activityinfo.model.formula.functions.FormulaFunction;
 import org.activityinfo.model.formula.functions.FormulaFunctions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static com.google.common.collect.Iterators.filter;
 import static com.google.common.collect.Iterators.peekingIterator;
@@ -324,6 +322,15 @@ public class FormulaParser {
             throw new FormulaSyntaxException(new SourceRange(extraToken), "Missing an operator like + - / *, etc.");
         }
         return expr;
+    }
+
+    public static Optional<FormulaNode> tryParse(String formula) {
+        try {
+            return Optional.of(parse(formula));
+
+        } catch (FormulaException e) {
+            return Optional.empty();
+        }
     }
 
     public static FormulaNode parse(String expression) {

@@ -132,6 +132,16 @@ public class FunctionCallNode extends FormulaNode {
     }
 
     @Override
+    public boolean contains(FormulaNode formulaNode) {
+        for (FormulaNode argument : arguments) {
+            if(argument.contains(formulaNode)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

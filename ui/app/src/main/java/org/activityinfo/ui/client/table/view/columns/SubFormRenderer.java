@@ -20,6 +20,8 @@ public class SubFormRenderer implements ColumnRenderer {
     private ColumnView idColumn;
     private ColumnView countColumn;
 
+    private boolean loaded;
+
     public SubFormRenderer(ResourceId subFormId, String idColumnId, String countColumnId) {
         this.subFormId = subFormId;
         this.idColumnId = idColumnId;
@@ -32,10 +34,15 @@ public class SubFormRenderer implements ColumnRenderer {
     public void init(ColumnSet columnSet) {
         idColumn = columnSet.getColumnView(idColumnId);
         countColumn = columnSet.getColumnView(countColumnId);
+        loaded = (idColumn != null && countColumn != null);
     }
 
     @Override
     public VTree renderCell(int row) {
+
+        if(!loaded) {
+            return EMPTY_CELL;
+        }
 
         String recordId = idColumn.getString(row);
         int count = (int) countColumn.getDouble(row);

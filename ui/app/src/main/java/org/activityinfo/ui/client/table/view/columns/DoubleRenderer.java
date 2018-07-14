@@ -1,7 +1,9 @@
 package org.activityinfo.ui.client.table.view.columns;
 
 import org.activityinfo.model.query.ColumnSet;
+import org.activityinfo.model.query.ColumnType;
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.model.query.EmptyColumnView;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VText;
@@ -20,6 +22,9 @@ public class DoubleRenderer implements ColumnRenderer {
     @Override
     public void init(ColumnSet columnSet) {
         columnView = columnSet.getColumnView(id);
+        if(columnView == null) {
+            columnView = new EmptyColumnView(ColumnType.NUMBER, 0);
+        }
     }
 
     @Override
@@ -27,10 +32,9 @@ public class DoubleRenderer implements ColumnRenderer {
         double value = columnView.getDouble(row);
         String string;
         if(Double.isNaN(value)) {
-            string = "";
-        } else {
-            string = "" + value;
+            return EMPTY_CELL;
         }
-        return new VNode(HtmlTag.TD, new VText(string));
+
+        return new VNode(HtmlTag.TD, new VText("" + value));
     }
 }

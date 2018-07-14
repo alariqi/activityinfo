@@ -145,6 +145,11 @@ public class ConstantNode extends FormulaNode {
     }
 
     @Override
+    public boolean contains(FormulaNode formulaNode) {
+        return equals(formulaNode);
+    }
+
+    @Override
     public FieldType resolveType(EvalContext context) {
         return type;
     }

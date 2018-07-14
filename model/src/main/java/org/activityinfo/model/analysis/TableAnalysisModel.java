@@ -55,8 +55,6 @@ public abstract class TableAnalysisModel implements AnalysisModel  {
     @Value.Lazy
     @Override
     public JsonValue toJson() {
-
-
         JsonValue object = Json.createObject();
         object.put("formId", getFormId().asString());
 

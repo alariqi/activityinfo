@@ -16,6 +16,7 @@ import static org.activityinfo.ui.vdom.shared.html.H.*;
 
 public class DataTable {
 
+
     private static final int BUFFER_SIZE = 50;
 
     private static final Logger LOGGER = Logger.getLogger(DataTable.class.getName());
@@ -24,6 +25,9 @@ public class DataTable {
     private Function<Observable<RowRange>, Observable<TableSlice>> rowRenderer;
     private RowClickHandler rowClickHandler;
 
+    /**
+     * The height of the row in pixels
+     */
     private double rowHeight = 44;
 
     private StatefulValue<RowRange> range = new StatefulValue<>(new RowRange(0, BUFFER_SIZE));
@@ -49,10 +53,13 @@ public class DataTable {
 
     public VTree build() {
 
+        VNode loading = render(Collections.emptyList());
+        Observable<VTree> rendered = columns.transform(c -> render(c));
+
         return new Component(
                 new ReactiveComponent(
-                    columns.transform(c -> render(c)),
-                    render(Collections.emptyList())));
+                        rendered,
+                        loading));
     }
 
     private VNode render(List<DataTableColumn> c) {
@@ -72,13 +79,7 @@ public class DataTable {
     }
 
     private VTree renderColumnHeader(DataTableColumn dataTableColumn) {
-        Style headerStyle = new Style();
-        headerStyle.set("width", dataTableColumn.getWidth() + "px");
-
-        PropMap headerProps = Props.create();
-        headerProps.setStyle(headerStyle);
-
-        return new VNode(HtmlTag.TH, headerProps, dataTableColumn.getHeader());
+        return dataTableColumn.header;
     }
 
     private VTree renderBody(List<DataTableColumn> columns) {
@@ -210,7 +211,7 @@ public class DataTable {
     }
 
     /**
-     * Keeps the header in sync with the body's horizontal scrolling
+     * Listens for changes to the body's scroll area, and syncs the top header bar and maybe
      */
     private class ScrollListener implements EventListener {
         private final Element tableBody;

@@ -29,21 +29,43 @@
   flex-grow: 1;
 }
 
-.datatable__header th {
-  text-align: left;
-  height: 40px
+.datatable__colheader {
+  display: flex;
+  overflow: hidden;
+  padding-top: 0.75rem;
+  padding-left: 0.5rem;
+  padding-bottom: 0.75rem;
+  padding-right: 2px;
+}
+
+.datatable__colheader__label {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+.datatable__colheader__filter {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
 }
 
 
 .datatable {
   th, td {
+    border-right: 1px solid $green-pale;
+  }
+
+  td {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 12px 16px 12px 8px;
-    border-right: 1px solid $green-pale;
+    padding: 0.75rem 1rem 0.75rem 0.5rem;
   }
 }
+
 
 .datatable__header {
   color: #466366;

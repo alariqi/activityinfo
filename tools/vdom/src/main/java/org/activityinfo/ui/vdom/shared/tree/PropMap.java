@@ -33,6 +33,11 @@ public interface PropMap {
         return set("style", style);
     }
 
+    default PropMap setTitle(String title) {
+        return set("title", title);
+    }
+
+
     PropMap disabled(boolean disabled);
 
     PropMap onclick(EventHandler handler);

@@ -116,6 +116,11 @@ public class SymbolNode extends FormulaNode {
     }
 
     @Override
+    public boolean contains(FormulaNode formulaNode) {
+        return this.equals(formulaNode);
+    }
+
+    @Override
     public String toString() {
         return asExpression();
     }

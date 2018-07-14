@@ -18,14 +18,13 @@
  */
 package org.activityinfo.analysis.table;
 
-import org.activityinfo.model.analysis.ImmutableTableAnalysisModel;
-import org.activityinfo.model.analysis.ImmutableTableColumn;
-import org.activityinfo.model.analysis.TableAnalysisModel;
-import org.activityinfo.model.analysis.TableColumn;
+import org.activityinfo.analysis.ParsedFormula;
+import org.activityinfo.model.analysis.*;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.formula.FormulaNode;
+import org.activityinfo.model.formula.FormulaParser;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
@@ -58,11 +57,21 @@ public class EffectiveTableModel {
     private FormTree formTree;
     private TableAnalysisModel tableModel;
     private List<EffectiveTableColumn> columns;
+    private List<EffectiveSortOrder> ordering;
+    private Optional<ParsedFormula> filter;
 
     public EffectiveTableModel(FormTree formTree, TableAnalysisModel tableModel) {
         this.formTree = formTree;
         this.tableModel = tableModel;
+        this.filter = tableModel.getFilter().transform(string -> new ParsedFormula(formTree, string)).toJavaUtil();
         this.columns = new ArrayList<>();
+        this.ordering = new ArrayList<>();
+
+        for (SortOrder sortOrder : tableModel.getOrdering()) {
+            FormulaParser.tryParse(sortOrder.getFormula()).ifPresent(formula -> {
+                ordering.add(new EffectiveSortOrder(formula, sortOrder.getAscending()));
+            });
+        }
 
         if(formTree.getRootState() == FormTree.State.VALID) {
             if (tableModel.getColumns().isEmpty()) {
@@ -182,6 +191,30 @@ public class EffectiveTableModel {
     }
 
     /**
+     * Determines whether this table is sorted by the given formula
+     */
+    public Sorting getSorting(FormulaNode formula) {
+        for (EffectiveSortOrder sortOrder : ordering) {
+            if(sortOrder.getFormula().equals(formula)) {
+                return sortOrder.isAscending() ? Sorting.ASCENDING : Sorting.DESCENDING;
+            }
+        }
+        return Sorting.NONE;
+    }
+
+
+    public boolean isFiltered(FormulaNode columnFormula) {
+        if(!filter.isPresent()) {
+            return false;
+        }
+        return filter.get().getRootNode().contains(columnFormula);
+    }
+
+    public Optional<ParsedFormula> getFilter() {
+        return filter;
+    }
+
+    /**
      * @return the set of formulas which are used as columns in this table
      */
     public Set<String> getIncludedFormulas() {
@@ -197,4 +230,5 @@ public class EffectiveTableModel {
                 .from(tableModel)
                 .columns(columns.stream().map(c -> c.getModel()).collect(Collectors.toList()));
     }
+
 }

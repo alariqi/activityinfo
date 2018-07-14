@@ -20,6 +20,7 @@ package org.activityinfo.ui.client.table.viewModel;
 
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
+import org.activityinfo.analysis.table.Sorting;
 import org.activityinfo.model.analysis.TableAnalysisModel;
 import org.activityinfo.model.database.Operation;
 import org.activityinfo.model.database.UserDatabaseMeta;
@@ -29,6 +30,7 @@ import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.formula.ConstantNode;
+import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.formula.Formulas;
 import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.query.ColumnSet;
@@ -80,7 +82,6 @@ public class TableViewModel {
         this.formTree = formStore.getFormTree(formId).transformIf(t -> t.toMaybe().getIfVisible());
         this.effectiveTable = Observable.transform(analysisModel, formTree, (a, t) -> new EffectiveTableModel(t, a));
         this.visible = place.transform(p -> sliderTree.isOnPathFrom(formId, p.getFormId()));
-
         this.subForm = sliderTree.isSubForm(formId);
         if(subForm) {
             this.parentRef = place.transformIf(p -> {
@@ -260,5 +261,14 @@ public class TableViewModel {
 
     public Observable<Boolean> isVisible() {
         return visible;
+    }
+
+    public Observable<ColumnHeaderViewModel> getColumnHeader(FormulaNode columnFormula) {
+        return effectiveTable.transform(table -> {
+            Sorting sorting = table.getSorting(columnFormula);
+            boolean filtered = table.isFiltered(columnFormula);
+
+            return new ColumnHeaderViewModel(sorting, filtered);
+        });
     }
 }

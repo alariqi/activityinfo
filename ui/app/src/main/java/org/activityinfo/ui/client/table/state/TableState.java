@@ -25,7 +25,6 @@ public class TableState {
 
     FieldChoiceState columnOptions = new FieldChoiceState(false);
 
-
     TableState() {
     }
 
@@ -65,6 +64,7 @@ public class TableState {
     public TableAnalysisModel getAnalysisModel() {
         return analysisModel;
     }
+
 
     public TableState withSelection(RecordRef selectedRef) {
 

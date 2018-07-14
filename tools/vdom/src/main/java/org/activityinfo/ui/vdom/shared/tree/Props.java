@@ -3,7 +3,9 @@ package org.activityinfo.ui.vdom.shared.tree;
 import com.google.gwt.core.client.GWT;
 import org.activityinfo.ui.vdom.client.tree.PropMapJs;
 
-public class Props {
+public final class Props {
+
+    private Props() {}
 
     public static PropMap create() {
         if(GWT.isScript()) {

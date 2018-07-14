@@ -61,4 +61,9 @@ public abstract class FormulaNode {
     public FormulaNode transform(Function<FormulaNode, FormulaNode> function) {
         return function.apply(this);
     }
+
+    /**
+     * Return true if this node is equal to {@code formulaNode}, or one if its children contains the node.
+     */
+    public abstract boolean contains(FormulaNode formulaNode);
 }

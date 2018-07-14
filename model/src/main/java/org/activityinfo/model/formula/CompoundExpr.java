@@ -119,6 +119,11 @@ public class CompoundExpr extends FormulaNode {
     }
 
     @Override
+    public boolean contains(FormulaNode formulaNode) {
+        return this.equals(formulaNode) || field.contains(formulaNode) || value.contains(formulaNode);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

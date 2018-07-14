@@ -61,6 +61,11 @@ public class GroupNode extends FormulaNode {
     }
 
     @Override
+    public boolean contains(FormulaNode formulaNode) {
+        return this.equals(formulaNode) || this.expr.contains(formulaNode);
+    }
+
+    @Override
     public FieldValue evaluate(EvalContext context) {
         return expr.evaluate(context);
     }

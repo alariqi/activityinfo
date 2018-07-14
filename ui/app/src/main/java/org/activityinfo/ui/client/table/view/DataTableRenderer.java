@@ -25,33 +25,36 @@ import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.datatable.DataTableColumn;
-import org.activityinfo.ui.client.base.datatable.DataTableColumnBuilder;
 import org.activityinfo.ui.client.base.datatable.RowRange;
 import org.activityinfo.ui.client.base.datatable.TableSlice;
+import org.activityinfo.ui.client.table.view.columns.*;
 import org.activityinfo.ui.client.table.view.columns.ColumnRenderer;
 import org.activityinfo.ui.client.table.view.columns.DoubleRenderer;
-import org.activityinfo.ui.client.table.view.columns.StringColumnRenderer;
-import org.activityinfo.ui.client.table.view.columns.SubFormRenderer;
+import org.activityinfo.ui.client.table.viewModel.ColumnHeaderViewModel;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
-import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
-import org.activityinfo.ui.vdom.shared.tree.*;
+import org.activityinfo.ui.vdom.shared.tree.PropMap;
+import org.activityinfo.ui.vdom.shared.tree.Props;
+import org.activityinfo.ui.vdom.shared.tree.VNode;
+import org.activityinfo.ui.vdom.shared.tree.VTree;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Constructs a GXT Grid column model from our EffectiveTableModel.
+ * Constructs a DataTable from an {@link EffectiveTableModel}
  */
 public class DataTableRenderer {
 
 
     private final List<DataTableColumn> columns = new ArrayList<>();
     private final List<ColumnRenderer> cells = new ArrayList<>();
+    private final TableViewModel tableViewModel;
 
 
-    public DataTableRenderer(EffectiveTableModel tableModel) {
+    public DataTableRenderer(TableViewModel tableViewModel, EffectiveTableModel tableModel) {
+        this.tableViewModel = tableViewModel;
         for (EffectiveTableColumn tableColumn : tableModel.getColumns()) {
 
             tableColumn.accept(new TableColumnVisitor<Void>() {
@@ -107,51 +110,52 @@ public class DataTableRenderer {
                     addSubFormColumn(columnModel, subFormFormat);
                     return null;
                 }
-
             });
-
         }
     }
 
     private void addTextColumn(EffectiveTableColumn tableColumn, TextFormat textFormat) {
-        columns.add(new DataTableColumnBuilder()
-        .setWidth(100)
-        .setFilterEnabled(true)
-        .setHeader(new VText(tableColumn.getLabel()))
-        .build());
 
+        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(textFormat.getFormula());
+        DataTableColumn column = ColumnBuilder.build(viewModel)
+                .heading(tableColumn.getLabel())
+                .build();
+
+        columns.add(column);
         cells.add(new StringColumnRenderer(textFormat.getId()));
     }
 
 
     private void addNumberColumn(EffectiveTableColumn tableColumn, NumberFormat numberFormat) {
-        columns.add(new DataTableColumnBuilder()
-                .setWidth(100)
-                .setFilterEnabled(true)
-                .setHeader(new VText(tableColumn.getLabel()))
-                .build());
 
+        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(numberFormat.getFormula());
+        DataTableColumn column = ColumnBuilder.build(viewModel)
+                .heading(tableColumn.getLabel())
+                .build();
+
+        columns.add(column);
         cells.add(new DoubleRenderer(numberFormat.getId()));
-
     }
 
     private void addEnumType(EffectiveTableColumn tableColumn, SingleEnumFormat format) {
-        columns.add(new DataTableColumnBuilder()
-                .setWidth(100)
-                .setFilterEnabled(true)
-                .setHeader(new VText(tableColumn.getLabel()))
-                .build());
 
+        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(format.getFormula());
+        DataTableColumn column = ColumnBuilder.build(viewModel)
+                .heading(tableColumn.getLabel())
+                .build();
+
+        columns.add(column);
         cells.add(new StringColumnRenderer(format.getId()));
     }
 
     private void addDateColumn(EffectiveTableColumn tableColumn, DateFormat dateFormat) {
-        columns.add(new DataTableColumnBuilder()
-                .setWidth(100)
-                .setFilterEnabled(true)
-                .setHeader(new VText(tableColumn.getLabel()))
-                .build());
 
+        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(dateFormat.getFormula());
+        DataTableColumn column = ColumnBuilder.build(viewModel)
+                .heading(tableColumn.getLabel())
+                .build();
+
+        columns.add(column);
         cells.add(new StringColumnRenderer(dateFormat.getId()));
     }
 
@@ -197,14 +201,13 @@ public class DataTableRenderer {
 
 
     private void addSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat format) {
-        columns.add(new DataTableColumnBuilder()
-                .setWidth(100)
-                .setFilterEnabled(true)
-                .setHeader(new VNode(HtmlTag.DIV,
-                        H.div("surtitle", new VText(I18N.CONSTANTS.subForm())),
-                        H.div(columnModel.getLabel())))
-                .build());
 
+        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(format.getFormula());
+        DataTableColumn column = ColumnBuilder.build(viewModel)
+                .heading(I18N.CONSTANTS.subForm(), columnModel.getLabel())
+                .build();
+
+        columns.add(column);
         cells.add(new SubFormRenderer(format.getSubFormId(), TableViewModel.ID_COLUMN_ID, format.getId()));
     }
 

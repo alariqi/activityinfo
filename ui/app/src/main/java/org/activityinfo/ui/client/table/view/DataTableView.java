@@ -15,7 +15,7 @@ public class DataTableView {
     public static VTree render(TableViewModel viewModel, TableUpdater updater) {
 
         Observable<DataTableRenderer> renderer =
-                viewModel.getEffectiveTable().transform(table -> new DataTableRenderer(table));
+                viewModel.getEffectiveTable().transform(table -> new DataTableRenderer(viewModel, table));
 
         Observable<ColumnSet> columnSet = viewModel.getColumnSet();
 
