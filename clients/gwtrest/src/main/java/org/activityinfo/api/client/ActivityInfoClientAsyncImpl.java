@@ -46,6 +46,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -266,7 +267,23 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
 
     @Override
     public Promise<FormMetadata> getFormMetadata(String formId) {
-        return get(formUrl(formId), FormMetadata::fromJson);
+        return getRaw(formUrl(formId), new Function<Response, FormMetadata>() {
+            @Nullable
+            @Override
+            public FormMetadata apply(@Nullable Response response) {
+                switch (response.getStatusCode()) {
+                    case Response.SC_OK:
+                        return FormMetadata.fromJson(Json.parse(response.getText()));
+                    case Response.SC_NOT_FOUND:
+                        return FormMetadata.notFound(ResourceId.valueOf(formId));
+                    case Response.SC_FORBIDDEN:
+                        return FormMetadata.forbidden(ResourceId.valueOf(formId));
+
+                    default:
+                        throw new ApiException(response.getStatusCode());
+                }
+            }
+        });
     }
 
     @Override

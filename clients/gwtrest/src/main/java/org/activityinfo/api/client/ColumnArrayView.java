@@ -26,12 +26,12 @@ import org.activityinfo.model.query.SortModel;
 
 
 @SuppressWarnings("GwtInconsistentSerializableClass")
-class ColumnArrayView implements EnumColumnView, ColumnView {
+public class ColumnArrayView implements EnumColumnView, ColumnView {
    
     private ColumnType columnType;
     private JavaScriptObject array;
 
-    ColumnArrayView(ColumnType columnType, JavaScriptObject array) {
+    public ColumnArrayView(ColumnType columnType, JavaScriptObject array) {
         this.columnType = columnType;
         this.array = array;
     }
