@@ -104,7 +104,7 @@ public class DataTable {
                     H.div("surtitle", new VText(I18N.CONSTANTS.subForm())),
                     new VText(column.getHeading())));
         } else {
-            children.add(new VNode(HtmlTag.DIV, new VText(column.getHeading())));
+            children.add(new VNode(HtmlTag.DIV, labelProps, new VText(column.getHeading())));
         }
 
         if(column.getSorting() != Sorting.NONE) {
