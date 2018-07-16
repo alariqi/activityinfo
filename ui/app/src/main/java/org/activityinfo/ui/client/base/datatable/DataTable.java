@@ -3,7 +3,6 @@ package org.activityinfo.ui.client.base.datatable;
 import elemental2.dom.*;
 import jsinterop.base.Js;
 import org.activityinfo.analysis.table.Sorting;
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.base.Svg;
@@ -29,6 +28,7 @@ public class DataTable {
     private Observable<List<DataTableColumn>> columns;
     private Function<Observable<RowRange>, Observable<TableSlice>> rowRenderer;
     private RowClickHandler rowClickHandler;
+    private RowClickHandler columnClickHandler;
 
     /**
      * The height of the row in pixels
@@ -56,6 +56,11 @@ public class DataTable {
         return this;
     }
 
+    public DataTable setColumnClickHandler(RowClickHandler handler) {
+        this.columnClickHandler = handler;
+        return this;
+    }
+
     public VTree build() {
 
         VNode loading = render(Collections.emptyList());
@@ -68,7 +73,13 @@ public class DataTable {
     }
 
     private VNode render(List<DataTableColumn> c) {
-        return div("datatable",
+
+        PropMap datatableProps = Props.withClass("datatable");
+        if(columnClickHandler != null || rowClickHandler != null) {
+            datatableProps.onclick(this::onClick);
+        }
+
+        return div(datatableProps,
                 div("datatable__inner",
                     renderHeader(c),
                     renderBody(c)));
@@ -89,6 +100,8 @@ public class DataTable {
 
         PropMap thProps = Props.create();
         thProps.setStyle(headerStyle);
+        thProps.setData("column", column.getId());
+        thProps.addClassName("selected", column.isColumnSelected());
 
         PropMap colHeaderProps = Props.create();
         colHeaderProps.addClassName("datatable__colheader");
@@ -100,8 +113,8 @@ public class DataTable {
         labelProps.setTitle(column.getHeading());
 
         if(column.hasSurtitle()) {
-            children.add( new VNode(HtmlTag.DIV, labelProps,
-                    H.div("surtitle", new VText(I18N.CONSTANTS.subForm())),
+            children.add(new VNode(HtmlTag.DIV, labelProps,
+                    H.div("surtitle", new VText(column.getSurtitle())),
                     new VText(column.getHeading())));
         } else {
             children.add(new VNode(HtmlTag.DIV, labelProps, new VText(column.getHeading())));
@@ -162,10 +175,6 @@ public class DataTable {
         PropMap tableProps = Props.create();
         tableProps.setStyle(tableStyle);
 
-        if(rowClickHandler != null) {
-            tableProps.onclick(event -> onBodyClick(event));
-        }
-
         return div("datatable__body",
                 div(innerProps,
                     table(tableProps,
@@ -173,11 +182,19 @@ public class DataTable {
                         slice.getTableBody())));
     }
 
-    private void onBodyClick(com.google.gwt.user.client.Event event) {
+    private void onClick(com.google.gwt.user.client.Event event) {
         Element element = Js.cast(event.getEventTarget());
-        Element row = element.closest("tr[data-row]");
-        if(row != null) {
-            rowClickHandler.onClick(row.getAttribute("data-row"));
+        if(rowClickHandler != null) {
+            Element row = element.closest("tr[data-row]");
+            if (row != null) {
+                rowClickHandler.onClick(row.getAttribute("data-row"));
+            }
+        }
+        if(columnClickHandler != null) {
+            Element column = element.closest("*[data-column]");
+            if(column != null) {
+                columnClickHandler.onClick(column.getAttribute("data-column"));
+            }
         }
     }
 
@@ -222,6 +239,7 @@ public class DataTable {
 
         return new VNode(HtmlTag.TH, headerProps);
     }
+
 
 
     private class Component extends VComponent {

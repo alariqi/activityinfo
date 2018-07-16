@@ -15,11 +15,14 @@ public class ImportState {
     private ResourceId formId;
     private Optional<ImportSource> source = Optional.empty();
     private ImportStep step = ImportStep.CHOOSE_SOURCE;
+    private String selectedColumnId = "";
+    private FieldMappingSet fieldMappings = new FieldMappingSet();
 
     private ImportState(ImportState from) {
         this.formId = from.formId;
         this.source = from.source;
         this.step = from.step;
+        this.selectedColumnId = from.selectedColumnId;
     }
 
     public ImportState(ResourceId formId) {
@@ -38,8 +41,16 @@ public class ImportState {
         return step;
     }
 
+    public String getSelectedColumnId() {
+        return selectedColumnId;
+    }
+
     public boolean isEmpty() {
         return !source.isPresent();
+    }
+
+    public FieldMappingSet getMappings() {
+        return fieldMappings;
     }
 
     public ImportState withSource(Optional<ImportSource> source) {
@@ -58,6 +69,16 @@ public class ImportState {
 
         ImportState copy = new ImportState(this);
         copy.step = step;
+        return copy;
+    }
+
+
+    public ImportState selectColumn(String columnId) {
+        if(this.selectedColumnId.equals(columnId)) {
+            return this;
+        }
+        ImportState copy = new ImportState(this);
+        copy.selectedColumnId = columnId;
         return copy;
     }
 

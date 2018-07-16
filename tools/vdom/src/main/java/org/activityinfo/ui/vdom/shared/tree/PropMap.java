@@ -29,14 +29,9 @@ public interface PropMap {
 
     PropMap setStyle(Style style);
 
-    default PropMap setStyle(PropMap style) {
-        return set("style", style);
-    }
+    PropMap setStyle(PropMap style);
 
-    default PropMap setTitle(String title) {
-        return set("title", title);
-    }
-
+    PropMap setTitle(String title);
 
     PropMap disabled(boolean disabled);
 

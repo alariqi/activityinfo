@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.importer.view;
 
 import com.google.common.base.Strings;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.TextAreaElement;
 import com.google.gwt.user.client.Event;
 import org.activityinfo.i18n.shared.I18N;
@@ -10,17 +11,22 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.base.NonIdeal;
 import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.button.Buttons;
+import org.activityinfo.ui.client.base.field.RadioButton;
 import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.importer.state.ImportSource;
 import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.state.ImportUpdater;
 import org.activityinfo.ui.client.importer.viewModel.ImportViewModel;
+import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
+import org.activityinfo.ui.client.importer.viewModel.targets.ColumnTarget;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -124,12 +130,33 @@ public class ImportView {
     }
 
     private VTree columnPanel() {
-        return new SidePanel()
-                .hideMode(SidePanel.HideMode.NONE)
-                .header(H.h2("Match Column"))
-                .build();
+        return new ReactiveComponent(viewModel.getSelectedColumnView().transform(column ->
+                new SidePanel()
+                        .hideMode(SidePanel.HideMode.NONE)
+                        .header(H.h2(I18N.MESSAGES.matchColumnToField(column.getSource().getLabel())))
+                        .content(
+                                H.div("importer__choice",
+                                    H.div("importer__choice__body", columnTargets(column))))
+                        .build()));
+    }
 
+    private VTree columnTargets(SelectedColumnViewModel column) {
+        List<VTree> radioGroup = new ArrayList<>();
+        for (ColumnTarget columnTarget : column.getTargets()) {
+            radioGroup.add(new RadioButton()
+                .label(columnTarget.getLabel())
+                .name("radio-" + column.getSource().getId())
+                .onchange(event -> onTargetSelected(column, columnTarget, event))
+                .render());
+        }
+        return new VNode(HtmlTag.DIV, PropMap.EMPTY, radioGroup);
+    }
 
+    private void onTargetSelected(SelectedColumnViewModel column, ColumnTarget columnTarget, Event event) {
+        InputElement input = event.getEventTarget().cast();
+        if(input.isChecked()) {
+
+        }
     }
 
     private VNode importHeader(String heading, VTree... buttons) {

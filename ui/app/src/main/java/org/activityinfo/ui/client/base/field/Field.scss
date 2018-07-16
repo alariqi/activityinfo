@@ -179,10 +179,16 @@ textarea:disabled {
     outline: 0 none;
   }
 }
-
-.fieldset__checkbox input[type="checkbox"]:checked ~ label {
-  color: $black;
-}
+//
+//.fieldset__checkbox input[type="checkbox"]:checked ~ label {
+//  color: $black;
+//}
+//
+//.dark {
+//  .fieldset__checkbox input[type="checkbox"]:checked ~ label {
+//    color: $white;
+//  }
+//}
 
 .fieldset__checkbox input[type="checkbox"]:disabled ~ label {
   opacity: 0.5;
@@ -197,11 +203,6 @@ textarea:disabled {
   position: relative;
   padding: 0.5rem 0;
   padding-left: 2rem;
-  margin-bottom: 1rem;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .fieldset__radio svg {
@@ -253,7 +254,6 @@ textarea:disabled {
 }
 
 .fieldset__radio input[type="radio"]:checked ~ label {
-  color: $black;
 
   &:before {
     transition: opacity 0.2s 0.1s ease,

@@ -4,7 +4,10 @@
   // Fill entire page body
   flex-grow: 1;
 
-  padding: 1rem 1.25rem;
+  padding-top: 1rem;
+  padding-right: 0;
+  padding-left: 1.25rem;
+  padding-bottom: 0;
 
   // Split the space vertically between the importer heading and the body
   display: flex;
@@ -22,7 +25,7 @@
 }
 
 .importer__header__actions {
-
+  padding-right: 1rem;
 }
 
 .importer__header .surtitle {
@@ -66,4 +69,20 @@
 
 .importer__match .datatable {
   flex-grow: 1;
+}
+
+.importer__choice {
+  display: flex;
+  flex-direction: column;
+}
+
+.importer__choice__header,
+.importer__choice__footer {
+  flex: none;
+}
+
+.importer__choice__body {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-left: 1rem;
 }

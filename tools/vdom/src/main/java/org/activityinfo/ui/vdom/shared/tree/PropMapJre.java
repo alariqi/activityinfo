@@ -123,6 +123,16 @@ final class PropMapJre implements PropMap {
     }
 
     @Override
+    public PropMap setStyle(PropMap style) {
+        return set("style", style);
+    }
+
+    @Override
+    public PropMap setTitle(String title) {
+        return set("title", title);
+    }
+
+    @Override
     public PropMap disabled(boolean disabled) {
         if(disabled) {
             set("disabled", "true");

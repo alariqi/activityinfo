@@ -127,6 +127,16 @@ public final class PropMapJs extends JavaScriptObject implements PropMap {
         return this;
     }
 
+    @Override
+    public PropMap setStyle(PropMap style) {
+        return set("style", style);
+    }
+
+    @Override
+    public PropMap setTitle(String title) {
+        return set("title", title);
+    }
+
     public PropMapJs disabled(boolean disabled) {
         if(disabled) {
             set("disabled", "true");

@@ -106,6 +106,7 @@ public class SidePanel {
 
             PropMap props = Props.create();
             props.addClassName("sidepanel");
+            props.addClassName("dark");
 
             if(!e) {
                 if(hideMode == HideMode.COLLAPSE) {

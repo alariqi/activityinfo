@@ -56,6 +56,10 @@
     border-right: 1px solid $green-pale;
   }
 
+  th .surtitle {
+    color: #689591;
+  }
+
   td {
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -72,6 +76,8 @@
 
 .datatable__body {
 
+  box-shadow: 0 2px 6px rgba(36, 50, 51, 0.2);
+
   // Used only for sizing columns
   th {
     height: 0;
@@ -80,12 +86,12 @@
 
   td {
     text-align: left;
-    border-bottom: 2px solid transparent;
-    border-top: 2px solid transparent;
   }
+
   td:first-child {
     border-left: 2px hidden transparent;
   }
+
   tr {
     background-color: $white;
     position: relative;
@@ -94,15 +100,36 @@
     background-color: #F1F6F6;
   }
 
+  /** Selected rows **/
+
   tr.selected {
     td {
-      border-bottom: 2px solid $green;
-      border-top: 2px solid $green;
+      box-shadow: inset 0 2px 0 0 $green, /* top */
+      inset 0 -2px 0 0 $green /* bottom */
+    ;
+
     }
 
     td:first-child {
-      border-left: 2px solid $green;
+      box-shadow: inset 2px 0 0 $green, /* left */
+      inset 0 2px 0 0 $green, /* top */
+      inset 0 -2px 0 0 $green /* bottom */
+    ;
     }
+  }
+}
+
+/** Selected Columns **/
+
+.datatable {
+
+  td.selected {
+    box-shadow: inset 2px 0 0 $green, /* left */
+                inset -2px 0 0 $green;
+  }
+
+  th.selected {
+    box-shadow: inset 0 0 0 2px $green;
   }
 }
 

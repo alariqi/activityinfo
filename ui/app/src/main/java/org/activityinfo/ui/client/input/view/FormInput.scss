@@ -35,12 +35,12 @@
 }
 
 
-.forminput__inner .fieldset__radio input[type="radio"]:checked ~ label,
+.forminput__inner .radio input[type="radio"]:checked ~ label,
 .forminput__inner .fieldset__checkbox input[type="checkbox"]:checked ~ label {
   color: $green-light;
 }
 
-.forminput__inner .fieldset__radio input[type="radio"]:disabled ~ label,
+.forminput__inner .radio input[type="radio"]:disabled ~ label,
 .forminput__inner .fieldset__checkbox input[type="checkbox"]:disabled ~ label {
   color: $grey-3;
 }

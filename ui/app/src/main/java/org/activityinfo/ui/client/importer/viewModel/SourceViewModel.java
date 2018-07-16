@@ -4,6 +4,7 @@ import org.activityinfo.model.query.ColumnView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SourceViewModel {
 
@@ -24,7 +25,8 @@ public class SourceViewModel {
                 if (numColumns > 0) {
                     ColumnView[] columns = parser.parseColumns(numColumns);
                     for (int i = 0; i < numColumns; i++) {
-                        this.columns.add(new SourceColumn(headerRow.getColumnValue(i), columns[i]));
+                        String id = "column" + i;
+                        this.columns.add(new SourceColumn(id, headerRow.getColumnValue(i), columns[i]));
                     }
                 }
             }
@@ -44,6 +46,28 @@ public class SourceViewModel {
             return 0;
         } else {
             return columns.get(0).getColumnView().numRows();
+        }
+    }
+
+    public boolean hasColumnId(String id) {
+        return getColumnIndex(id) != -1;
+    }
+
+    public int getColumnIndex(String columnId) {
+        for (int i = 0; i < columns.size(); i++) {
+            if(columns.get(i).getId().equals(columnId)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public Optional<SourceColumn> getColumnById(String id) {
+        int index = getColumnIndex(id);
+        if(index < 0) {
+            return Optional.empty();
+        } else {
+            return Optional.of(columns.get(index));
         }
     }
 }
