@@ -1,0 +1,69 @@
+
+
+.importer {
+  // Fill entire page body
+  flex-grow: 1;
+
+  padding: 1rem 1.25rem;
+
+  // Split the space vertically between the importer heading and the body
+  display: flex;
+  flex-direction: column;
+}
+
+.importer__header {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.importer__header__inner {
+
+}
+
+.importer__header__actions {
+
+}
+
+.importer__header .surtitle {
+  color: #689591;
+}
+
+.importer__body {
+  flex-grow: 1;
+  position: relative;
+}
+
+.importer__source {
+
+  background-color: $white;
+  border: 1px solid #e6ebea;
+
+  /* Center the instructions in this container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.importer__source textarea {
+  resize: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+}
+
+.importer__match {
+  display: flex;
+  flex-direction: row;
+}
+
+.importer__match .datatable {
+  flex-grow: 1;
+}

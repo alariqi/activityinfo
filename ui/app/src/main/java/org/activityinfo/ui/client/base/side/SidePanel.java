@@ -3,6 +3,7 @@ package org.activityinfo.ui.client.base.side;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.base.Svg;
+import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
@@ -12,7 +13,8 @@ public class SidePanel {
 
     public enum HideMode {
         CLOSE,
-        COLLAPSE
+        COLLAPSE,
+        NONE
     }
 
     private Observable<Boolean> expanded;
@@ -61,6 +63,10 @@ public class SidePanel {
 
     public SidePanel hideMode(HideMode hideMode) {
         this.hideMode = hideMode;
+        if(this.hideMode == HideMode.NONE) {
+            this.expanded = Observable.just(Boolean.TRUE);
+            this.updater = expanded -> { };
+        }
         return this;
     }
 
@@ -136,6 +142,9 @@ public class SidePanel {
     }
 
     private VNode collapseButton() {
+        if(this.hideMode == HideMode.NONE) {
+            return null;
+        }
         return new VNode(HtmlTag.BUTTON, withClass("sidepanel__collapse").onclick(event -> {
             updater.expand(false);
         }), Svg.svg(null, "#close_white"));
@@ -144,8 +153,8 @@ public class SidePanel {
 
     private VTree header() {
         return new VNode(HtmlTag.DIV, withClass("sidepanel__header"),
-                header,
-                collapseButton());
+                H.nullableList(header,
+                    collapseButton()));
     }
 
     private VNode content() {

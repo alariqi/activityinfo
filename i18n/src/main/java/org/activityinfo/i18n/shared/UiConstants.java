@@ -1984,4 +1984,17 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("This Form")
     String thisForm();
+
+    @DefaultStringValue("Import data to existing form")
+    String importDataExistingForm();
+
+    @DefaultStringValue("Upload your data")
+    String uploadYourData();
+
+    @DefaultStringValue("Continue")
+    String continue_();
+
+    @DefaultStringValue("Match fields & validate fields")
+    String matchFieldStep();
+
 }

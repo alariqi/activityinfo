@@ -8,8 +8,8 @@ public class DataTableColumn {
     int width = 150;
     String surtitle = "";
     String heading;
-    Sorting sorting;
-    boolean filterActive;
+    Sorting sorting = Sorting.NONE;
+    boolean filterActive = false;
 
     protected DataTableColumn() {
     }

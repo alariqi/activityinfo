@@ -24,6 +24,7 @@ import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.ui.client.analysis.AnalysisPlace;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
+import org.activityinfo.ui.client.importer.ImportPlace;
 import org.activityinfo.ui.client.input.RecordPlace;
 import org.activityinfo.ui.client.table.TablePlace;
 
@@ -40,6 +41,9 @@ public class AppPlaceHistoryMapper implements Function<String, Place> {
             String[] parts = token.split("/");
             if (parts[0].equals("table")) {
                 return TablePlace.parse(parts);
+
+            } else if (parts[0].equals("import") && parts.length == 2) {
+                return new ImportPlace(ResourceId.valueOf(parts[1]));
 
             } else if(parts[0].equals("edit")) {
                 return new RecordPlace(new RecordRef(ResourceId.valueOf(parts[1]), ResourceId.valueOf(parts[2])));

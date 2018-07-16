@@ -8,6 +8,8 @@ import org.activityinfo.ui.client.database.DatabaseListPage;
 import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePage;
 import org.activityinfo.ui.client.database.DatabasePlace;
+import org.activityinfo.ui.client.importer.ImportPage;
+import org.activityinfo.ui.client.importer.ImportPlace;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.client.table.TablePage;
 import org.activityinfo.ui.client.table.TablePlace;
@@ -74,6 +76,9 @@ public class AppHolder implements IsWidget {
 
         } else if(p instanceof TablePlace) {
             return new TablePage(formStore, (TablePlace) p);
+
+        } else if(p instanceof ImportPlace) {
+            return new ImportPage(formStore, (ImportPlace) p);
 
         } else {
             return new NotFoundPage(formStore);

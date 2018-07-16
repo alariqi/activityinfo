@@ -10,6 +10,7 @@ import org.activityinfo.ui.client.base.avatar.GenericAvatar;
 import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.base.toolbar.ToolbarBuilder;
 import org.activityinfo.ui.client.fields.view.FieldChoiceView;
+import org.activityinfo.ui.client.importer.ImportPlace;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.view.FormOverlay;
 import org.activityinfo.ui.client.page.PageBuilder;
@@ -142,6 +143,7 @@ public class TableView {
 
         VTree importButton = Buttons.button(I18N.CONSTANTS.importText())
                 .icon(Icon.BUBBLE_IMPORT)
+                .link(new ImportPlace(tableViewModel.getFormId()).toUri())
                 .build();
 
         VTree columnsButton = Buttons.button(I18N.CONSTANTS.chooseColumns())
