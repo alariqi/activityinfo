@@ -2,11 +2,16 @@ package org.activityinfo.ui.client.base.datatable;
 
 import elemental2.dom.*;
 import jsinterop.base.Js;
+import org.activityinfo.analysis.table.Sorting;
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
+import org.activityinfo.ui.client.base.Svg;
+import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -78,8 +83,51 @@ public class DataTable {
                 )));
     }
 
-    private VTree renderColumnHeader(DataTableColumn dataTableColumn) {
-        return dataTableColumn.header;
+    private VTree renderColumnHeader(DataTableColumn column) {
+        Style headerStyle = new Style();
+        headerStyle.set("width", column.getWidth() + "px");
+
+        PropMap thProps = Props.create();
+        thProps.setStyle(headerStyle);
+
+        PropMap colHeaderProps = Props.create();
+        colHeaderProps.addClassName("datatable__colheader");
+        colHeaderProps.setStyle(headerStyle);
+
+        List<VTree> children = new ArrayList<>();
+
+        PropMap labelProps = Props.withClass("datatable__colheader__label");
+        labelProps.setTitle(column.getHeading());
+
+        if(column.hasSurtitle()) {
+            children.add( new VNode(HtmlTag.DIV, labelProps,
+                    H.div("surtitle", new VText(I18N.CONSTANTS.subForm())),
+                    new VText(column.getHeading())));
+        } else {
+            children.add(new VNode(HtmlTag.DIV, new VText(column.getHeading())));
+        }
+
+        if(column.getSorting() != Sorting.NONE) {
+            children.add(sortIcon(column.getSorting()));
+        }
+
+        children.add(filterIcon(column.isFilterActive()));
+
+        return new VNode(HtmlTag.TH, thProps,
+                new VNode(HtmlTag.DIV, colHeaderProps, children));
+    }
+
+
+    private static VTree sortIcon(Sorting sorting) {
+        return Svg.svg("sorticon", sorting == Sorting.ASCENDING ?
+                "#sort_ascending" :
+                "#sort_descending", "0 0 12 15");
+    }
+
+    private static VTree filterIcon(boolean active) {
+        return Svg.svg("datatable__colheader__filter", active ?
+                "#filter_active" :
+                "#filter_inactive", "0 0 26 25");
     }
 
     private VTree renderBody(List<DataTableColumn> columns) {

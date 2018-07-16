@@ -31,11 +31,9 @@
 
 .datatable__colheader {
   display: flex;
+  align-items: flex-end;
   overflow: hidden;
-  padding-top: 0.75rem;
-  padding-left: 0.5rem;
-  padding-bottom: 0.75rem;
-  padding-right: 2px;
+  padding: 0.75rem 2px 0.75rem 0.5rem;
 }
 
 .datatable__colheader__label {

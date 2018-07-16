@@ -1,26 +1,40 @@
 package org.activityinfo.ui.client.base.datatable;
 
-import org.activityinfo.ui.vdom.shared.tree.VTree;
+import org.activityinfo.analysis.table.Sorting;
+import org.activityinfo.model.annotation.AutoBuilder;
 
+@AutoBuilder
 public class DataTableColumn {
-    int width;
-    VTree header;
+    int width = 150;
+    String surtitle;
+    String heading;
+    Sorting sorting;
+    boolean filterActive;
 
-
-    public DataTableColumn(int width, VTree header) {
-        this.width = width;
-        this.header = header;
+    protected DataTableColumn() {
     }
 
     public int getWidth() {
         return width;
     }
 
-    /**
-     * @return
-     */
-    public VTree getHeader() {
-        return header;
+    public String getSurtitle() {
+        return surtitle;
     }
 
+    public String getHeading() {
+        return heading;
+    }
+
+    public Sorting getSorting() {
+        return sorting;
+    }
+
+    public boolean isFilterActive() {
+        return filterActive;
+    }
+
+    public boolean hasSurtitle() {
+        return surtitle != null;
+    }
 }

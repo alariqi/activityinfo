@@ -25,12 +25,13 @@ import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.datatable.DataTableColumn;
+import org.activityinfo.ui.client.base.datatable.DataTableColumnBuilder;
 import org.activityinfo.ui.client.base.datatable.RowRange;
 import org.activityinfo.ui.client.base.datatable.TableSlice;
-import org.activityinfo.ui.client.table.view.columns.*;
 import org.activityinfo.ui.client.table.view.columns.ColumnRenderer;
 import org.activityinfo.ui.client.table.view.columns.DoubleRenderer;
-import org.activityinfo.ui.client.table.viewModel.ColumnHeaderViewModel;
+import org.activityinfo.ui.client.table.view.columns.StringColumnRenderer;
+import org.activityinfo.ui.client.table.view.columns.SubFormRenderer;
 import org.activityinfo.ui.client.table.viewModel.TableViewModel;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.PropMap;
@@ -51,10 +52,12 @@ public class DataTableRenderer {
     private final List<DataTableColumn> columns = new ArrayList<>();
     private final List<ColumnRenderer> cells = new ArrayList<>();
     private final TableViewModel tableViewModel;
+    private final EffectiveTableModel tableModel;
 
 
     public DataTableRenderer(TableViewModel tableViewModel, EffectiveTableModel tableModel) {
         this.tableViewModel = tableViewModel;
+        this.tableModel = tableModel;
         for (EffectiveTableColumn tableColumn : tableModel.getColumns()) {
 
             tableColumn.accept(new TableColumnVisitor<Void>() {
@@ -114,49 +117,49 @@ public class DataTableRenderer {
         }
     }
 
-    private void addTextColumn(EffectiveTableColumn tableColumn, TextFormat textFormat) {
+    private void addTextColumn(EffectiveTableColumn tableColumn, TextFormat format) {
 
-        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(textFormat.getFormula());
-        DataTableColumn column = ColumnBuilder.build(viewModel)
-                .heading(tableColumn.getLabel())
-                .build();
+        columns.add(new DataTableColumnBuilder()
+            .setHeading(tableColumn.getLabel())
+            .setFilterActive(tableModel.isFiltered(format.getFormula()))
+            .setSorting(tableModel.getSorting(format.getFormula()))
+            .build());
 
-        columns.add(column);
-        cells.add(new StringColumnRenderer(textFormat.getId()));
+        cells.add(new StringColumnRenderer(format.getId()));
     }
 
 
-    private void addNumberColumn(EffectiveTableColumn tableColumn, NumberFormat numberFormat) {
+    private void addNumberColumn(EffectiveTableColumn tableColumn, NumberFormat format) {
 
-        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(numberFormat.getFormula());
-        DataTableColumn column = ColumnBuilder.build(viewModel)
-                .heading(tableColumn.getLabel())
-                .build();
+        columns.add(new DataTableColumnBuilder()
+                .setHeading(tableColumn.getLabel())
+                .setFilterActive(tableModel.isFiltered(format.getFormula()))
+                .setSorting(tableModel.getSorting(format.getFormula()))
+                .build());
 
-        columns.add(column);
-        cells.add(new DoubleRenderer(numberFormat.getId()));
+        cells.add(new DoubleRenderer(format.getId()));
     }
 
     private void addEnumType(EffectiveTableColumn tableColumn, SingleEnumFormat format) {
 
-        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(format.getFormula());
-        DataTableColumn column = ColumnBuilder.build(viewModel)
-                .heading(tableColumn.getLabel())
-                .build();
+        columns.add(new DataTableColumnBuilder()
+                .setHeading(tableColumn.getLabel())
+                .setFilterActive(tableModel.isFiltered(format.getFormula()))
+                .setSorting(tableModel.getSorting(format.getFormula()))
+                .build());
 
-        columns.add(column);
         cells.add(new StringColumnRenderer(format.getId()));
     }
 
-    private void addDateColumn(EffectiveTableColumn tableColumn, DateFormat dateFormat) {
+    private void addDateColumn(EffectiveTableColumn tableColumn, DateFormat format) {
 
-        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(dateFormat.getFormula());
-        DataTableColumn column = ColumnBuilder.build(viewModel)
-                .heading(tableColumn.getLabel())
-                .build();
+        columns.add(new DataTableColumnBuilder()
+                .setHeading(tableColumn.getLabel())
+                .setFilterActive(tableModel.isFiltered(format.getFormula()))
+                .setSorting(tableModel.getSorting(format.getFormula()))
+                .build());
 
-        columns.add(column);
-        cells.add(new StringColumnRenderer(dateFormat.getId()));
+        cells.add(new StringColumnRenderer(format.getId()));
     }
 
 
@@ -202,12 +205,13 @@ public class DataTableRenderer {
 
     private void addSubFormColumn(EffectiveTableColumn columnModel, SubFormFormat format) {
 
-        Observable<ColumnHeaderViewModel> viewModel = tableViewModel.getColumnHeader(format.getFormula());
-        DataTableColumn column = ColumnBuilder.build(viewModel)
-                .heading(I18N.CONSTANTS.subForm(), columnModel.getLabel())
-                .build();
+        columns.add(new DataTableColumnBuilder()
+                .setSurtitle(I18N.CONSTANTS.subForm())
+                .setHeading(columnModel.getLabel())
+                .setFilterActive(tableModel.isFiltered(format.getFormula()))
+                .setSorting(tableModel.getSorting(format.getFormula()))
+                .build());
 
-        columns.add(column);
         cells.add(new SubFormRenderer(format.getSubFormId(), TableViewModel.ID_COLUMN_ID, format.getId()));
     }
 
