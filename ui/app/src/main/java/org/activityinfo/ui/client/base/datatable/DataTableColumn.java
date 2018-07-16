@@ -6,7 +6,7 @@ import org.activityinfo.model.annotation.AutoBuilder;
 @AutoBuilder
 public class DataTableColumn {
     int width = 150;
-    String surtitle;
+    String surtitle = "";
     String heading;
     Sorting sorting;
     boolean filterActive;
@@ -35,6 +35,6 @@ public class DataTableColumn {
     }
 
     public boolean hasSurtitle() {
-        return surtitle != null;
+        return !surtitle.isEmpty();
     }
 }
