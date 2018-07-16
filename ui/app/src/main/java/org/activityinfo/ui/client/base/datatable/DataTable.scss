@@ -4,7 +4,7 @@
 }
 
 .datatable table {
-  border-collapse: collapse;
+  border-collapse: separate;
   table-layout: fixed;
 }
 
@@ -80,18 +80,29 @@
 
   td {
     text-align: left;
+    border-bottom: 2px solid transparent;
+    border-top: 2px solid transparent;
+  }
+  td:first-child {
+    border-left: 2px hidden transparent;
   }
   tr {
     background-color: $white;
     position: relative;
-
   }
   tr:nth-child(odd) {
     background-color: #F1F6F6;
   }
 
   tr.selected {
-    border: 2px solid $green;
+    td {
+      border-bottom: 2px solid $green;
+      border-top: 2px solid $green;
+    }
+
+    td:first-child {
+      border-left: 2px solid $green;
+    }
   }
 }
 
