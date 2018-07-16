@@ -275,7 +275,7 @@ public class DataTable {
         @Override
         public void handleEvent(Event evt) {
             // Sync the header scrolling
-            headerTable.style.left = (-tableBody.scrollLeft) + "px";
+            headerTable.style.transform = "translateX(" + (-tableBody.scrollLeft) + "px)";
 
             // Update our estimate of row height with a measured value
             if(!measuredRowHeight) {
