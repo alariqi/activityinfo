@@ -69,6 +69,15 @@ public class KeyMatrixSet {
     private final ReferenceType referenceType;
     private final LookupKeySet lookupKeySet;
 
+
+    public KeyMatrixSet(
+            FormSource formSource,
+            ReferenceType referenceType,
+            LookupKeySet lookupKeySet,
+            Optional<FormulaNode> filter) {
+        this(formSource, referenceType, lookupKeySet, Observable.just(filter));
+    }
+
     public KeyMatrixSet(
             FormSource formSource,
             ReferenceType referenceType,

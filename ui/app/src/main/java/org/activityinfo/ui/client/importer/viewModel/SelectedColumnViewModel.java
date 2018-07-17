@@ -1,9 +1,10 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
-import org.activityinfo.ui.client.importer.viewModel.targets.ColumnTarget;
-import org.activityinfo.ui.client.importer.viewModel.targets.ColumnTargetSet;
+import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
+import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +14,9 @@ public class SelectedColumnViewModel {
     private final List<ColumnTarget> targets;
     private final Optional<ColumnTarget> selected;
 
-    public SelectedColumnViewModel(ColumnTargetSet targetSet, SourceColumn selectedColumn, FieldMappingSet mappings) {
+    public SelectedColumnViewModel(FieldViewModelSet fields, SourceColumn selectedColumn, FieldMappingSet mappings) {
         this.source = selectedColumn;
-        this.targets = targetSet.getTargetsForColumn(selectedColumn);
+        this.targets = Collections.emptyList();
         this.selected = this.targets.stream().filter(t -> t.isSelected(selectedColumn.getId(), mappings)).findAny();
     }
 

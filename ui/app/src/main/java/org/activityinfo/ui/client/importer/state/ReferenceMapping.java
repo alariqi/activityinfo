@@ -1,29 +1,72 @@
 package org.activityinfo.ui.client.importer.state;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class ReferenceMapping implements FieldMapping {
-    private String fieldId;
+    private String fieldName;
 
     /**
-     * Mapping from column ids to reference field keys
+     * Maps from columnId to the applicable key map
      */
-    private Map<String, String> keyMapping = new HashMap<>();
+    private Map<String, KeyMapping> columnMap;
 
-    public ReferenceMapping(String fieldId, Map<String, String> keyMapping) {
-        this.fieldId = fieldId;
-        this.keyMapping = keyMapping;
+    public ReferenceMapping(String fieldName, KeyMapping... mappings) {
+        this(fieldName, Arrays.asList(mappings));
+    }
+
+    public ReferenceMapping(String fieldName, Iterable<KeyMapping> keyMappings) {
+        this.fieldName = fieldName;
+        this.columnMap = new HashMap<>();
+        for (KeyMapping keyMapping : keyMappings) {
+            columnMap.put(keyMapping.getColumnId(), keyMapping);
+        }
+    }
+
+    private ReferenceMapping(String fieldName, Map<String, KeyMapping> columnMap) {
+        this.fieldName = fieldName;
+        this.columnMap = columnMap;
     }
 
     @Override
-    public String getFieldId() {
-        return fieldId;
+    public String getFieldName() {
+        return fieldName;
     }
 
     @Override
     public Set<String> getMappedColumnIds() {
-        return keyMapping.keySet();
+        return columnMap.keySet();
+    }
+
+    @Override
+    public Optional<FieldMapping> withColumns(Predicate<String> columnPredicate) {
+        Map<String, KeyMapping> updatedMap = new HashMap<>();
+        for (KeyMapping keyMapping : columnMap.values()) {
+            if(columnPredicate.test(keyMapping.getColumnId())) {
+                updatedMap.put(keyMapping.getColumnId(), keyMapping);
+            }
+        }
+        if(updatedMap.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(new ReferenceMapping(fieldName, updatedMap));
+        }
+    }
+
+    public ReferenceMapping withKeyMapping(KeyMapping newMapping) {
+        List<KeyMapping> updatedMappings = new ArrayList<>();
+        for (KeyMapping existing : columnMap.values()) {
+            if(!existing.conflictsWith(newMapping)) {
+                updatedMappings.add(existing);
+            }
+        }
+        updatedMappings.add(newMapping);
+
+        return new ReferenceMapping(fieldName, updatedMappings);
+    }
+
+    @Override
+    public String toString() {
+        return "ReferenceMapping{" + fieldName + " => (" + columnMap.values() + ")}";
     }
 }

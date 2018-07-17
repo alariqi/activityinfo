@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.ui.client.base.ConsoleTimer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,9 @@ public class SourceViewModel {
     }
 
     public SourceViewModel(String pastedText) {
+
+        ConsoleTimer.time("import.parse");
+
         DelimiterGuesser guesser = new DelimiterGuesser(pastedText);
         char delimiter = guesser.guess();
         if(delimiter != 0) {
@@ -31,6 +35,8 @@ public class SourceViewModel {
                 }
             }
         }
+
+        ConsoleTimer.timeEnd("import.parse");
     }
 
     public boolean isValid() {

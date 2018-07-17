@@ -125,7 +125,13 @@
 
   td.selected {
     box-shadow: inset 2px 0 0 $green, /* left */
-                inset -2px 0 0 $green;
+                inset -2px 0 0 $green; /* right */
+  }
+
+  tr:last-child td.selected {
+    box-shadow: inset 2px 0 0 $green, /* left */
+                inset -2px 0 0 $green, /* right */
+                inset 0 -2px 0 0 $green /* bottom */;
   }
 
   th.selected {

@@ -29,6 +29,7 @@ public class DataTable {
     private Function<Observable<RowRange>, Observable<TableSlice>> rowRenderer;
     private RowClickHandler rowClickHandler;
     private RowClickHandler columnClickHandler;
+    private boolean columnMenuVisible = true;
 
     /**
      * The height of the row in pixels
@@ -58,6 +59,11 @@ public class DataTable {
 
     public DataTable setColumnClickHandler(RowClickHandler handler) {
         this.columnClickHandler = handler;
+        return this;
+    }
+
+    public DataTable setColumnMenuVisible(boolean columnMenuVisible) {
+        this.columnMenuVisible = columnMenuVisible;
         return this;
     }
 
@@ -120,11 +126,13 @@ public class DataTable {
             children.add(new VNode(HtmlTag.DIV, labelProps, new VText(column.getHeading())));
         }
 
-        if(column.getSorting() != Sorting.NONE) {
-            children.add(sortIcon(column.getSorting()));
-        }
+        if(columnMenuVisible) {
+            if (column.getSorting() != Sorting.NONE) {
+                children.add(sortIcon(column.getSorting()));
+            }
 
-        children.add(filterIcon(column.isFilterActive()));
+            children.add(filterIcon(column.isFilterActive()));
+        }
 
         return new VNode(HtmlTag.TH, thProps,
                 new VNode(HtmlTag.DIV, colHeaderProps, children));

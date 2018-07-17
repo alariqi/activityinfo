@@ -1,10 +1,9 @@
-package org.activityinfo.ui.client.importer.viewModel.targets;
+package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.state.GeoPointMapping;
-import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 public class CoordTarget implements ColumnTarget {
@@ -23,16 +22,11 @@ public class CoordTarget implements ColumnTarget {
     }
 
     @Override
-    public boolean accept(SourceColumn column) {
-        return true;
-    }
-
-    @Override
     public boolean isSelected(String columnId, FieldMappingSet mappings) {
         return mappings.getColumnMapping(columnId).map(mapping -> {
             if(mapping instanceof GeoPointMapping) {
                 GeoPointMapping geoPointMapping = (GeoPointMapping) mapping;
-                if(geoPointMapping.getFieldId().equals(field.getId()) &&
+                if(geoPointMapping.getFieldName().equals(field.getId()) &&
                     geoPointMapping.isColumnMapped(columnId, axis)) {
                     return true;
                 }
@@ -42,7 +36,13 @@ public class CoordTarget implements ColumnTarget {
     }
 
     @Override
-    public FieldMappingSet buildMapping(FieldMappingSet mappingSet, SelectedColumnViewModel column) {
-        throw new UnsupportedOperationException("TODO");
+    public double scoreContent(SourceColumn column) {
+        return column.getNumberFraction();
     }
+
+    @Override
+    public FieldMappingSet apply(FieldMappingSet mappingSet, String columnId) {
+        return mappingSet.withGeoPointMapping(field.getName(), axis, columnId);
+    }
+
 }

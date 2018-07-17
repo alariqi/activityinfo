@@ -6,7 +6,8 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.state.ImportState;
-import org.activityinfo.ui.client.importer.viewModel.targets.ColumnTargetSet;
+import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
+import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.store.FormStore;
 
@@ -17,25 +18,26 @@ import java.util.Optional;
 public class ImportViewModel {
 
     private final FormTree formTree;
-    private final ColumnTargetSet targetSet;
+    private final FieldViewModelSet fields;
     private final Observable<ImportState> state;
     private final Observable<ImportState.ImportStep> currentStep;
     private final Observable<SourceViewModel> source;
     private final Observable<String> selectedColumnId;
-    private final Observable<FieldMappingSet> mapping;
+    private final Observable<ColumnMatchMatrix> columnMatchMatrix;
+    private final Observable<FieldMappingSet> mappings;
     private final Observable<Optional<SelectedColumnViewModel>> columnTargetSelection;
 
     public static Observable<Maybe<ImportViewModel>> compute(FormStore formStore, Observable<ImportState> state) {
 
-        Observable<ResourceId> formId = state.transform(s -> s.getFormId());
+        Observable<ResourceId> formId = state.transform(s -> s.getFormId()).cache();
         Observable<Maybe<FormTree>> formTree = formId.join(id -> formStore.getFormTree(id).transform(tree -> tree.toMaybe()));
 
-        return formTree.transform(maybe -> maybe.transform(tree -> new ImportViewModel(tree, state)));
+        return formTree.transform(maybe -> maybe.transform(tree -> new ImportViewModel(formStore, tree, state)));
     }
 
-    public ImportViewModel(FormTree formTree, Observable<ImportState> state) {
+    public ImportViewModel(FormStore formStore, FormTree formTree, Observable<ImportState> state) {
         this.formTree = formTree;
-        this.targetSet = new ColumnTargetSet(formTree);
+        this.fields = new FieldViewModelSet(formStore, formTree);
         this.state = state;
         this.currentStep = state.transform(s -> s.getStep()).cache();
         this.source = state.transform(s -> s.getSource()).cache().transform(source -> {
@@ -54,9 +56,10 @@ public class ImportViewModel {
                 return "";
             }
         });
-        this.mapping = state.transform(s -> s.getMappings()).cache();
-        this.columnTargetSelection = Observable.transform(source, selectedColumnId, mapping, (s, id, m) -> {
-            return s.getColumnById(id).map(selectedColumn -> new SelectedColumnViewModel(targetSet, selectedColumn, m));
+        this.columnMatchMatrix = fields.computeColumnMatchMatrix(source);
+        this.mappings = fields.guessMappings(columnMatchMatrix, state.transform(s -> s.getMappings()).cache());
+        this.columnTargetSelection = Observable.transform(source, selectedColumnId, mappings, (s, id, m) -> {
+            return s.getColumnById(id).map(selectedColumn -> new SelectedColumnViewModel(fields, selectedColumn, m));
         });
     }
 
@@ -72,6 +75,14 @@ public class ImportViewModel {
         return Observable.just(Arrays.asList(Breadcrumb.DATABASES));
     }
 
+    public Observable<FieldMappingSet> getMappings() {
+        return mappings;
+    }
+
+    public Observable<ColumnMatchMatrix> getColumnMatchMatrix() {
+        return columnMatchMatrix;
+    }
+
     public Observable<String> getSelectedColumnId() {
         return selectedColumnId;
     }
@@ -84,7 +95,15 @@ public class ImportViewModel {
         return formTree.getRootFormClass().getLabel();
     }
 
+    public FormTree getFormTree() {
+        return formTree;
+    }
+
     public Observable<SelectedColumnViewModel> getSelectedColumnView() {
         return columnTargetSelection.transformIf(x -> com.google.common.base.Optional.fromJavaUtil(x));
+    }
+
+    public FieldViewModelSet getFields() {
+        return fields;
     }
 }

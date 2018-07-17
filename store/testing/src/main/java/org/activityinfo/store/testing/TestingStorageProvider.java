@@ -18,9 +18,13 @@
  */
 package org.activityinfo.store.testing;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
+import com.google.common.io.Resources;
 import com.google.gwt.core.shared.GwtIncompatible;
 import net.lightoze.gwt.i18n.server.LocaleProxy;
+import org.activityinfo.json.Json;
+import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormInstance;
 import org.activityinfo.model.formTree.FormTree;
@@ -37,6 +41,8 @@ import org.activityinfo.store.query.shared.NullFormScanCache;
 import org.activityinfo.store.query.shared.NullFormSupervisor;
 import org.activityinfo.store.spi.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -128,6 +134,16 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
         add(simpleReferenceForm, multipleTextKeysForm);
     }
 
+    @SuppressWarnings("NonJREEmulationClassesInClientCode")
+    public void loadDataSet(URL resource) throws IOException {
+        String json = Resources.toString(resource, Charsets.UTF_8);
+        JsonValue jsonValue = Json.parse(json);
+        JsonValue formsArray = jsonValue.get("forms");
+        for (int i = 0; i < formsArray.length(); i++) {
+            add(new JsonTestForm(formsArray.get(i)));
+        }
+    }
+
     public Survey getSurvey() {
         return survey;
     }
@@ -146,6 +162,7 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
             formMap.put(testForm.getFormId(), new TestingFormStorage(testForm));
         }
     }
+
 
 
     @Override

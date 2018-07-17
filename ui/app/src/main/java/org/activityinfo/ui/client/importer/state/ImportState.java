@@ -3,8 +3,10 @@ package org.activityinfo.ui.client.importer.state;
 import org.activityinfo.model.resource.ResourceId;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public class ImportState {
+
 
 
     public enum ImportStep {
@@ -79,6 +81,17 @@ public class ImportState {
         }
         ImportState copy = new ImportState(this);
         copy.selectedColumnId = columnId;
+        return copy;
+    }
+
+
+    public ImportState updateMappings(Function<FieldMappingSet, FieldMappingSet> function) {
+        FieldMappingSet updated = function.apply(this.fieldMappings);
+        if(updated == fieldMappings) {
+            return this;
+        }
+        ImportState copy = new ImportState(this);
+        copy.fieldMappings = updated;
         return copy;
     }
 

@@ -22,6 +22,7 @@ public class MatchTableView {
                 .setColumns(columnHeaders(viewModel))
                 .setRowRenderer(rowRange -> renderRows(viewModel, rowRange))
                 .setColumnClickHandler(columnId -> updater.update(s -> s.selectColumn(columnId)))
+                .setColumnMenuVisible(false)
                 .build();
     }
 

@@ -18,7 +18,7 @@ import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.state.ImportUpdater;
 import org.activityinfo.ui.client.importer.viewModel.ImportViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
-import org.activityinfo.ui.client.importer.viewModel.targets.ColumnTarget;
+import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
