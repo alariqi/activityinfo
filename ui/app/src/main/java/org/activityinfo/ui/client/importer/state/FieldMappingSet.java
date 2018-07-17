@@ -13,7 +13,7 @@ import java.util.*;
  *     <li>Each column can be used in one field mapping</li>
  * </ul>
  */
-public class FieldMappingSet {
+public class FieldMappingSet implements Iterable<FieldMapping> {
     private Map<String, FieldMapping> fieldMap;
     private Map<String, FieldMapping> columnMap;
     private Set<String> ignoredColumns;
@@ -54,7 +54,7 @@ public class FieldMappingSet {
         // field mapping. If i
         Set<String> newlyMappedColumns = newMapping.getMappedColumnIds();
 
-        // Copy any existing mappings, removing this co
+        // Copy any existing mappings, removing this column from any existing mapping
         List<FieldMapping> retained = new ArrayList<>();
         for (FieldMapping existing : getMappings()) {
             if(!existing.getFieldName().equals(newMapping.getFieldName())) {
@@ -62,6 +62,7 @@ public class FieldMappingSet {
                 updated.ifPresent(m -> retained.add(m));
             }
         }
+
         // Add the new field mapping
         retained.add(newMapping);
 
@@ -71,6 +72,22 @@ public class FieldMappingSet {
 
         return new FieldMappingSet(retained, updatedIgnore);
 
+    }
+
+    public FieldMappingSet withColumnIgnored(String columnId) {
+
+        // Copy any existing mappings, removing this column from any existing mapping
+        List<FieldMapping> retained = new ArrayList<>();
+        for (FieldMapping existing : getMappings()) {
+            Optional<FieldMapping> updated = existing.withColumns(c -> !c.equals(columnId));
+            updated.ifPresent(m -> retained.add(m));
+        }
+
+        // Update the ignored set
+        Set<String> updatedIgnore = new HashSet<>(ignoredColumns);
+        updatedIgnore.add(columnId);
+
+        return new FieldMappingSet(retained, updatedIgnore);
     }
 
     public FieldMappingSet withSimpleMapping(String fieldName, String columnId) {
@@ -87,7 +104,6 @@ public class FieldMappingSet {
     }
 
     public FieldMappingSet withGeoPointMapping(String fieldName, CoordinateAxis axis, String columnId) {
-
         FieldMapping existing = fieldMap.get(fieldName);
         if(existing instanceof GeoPointMapping) {
             return withMapping(((GeoPointMapping) existing).withCoordMapping(axis, columnId));
@@ -100,6 +116,15 @@ public class FieldMappingSet {
         return Optional.ofNullable(fieldMap.get(fieldName));
     }
 
+    public Optional<SimpleFieldMapping> getSimpleFieldMapping(String fieldName) {
+        FieldMapping mapping = fieldMap.get(fieldName);
+        if(mapping instanceof SimpleFieldMapping) {
+            return Optional.of((SimpleFieldMapping) mapping);
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public Collection<FieldMapping> getMappings() {
         return fieldMap.values();
     }
@@ -107,4 +132,14 @@ public class FieldMappingSet {
     public boolean isFieldMapped(String name) {
         return fieldMap.containsKey(name);
     }
+
+    public boolean isIgnored(String id) {
+        return ignoredColumns.contains(id);
+    }
+
+    @Override
+    public Iterator<FieldMapping> iterator() {
+        return fieldMap.values().iterator();
+    }
+
 }

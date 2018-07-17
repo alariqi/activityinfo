@@ -12,8 +12,8 @@ public class ColumnMatchMatrix {
 
     private static final LatinPlaceNameScorer SCORER = new LatinPlaceNameScorer();
 
-    private List<SourceColumn> columns;
-    private List<ColumnTarget> targets;
+    private final List<SourceColumn> columns;
+    private final List<ColumnTarget> targets;
     private final int numColumns;
     private final int numTargets;
     private final double[] score;

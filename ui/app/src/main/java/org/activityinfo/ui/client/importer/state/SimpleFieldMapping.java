@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 /**
- * A simple one-to-one mapping between a single column to import and a column to
+ * A simple one-to-one mapping between a single column to import and a single field.
  */
 public class SimpleFieldMapping implements FieldMapping {
     private String fieldId;

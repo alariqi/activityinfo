@@ -32,6 +32,11 @@ public class RadioButton {
         return this;
     }
 
+    public RadioButton checked(boolean checked) {
+        this.inputProps.set("checked", checked);
+        return this;
+    }
+
     public RadioButton onchange(EventHandler handler) {
         inputProps.set("onchange", handler);
         return this;

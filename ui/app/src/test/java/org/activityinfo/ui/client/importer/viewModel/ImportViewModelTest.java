@@ -3,15 +3,12 @@ package org.activityinfo.ui.client.importer.viewModel;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
-import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Connection;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.importer.state.FieldMapping;
-import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.state.ImportSource;
 import org.activityinfo.ui.client.importer.state.ImportState;
-import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
 import org.activityinfo.ui.client.store.TestSetup;
@@ -28,8 +25,7 @@ public class ImportViewModelTest {
     private StatefulValue<ImportState> state;
     private ImportViewModel viewModel;
     private Connection<SourceViewModel> sourceView;
-    private Connection<FieldMappingSet> mappingView;
-    private Connection<ColumnMatchMatrix> columnMatrixView;
+    private Connection<MappedSourceViewModel> mappedView;
 
 
     @Test
@@ -54,10 +50,13 @@ public class ImportViewModelTest {
         map("Partner", "Partner Name");
 
         dumpMappings();
+        dumpColumnHeaders();
+
 
 
 
     }
+
 
 
     /**
@@ -78,8 +77,7 @@ public class ImportViewModelTest {
                 state);
 
         sourceView = testSetup.connect(viewModel.getSource());
-        columnMatrixView = testSetup.connect(viewModel.getColumnMatchMatrix());
-        mappingView = testSetup.connect(viewModel.getMappings());
+        mappedView = testSetup.connect(viewModel.getMappedSource());
     }
 
     private void importResource(String resourceName) throws IOException {
@@ -89,17 +87,6 @@ public class ImportViewModelTest {
 
         state.update(s -> s.withSource(source));
     }
-
-    private String field(String fieldLabel) {
-        for (FormTree.Node node : viewModel.getFormTree().getRootFields()) {
-            if(node.getField().getLabel().equals(fieldLabel)) {
-                return node.getFieldId().asString();
-            }
-        }
-        throw new AssertionError("No field with label " + fieldLabel);
-    }
-
-
 
     /**
      * Updates the field mapping set by matching the column with the given {@code columnLabel} to the
@@ -137,7 +124,7 @@ public class ImportViewModelTest {
 
     private void dumpColumnMatrix() throws IOException {
         File tempFile = File.createTempFile("matrix", ".csv");
-        Files.asCharSink(tempFile, Charsets.UTF_8).write(columnMatrixView.assertLoaded().toCsv());
+        Files.asCharSink(tempFile, Charsets.UTF_8).write(mappedView.assertLoaded().getColumnMatrix().toCsv());
 
         System.out.println("Wrote column matrix to " + tempFile.getAbsolutePath());
     }
@@ -145,7 +132,7 @@ public class ImportViewModelTest {
 
     private void dumpMappings() {
         System.out.println("==== Field Mappings ====");
-        for (FieldMapping fieldMapping : mappingView.assertLoaded().getMappings()) {
+        for (FieldMapping fieldMapping : mappedView.assertLoaded().getFieldMappingSet()) {
             System.out.println(fieldMapping);
         }
     }
@@ -156,6 +143,15 @@ public class ImportViewModelTest {
         for (FieldViewModel field : viewModel.getFields()) {
             System.out.println(field.getField().getLabel() + ": " + field.getTargets());
         }
+    }
+
+
+    private void dumpColumnHeaders() {
+        System.out.println("=== Match Table Headers === ");
+        for (MappedSourceColumn column : mappedView.assertLoaded().getColumns()) {
+            System.out.println(column.getStatusLabel() + " / " + column.getLabel());
+        }
+
     }
 
 }

@@ -233,4 +233,8 @@ public class LookupKey {
     public String getKeyLabel() {
         return keyLabel;
     }
+
+    public String getKeyId() {
+        return formId + "." + getKeyField();
+    }
 }

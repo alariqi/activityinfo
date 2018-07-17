@@ -142,20 +142,36 @@ public class ImportView {
 
     private VTree columnTargets(SelectedColumnViewModel column) {
         List<VTree> radioGroup = new ArrayList<>();
-        for (ColumnTarget columnTarget : column.getTargets()) {
+        for (ColumnTarget target : column.getTargets()) {
             radioGroup.add(new RadioButton()
-                .label(columnTarget.getLabel())
+                .label(target.getLabel())
                 .name("radio-" + column.getSource().getId())
-                .onchange(event -> onTargetSelected(column, columnTarget, event))
+                .checked(column.isSelected(target))
+                .onchange(event -> onTargetSelected(column, target, event))
                 .render());
         }
+
+        radioGroup.add(new RadioButton()
+            .label(I18N.CONSTANTS.ignoreColumnAction())
+            .name("radio-ignore-column")
+            .checked(column.isIgnored())
+            .onchange(event -> onIgnoreSelected(column, event))
+            .render());
+
         return new VNode(HtmlTag.DIV, PropMap.EMPTY, radioGroup);
     }
 
-    private void onTargetSelected(SelectedColumnViewModel column, ColumnTarget columnTarget, Event event) {
+    private void onTargetSelected(SelectedColumnViewModel column, ColumnTarget target, Event event) {
         InputElement input = event.getEventTarget().cast();
         if(input.isChecked()) {
+            updater.update(s -> s.updateMappings(m -> target.apply(m, column.getId())));
+        }
+    }
 
+    private void onIgnoreSelected(SelectedColumnViewModel column, Event event) {
+        InputElement input = event.getEventTarget().cast();
+        if(input.isChecked()) {
+            updater.update(s -> s.updateMappings(m -> m.withColumnIgnored(column.getId())));
         }
     }
 

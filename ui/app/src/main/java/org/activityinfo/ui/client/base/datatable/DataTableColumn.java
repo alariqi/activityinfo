@@ -45,6 +45,9 @@ public class DataTableColumn {
         return !surtitle.isEmpty();
     }
 
+    /**
+     * @return Additional CSS classes to be applied to the TH element.
+     */
     public String getHeadingClass() {
         return headingClass;
     }

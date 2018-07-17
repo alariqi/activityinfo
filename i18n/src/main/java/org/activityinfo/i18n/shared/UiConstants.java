@@ -1997,4 +1997,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Match fields & validate fields")
     String matchFieldStep();
 
+    @DefaultStringValue("Unset")
+    String unset();
+
 }

@@ -38,6 +38,10 @@ public class ReferenceMapping implements FieldMapping {
         return columnMap.keySet();
     }
 
+    public Collection<KeyMapping> getKeyMappings() {
+        return this.columnMap.values();
+    }
+
     @Override
     public Optional<FieldMapping> withColumns(Predicate<String> columnPredicate) {
         Map<String, KeyMapping> updatedMap = new HashMap<>();
@@ -69,4 +73,5 @@ public class ReferenceMapping implements FieldMapping {
     public String toString() {
         return "ReferenceMapping{" + fieldName + " => (" + columnMap.values() + ")}";
     }
+
 }

@@ -2,13 +2,17 @@ package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.observable.Observable;
+import org.activityinfo.ui.client.importer.state.FieldMapping;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
+import org.activityinfo.ui.client.importer.viewModel.ScoredSourceViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class FieldViewModelSet implements Iterable<FieldViewModel> {
@@ -27,18 +31,22 @@ public class FieldViewModelSet implements Iterable<FieldViewModel> {
         }
     }
 
-    public Observable<ColumnMatchMatrix> computeColumnMatchMatrix(Observable<SourceViewModel> source) {
-        return source.transform(s -> new ColumnMatchMatrix(s.getColumns(), targets));
+    public List<ColumnTarget> getTargets() {
+        return targets;
     }
 
-    public Observable<FieldMappingSet> guessMappings(Observable<ColumnMatchMatrix> matrix, Observable<FieldMappingSet> mappings) {
-        return Observable.join(matrix, mappings, this::guessMappings);
+    public Observable<ScoredSourceViewModel> scoreSource(Observable<SourceViewModel> source) {
+        return source.transform(s -> new ScoredSourceViewModel(s, targets));
+    }
+
+    public Observable<MappedSourceViewModel> guessMappings(Observable<ScoredSourceViewModel> source, Observable<FieldMappingSet> mappings) {
+        return Observable.join(source, mappings, this::guessMappings);
     }
 
     /**
-     * Given the user's explict choices, make an educated guess about the remaining columns.
+     * Given the user's explicit choices, make an educated guess about the remaining columns.
      */
-    public Observable<FieldMappingSet> guessMappings(ColumnMatchMatrix matchMatrix, FieldMappingSet explicitMappings) {
+    public Observable<MappedSourceViewModel> guessMappings(ScoredSourceViewModel sourceViewModel, FieldMappingSet explicitMappings) {
 
 //        // Make a list of columns that need to be mapped
 //        Set<String> explicitlyMappedColumns = explicitMappings.getMappedColumnIds();
@@ -58,12 +66,21 @@ public class FieldViewModelSet implements Iterable<FieldViewModel> {
 //
 //        LOGGER.info("Column Match Matrix:\n" + matchMatrix.toCsv());
 
-        return Observable.just(explicitMappings);
-
+        return Observable.just(new MappedSourceViewModel(this, sourceViewModel, explicitMappings));
     }
+
 
     @Override
     public Iterator<FieldViewModel> iterator() {
         return fields.iterator();
+    }
+
+    public Optional<String> columnMappingLabel(String columnId, FieldMapping fieldMapping) {
+        for (FieldViewModel field : fields) {
+            if(field.getFieldName().equals(fieldMapping.getFieldName())) {
+                return field.columnMappingLabel(fieldMapping, columnId);
+            }
+        }
+        return Optional.empty();
     }
 }

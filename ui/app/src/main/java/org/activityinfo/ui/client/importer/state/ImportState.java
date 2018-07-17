@@ -7,8 +7,6 @@ import java.util.function.Function;
 
 public class ImportState {
 
-
-
     public enum ImportStep {
         CHOOSE_SOURCE,
         MATCH_COLUMNS
@@ -25,6 +23,7 @@ public class ImportState {
         this.source = from.source;
         this.step = from.step;
         this.selectedColumnId = from.selectedColumnId;
+        this.fieldMappings = from.fieldMappings;
     }
 
     public ImportState(ResourceId formId) {

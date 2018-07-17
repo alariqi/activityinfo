@@ -5,8 +5,8 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.datatable.*;
 import org.activityinfo.ui.client.importer.state.ImportUpdater;
 import org.activityinfo.ui.client.importer.viewModel.ImportViewModel;
-import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
-import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
 import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
@@ -29,22 +29,34 @@ public class MatchTableView {
 
     private static Observable<List<DataTableColumn>> columnHeaders(ImportViewModel viewModel) {
         Observable<String> selectedColumnId = viewModel.getSelectedColumnId();
-        Observable<SourceViewModel> source = viewModel.getSource();
+        Observable<MappedSourceViewModel> source = viewModel.getMappedSource();
 
         return Observable.transform(source, selectedColumnId, (s, selectedId) -> {
             List<DataTableColumn> columns = new ArrayList<>();
-            for (SourceColumn sourceColumn : s.getColumns()) {
+            for (MappedSourceColumn column : s.getColumns()) {
                 columns.add(new DataTableColumnBuilder()
-                        .setId(sourceColumn.getId())
-                        .setHeading(sourceColumn.getLabel())
+                        .setId(column.getId())
+                        .setHeading(column.getLabel())
+                        .setHeadingClass(headerClass(column))
                         .setWidth(150)
-                        .setColumnSelected(sourceColumn.getId().equals(selectedId))
-                        .setSurtitle("Unset")
+                        .setColumnSelected(column.getId().equals(selectedId))
+                        .setSurtitle(column.getStatusLabel())
                         .build());
             }
             return columns;
         });
 
+    }
+
+    private static String headerClass(MappedSourceColumn column) {
+        switch (column.getStatus()) {
+            case UNSET:
+                return "unset";
+            case IGNORED:
+                return "ignored";
+            default:
+                return "";
+        }
     }
 
 

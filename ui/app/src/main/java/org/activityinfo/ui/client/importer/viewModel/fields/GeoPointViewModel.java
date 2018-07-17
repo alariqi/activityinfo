@@ -1,11 +1,16 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.observable.Observable;
+import org.activityinfo.ui.client.importer.state.FieldMapping;
 import org.activityinfo.ui.client.importer.state.GeoPointMapping;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class GeoPointViewModel extends FieldViewModel {
 
@@ -21,25 +26,25 @@ public class GeoPointViewModel extends FieldViewModel {
     }
 
     @Override
-    public Collection<ColumnTarget> unusedTarget(FieldMappingSet explicitMappings) {
-        GeoPointMapping mapping = explicitMappings.getFieldMapping(field.getName())
-                .filter(m -> m instanceof GeoPointMapping)
-                .map(m -> (GeoPointMapping)m)
-                .orElse(new GeoPointMapping(field.getName(), Optional.empty(), Optional.empty()));
-
-        List<ColumnTarget> targets = new ArrayList<>();
-        if(!mapping.getLongitudeColumnId().isPresent()) {
-            targets.add(longitudeTarget);
-        }
-        if(!mapping.getLatitudeColumnId().isPresent()) {
-            targets.add(latitudeTarget);
-        }
-
-        return targets;
+    public List<ColumnTarget> getTargets() {
+        return Arrays.asList(latitudeTarget, longitudeTarget);
     }
 
     @Override
-    public List<ColumnTarget> getTargets() {
-        return Arrays.asList(latitudeTarget, longitudeTarget);
+    public Observable<java.util.Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source) {
+        return Observable.just(java.util.Optional.empty());
+    }
+
+    @Override
+    public Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId) {
+        if(fieldMapping instanceof GeoPointMapping) {
+            GeoPointMapping geoPointMapping = (GeoPointMapping) fieldMapping;
+            if(geoPointMapping.isColumnMapped(columnId, CoordinateAxis.LATITUDE)) {
+                return Optional.of(I18N.CONSTANTS.latitude() + " - " + field.getLabel());
+            }  else if(geoPointMapping.isColumnMapped(columnId, CoordinateAxis.LONGITUDE)) {
+                return Optional.of(I18N.CONSTANTS.longitude() + " - " + field.getLabel());
+            }
+        }
+        return Optional.empty();
     }
 }

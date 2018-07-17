@@ -86,3 +86,41 @@
   overflow-y: auto;
   padding-left: 1rem;
 }
+
+.importer {
+
+  th.unset {
+    background-color: #d2003d;
+    color: $white;
+    .surtitle {
+      color: $white;
+    }
+  }
+
+  td.unset {
+    background-color: #fae5eb;
+  }
+
+  tr:nth-child(odd) td.unset {
+    background-color: #f8d5df;
+  }
+
+  th.ignored {
+    background-color: #ffce60;
+    color: $black;
+
+    .surtitle {
+      color: $black;
+    }
+  }
+
+  td.ignored {
+    background-color: #fffaef;
+  }
+
+  tr:nth-child(odd) td.unset {
+    background-color: #fbf2df;
+  }
+
+
+}

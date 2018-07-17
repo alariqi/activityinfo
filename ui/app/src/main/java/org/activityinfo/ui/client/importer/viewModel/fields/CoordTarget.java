@@ -22,7 +22,7 @@ public class CoordTarget implements ColumnTarget {
     }
 
     @Override
-    public boolean isSelected(String columnId, FieldMappingSet mappings) {
+    public boolean isApplied(String columnId, FieldMappingSet mappings) {
         return mappings.getColumnMapping(columnId).map(mapping -> {
             if(mapping instanceof GeoPointMapping) {
                 GeoPointMapping geoPointMapping = (GeoPointMapping) mapping;

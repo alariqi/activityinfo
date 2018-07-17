@@ -108,6 +108,9 @@ public class DataTable {
         thProps.setStyle(headerStyle);
         thProps.setData("column", column.getId());
         thProps.addClassName("selected", column.isColumnSelected());
+        if(!column.getHeadingClass().isEmpty()) {
+            thProps.addClassName(column.getHeadingClass());
+        }
 
         PropMap colHeaderProps = Props.create();
         colHeaderProps.addClassName("datatable__colheader");

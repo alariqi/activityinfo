@@ -24,7 +24,7 @@ public class ReferenceTarget implements ColumnTarget {
     }
 
     @Override
-    public boolean isSelected(String columnId, FieldMappingSet mappings) {
+    public boolean isApplied(String columnId, FieldMappingSet mappings) {
         return false;
     }
 

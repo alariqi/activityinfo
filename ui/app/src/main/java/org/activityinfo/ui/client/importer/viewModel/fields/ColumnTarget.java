@@ -5,9 +5,13 @@ import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 public interface ColumnTarget {
 
+    /**
+     * @return a human readable label for this target to be shown in the user interface.
+     */
     String getLabel();
 
-    boolean isSelected(String columnId, FieldMappingSet mappings);
+
+    boolean isApplied(String columnId, FieldMappingSet mappings);
 
     /**
      * Scores a source column on a scale from 0 to 1, based on how well the column's content
@@ -18,5 +22,9 @@ public interface ColumnTarget {
      */
     double scoreContent(SourceColumn column);
 
+    /**
+     * Applies the given {@code columnId} to this target, returning a new, updated
+     * {@link FieldMappingSet}.
+     */
     FieldMappingSet apply(FieldMappingSet mappingSet, String columnId);
 }

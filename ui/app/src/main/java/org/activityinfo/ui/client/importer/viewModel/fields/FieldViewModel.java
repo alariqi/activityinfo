@@ -1,10 +1,12 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.observable.Observable;
+import org.activityinfo.ui.client.importer.state.FieldMapping;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Centralizes our knowledge about an existing field to which imported columns can be matched.
@@ -29,7 +31,13 @@ public abstract class FieldViewModel {
         return field;
     }
 
-    public abstract Collection<ColumnTarget> unusedTarget(FieldMappingSet explicitMappings);
-
     public abstract List<ColumnTarget> getTargets();
+
+    public String getFieldName() {
+        return field.getName();
+    }
+
+    public abstract Observable<Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source);
+
+    public abstract Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId);
 }

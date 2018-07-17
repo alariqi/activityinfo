@@ -77,11 +77,11 @@ public class ImportSimpleTest extends AbstractImporterTest {
         FormTree formTree = assertResolves(locator.getFormTree(HOUSEHOLD_SURVEY_FORM_CLASS));
         FormTreePrettyPrinter.print(formTree);
 
-
-        TestDataSetWriter writer = new TestDataSetWriter();
-        writer.addWithRecords(locator, formTree);
-        writer.write("/home/alex/dev/activityinfo/ui/app/src/test/resources/org/activityinfo/ui/client/importer/viewModel/qis.json");
-
+//
+//        TestDataSetWriter writer = new TestDataSetWriter();
+//        writer.addWithRecords(locator, formTree);
+//        writer.write("/home/alex/dev/activityinfo/ui/app/src/test/resources/org/activityinfo/ui/client/importer/viewModel/qis.json");
+//
 
         importModel = new ImportModel(formTree);
 
