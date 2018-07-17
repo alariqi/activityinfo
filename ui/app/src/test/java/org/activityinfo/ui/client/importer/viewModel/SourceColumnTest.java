@@ -15,8 +15,6 @@ public class SourceColumnTest {
         assertThat(column.getDateCount(), equalTo(2));
     }
 
-    @Test
-
     private SourceColumn column(String... values) {
         return new SourceColumn("A", "B", new StringArrayColumnView(values));
     }
