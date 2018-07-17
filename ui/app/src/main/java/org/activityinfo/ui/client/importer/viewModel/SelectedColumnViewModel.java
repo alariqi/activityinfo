@@ -27,4 +27,7 @@ public class SelectedColumnViewModel {
         return targets;
     }
 
+    public String getId() {
+        return source.getId();
+    }
 }

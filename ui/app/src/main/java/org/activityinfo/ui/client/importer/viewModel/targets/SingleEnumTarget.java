@@ -2,6 +2,7 @@ package org.activityinfo.ui.client.importer.viewModel.targets;
 
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 public class SingleEnumTarget implements ColumnTarget {
@@ -25,5 +26,10 @@ public class SingleEnumTarget implements ColumnTarget {
     @Override
     public boolean isSelected(String columnId, FieldMappingSet mappings) {
         return mappings.isSimpleMapped(field.getId(), columnId);
+    }
+
+    @Override
+    public FieldMappingSet buildMapping(FieldMappingSet mappingSet, SelectedColumnViewModel column) {
+        return mappingSet;
     }
 }

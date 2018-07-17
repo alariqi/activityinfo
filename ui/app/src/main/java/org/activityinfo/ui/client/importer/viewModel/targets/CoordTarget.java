@@ -4,6 +4,7 @@ import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.state.GeoPointMapping;
+import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 public class CoordTarget implements ColumnTarget {
@@ -38,5 +39,10 @@ public class CoordTarget implements ColumnTarget {
             }
             return false;
         }).orElse(false);
+    }
+
+    @Override
+    public FieldMappingSet buildMapping(FieldMappingSet mappingSet, SelectedColumnViewModel column) {
+        throw new UnsupportedOperationException("TODO");
     }
 }

@@ -47,4 +47,8 @@ public class FieldMappingSet {
 
         throw new UnsupportedOperationException("TODO");
     }
+
+    public FieldMappingSet removeColumnMapping(String id) {
+        throw new UnsupportedOperationException("TODO");
+    }
 }

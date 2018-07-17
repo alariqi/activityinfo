@@ -2,6 +2,7 @@ package org.activityinfo.ui.client.importer.viewModel.targets;
 
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 public class QuantityTarget implements ColumnTarget {
@@ -24,5 +25,10 @@ public class QuantityTarget implements ColumnTarget {
     @Override
     public boolean isSelected(String columnId, FieldMappingSet mappings) {
         return mappings.isSimpleMapped(field.getId(), columnId);
+    }
+
+    @Override
+    public FieldMappingSet buildMapping(FieldMappingSet mappingSet, SelectedColumnViewModel column) {
+        return mappingSet.replaceSimpleMapping(field.getName(), column.getId());
     }
 }
