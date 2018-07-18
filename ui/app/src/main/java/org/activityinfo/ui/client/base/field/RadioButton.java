@@ -28,7 +28,7 @@ public class RadioButton {
     }
 
     public RadioButton name(String groupName) {
-        this.name = name;
+        this.name = groupName;
         return this;
     }
 
@@ -43,13 +43,13 @@ public class RadioButton {
     }
 
     public VTree render() {
-        PropMap fieldSetProps = Props.withClass("fieldset__" + this.type);
+        PropMap fieldSetProps = Props.withClass("field__" + this.type);
 
 
         PropMap labelProps = Props.create()
                 .set("for", inputId);
 
-        return new VNode(HtmlTag.FIELDSET, fieldSetProps,
+        return new VNode(HtmlTag.DIV, fieldSetProps,
                 new VNode(HtmlTag.INPUT, inputProps),
                 new VNode(HtmlTag.LABEL, labelProps,
                         new VNode(HtmlTag.SPAN, new VText(label))),

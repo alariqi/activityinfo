@@ -154,7 +154,7 @@ textarea:disabled {
 }
 
 /* checkbox */
-.fieldset__checkbox {
+.field__checkbox {
   display: flex;
   align-items: center;
   position: relative;
@@ -167,12 +167,12 @@ textarea:disabled {
   }
 }
 
-.fieldset__checkbox input[type="checkbox"] {
+.field__checkbox input[type="checkbox"] {
   position: absolute;
   visibility: hidden;
 }
 
-.fieldset__checkbox label {
+.field__checkbox label {
   font-family: $gretasemibold;
 
   &:focus {
@@ -190,14 +190,14 @@ textarea:disabled {
 //  }
 //}
 
-.fieldset__checkbox input[type="checkbox"]:disabled ~ label {
+.field__checkbox input[type="checkbox"]:disabled ~ label {
   opacity: 0.5;
   color: $grey-3;
 }
 
 
 /* radio */
-.fieldset__radio {
+.field__radio {
   display: flex;
   align-items: center;
   position: relative;
@@ -205,16 +205,16 @@ textarea:disabled {
   padding-left: 2rem;
 }
 
-.fieldset__radio svg {
+.field__radio svg {
   display: none;
 }
 
-.fieldset__radio input[type="radio"] {
+.field__radio input[type="radio"] {
   position: absolute;
   visibility: hidden;
 }
 
-.fieldset__radio label {
+.field__radio label {
   font-family: $gretasemibold;
 
   &:before,
@@ -253,7 +253,7 @@ textarea:disabled {
   }
 }
 
-.fieldset__radio input[type="radio"]:checked ~ label {
+.field__radio input[type="radio"]:checked ~ label {
 
   &:before {
     transition: opacity 0.2s 0.1s ease,
@@ -263,7 +263,7 @@ textarea:disabled {
   }
 }
 
-.fieldset__radio input[type="radio"]:disabled ~ label {
+.field__radio input[type="radio"]:disabled ~ label {
   opacity: 0.5;
   color: $grey-3;
 
@@ -281,7 +281,7 @@ textarea:disabled {
   }
 }
 
-.fieldset__radio input[type="radio"]:disabled:checked ~ label{
+.field__radio input[type="radio"]:disabled:checked ~ label{
   &:before {
     opacity: 1;
     transform: scaleY(1);

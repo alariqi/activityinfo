@@ -71,7 +71,7 @@ public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
     String typeParam = " type=" + type;
     String checkedParam = value ? " checked" : "";
 
-    sb.appendHtmlConstant("<fieldset class=\"fieldset__" + type + "\">");
+    sb.appendHtmlConstant("<div class=\"field__" + type + "\">");
     sb.appendHtmlConstant("<input " + typeParam + nameParam + disabledParam + readOnlyParam + idParam + checkedParam + " />");
     sb.appendHtmlConstant("<label for=" + checkBoxId + "><span>");
     if (options.getBoxLabel() != null) {
@@ -83,7 +83,7 @@ public class Css3CheckBoxAppearance implements CheckBoxCell.CheckBoxAppearance {
             " viewBox=\"0 0 21 17\" class=\"icon\" preserveAspectRatio=\"xMinYMin meet\">" +
             "<use xmlns:xlink=\"http://www.w3.org/1999/xlink\" xlink:href=\"" + iconHref + "\"></use></svg>");
     sb.appendHtmlConstant("</div>");
-    sb.appendHtmlConstant("</fieldset>");
+    sb.appendHtmlConstant("</div>");
   }
 
   @Override
