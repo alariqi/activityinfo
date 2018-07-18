@@ -7,10 +7,7 @@ import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
 import org.activityinfo.ui.client.importer.viewModel.fields.MappedField;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MappedSourceViewModel {
 
@@ -82,5 +79,9 @@ public class MappedSourceViewModel {
 
     public Observable<ValidatedTable> getValidatedTable() {
         return validatedTable;
+    }
+
+    public Observable<Optional<ValidatedColumn>> getColumnById(String columnId) {
+        return validatedTable.transform(table -> table.getColumnById(columnId));
     }
 }

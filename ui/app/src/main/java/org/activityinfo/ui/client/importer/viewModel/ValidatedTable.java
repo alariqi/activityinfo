@@ -3,6 +3,7 @@ package org.activityinfo.ui.client.importer.viewModel;
 import org.activityinfo.model.query.ColumnView;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ValidatedTable {
 
@@ -51,5 +52,9 @@ public class ValidatedTable {
 
     public Validation[] getValidationArray() {
         return validation;
+    }
+
+    public Optional<ValidatedColumn> getColumnById(String columnId) {
+        return columns.stream().filter(c -> c.getId().equals(columnId)).findAny();
     }
 }

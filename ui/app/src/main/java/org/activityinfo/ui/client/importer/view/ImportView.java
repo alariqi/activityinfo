@@ -133,7 +133,7 @@ public class ImportView {
         return new ReactiveComponent(viewModel.getSelectedColumnView().transform(column ->
                 new SidePanel()
                         .hideMode(SidePanel.HideMode.NONE)
-                        .header(H.h2(I18N.MESSAGES.matchColumnToField(column.getSource().getLabel())))
+                        .header(H.h2(I18N.MESSAGES.matchColumnToField(column.getLabel())))
                         .content(
                                 H.div("importer__choice",
                                     H.div("importer__choice__body", columnTargets(column))))
@@ -145,7 +145,7 @@ public class ImportView {
         for (ColumnTarget target : column.getTargets()) {
             radioGroup.add(new RadioButton()
                 .label(target.getLabel())
-                .name("radio-" + column.getSource().getId())
+                .name("radio-" + column.getId())
                 .checked(column.isSelected(target))
                 .onchange(event -> onTargetSelected(column, target, event))
                 .render());

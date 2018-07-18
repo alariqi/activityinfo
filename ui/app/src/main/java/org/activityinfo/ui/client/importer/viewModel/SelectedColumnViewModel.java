@@ -1,28 +1,40 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.fields.BestColumnTargets;
+import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
-import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
 
 import java.util.List;
 import java.util.Optional;
 
 public class SelectedColumnViewModel {
 
-    private final SourceColumn source;
-    private final List<ColumnTarget> targets;
-    private final Optional<ColumnTarget> selected;
+    private final ValidatedColumn column;
+    private final Optional<ColumnTarget> selectedTarget;
+    private final BestColumnTargets bestTargets;
     private boolean ignored;
 
-    public SelectedColumnViewModel(FieldViewModelSet fields, SourceColumn selectedColumn, FieldMappingSet mappings) {
-        this.source = selectedColumn;
-        this.targets = fields.getTargets();
-        this.selected = this.targets.stream().filter(t -> t.isApplied(selectedColumn.getId(), mappings)).findAny();
-        this.ignored = mappings.isIgnored(source.getId());
+
+    public SelectedColumnViewModel(MappedSourceViewModel source, ValidatedColumn column) {
+
+        this.column = column;
+
+        ColumnMatchMatrix columnMatrix = source.getColumnMatrix();
+        FieldMappingSet fieldMappingSet = source.getFieldMappingSet();
+
+        // Find the target that is currently selected
+        this.selectedTarget = columnMatrix.getTargets().stream().filter(t -> t.isApplied(column.getId(), fieldMappingSet)).findAny();
+
+        // Now find the targets that match by name (and are not excluded by content)
+        bestTargets = columnMatrix.findBestTargets(column.getId());
+
+        this.ignored = fieldMappingSet.isIgnored(column.getId());
     }
 
-    public SourceColumn getSource() {
-        return source;
+
+    public ValidatedColumn getColumn() {
+        return column;
     }
 
     public List<ColumnTarget> getTargets() {
@@ -30,14 +42,18 @@ public class SelectedColumnViewModel {
     }
 
     public String getId() {
-        return source.getId();
+        return column.getId();
     }
 
     public boolean isSelected(ColumnTarget target) {
-        return selected.map(s -> s == target).orElse(false);
+        return selectedTarget.map(s -> s == target).orElse(false);
     }
 
     public boolean isIgnored() {
         return ignored;
+    }
+
+    public String getLabel() {
+        return column.getColumn().getLabel();
     }
 }

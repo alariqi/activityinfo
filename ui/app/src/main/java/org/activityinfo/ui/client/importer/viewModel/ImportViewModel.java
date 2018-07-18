@@ -82,9 +82,10 @@ public class ImportViewModel {
         // Compute a viewModel of the current selected column that shows the current choice as well as alternatives
         // ranked by suitability.
 
-        this.columnTargetSelection = Observable.transform(scoredSource, selectedColumnId, mappedSource, (s, id, m) -> {
-            return s.getViewModel().getColumnById(id).map(selectedColumn ->
-                    new SelectedColumnViewModel(fields, selectedColumn, m.getFieldMappingSet()));
+        this.columnTargetSelection = Observable.join(mappedSource, selectedColumnId, (s, id) -> {
+            return s.getColumnById(id).transform(optionalColumn ->
+                    optionalColumn.map(column ->
+                        new SelectedColumnViewModel(s, column)));
         });
     }
 
