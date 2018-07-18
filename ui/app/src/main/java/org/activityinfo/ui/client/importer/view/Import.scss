@@ -118,9 +118,13 @@
     background-color: #fffaef;
   }
 
-  tr:nth-child(odd) td.unset {
+  tr:nth-child(odd) td.ignored {
     background-color: #fbf2df;
   }
 
+  td.invalid {
+    background-color: #d2003d;
+    color: $white;
+  }
 
 }

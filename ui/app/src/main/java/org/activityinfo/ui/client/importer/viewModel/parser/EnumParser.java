@@ -4,6 +4,7 @@ import org.activityinfo.model.type.enumerated.EnumItem;
 import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
+import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,5 +20,10 @@ public class EnumParser implements FieldParser {
     @Override
     public double scoreContent(SourceColumn column) {
         return column.scoreSample(labels);
+    }
+
+    @Override
+    public boolean validate(@Nonnull String value) {
+        return labels.contains(value);
     }
 }

@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
+import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
@@ -18,6 +19,7 @@ public class MappedSourceViewModel {
     private ColumnMatchMatrix columnMatrix;
     private final List<MappedField> mappedFields = new ArrayList<>();
     private final List<MappedSourceColumn> columns = new ArrayList<>();
+    private final Observable<ValidatedTable> validatedTable;
 
     public MappedSourceViewModel(FieldViewModelSet fields, ScoredSourceViewModel scoredViewModel, FieldMappingSet fieldMappingSet) {
         this.source = scoredViewModel.getViewModel();
@@ -41,15 +43,21 @@ public class MappedSourceViewModel {
         // Now combine the mapped columns with unmapped and ignored columns
         for (SourceColumn sourceColumn : source.getColumns()) {
             if(fieldMappingSet.isIgnored(sourceColumn.getId())) {
-                columns.add(new MappedSourceColumn(sourceColumn, MappedSourceColumn.Status.IGNORED));
+                columns.add(new MappedSourceColumn(sourceColumn, ColumnStatus.IGNORED));
 
             } else if(mappedColumns.containsKey(sourceColumn.getId())) {
                 columns.add(mappedColumns.get(sourceColumn.getId()));
 
             } else {
-                columns.add(new MappedSourceColumn(sourceColumn, MappedSourceColumn.Status.UNSET));
+                columns.add(new MappedSourceColumn(sourceColumn, ColumnStatus.UNSET));
             }
         }
+
+        // Finally...
+        validatedTable = Observable.flatJoin(columns,
+                column -> column.getValidation().transform(
+                    validation -> new ValidatedColumn(column, validation))).transform(
+                       validatedColumns -> new ValidatedTable(validatedColumns));
     }
 
     public SourceViewModel getSource() {
@@ -68,5 +76,11 @@ public class MappedSourceViewModel {
         return columns;
     }
 
+    public int getRowCount() {
+        return source.getRowCount();
+    }
 
+    public Observable<ValidatedTable> getValidatedTable() {
+        return validatedTable;
+    }
 }

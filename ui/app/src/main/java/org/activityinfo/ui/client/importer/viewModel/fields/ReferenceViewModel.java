@@ -9,6 +9,7 @@ import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.MappedSourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.NoValidation;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 import org.activityinfo.ui.client.input.viewModel.PermissionFilters;
@@ -58,7 +59,8 @@ public class ReferenceViewModel extends FieldViewModel {
                     .flatMap(columnId -> source.getColumnById(columnId));
 
             sourceColumn.ifPresent(c -> {
-                mappedColumns.add(new MappedSourceColumn(c, lookupKey.getKeyLabel()));
+                mappedColumns.add(new MappedSourceColumn(c, lookupKey.getKeyLabel(),
+                        org.activityinfo.observable.Observable.just(NoValidation.NONE)));
             });
         }
 

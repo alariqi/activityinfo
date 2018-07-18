@@ -1,25 +1,20 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.observable.Observable;
 
 /**
  * View model, with results of the matching exercise
  */
 public class MappedSourceColumn {
 
-
-    public enum Status {
-        UNSET,
-        IGNORED,
-        MAPPED;
-    }
-
     private SourceColumn column;
-    private Status status;
+    private ColumnStatus status;
     private String statusLabel;
+    private Observable<Validation> validation;
 
 
-    public MappedSourceColumn(SourceColumn sourceColumn, Status status) {
+    public MappedSourceColumn(SourceColumn sourceColumn, ColumnStatus status) {
         column = sourceColumn;
         this.status = status;
         switch (status) {
@@ -32,20 +27,22 @@ public class MappedSourceColumn {
             case MAPPED:
                 throw new IllegalStateException("Expected label");
         }
+        this.validation = Observable.just(NoValidation.NONE);
     }
 
 
-    public MappedSourceColumn(SourceColumn column, String matchedLabel) {
+    public MappedSourceColumn(SourceColumn column, String matchedLabel, Observable<Validation> validation) {
         this.column = column;
-        this.status = Status.MAPPED;
+        this.status = ColumnStatus.MAPPED;
         this.statusLabel = matchedLabel;
+        this.validation = validation;
     }
 
     public SourceColumn getColumn() {
         return column;
     }
 
-    public Status getStatus() {
+    public ColumnStatus getStatus() {
         return status;
     }
 
@@ -59,5 +56,9 @@ public class MappedSourceColumn {
 
     public String getId() {
         return column.getId();
+    }
+
+    public Observable<Validation> getValidation() {
+        return validation;
     }
 }

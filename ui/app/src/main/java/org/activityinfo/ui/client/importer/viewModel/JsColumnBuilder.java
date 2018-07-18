@@ -16,7 +16,11 @@ public final class JsColumnBuilder extends JavaScriptObject implements ColumnBui
 
     @Override
     public native void add(String value) /*-{
-        this.push(value);
+        if(value === "") {
+            this.push(null);
+        } else {
+            this.push(value);
+        }
     }-*/;
 
     @Override

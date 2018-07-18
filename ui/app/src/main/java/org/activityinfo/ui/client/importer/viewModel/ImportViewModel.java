@@ -25,6 +25,7 @@ public class ImportViewModel {
     private final Observable<String> selectedColumnId;
     private final Observable<MappedSourceViewModel> mappedSource;
     private final Observable<Optional<SelectedColumnViewModel>> columnTargetSelection;
+    private final Observable<ValidatedTable> validatedTable;
 
     public static Observable<Maybe<ImportViewModel>> compute(FormStore formStore, Observable<ImportState> state) {
 
@@ -75,6 +76,8 @@ public class ImportViewModel {
         // *effective* mappings between the imported columns and the target form.
 
         this.mappedSource = fields.guessMappings(scoredSource, state.transform(s -> s.getMappings()).cache());
+
+        this.validatedTable = mappedSource.join(s -> s.getValidatedTable());
 
         // Compute a viewModel of the current selected column that shows the current choice as well as alternatives
         // ranked by suitability.
@@ -129,4 +132,7 @@ public class ImportViewModel {
         return fields;
     }
 
+    public Observable<ValidatedTable> getValidatedTable() {
+        return validatedTable;
+    }
 }
