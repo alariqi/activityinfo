@@ -1,12 +1,10 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
-import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.importer.state.FieldMapping;
-import org.activityinfo.ui.client.importer.state.GeoPointMapping;
-import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
+import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,20 +29,20 @@ public class GeoPointViewModel extends FieldViewModel {
     }
 
     @Override
-    public Observable<java.util.Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source) {
-        return Observable.just(java.util.Optional.empty());
-    }
+    public Optional<MappedField> mapColumns(SourceViewModel source, FieldMappingSet fieldMappingSet) {
 
-    @Override
-    public Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId) {
-        if(fieldMapping instanceof GeoPointMapping) {
-            GeoPointMapping geoPointMapping = (GeoPointMapping) fieldMapping;
-            if(geoPointMapping.isColumnMapped(columnId, CoordinateAxis.LATITUDE)) {
-                return Optional.of(I18N.CONSTANTS.latitude() + " - " + field.getLabel());
-            }  else if(geoPointMapping.isColumnMapped(columnId, CoordinateAxis.LONGITUDE)) {
-                return Optional.of(I18N.CONSTANTS.longitude() + " - " + field.getLabel());
-            }
+        Optional<SourceColumn> latitudeColumn = fieldMappingSet
+                .getMappedColumn(field.getName(), CoordinateAxis.LATITUDE.name())
+                .flatMap(id -> source.getColumnById(id));
+
+        Optional<SourceColumn> longitudeColumn = fieldMappingSet
+                .getMappedColumn(field.getName(), CoordinateAxis.LONGITUDE.name())
+                .flatMap(id -> source.getColumnById(id));
+
+        if(latitudeColumn.isPresent() || longitudeColumn.isPresent()) {
+            return Optional.of(new GeoPointMappedField(field, latitudeColumn, longitudeColumn));
+        } else {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 }

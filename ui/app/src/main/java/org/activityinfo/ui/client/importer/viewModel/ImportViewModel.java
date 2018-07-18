@@ -6,13 +6,10 @@ import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
-import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
-import org.activityinfo.ui.client.importer.viewModel.fields.ImportedFieldViewModel;
 import org.activityinfo.ui.client.page.Breadcrumb;
 import org.activityinfo.ui.client.store.FormStore;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +25,6 @@ public class ImportViewModel {
     private final Observable<String> selectedColumnId;
     private final Observable<MappedSourceViewModel> mappedSource;
     private final Observable<Optional<SelectedColumnViewModel>> columnTargetSelection;
-    private final List<Observable<Optional<ImportedFieldViewModel>>> results;
 
     public static Observable<Maybe<ImportViewModel>> compute(FormStore formStore, Observable<ImportState> state) {
 
@@ -87,17 +83,6 @@ public class ImportViewModel {
             return s.getViewModel().getColumnById(id).map(selectedColumn ->
                     new SelectedColumnViewModel(fields, selectedColumn, m.getFieldMappingSet()));
         });
-
-
-        // Now the hard work. For each field, parse and validate the imported data
-        results = new ArrayList<>();
-        for (FieldViewModel field : fields) {
-            results.add(field.computeImport(mappedSource));
-        }
-
-        // And finally put everything together into one big table
-//        resultTable = ResultTable.compute(source, results);
-
     }
 
     public Observable<Boolean> isSourceValid() {

@@ -3,7 +3,6 @@ package org.activityinfo.ui.client.importer.viewModel.fields;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
-import org.activityinfo.ui.client.importer.state.KeyMapping;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 import org.activityinfo.ui.client.lookup.viewModel.KeyMatrixSet;
 
@@ -25,7 +24,7 @@ public class ReferenceTarget implements ColumnTarget {
 
     @Override
     public boolean isApplied(String columnId, FieldMappingSet mappings) {
-        return false;
+        return mappings.isMapped(field.getName(), lookupKey.getKeyId(), columnId);
     }
 
     @Override
@@ -35,7 +34,7 @@ public class ReferenceTarget implements ColumnTarget {
 
     @Override
     public FieldMappingSet apply(FieldMappingSet mappingSet, String columnId) {
-        return mappingSet.withReferenceMapping(field.getName(), new KeyMapping(lookupKey, columnId));
+        return mappingSet.withMapping(field.getName(), lookupKey.getKeyId(), columnId);
     }
 
     @Override

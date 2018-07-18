@@ -7,11 +7,10 @@ import org.activityinfo.model.formTree.LookupKey;
 import org.activityinfo.model.formTree.LookupKeySet;
 import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.type.ReferenceType;
-import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.importer.state.FieldMapping;
-import org.activityinfo.ui.client.importer.state.KeyMapping;
-import org.activityinfo.ui.client.importer.state.ReferenceMapping;
-import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
+import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.MappedSourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 import org.activityinfo.ui.client.input.viewModel.PermissionFilters;
 import org.activityinfo.ui.client.lookup.viewModel.KeyMatrixSet;
 import org.activityinfo.ui.client.store.FormStore;
@@ -47,30 +46,26 @@ public class ReferenceViewModel extends FieldViewModel {
         return targets;
     }
 
-    @Override
-    public Observable<java.util.Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source) {
-        return Observable.just(java.util.Optional.empty());
-    }
 
     @Override
-    public java.util.Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId) {
-        if(fieldMapping instanceof ReferenceMapping) {
-            ReferenceMapping referenceMapping = (ReferenceMapping) fieldMapping;
-            for (KeyMapping keyMapping : referenceMapping.getKeyMappings()) {
-                if(keyMapping.getColumnId().equals(columnId)) {
-                    return findLookupKey(keyMapping).map(k -> k.getKeyLabel());
-                }
-            }
-        }
-        return java.util.Optional.empty();
-    }
+    public java.util.Optional<MappedField> mapColumns(SourceViewModel source, FieldMappingSet fieldMappingSet) {
 
-    private java.util.Optional<LookupKey> findLookupKey(KeyMapping mapping) {
+        List<MappedSourceColumn> mappedColumns = new ArrayList<>();
+
         for (LookupKey lookupKey : keySet.getLookupKeys()) {
-            if(lookupKey.getKeyId().equals(mapping.getKey())) {
-                return java.util.Optional.of(lookupKey);
-            }
+            java.util.Optional<SourceColumn> sourceColumn = fieldMappingSet
+                    .getMappedColumn(field.getName(), lookupKey.getKeyId())
+                    .flatMap(columnId -> source.getColumnById(columnId));
+
+            sourceColumn.ifPresent(c -> {
+                mappedColumns.add(new MappedSourceColumn(c, lookupKey.getKeyLabel()));
+            });
         }
-        return java.util.Optional.empty();
+
+        if(mappedColumns.isEmpty()) {
+            return java.util.Optional.empty();
+        }
+
+        return java.util.Optional.of(new MappedReferenceField(mappedColumns));
     }
 }

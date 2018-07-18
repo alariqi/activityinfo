@@ -3,9 +3,6 @@ package org.activityinfo.ui.client.importer.state;
 import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.junit.Test;
 
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
@@ -16,21 +13,21 @@ public class FieldMappingSetTest {
 
         // First map columns LAT and LONG to a GEOPOINT field
         FieldMappingSet mappingSet = new FieldMappingSet()
-                .withGeoPointMapping("GEOPOINT", CoordinateAxis.LATITUDE, "LAT")
-                .withGeoPointMapping("GEOPOINT", CoordinateAxis.LONGITUDE, "LONG");
+                .withMapping("GEOPOINT", CoordinateAxis.LATITUDE.name(), "LAT")
+                .withMapping("GEOPOINT", CoordinateAxis.LONGITUDE.name(), "LONG");
 
 
-        assertThat(mappingSet.getFieldMapping("GEOPOINT").get(),
-                equalTo(new GeoPointMapping("GEOPOINT", "LAT", "LONG")));
+        assertThat(mappingSet, containsInAnyOrder(
+                new FieldMapping("GEOPOINT", CoordinateAxis.LATITUDE.name(), "LAT"),
+                new FieldMapping("GEOPOINT", CoordinateAxis.LONGITUDE.name(), "LONG")));
 
         // Now replace the mapping to LONG to a quantity field
 
-        mappingSet = mappingSet.withSimpleMapping("Q1", "LONG");
+        mappingSet = mappingSet.withMapping("Q1", FieldMapping.VALUE_ROLE, "LONG");
 
-        assertThat(mappingSet.getMappings(), containsInAnyOrder(
-                new GeoPointMapping("GEOPOINT", Optional.of("LAT"), Optional.empty()),
-                new SimpleFieldMapping("Q1", "LONG")));
-
+        assertThat(mappingSet, containsInAnyOrder(
+                new FieldMapping("GEOPOINT", CoordinateAxis.LATITUDE.name(), "LAT"),
+                new FieldMapping("Q1", FieldMapping.VALUE_ROLE, "LONG")));
 
     }
 

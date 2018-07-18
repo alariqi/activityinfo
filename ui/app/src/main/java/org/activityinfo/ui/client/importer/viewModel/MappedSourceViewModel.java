@@ -2,32 +2,52 @@ package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
+import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModelSet;
+import org.activityinfo.ui.client.importer.viewModel.fields.MappedField;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MappedSourceViewModel {
 
     private SourceViewModel source;
     private FieldMappingSet fieldMappingSet;
     private ColumnMatchMatrix columnMatrix;
-    private final List<MappedSourceColumn> columns;
+    private final List<MappedField> mappedFields = new ArrayList<>();
+    private final List<MappedSourceColumn> columns = new ArrayList<>();
 
     public MappedSourceViewModel(FieldViewModelSet fields, ScoredSourceViewModel scoredViewModel, FieldMappingSet fieldMappingSet) {
         this.source = scoredViewModel.getViewModel();
         this.columnMatrix = scoredViewModel.getMatchMatrix();
         this.fieldMappingSet = fieldMappingSet;
 
-        columns = new ArrayList<>();
+        // Build the list of fields that are mapped to columns,
+        // and keep track of the columns to which they are mapped
+
+        Map<String, MappedSourceColumn> mappedColumns = new HashMap<>();
+
+        for (FieldViewModel field : fields) {
+            field.mapColumns(source, fieldMappingSet).ifPresent(mappedField -> {
+                mappedFields.add(mappedField);
+                for (MappedSourceColumn mappedColumn : mappedField.getMappedColumns()) {
+                    mappedColumns.put(mappedColumn.getId(), mappedColumn);
+                }
+            });
+        }
+
+        // Now combine the mapped columns with unmapped and ignored columns
         for (SourceColumn sourceColumn : source.getColumns()) {
             if(fieldMappingSet.isIgnored(sourceColumn.getId())) {
                 columns.add(new MappedSourceColumn(sourceColumn, MappedSourceColumn.Status.IGNORED));
+
+            } else if(mappedColumns.containsKey(sourceColumn.getId())) {
+                columns.add(mappedColumns.get(sourceColumn.getId()));
+
             } else {
-                columns.add(fieldMappingSet.getColumnMapping(sourceColumn.getId())
-                        .flatMap(fieldMapping -> fields.columnMappingLabel(sourceColumn.getId(), fieldMapping))
-                        .map(label -> new MappedSourceColumn(sourceColumn, label))
-                        .orElse(new MappedSourceColumn(sourceColumn, MappedSourceColumn.Status.UNSET)));
+                columns.add(new MappedSourceColumn(sourceColumn, MappedSourceColumn.Status.UNSET));
             }
         }
     }

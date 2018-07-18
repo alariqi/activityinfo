@@ -1,136 +1,124 @@
 package org.activityinfo.ui.client.importer.state;
 
-import org.activityinfo.io.match.coord.CoordinateAxis;
+import com.google.common.collect.Lists;
 
 import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A set of mappings from form fields to imported columns.
  *
+ * <p>Each mapping between a field and a column has a <em>role</em>. For simple mappings between
+ * a single column and a simple field of {@code TextType} or {@code LocalDateType}, there will
+ * be a single mapping with the role "VALUE".
+ *
+ * <p>For fields of {@code GeoPointType}, there will up to two mappings, one with the role "LATITUDE" and
+ * the other with the role "LONGITUDE"</p>
+ *
  * <p>This class is immutable, and maintains the following invariants:
  * <ul>
- *     <li>Each field can have only one mapping</li>
+ *     <li>Each field-role pair can have only one mapping</li>
  *     <li>Each column can be used in one field mapping</li>
  * </ul>
  */
 public class FieldMappingSet implements Iterable<FieldMapping> {
-    private Map<String, FieldMapping> fieldMap;
+
+
+    /**
+     * List of field-role-column mappings.
+     */
+    private List<FieldMapping> list;
+
+    /**
+     * Maps from column id to FieldMapping
+     */
     private Map<String, FieldMapping> columnMap;
+
+    /**
+     * Maps from "fieldName$$role" to column id
+     */
+    private Map<String, String> index;
+
+    /**
+     * A set of column ids that have been explicitly marked as "ignored" by the user.
+     */
     private Set<String> ignoredColumns;
 
     public FieldMappingSet() {
-        fieldMap = new HashMap<>();
-        columnMap = new HashMap<>();
-        ignoredColumns = new HashSet<>();
+        this(Collections.emptyList(), Collections.emptySet());
     }
 
-    private FieldMappingSet(Iterable<FieldMapping> mappings, Set<String> ignoredColumns) {
+    private FieldMappingSet(Iterable<FieldMapping> list, Set<String> ignoredColumns) {
+        this.list = Lists.newArrayList(list);
         this.ignoredColumns = ignoredColumns;
-        this.fieldMap = new HashMap<>();
         this.columnMap = new HashMap<>();
-        for (FieldMapping fieldMapping : mappings) {
-            fieldMap.put(fieldMapping.getFieldName(), fieldMapping);
-            for (String columnId : fieldMapping.getMappedColumnIds()) {
-                columnMap.put(columnId, fieldMapping);
-            }
+        this.index = new HashMap<>();
+        for (FieldMapping fieldMapping : list) {
+            columnMap.put(fieldMapping.getColumnId(), fieldMapping);
+            index.put(indexKey(fieldMapping.getFieldName(), fieldMapping.getRole()), fieldMapping.getColumnId());
         }
+    }
+
+    private static String indexKey(String fieldName, String role) {
+        return fieldName + "$$" + role;
     }
 
     /**
-     *
-     * @return the set of column ids that are either part of a field mapping, or are explicitly ignored.
+     * @return the columnId of the column mapped to the given {@code fieldName} and {@code role}, if one exists.
      */
-    public Set<String> getMappedColumnIds() {
-        return columnMap.keySet();
+    public Optional<String> getMappedColumn(String fieldName, String role) {
+        return Optional.ofNullable(index.get(indexKey(fieldName, role)));
     }
 
-    public Optional<FieldMapping> getColumnMapping(String columnId) {
-        return Optional.ofNullable(columnMap.get(columnId));
+    /**
+     * @return the columnId of the column mapped to the given {@code fieldName} in the VALUE role, if one exists.
+     */
+    public Optional<String> getMappedValueColumn(String fieldName) {
+        return getMappedColumn(fieldName, FieldMapping.VALUE_ROLE);
     }
 
-    private FieldMappingSet withMapping(FieldMapping newMapping) {
+    public FieldMappingSet withMapping(FieldMapping newMapping) {
 
-        // We have to ensure that each column is mapped to no more than one
-        // field mapping. If i
-        Set<String> newlyMappedColumns = newMapping.getMappedColumnIds();
+        // Create a new list
+        List<FieldMapping> newList = new ArrayList<>();
+        newList.add(newMapping);
 
-        // Copy any existing mappings, removing this column from any existing mapping
-        List<FieldMapping> retained = new ArrayList<>();
-        for (FieldMapping existing : getMappings()) {
-            if(!existing.getFieldName().equals(newMapping.getFieldName())) {
-                Optional<FieldMapping> updated = existing.withColumns(c -> !newlyMappedColumns.contains(c));
-                updated.ifPresent(m -> retained.add(m));
+        // Keep any existing mappings that don't conflict with this mapping
+        for (FieldMapping mapping : this.list) {
+            if(!mapping.conflicts(newMapping)) {
+                newList.add(mapping);
             }
         }
-
-        // Add the new field mapping
-        retained.add(newMapping);
-
         // Remove any mapped columns from the ignored set
         Set<String> updatedIgnore = new HashSet<>(ignoredColumns);
-        updatedIgnore.removeAll(newlyMappedColumns);
+        updatedIgnore.remove(newMapping.getColumnId());
 
-        return new FieldMappingSet(retained, updatedIgnore);
+        return new FieldMappingSet(newList, updatedIgnore);
+    }
 
+    public FieldMappingSet withMapping(String fieldName, String role, String columnId) {
+        return withMapping(new FieldMapping(fieldName, role, columnId));
     }
 
     public FieldMappingSet withColumnIgnored(String columnId) {
 
         // Copy any existing mappings, removing this column from any existing mapping
-        List<FieldMapping> retained = new ArrayList<>();
-        for (FieldMapping existing : getMappings()) {
-            Optional<FieldMapping> updated = existing.withColumns(c -> !c.equals(columnId));
-            updated.ifPresent(m -> retained.add(m));
-        }
+        List<FieldMapping> newList = list.stream().filter(m -> !m.getColumnId().equals(columnId)).collect(toList());
 
-        // Update the ignored set
-        Set<String> updatedIgnore = new HashSet<>(ignoredColumns);
-        updatedIgnore.add(columnId);
+        Set<String> newIgnored = new HashSet<>(ignoredColumns);
+        newIgnored.add(columnId);
 
-        return new FieldMappingSet(retained, updatedIgnore);
+
+        return new FieldMappingSet(newList, newIgnored);
     }
 
-    public FieldMappingSet withSimpleMapping(String fieldName, String columnId) {
-        return withMapping(new SimpleFieldMapping(fieldName, columnId));
-    }
 
-    public FieldMappingSet withReferenceMapping(String fieldName, KeyMapping keyMapping) {
-        FieldMapping existing = fieldMap.get(fieldName);
-        if(existing instanceof ReferenceMapping) {
-            return withMapping(((ReferenceMapping) existing).withKeyMapping(keyMapping));
-        } else {
-            return withMapping(new ReferenceMapping(fieldName, keyMapping));
-        }
-    }
-
-    public FieldMappingSet withGeoPointMapping(String fieldName, CoordinateAxis axis, String columnId) {
-        FieldMapping existing = fieldMap.get(fieldName);
-        if(existing instanceof GeoPointMapping) {
-            return withMapping(((GeoPointMapping) existing).withCoordMapping(axis, columnId));
-        } else {
-            return withMapping(new GeoPointMapping(fieldName, axis, columnId));
-        }
-    }
-
-    public Optional<FieldMapping> getFieldMapping(String fieldName) {
-        return Optional.ofNullable(fieldMap.get(fieldName));
-    }
-
-    public Optional<SimpleFieldMapping> getSimpleFieldMapping(String fieldName) {
-        FieldMapping mapping = fieldMap.get(fieldName);
-        if(mapping instanceof SimpleFieldMapping) {
-            return Optional.of((SimpleFieldMapping) mapping);
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public Collection<FieldMapping> getMappings() {
-        return fieldMap.values();
-    }
-
-    public boolean isFieldMapped(String name) {
-        return fieldMap.containsKey(name);
+    /**
+     * Returns {@code true} if the given {@code columnId} is mapped to the given {@code fieldName} and {@code role}
+     */
+    public boolean isMapped(String fieldName, String role, String columnId) {
+        return columnId.equals(index.get(indexKey(fieldName, role)));
     }
 
     public boolean isIgnored(String id) {
@@ -139,7 +127,7 @@ public class FieldMappingSet implements Iterable<FieldMapping> {
 
     @Override
     public Iterator<FieldMapping> iterator() {
-        return fieldMap.values().iterator();
+        return list.iterator();
     }
 
 }

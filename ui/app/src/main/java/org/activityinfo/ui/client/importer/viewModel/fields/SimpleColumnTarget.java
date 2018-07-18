@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
+import org.activityinfo.ui.client.importer.state.FieldMapping;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 import org.activityinfo.ui.client.importer.viewModel.parser.FieldParser;
@@ -21,9 +22,7 @@ public class SimpleColumnTarget implements ColumnTarget {
 
     @Override
     public boolean isApplied(String columnId, FieldMappingSet mappings) {
-        return mappings.getColumnMapping(columnId)
-                .map(m -> m.getFieldName().equals(field.getName()))
-                .orElse(false);
+        return mappings.isMapped(field.getName(),  FieldMapping.VALUE_ROLE, columnId);
     }
 
     @Override
@@ -33,7 +32,7 @@ public class SimpleColumnTarget implements ColumnTarget {
 
     @Override
     public FieldMappingSet apply(FieldMappingSet mappingSet, String columnId) {
-        return mappingSet.withSimpleMapping(field.getName(), columnId);
+        return mappingSet.withMapping(field.getName(), FieldMapping.VALUE_ROLE, columnId);
     }
 
     @Override

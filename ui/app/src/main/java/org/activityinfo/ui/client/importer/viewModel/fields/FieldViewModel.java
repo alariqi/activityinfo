@@ -1,9 +1,8 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.importer.state.FieldMapping;
-import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
+import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,5 @@ public abstract class FieldViewModel {
         return field.getName();
     }
 
-    public abstract Observable<Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source);
-
-    public abstract Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId);
+    public abstract Optional<MappedField> mapColumns(SourceViewModel source, FieldMappingSet fieldMappingSet);
 }

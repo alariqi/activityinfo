@@ -1,9 +1,9 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.importer.state.FieldMapping;
-import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
+import org.activityinfo.ui.client.importer.state.FieldMappingSet;
+import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
+import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
 import org.activityinfo.ui.client.importer.viewModel.parser.FieldParser;
 
 import java.util.Collections;
@@ -27,16 +27,16 @@ public class SimpleFieldViewModel extends FieldViewModel {
     }
 
     @Override
-    public Observable<Optional<ImportedFieldViewModel>> computeImport(Observable<MappedSourceViewModel> source) {
-        return source.transform(s -> {
-            return s.getFieldMappingSet().getSimpleFieldMapping(field.getName())
-             .flatMap(m -> s.getSource().getColumnById(m.getSourceColumnId()))
-             .map(c -> new SimpleImportedViewModel(c, parser));
-        });
-    }
+    public Optional<MappedField> mapColumns(SourceViewModel source, FieldMappingSet fieldMappingSet) {
 
-    @Override
-    public Optional<String> columnMappingLabel(FieldMapping fieldMapping, String columnId) {
-        return Optional.of(field.getLabel());
+        // First obtain the mapping for this field and its mapped column,
+        // if they both exist.
+
+        Optional<SourceColumn> sourceColumn = fieldMappingSet
+                .getMappedValueColumn(this.field.getName())
+                .flatMap(columnId -> source.getColumnById(columnId));
+
+        // Now construct the mapper which validate and parse the source column
+        return sourceColumn.map(column -> new SimpleMappedField(field, column, parser));
     }
 }

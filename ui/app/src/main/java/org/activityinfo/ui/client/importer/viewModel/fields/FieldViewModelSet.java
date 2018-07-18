@@ -2,7 +2,6 @@ package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.importer.state.FieldMapping;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.MappedSourceViewModel;
 import org.activityinfo.ui.client.importer.viewModel.ScoredSourceViewModel;
@@ -12,7 +11,6 @@ import org.activityinfo.ui.client.store.FormStore;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 public class FieldViewModelSet implements Iterable<FieldViewModel> {
@@ -73,14 +71,5 @@ public class FieldViewModelSet implements Iterable<FieldViewModel> {
     @Override
     public Iterator<FieldViewModel> iterator() {
         return fields.iterator();
-    }
-
-    public Optional<String> columnMappingLabel(String columnId, FieldMapping fieldMapping) {
-        for (FieldViewModel field : fields) {
-            if(field.getFieldName().equals(fieldMapping.getFieldName())) {
-                return field.columnMappingLabel(fieldMapping, columnId);
-            }
-        }
-        return Optional.empty();
     }
 }
