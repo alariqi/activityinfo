@@ -6,8 +6,8 @@ import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 import javax.annotation.Nonnull;
 
 public class YearParser implements FieldParser {
-    private static RegExp REGEX = RegExp.compile("^[0-9]{4}$");
 
+    private static RegExp REGEX = RegExp.compile("^[0-9]{4}$");
 
     @Override
     public double scoreContent(SourceColumn column) {

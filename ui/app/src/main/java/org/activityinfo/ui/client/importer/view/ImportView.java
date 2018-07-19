@@ -19,6 +19,7 @@ import org.activityinfo.ui.client.importer.state.ImportUpdater;
 import org.activityinfo.ui.client.importer.viewModel.ImportViewModel;
 import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
+import org.activityinfo.ui.client.importer.viewModel.fields.ScoredColumnTarget;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.html.H;
@@ -141,25 +142,52 @@ public class ImportView {
     }
 
     private VTree columnTargets(SelectedColumnViewModel column) {
-        List<VTree> radioGroup = new ArrayList<>();
-        for (ColumnTarget target : column.getTargets()) {
-            radioGroup.add(new RadioButton()
-                .label(target.getLabel())
-                .name("radio-" + column.getId())
-                .checked(column.isSelected(target))
-                .onchange(event -> onTargetSelected(column, target, event))
-                .render());
-        }
 
-        radioGroup.add(new RadioButton()
-            .label(I18N.CONSTANTS.ignoreColumnAction())
-            .name("radio-ignore-column")
-            .checked(column.isIgnored())
-            .onchange(event -> onIgnoreSelected(column, event))
-            .render());
-
-        return new VNode(HtmlTag.DIV, PropMap.EMPTY, radioGroup);
+        return new VNode(HtmlTag.DIV, PropMap.EMPTY,
+                bestTargetList(column),
+                ignoreRadioButton(column),
+                remainingFields(column));
     }
+
+
+    private VTree bestTargetList(SelectedColumnViewModel column) {
+        List<VTree> radios = new ArrayList<>();
+        for (ScoredColumnTarget scoredTarget : column.getTargets().getNameMatches()) {
+            radios.add(targetRadioButton(column, scoredTarget.getTarget()));
+        }
+        return new VNode(HtmlTag.FIELDSET, Props.withClass("importer__best"), radios);
+    }
+
+
+    private VTree remainingFields(SelectedColumnViewModel column) {
+        List<VTree> radios = new ArrayList<>();
+        for (ScoredColumnTarget scoredTarget : column.getTargets().getOther()) {
+            radios.add(targetRadioButton(column, scoredTarget.getTarget()));
+        }
+        return new VNode(HtmlTag.FIELDSET, Props.withClass("importer__other"), radios);
+    }
+
+    private VTree targetRadioButton(SelectedColumnViewModel column, ColumnTarget target) {
+        return new RadioButton()
+            .label(target.getLabel())
+            .name("radio-" + column.getId())
+            .checked(column.isSelected(target))
+            .onchange(event -> onTargetSelected(column, target, event))
+            .render();
+    }
+
+
+    private VTree ignoreRadioButton(SelectedColumnViewModel column) {
+        return new RadioButton()
+                .label(I18N.CONSTANTS.ignoreColumnAction())
+                .name("radio-ignore-column")
+                .checked(column.isIgnored())
+                .onchange(event -> onIgnoreSelected(column, event))
+                .render();
+    }
+
+
+
 
     private void onTargetSelected(SelectedColumnViewModel column, ColumnTarget target, Event event) {
         InputElement input = event.getEventTarget().cast();

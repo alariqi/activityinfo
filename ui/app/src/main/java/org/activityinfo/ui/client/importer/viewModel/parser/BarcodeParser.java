@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 public class BarcodeParser implements FieldParser {
     @Override
     public double scoreContent(SourceColumn column) {
-        return 1;
+        return ANYTHING_GOES_SCORE;
     }
 
     @Override

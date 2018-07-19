@@ -117,7 +117,7 @@ public class SourceColumn {
     /**
      * Compute the average matching score of values across a sample of the columns.
      */
-    public double scoreSample(Set<String> expected) {
+    public double   scoreSample(Set<String> expected) {
         double sumOfScores = 0;
         int countOfScores = 0;
 

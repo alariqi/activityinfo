@@ -51,10 +51,19 @@ public class ImportViewModelTest {
 
         dumpMappings();
         dumpColumnHeaders();
+    }
 
+    @Test
+    public void missingAdminLevel() throws IOException {
+        ResourceId formId = ResourceId.valueOf("L0000000002");
 
+        loadDataSet("qis-villages.json");
+        startImport(formId);
 
+        importResource("qis-villages.csv");
 
+        dumpTargets();
+        dumpColumnMatrix();
     }
 
 
@@ -124,7 +133,7 @@ public class ImportViewModelTest {
 
     private void dumpColumnMatrix() throws IOException {
         File tempFile = File.createTempFile("matrix", ".csv");
-        Files.asCharSink(tempFile, Charsets.UTF_8).write(mappedView.assertLoaded().getColumnMatrix().toCsv());
+        Files.asCharSink(tempFile, Charsets.UTF_8).write(mappedView.assertLoaded().getColumnMatrix().toCsv(true));
 
         System.out.println("Wrote column matrix to " + tempFile.getAbsolutePath());
     }

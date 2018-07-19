@@ -5,7 +5,6 @@ import org.activityinfo.ui.client.importer.viewModel.fields.BestColumnTargets;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnMatchMatrix;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
 
-import java.util.List;
 import java.util.Optional;
 
 public class SelectedColumnViewModel {
@@ -37,8 +36,8 @@ public class SelectedColumnViewModel {
         return column;
     }
 
-    public List<ColumnTarget> getTargets() {
-        return targets;
+    public BestColumnTargets getTargets() {
+        return bestTargets;
     }
 
     public String getId() {
@@ -56,4 +55,5 @@ public class SelectedColumnViewModel {
     public String getLabel() {
         return column.getColumn().getLabel();
     }
+
 }

@@ -1,0 +1,502 @@
+{
+  "forms": [
+    {
+      "schema": {
+        "id": "E0000000002",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "District",
+        "elements": [
+          {
+            "id": "E00000000020000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000020000000003",
+            "code": "code",
+            "label": "Code",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000020000000005",
+            "code": "boundary",
+            "label": "Geography",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geoArea"
+          },
+          {
+            "id": "E00000000020000000002",
+            "code": "parent",
+            "label": "Division",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "reference",
+            "key": true,
+            "superProperties": [
+              "_parent"
+            ],
+            "typeParameters": {
+              "cardinality": "single",
+              "range": [
+                {
+                  "formId": "E0000000001"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "records": [
+        {
+          "recordId": "z0000000001",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Bogra"
+          }
+        },
+        {
+          "recordId": "z0000000002",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Chittagong"
+          }
+        },
+        {
+          "recordId": "z0000000003",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Comilla"
+          }
+        },
+        {
+          "recordId": "z0000000004",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Gazipur"
+          }
+        },
+        {
+          "recordId": "z0000000005",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Gopalgonj"
+          }
+        },
+        {
+          "recordId": "z0000000006",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Kishoregonj"
+          }
+        },
+        {
+          "recordId": "z0000000007",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Kushtia"
+          }
+        },
+        {
+          "recordId": "z0000000008",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Mymensingh"
+          }
+        },
+        {
+          "recordId": "z0000000009",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Netrakona"
+          }
+        },
+        {
+          "recordId": "z0000000010",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Rajbari"
+          }
+        },
+        {
+          "recordId": "z0000000011",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Satkhira"
+          }
+        },
+        {
+          "recordId": "z0000000012",
+          "formId": "E0000000002",
+          "fields": {
+            "E00000000020000000001": "Tangail"
+          }
+        }
+      ]
+    },
+    {
+      "schema": {
+        "id": "E0000000001",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "Division",
+        "elements": [
+          {
+            "id": "E00000000010000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000010000000003",
+            "code": "code",
+            "label": "Code",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000010000000005",
+            "code": "boundary",
+            "label": "Geography",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geoArea"
+          }
+        ]
+      },
+      "records": [
+        
+      ]
+    },
+    {
+      "schema": {
+        "id": "L0000000002",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "Village",
+        "elements": [
+          {
+            "id": "L00000000020000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "L00000000020000000004",
+            "code": "axe",
+            "label": "Alternate Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "L00000000020000000006",
+            "code": "admin",
+            "label": "Administrative Unit",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "reference",
+            "typeParameters": {
+              "cardinality": "multiple",
+              "range": [
+                {
+                  "formId": "E0000000001"
+                },
+                {
+                  "formId": "E0000000002"
+                },
+                {
+                  "formId": "E0000000003"
+                }
+              ]
+            }
+          },
+          {
+            "id": "L00000000020000000005",
+            "code": "point",
+            "label": "Geographic coordinates",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geopoint"
+          }
+        ]
+      },
+      "records": [
+        
+      ]
+    },
+    {
+      "schema": {
+        "id": "geoPoint",
+        "schemaVersion": 0,
+        "label": "Geographic coordinates",
+        "elements": [
+          {
+            "id": "latitude",
+            "code": "latitude",
+            "label": "Latitude",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "quantity",
+            "typeParameters": {
+              "units": "degrees",
+              "aggregation": "SUM"
+            }
+          },
+          {
+            "id": "longitude",
+            "code": "longitude",
+            "label": "Longitude",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "quantity",
+            "typeParameters": {
+              "units": "degrees",
+              "aggregation": "SUM"
+            }
+          }
+        ]
+      },
+      "records": [
+        
+      ]
+    },
+    {
+      "schema": {
+        "id": "E0000000003",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "Upzilla",
+        "elements": [
+          {
+            "id": "E00000000030000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000030000000003",
+            "code": "code",
+            "label": "Code",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000000030000000005",
+            "code": "boundary",
+            "label": "Geography",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geoArea"
+          },
+          {
+            "id": "E00000000030000000002",
+            "code": "parent",
+            "label": "District",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "reference",
+            "key": true,
+            "superProperties": [
+              "_parent"
+            ],
+            "typeParameters": {
+              "cardinality": "single",
+              "range": [
+                {
+                  "formId": "E0000000002"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "records": [
+        {
+          "recordId": "z0000000013",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Sonatoal",
+            "E00000000030000000002": "E0000000002:z0000000001"
+          }
+        },
+        {
+          "recordId": "z0000000014",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Fatickchari",
+            "E00000000030000000002": "E0000000002:z0000000002"
+          }
+        },
+        {
+          "recordId": "z0000000015",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Burichong",
+            "E00000000030000000002": "E0000000002:z0000000003"
+          }
+        },
+        {
+          "recordId": "z0000000016",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Kaligonj",
+            "E00000000030000000002": "E0000000002:z0000000004"
+          }
+        },
+        {
+          "recordId": "z0000000017",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Tungipara",
+            "E00000000030000000002": "E0000000002:z0000000005"
+          }
+        },
+        {
+          "recordId": "z0000000018",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Bhairab",
+            "E00000000030000000002": "E0000000002:z0000000006"
+          }
+        },
+        {
+          "recordId": "z0000000019",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Kushtia Sadar",
+            "E00000000030000000002": "E0000000002:z0000000007"
+          }
+        },
+        {
+          "recordId": "z0000000020",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Bhaluka",
+            "E00000000030000000002": "E0000000002:z0000000008"
+          }
+        },
+        {
+          "recordId": "z0000000021",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Purbadhala",
+            "E00000000030000000002": "E0000000002:z0000000009"
+          }
+        },
+        {
+          "recordId": "z0000000022",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Baliakandi",
+            "E00000000030000000002": "E0000000002:z0000000010"
+          }
+        },
+        {
+          "recordId": "z0000000023",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Tala",
+            "E00000000030000000002": "E0000000002:z0000000011"
+          }
+        },
+        {
+          "recordId": "z0000000024",
+          "formId": "E0000000003",
+          "fields": {
+            "E00000000030000000001": "Modhupur",
+            "E00000000030000000002": "E0000000002:z0000000012"
+          }
+        }
+      ]
+    }
+  ]
+}

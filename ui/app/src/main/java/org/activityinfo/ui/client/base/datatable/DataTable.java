@@ -156,7 +156,7 @@ public class DataTable {
 
     private VTree renderBody(List<DataTableColumn> columns) {
 
-        Observable<RowRange> debouncedRange = this.range.debounce(100);
+        Observable<RowRange> debouncedRange = this.range;
         Observable<TableSlice> tableSlice = rowRenderer.apply(debouncedRange);
 
         VTree loading = renderBodyInner(columns, TableSlice.EMPTY);

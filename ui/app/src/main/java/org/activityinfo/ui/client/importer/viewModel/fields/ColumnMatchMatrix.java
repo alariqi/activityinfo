@@ -39,17 +39,14 @@ public class ColumnMatchMatrix {
                 // contains only numbers, then it cannot be a good match for a date field, regardless of the name.
 
                 double contentScore = target.scoreContent(column);
-                double nameScore;
-                if(contentScore > 0) {
-                    nameScore = SCORER.score(column.getLabel(), target.getLabel());
-                } else {
-                    nameScore = 0;
-                }
+                double nameScore = SCORER.score(column.getLabel(), target.getLabel());
                 nameScores[scoreIndex] = nameScore;
                 contentScores[scoreIndex] = contentScore;
                 scoreIndex++;
             }
         }
+
+        LOGGER.info("Match matrix\n" + toCsv(true));
     }
 
     public int getNumColumns() {
@@ -78,22 +75,14 @@ public class ColumnMatchMatrix {
     }
 
     public double getNameScore(int columnIndex, int targetIndex) {
-        return nameScores[(columnIndex * numTargets) + targetIndex];
+        return nameScores[(targetIndex * numColumns) + columnIndex];
     }
 
     public double getContentScore(int columnIndex, int targetIndex) {
-        return contentScores[(columnIndex * numTargets) + targetIndex];
+        return contentScores[(targetIndex * numColumns) + columnIndex];
     }
 
-    private double score(SourceColumn column, ColumnTarget columnTarget) {
-        double contentScore = columnTarget.scoreContent(column);
-        if(contentScore == 0) {
-            return 0;
-        }
-        return SCORER.score(column.getLabel(), columnTarget.getLabel()) * contentScore;
-    }
-
-    public String toCsv() {
+    public String toCsv(boolean scoreByName) {
         StringBuilder csv = new StringBuilder();
         for (SourceColumn column : columns) {
             csv.append("\t").append(column.getLabel());
@@ -102,7 +91,8 @@ public class ColumnMatchMatrix {
         for (int i = 0; i < numTargets; i++) {
             csv.append(targets.get(i).getLabel());
             for (int j = 0; j < numColumns; ++j) {
-                csv.append("\t").append(getNameScore(j, i));
+                double score = scoreByName ? getNameScore(j, i) : getContentScore(j, i);
+                csv.append("\t").append(score);
             }
             csv.append("\n");
         }
@@ -111,7 +101,6 @@ public class ColumnMatchMatrix {
 
     public BestColumnTargets findBestTargets(String columnId) {
         List<ScoredColumnTarget> nameMatches = new ArrayList<>();
-        List<ScoredColumnTarget> contentMatches = new ArrayList<>();
         List<ScoredColumnTarget> other = new ArrayList<>();
 
         int columnIndex = findColumnIndexFromId(columnId);
@@ -119,21 +108,17 @@ public class ColumnMatchMatrix {
             for (int i = 0; i < numTargets; i++) {
                 ColumnTarget target = targets.get(i);
                 double nameScore = getNameScore(columnIndex, i);
+                double contentScore = getContentScore(columnIndex, i);
                 if(nameScore > 0.5) {
-                    nameMatches.add(new ScoredColumnTarget(target, nameScore));
-                } else {
-                    double contentScore = getContentScore(columnIndex, i);
-                    if(contentScore > 0.5) {
-                        contentMatches.add(new ScoredColumnTarget(target, contentScore));
-                    } else {
-                        other.add(new ScoredColumnTarget(target, nameScore));
-                    }
+                    nameMatches.add(new ScoredColumnTarget(target, nameScore, contentScore));
+                } else if(contentScore > 0) {
+                    other.add(new ScoredColumnTarget(target, nameScore, contentScore));
                 }
             }
         }
         nameMatches.sort(Ordering.natural());
-        contentMatches.sort(Ordering.natural());
+        other.sort(Ordering.natural());
 
-        return new BestColumnTargets(nameMatches, contentMatches, other);
+        return new BestColumnTargets(nameMatches, other);
     }
 }
