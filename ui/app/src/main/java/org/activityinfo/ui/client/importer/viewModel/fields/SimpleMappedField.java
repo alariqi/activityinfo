@@ -37,6 +37,11 @@ public class SimpleMappedField implements MappedField {
     }
 
     @Override
+    public boolean isComplete() {
+        return true;
+    }
+
+    @Override
     public List<MappedSourceColumn> getMappedColumns() {
         return singletonList(mappedColumn);
     }

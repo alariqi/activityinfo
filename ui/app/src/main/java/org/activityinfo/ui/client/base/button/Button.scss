@@ -58,6 +58,10 @@ button,
   }
 }
 
+.button--primary:disabled {
+  background-color: #d1d3d3;
+}
+
 .datepicker__footer .button {
 // .link {
   padding: 0;

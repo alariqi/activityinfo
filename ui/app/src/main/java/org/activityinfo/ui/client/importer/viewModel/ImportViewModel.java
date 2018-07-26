@@ -136,4 +136,8 @@ public class ImportViewModel {
     public Observable<ValidatedTable> getValidatedTable() {
         return validatedTable;
     }
+
+    public Observable<Boolean> isMappingComplete() {
+        return mappedSource.transform(m -> m.isComplete()).cache();
+    }
 }

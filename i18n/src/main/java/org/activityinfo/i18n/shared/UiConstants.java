@@ -1984,8 +1984,8 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Match fields & validate fields")
     String matchFieldStep();
 
-    @DefaultStringValue("Unset")
-    String unset();
+    @DefaultStringValue("Not matched")
+    String notMatched();
 
 
     @DefaultStringValue("No Filter")
@@ -2039,4 +2039,14 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Delete Target")
     String deleteTarget();
 
+    @DefaultStringValue("Column Matching")
+    String columnMatching();
+
+    @DefaultStringValue("Probable Matches")
+    String probableMatches();
+
+    @DefaultStringValue("Some required fields in the form have not been matched. Please match all required fields to proceed.")
+    String requiredFieldsNotMapped();
+
 }
+

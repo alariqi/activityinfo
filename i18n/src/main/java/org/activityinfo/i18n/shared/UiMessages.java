@@ -249,8 +249,8 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @Messages.DefaultMessage("Matched to ''{0}'' ({1}%)")
     String importValidationCellTooltip(String matchedValue, int confidencePercent);
 
-    @Messages.DefaultMessage("Match “{0}” to field")
-    String matchColumnToField(String columnName);
+    @Messages.DefaultMessage("Column “{0}”")
+    String columnHeading(String columnName);
 
     @Messages.DefaultMessage("{0,date,medium} to {1,date,medium}")
     String dateRange(Date formDate, Date toDate);

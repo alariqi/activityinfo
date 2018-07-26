@@ -17,6 +17,7 @@ public class MappedSourceViewModel {
     private final List<MappedField> mappedFields = new ArrayList<>();
     private final List<MappedSourceColumn> columns = new ArrayList<>();
     private final Observable<ValidatedTable> validatedTable;
+    private final List<FieldViewModel> missingRequiredFields = new ArrayList<>();
 
     public MappedSourceViewModel(FieldViewModelSet fields, ScoredSourceViewModel scoredViewModel, FieldMappingSet fieldMappingSet) {
         this.source = scoredViewModel.getViewModel();
@@ -29,12 +30,17 @@ public class MappedSourceViewModel {
         Map<String, MappedSourceColumn> mappedColumns = new HashMap<>();
 
         for (FieldViewModel field : fields) {
-            field.mapColumns(source, fieldMappingSet).ifPresent(mappedField -> {
+            Optional<MappedField> mapping = field.mapColumns(source, fieldMappingSet);
+            mapping.ifPresent(mappedField -> {
                 mappedFields.add(mappedField);
                 for (MappedSourceColumn mappedColumn : mappedField.getMappedColumns()) {
                     mappedColumns.put(mappedColumn.getId(), mappedColumn);
                 }
             });
+            boolean complete = mapping.map(m -> m.isComplete()).orElse(false);
+            if(field.getField().isRequired() && !complete) {
+                missingRequiredFields.add(field);
+            }
         }
 
         // Now combine the mapped columns with unmapped and ignored columns
@@ -83,5 +89,9 @@ public class MappedSourceViewModel {
 
     public Observable<Optional<ValidatedColumn>> getColumnById(String columnId) {
         return validatedTable.transform(table -> table.getColumnById(columnId));
+    }
+
+    public boolean isComplete() {
+        return missingRequiredFields.isEmpty();
     }
 }

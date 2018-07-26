@@ -9,7 +9,8 @@ public class ImportState {
 
     public enum ImportStep {
         CHOOSE_SOURCE,
-        MATCH_COLUMNS
+        MATCH_COLUMNS,
+        REVIEW_INVALID
     }
 
     private ResourceId formId;

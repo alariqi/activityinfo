@@ -9,7 +9,19 @@ import java.util.Optional;
 
 public class GeoPointMappedField implements MappedField {
 
+    private final FormField field;
+    private final Optional<SourceColumn> latitudeColumn;
+    private final Optional<SourceColumn> longitudeColumn;
+
     public GeoPointMappedField(FormField field, Optional<SourceColumn> latitudeColumn, Optional<SourceColumn> longitudeColumn) {
+        this.field = field;
+        this.latitudeColumn = latitudeColumn;
+        this.longitudeColumn = longitudeColumn;
+    }
+
+    @Override
+    public boolean isComplete() {
+        return latitudeColumn.isPresent() && longitudeColumn.isPresent();
     }
 
     @Override

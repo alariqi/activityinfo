@@ -6,11 +6,13 @@ import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.Place;
 import org.activityinfo.ui.client.base.avatar.Avatar;
 import org.activityinfo.ui.client.base.button.Buttons;
+import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
 import org.activityinfo.ui.vdom.shared.tree.VNode;
 import org.activityinfo.ui.vdom.shared.tree.VText;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class PageBuilder {
     private VTree heading;
     private VTree body;
     private Place parentPlace;
+    private List<VTree> actions = new ArrayList<>();
 
     private boolean padded = false;
 
@@ -47,6 +50,11 @@ public class PageBuilder {
 
     public PageBuilder breadcrumbs(Observable<List<Breadcrumb>> breadcrumbs) {
         this.breadcrumbs = breadcrumbs;
+        return this;
+    }
+
+    public PageBuilder headerAction(VTree tree) {
+        this.actions.add(tree);
         return this;
     }
 
@@ -136,6 +144,9 @@ public class PageBuilder {
     }
 
     private VTree maybeActions() {
-        return null;
+        if(actions.isEmpty()) {
+            return null;
+        }
+        return H.div("page__header__actions", actions.stream());
     }
 }

@@ -85,6 +85,7 @@
   flex-grow: 1;
   overflow-y: auto;
   padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .importer {
@@ -106,8 +107,8 @@
   }
 
   th.ignored {
-    background-color: #ffce60;
-    color: $black;
+    background-color: $green-pale;
+    color: #466366;
 
     .surtitle {
       color: $black;
@@ -115,11 +116,12 @@
   }
 
   td.ignored {
-    background-color: #fffaef;
+    background-color: #eceff0;
+    color: #a4a8ac;
   }
 
   tr:nth-child(odd) td.ignored {
-    background-color: #fbf2df;
+    background-color: #e6ebea;
   }
 
   td.invalid {
@@ -133,5 +135,13 @@
   border-radius: 3px;
   border: 1px solid $white;
   padding: 1rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+
+  h4 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: $white;
+  }
 }
 

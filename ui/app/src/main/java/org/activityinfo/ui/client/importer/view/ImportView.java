@@ -27,6 +27,7 @@ import org.activityinfo.ui.vdom.shared.html.HtmlTag;
 import org.activityinfo.ui.vdom.shared.tree.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -65,7 +66,6 @@ public class ImportView {
                 })));
     }
 
-
     public ImportView(FormStore formStore, ImportViewModel viewModel, ImportUpdater updater) {
         this.formStore = formStore;
         this.viewModel = viewModel;
@@ -77,8 +77,30 @@ public class ImportView {
                 .avatar(GenericAvatar.DATABASE)
                 .heading(I18N.CONSTANTS.importDataExistingForm())
                 .breadcrumbs(viewModel.getBreadcrumbs())
+                .headerAction(navigation())
                 .body(body())
                 .build();
+    }
+
+    /**
+     * Renders the Cancel, Back, and continue buttons
+     */
+    private VTree navigation() {
+        return new ReactiveComponent(viewModel.getCurrentStep().transform(step -> {
+            List<VTree> buttons = new ArrayList<>();
+            buttons.add(cancelButton());
+            if(step.ordinal() > 0) {
+                buttons.add(backButton());
+            }
+            if(step == ImportState.ImportStep.CHOOSE_SOURCE) {
+                buttons.add(sourceContinueButton());
+            } else if(step == ImportState.ImportStep.MATCH_COLUMNS) {
+                buttons.add(matchingContinueButton());
+            } else {
+                buttons.add(doneButton());
+            }
+            return new VNode(HtmlTag.DIV, buttons.stream());
+        }));
     }
 
     private VTree body() {
@@ -94,9 +116,7 @@ public class ImportView {
 
     private VTree chooseSource() {
         return H.div("importer",
-                importHeader(I18N.CONSTANTS.uploadYourData(),
-                        cancelButton(),
-                        sourceContinueButton()),
+                importHeader(I18N.CONSTANTS.uploadYourData()),
                 H.div("importer__body importer__source",
                         new VNode(HtmlTag.TEXTAREA, Props.create()
                                 .oninput(event -> onSourceInput(event))),
@@ -116,15 +136,22 @@ public class ImportView {
     private VTree matchColumns() {
         return H.div("importer",
                 importHeader(I18N.CONSTANTS.matchFieldStep(),
-                        cancelButton(),
-                        backButton(),
-                        doneButton()),
+                        requiredFieldError()),
                 H.div("importer__body importer__match",
                         matchDataTable(),
                         columnPanel()));
     }
 
-
+    private VTree requiredFieldError() {
+        Observable<Boolean> complete = viewModel.getMappedSource().transform(m -> m.isComplete()).cache();
+        return new ReactiveComponent(complete.transform(c -> {
+            if(c) {
+                return H.div();
+            } else {
+                return H.div("alert alert--error", H.t(I18N.CONSTANTS.requiredFieldsNotMapped()));
+            }
+        }));
+    }
 
     private VTree matchDataTable() {
         return MatchTableView.render(viewModel, updater);
@@ -134,7 +161,7 @@ public class ImportView {
         return new ReactiveComponent(viewModel.getSelectedColumnView().transform(column ->
                 new SidePanel()
                         .hideMode(SidePanel.HideMode.NONE)
-                        .header(H.h2(I18N.MESSAGES.matchColumnToField(column.getLabel())))
+                        .header(H.h2(I18N.MESSAGES.columnHeading(column.getLabel())))
                         .content(
                                 H.div("importer__choice",
                                     H.div("importer__choice__body", columnTargets(column))))
@@ -144,18 +171,30 @@ public class ImportView {
     private VTree columnTargets(SelectedColumnViewModel column) {
 
         return new VNode(HtmlTag.DIV, PropMap.EMPTY,
+                H.div(H.h3(I18N.CONSTANTS.columnMatching())),
                 bestTargetList(column),
                 ignoreRadioButton(column),
                 remainingFields(column));
     }
 
 
+    /**
+     * Display the best matching fields at the top of list with a
+     * "probable matches" heading.
+     */
     private VTree bestTargetList(SelectedColumnViewModel column) {
-        List<VTree> radios = new ArrayList<>();
-        for (ScoredColumnTarget scoredTarget : column.getTargets().getNameMatches()) {
-            radios.add(targetRadioButton(column, scoredTarget.getTarget()));
+        List<ScoredColumnTarget> bestMatches = column.getTargets().getNameMatches();
+        if(bestMatches.isEmpty()) {
+            return H.div();
         }
-        return new VNode(HtmlTag.FIELDSET, Props.withClass("importer__best"), radios);
+
+        List<VTree> children = new ArrayList<>();
+        children.add(H.h4(I18N.CONSTANTS.probableMatches()));
+        for (ScoredColumnTarget scoredTarget : bestMatches) {
+            children.add(targetRadioButton(column, scoredTarget.getTarget()));
+        }
+        return new VNode(HtmlTag.FIELDSET,
+                Props.withClass("importer__best"), children);
     }
 
 
@@ -186,9 +225,6 @@ public class ImportView {
                 .render();
     }
 
-
-
-
     private void onTargetSelected(SelectedColumnViewModel column, ColumnTarget target, Event event) {
         InputElement input = event.getEventTarget().cast();
         if(input.isChecked()) {
@@ -203,13 +239,16 @@ public class ImportView {
         }
     }
 
-    private VNode importHeader(String heading, VTree... buttons) {
+    private VNode importHeader(String heading, VTree... content) {
+
+        List<VTree> children = new ArrayList<>();
+        children.add(H.div("surtitle", new VText(viewModel.getFormLabel())));
+        children.add(H.h2(heading));
+        children.addAll(Arrays.asList(content));
+
         return H.div("importer__header",
                 H.div("importer__header__inner",
-                        H.div("surtitle", new VText(viewModel.getFormLabel())),
-                        H.h2(heading)),
-                H.div("importer__header__actions",
-                        buttons));
+                        children.stream()));
     }
 
     private VTree cancelButton() {
@@ -222,11 +261,21 @@ public class ImportView {
         return new ReactiveComponent(viewModel.isSourceValid().transform(source ->
              Buttons.button(I18N.CONSTANTS.continue_())
                 .icon(Icon.BUBBLE_ARROWRIGHT)
+                .primary()
                 .enabled(source)
                 .onSelect(event -> updater.update(s -> s.withStep(ImportState.ImportStep.MATCH_COLUMNS)))
                 .build()));
     }
 
+    private VTree matchingContinueButton() {
+        return new ReactiveComponent(viewModel.isMappingComplete().transform(source ->
+                Buttons.button(I18N.CONSTANTS.continue_())
+                        .icon(Icon.BUBBLE_ARROWRIGHT)
+                        .primary()
+                        .enabled(source)
+                        .onSelect(event -> updater.update(s -> s.withStep(ImportState.ImportStep.REVIEW_INVALID)))
+                        .build()));
+    }
 
     private VTree backButton() {
         return Buttons.button(I18N.CONSTANTS.back())
@@ -241,6 +290,7 @@ public class ImportView {
                 .primary()
                 .build();
     }
+
 
 
     private void onSourceInput(Event event) {

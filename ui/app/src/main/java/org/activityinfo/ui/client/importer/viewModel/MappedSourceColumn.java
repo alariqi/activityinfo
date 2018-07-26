@@ -19,7 +19,7 @@ public class MappedSourceColumn {
         this.status = status;
         switch (status) {
             case UNSET:
-                this.statusLabel = I18N.CONSTANTS.unset();
+                this.statusLabel = I18N.CONSTANTS.notMatched();
                 break;
             case IGNORED:
                 this.statusLabel = I18N.CONSTANTS.ignored();

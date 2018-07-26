@@ -6,5 +6,8 @@ import java.util.List;
 
 public interface MappedField {
 
-    public List<MappedSourceColumn> getMappedColumns();
+    List<MappedSourceColumn> getMappedColumns();
+
+    boolean isComplete();
+
 }

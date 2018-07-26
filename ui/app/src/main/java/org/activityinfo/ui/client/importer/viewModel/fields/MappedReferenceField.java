@@ -17,4 +17,9 @@ public class MappedReferenceField implements MappedField {
     public List<MappedSourceColumn> getMappedColumns() {
         return mappedColumns;
     }
+
+    @Override
+    public boolean isComplete() {
+        return true;
+    }
 }
