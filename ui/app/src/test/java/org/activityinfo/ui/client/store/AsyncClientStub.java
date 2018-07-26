@@ -134,7 +134,7 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion) {
+    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion, java.util.Optional<String> cursor) {
         if(!connected) {
             return offlineResult();
         }
@@ -143,7 +143,7 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
             return Promise.rejected(new RuntimeException("No such form"));
         }
         VersionedFormStorage formStorage = (VersionedFormStorage) form.get();
-        return Promise.resolved(formStorage.getVersionRange(localVersion, toVersion, resourceId -> true));
+        return Promise.resolved(formStorage.getVersionRange(localVersion, toVersion, resourceId -> true, cursor));
     }
 
     @Override
@@ -250,4 +250,13 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
         return Promise.rejected(new RuntimeException("Offline"));
     }
 
+    @Override
+    public Promise<Void> requestDatabaseTransfer(String s, int i) {
+        return Promise.rejected(new UnsupportedOperationException());
+    }
+
+    @Override
+    public Promise<Void> cancelDatabaseTransfer(int i) {
+        return Promise.rejected(new UnsupportedOperationException());
+    }
 }

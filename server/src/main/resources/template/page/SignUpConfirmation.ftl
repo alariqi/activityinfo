@@ -53,11 +53,22 @@
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="checkbox">
-                        <input type="checkbox" checked="true" name="newsletter" value="true">
-                    ${label.newsletter}
-                    </label>
+                <div>
+                    <label>${label.newsletter}:</label>
+                    <ul style="list-style-type: none">
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="newsletter" id="newsletterYes" value="true">
+                                ${label.newsletterYes}
+                            </label>
+                        </li>
+                        <li>
+                            <label class="radio">
+                                <input type="radio" name="newsletter" id="newsletterNo" value="false">
+                                ${label.newsletterNo}
+                            </label>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="control-group">
@@ -77,6 +88,18 @@
 
         var passwordInput = document.getElementById('passwordInput');
         var confirmPasswordInput = document.getElementById('confirmPasswordInput');
+        var newsletterYesInput = document.getElementById('newsletterYes');
+        var newsletterNoInput = document.getElementById('newsletterNo');
+        var confirmForm = document.getElementById('confirmForm');
+
+        confirmForm.addEventListener('submit', function(event) {
+            if (!newsletterYesInput.checked && !newsletterNoInput.checked) {
+                event.preventDefault();
+                alert("Please choose whether you wish to receive emails from the ActivityInfo team.");
+                return;
+            }
+        });
+
         var validatePass = function () {
             var pass1 = passwordInput.value;
             var pass2 = confirmPasswordInput.value;

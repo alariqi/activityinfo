@@ -24,6 +24,7 @@ import org.activityinfo.observable.Subscription;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.HttpStore;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -33,10 +34,12 @@ public class RecordSynchronizer {
 
     private static final Logger LOGGER = Logger.getLogger(RecordSynchronizer.class.getName());
 
+    private static final int SYNC_DELAY_MS = 5 * 60 * 1000;
+
     private FormStoreImpl formStore;
     private ActivityInfoClientAsync client;
 
-    private final Observable<Snapshot> snapshot;
+    private final Observable<Optional<SnapshotDelta>> snapshot;
 
     private final Subscription subscription;
     private OfflineStore offlineStore;
@@ -44,14 +47,26 @@ public class RecordSynchronizer {
 
     public RecordSynchronizer(HttpStore httpStore, OfflineStore offlineStore) {
         this.offlineStore = offlineStore;
-        this.snapshot = Snapshot.compute(offlineStore.getOfflineForms(), httpStore);
+        this.snapshot = SnapshotDelta.compute(httpStore, offlineStore.getOfflineForms(), offlineStore.getCurrentSnapshot());
         this.subscription = snapshot.subscribe(this::onSnapshotUpdated);
     }
 
-    private void onSnapshotUpdated(Observable<Snapshot> snapshotObservable) {
+    private void onSnapshotUpdated(Observable<Optional<SnapshotDelta>> snapshotObservable) {
         if(snapshotObservable.isLoaded()) {
-            LOGGER.info("New snapshot loaded.");
-            offlineStore.store(snapshotObservable.get());
+            snapshotObservable.get().ifPresent(snapshot -> {
+                LOGGER.info("New snapshot loaded.");
+                offlineStore.store(snapshot);
+            });
         }
+    }
+
+    public void start() {
+        com.google.gwt.core.client.Scheduler.get().scheduleFixedDelay(new com.google.gwt.core.client.Scheduler.RepeatingCommand() {
+            @Override
+            public boolean execute() {
+                offlineStore.syncChanges();
+                return true;
+            }
+        }, SYNC_DELAY_MS);
     }
 }

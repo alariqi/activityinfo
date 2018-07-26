@@ -179,7 +179,7 @@ public class QueryModel implements JsonSerializable {
      * Adds the {@code ResourceId} as a string column to the table model with
      * the given column id
      */
-    public ColumnModel selectResourceId() {
+    public ColumnModel selectRecordId() {
         ColumnModel columnModel = new ColumnModel();
         columnModel.setFormula(new SymbolNode(ColumnModel.ID_SYMBOL));
         columns.add(columnModel);
@@ -226,6 +226,11 @@ public class QueryModel implements JsonSerializable {
         if (!Strings.isNullOrEmpty(filter)) {
             queryModel.setFilter(filter);
         }
+
+        for (JsonValue sort : jsonObject.get("sort").values()) {
+            queryModel.addSortModel(SortModel.fromJson(sort));
+        }
+
         return queryModel;
     }
 
@@ -238,6 +243,11 @@ public class QueryModel implements JsonSerializable {
         if(filter != null) {
             object.put("filter", filter.asExpression());
         }
+
+        if(!sortModels.isEmpty()) {
+            object.put("sort", Json.toJson(sortModels));
+        }
+
         return object;
     }
 

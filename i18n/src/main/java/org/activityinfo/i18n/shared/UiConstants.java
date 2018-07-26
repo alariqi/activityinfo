@@ -1798,9 +1798,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Key")
     String keyField();
 
-    @DefaultStringValue("Sync automatically")
-    String syncAutomatically();
-
     @DefaultStringValue("Clear all offline data")
     String clearOfflineMode();
 
@@ -1875,16 +1872,6 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("This entry references a site which has been deleted. Please update the location to avoid loss of data.")
     String deletedLocation();
-
-    @DefaultStringValue("No Filter")
-    String noFilter();
-
-    @DefaultStringValue("Current Filter")
-    String currentFilter();
-
-    @DefaultStringValue("Current column length {0} exceeds Column Export Limitation of {1} for Export Type {2}")
-    String columnLimit();
-
 
     @DefaultStringValue("Search for a database, folder or form...")
     String searchPlaceholder();
@@ -1999,5 +1986,57 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("Unset")
     String unset();
+
+
+    @DefaultStringValue("No Filter")
+    String noFilter();
+
+    @DefaultStringValue("Current Filter")
+    String currentFilter();
+
+    @DefaultStringValue("Current column length {0} exceeds Column Export Limitation of {1} for Export Type {2}")
+    String columnLimit();
+
+    @DefaultStringValue("To request change of email address or account deletion, please contact support@activityinfo.org.")
+    String requestDeleteChangeEmail();
+
+    @DefaultStringValue("Clear Sort")
+    String clearSort();
+
+    @DefaultStringValue("Transfer Database")
+    String transferDatabaseLabel();
+
+    @DefaultStringValue("New Owner")
+    String newDatabaseOwner();
+
+    @DefaultStringValue("Database Transfer Failed")
+    String transferFailed();
+
+    @DefaultStringValue("Cannot Find User")
+    String noUser();
+
+    @DefaultStringValue("There is a currently pending transfer for this Database. Do you wish to cancel?")
+    String pendingTransfer();
+
+    @DefaultStringValue("Cancel Transfer")
+    String cancelTransfer();
+
+    @DefaultStringValue("You must add a User to your Database before you can transfer ownership.")
+    String addUserBeforeTransferWarning();
+
+    @DefaultStringValue("Please select a User to transfer ownership to. The selected User must accept responsibility for the Database before ownership will be transferred.")
+    String transferDatabaseUserInfo();
+
+    @DefaultStringValue("Select a date (YYYY-MM-DD)")
+    String selectDatePlaceholder();
+
+    @DefaultStringValue("Remove User")
+    String removeUser();
+
+    @DefaultStringValue("Delete Project")
+    String deleteProject();
+
+    @DefaultStringValue("Delete Target")
+    String deleteTarget();
 
 }

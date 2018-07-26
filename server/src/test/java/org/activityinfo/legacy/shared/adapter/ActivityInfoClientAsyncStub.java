@@ -233,7 +233,7 @@ public class ActivityInfoClientAsyncStub implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion) {
+    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion, java.util.Optional<String> cursor) {
         return Promise.rejected(new UnsupportedOperationException());
     }
 
@@ -271,6 +271,16 @@ public class ActivityInfoClientAsyncStub implements ActivityInfoClientAsync {
 
     @Override
     public Promise<JobStatus<?, ?>> getJobStatus(String jobId) {
+        return Promise.rejected(new UnsupportedOperationException("TODO"));
+    }
+
+    @Override
+    public Promise<Void> requestDatabaseTransfer(String s, int i) {
+        return Promise.rejected(new UnsupportedOperationException("TODO"));
+    }
+
+    @Override
+    public Promise<Void> cancelDatabaseTransfer(int i) {
         return Promise.rejected(new UnsupportedOperationException("TODO"));
     }
 

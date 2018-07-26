@@ -302,6 +302,25 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("{0} records")
     @AlternateMessage({ "one", "1 record" })
     String recordCount(@PluralCount int count);
+
+    @DefaultMessage("Your Database Transfer request has been sent to User {0}. You will receive an email informing you of the Users decision to accept or reject ownership of your Database.")
+    String transferDatabase(String userName);
+
+    @DefaultMessage("User {0} does not exist in ActivityInfo system.")
+    String userNotInSystem(String userName);
+
+    @DefaultMessage("Do you want to remove User: ''{0}'' from your Database?")
+    String requestConfirmationToRemoveUser(String userName);
+
+    @DefaultMessage("Do you want to delete Partner: ''{0}'' from your Database?")
+    String requestConfirmationToDeletePartner(String partnerName);
+
+    @DefaultMessage("Do you want to delete Project: ''{0}'' from your Database?")
+    String requestConfirmationToDeleteProject(String projectName);
+
+    @DefaultMessage("Do you want to delete Target: ''{0}'' from your Database?")
+    String requestConfirmationToDeleteTarget(String targetName);
+
 }
 
 

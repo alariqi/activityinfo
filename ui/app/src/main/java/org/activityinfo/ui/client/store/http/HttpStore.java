@@ -54,6 +54,7 @@ import org.activityinfo.ui.client.store.tasks.Watcher;
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
@@ -131,8 +132,8 @@ public class HttpStore {
         return get(new QueryRequest(queryModel), new FormChangeWatcher(eventBus, change -> true));
     }
 
-    public Observable<FormSyncSet> getVersionRange(ResourceId formId, long localVersion, long version) {
-        return get(new VersionRangeRequest(formId, localVersion, version));
+    public Observable<FormSyncSet> getVersionRange(ResourceId formId, long localVersion, long version, Optional<String> cursor) {
+        return get(new VersionRangeRequest(formId, localVersion, version, cursor));
     }
 
     public Observable<Maybe<FormRecord>> getRecord(RecordRef ref) {

@@ -2,7 +2,6 @@ package org.activityinfo.store.hrd.columns;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import org.activityinfo.model.query.ColumnView;
@@ -11,25 +10,36 @@ import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.enumerated.EnumItem;
 import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.model.type.enumerated.EnumValue;
-import org.activityinfo.store.hrd.entity.FormColumnStorage;
+import org.activityinfo.store.hrd.entity.FormEntity;
 import org.activityinfo.store.query.shared.columns.DiscreteStringColumnView;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class SingleEnumBlock implements BlockManager {
 
-    private static final String ITEM_ID_PROPERTY = "itemIds";
     private final EnumType enumType;
+    private final String itemIdProperty;
+    private final String offsetProperty;
 
-    public SingleEnumBlock(EnumType enumType) {
+    public SingleEnumBlock(String fieldName, EnumType enumType) {
         this.enumType = enumType;
+        this.itemIdProperty = fieldName + ":pool";
+        this.offsetProperty = fieldName;
     }
 
     @Override
     public int getBlockSize() {
-        return 10_000;
+        return 1024 * 4;
+    }
+
+    @Override
+    public int getMaxFieldSize() {
+        return 4;
+    }
+
+    @Override
+    public String getBlockType() {
+        return "enum";
     }
 
     @Override
@@ -37,9 +47,9 @@ public class SingleEnumBlock implements BlockManager {
 
         String itemId = toItemId(fieldValue);
 
-        char itemIndex = StringPools.findOrInsertStringInPool(blockEntity, ITEM_ID_PROPERTY, itemId);
+        char itemIndex = StringPools.findOrInsertStringInPool(blockEntity, itemIdProperty, itemId);
 
-        if(OffsetArray.updateOffset(blockEntity, recordOffset, itemIndex)) {
+        if(OffsetArray.updateOffset(blockEntity, offsetProperty, recordOffset, itemIndex)) {
             return blockEntity;
         } else {
             /* no change */
@@ -60,8 +70,8 @@ public class SingleEnumBlock implements BlockManager {
     }
 
     @Override
-    public ColumnView buildView(FormColumnStorage header,
-                                QueryResultIterator<Entity> blockIterator) {
+    public ColumnView buildView(FormEntity header,
+                                TombstoneIndex tombstones, Iterator<Entity> blockIterator, String component) {
 
         Object2IntOpenHashMap<String> labelLookup = new Object2IntOpenHashMap<>();
         labelLookup.defaultReturnValue(-1);
@@ -84,16 +94,25 @@ public class SingleEnumBlock implements BlockManager {
             int blockIndex = (int)(block.getKey().getId() - 1);
             int blockStart = blockIndex * getBlockSize();
 
-            String[] pool = StringPools.toArray((Blob) block.getProperty(ITEM_ID_PROPERTY));
+            // Adjust start position depending on the number of records that have been deleted
+            // in preceding blocks.
+            int targetIndex = blockStart - tombstones.countDeletedBefore(blockStart);
+
+            String[] pool = StringPools.toArray((Blob) block.getProperty(itemIdProperty));
             if(pool.length > 0) {
-                byte[] offsets = ((Blob)block.getProperty(OffsetArray.OFFSETS_PROPERTY)).getBytes();
+                byte[] offsets = ((Blob)block.getProperty(offsetProperty)).getBytes();
                 int offsetCount = OffsetArray.length(offsets);
 
+                BitSet deleted = tombstones.getDeletedBitSet(blockStart, getBlockSize());
+
                 for (int i = 0; i < offsetCount; i++) {
-                    int offset = OffsetArray.get(offsets, i);
-                    if(offset != 0) {
-                        String itemId = pool[offset - 1];
-                        values[blockStart + i] = labelLookup.getInt(itemId);
+                    if(!deleted.get(i)) {
+                        int offset = OffsetArray.get(offsets, i);
+                        if (offset != 0) {
+                            String itemId = pool[offset - 1];
+                            values[targetIndex] = labelLookup.getInt(itemId);
+                        }
+                        targetIndex++;
                     }
                 }
             }

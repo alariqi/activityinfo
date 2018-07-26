@@ -26,6 +26,7 @@ import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formula.*;
 import org.activityinfo.model.formula.diagnostic.FormulaException;
+import org.activityinfo.model.formula.functions.BoundingBoxFunction;
 import org.activityinfo.model.formula.functions.CoalesceFunction;
 import org.activityinfo.model.formula.functions.ColumnFunction;
 import org.activityinfo.model.query.*;
@@ -39,6 +40,7 @@ import org.activityinfo.store.spi.Slot;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Constructs a set of rows from a given RowSource model.
@@ -134,9 +136,12 @@ public class QueryEvaluator {
     private static ColumnSet sort(ColumnSet columnSet, List<SortModel> sortModels) {
         Stack<SortModel> sortModelStack = constructSortModelStack(sortModels);
         int[] sortVector = generateIndexArray(columnSet.getNumRows());
+        Range range = new Range(0, columnSet.getNumRows()-1);
 
         // determine the sort vector of the current columnset, based on the defined sort models
-        order(columnSet, sortModelStack, sortVector, new Range(0, columnSet.getNumRows()-1));
+        order(columnSet, sortModelStack, sortVector, range);
+        categorize(columnSet, sortModelStack, sortVector, range);
+
         // return the new sorted column set, with rows reordered by the sort vector
         return sortColumnSet(columnSet, sortVector);
     }
@@ -158,34 +163,52 @@ public class QueryEvaluator {
     }
 
     private static void order(ColumnSet columnSet, Stack<SortModel> sortModelStack, int[] sortVector, Range range) {
+        if (sortModelStack.empty()) {
+            return;
+        }
+
         SortModel sortModel = sortModelStack.pop();
         ColumnView sortColumn = columnSet.getColumnView(sortModel.getField());
 
+        // If SortColumn not returned from query - skip
         if (sortColumn == null) {
-            // SortColumn not returned from query - skip
             sortModelStack.push(sortModel);
             return;
         }
 
         // Order on the current sort column
-        // If there are further sort models on stack, categorize and then order within categories
         sortColumn.order(sortVector, sortModel.getDir(), range.getRange());
-        if (!sortModelStack.empty()) {
-            categorize(columnSet, sortColumn, sortModelStack, sortVector, range);
-        }
 
+        // Push sort model back onto stack and return
         sortModelStack.push(sortModel);
     }
 
-    private static void categorize(ColumnSet columnSet, ColumnView sortColumn, Stack<SortModel> sortModelStack, int[] sortVector, Range range) {
-        // start new category group with first element
-        range.resetRange().addToRange(0);
+    private static void categorize(ColumnSet columnSet, Stack<SortModel> sortModelStack, int[] sortVector, Range range) {
+        if (sortModelStack.size() < 2) {
+            return;
+        }
+
+        SortModel sortModel = sortModelStack.pop();
+        ColumnView sortColumn = columnSet.getColumnView(sortModel.getField());
+
+        // If SortColumn not returned from query - skip
+        if (sortColumn == null) {
+            sortModelStack.push(sortModel);
+            return;
+        }
+
+        // get encompassing group size and starting position
+        int start = range.getStart();
+        int end = range.getEnd() + 1;
+
+        // start new category group with first element, stating at encompassing group starting position
+        range.resetRange().addToRange(start);
 
         // step through sortColumn rows
         // group together like members
         // order within each group which has more than one member, after we transition to a new group
-        for (int i=1; i<sortVector.length; i++) {
-            if (sortColumn.get(sortVector[i-1]).equals(sortColumn.get(sortVector[i]))) {
+        for (int i = start+1; i <= end; i++) {
+            if (i != end && Objects.equals(sortColumn.get(sortVector[i-1]), sortColumn.get(sortVector[i]))) {
                 // same group - add to group's range
                 range.addToRange(i);
             } else if (range.getRangeSize() == 1){
@@ -194,9 +217,13 @@ public class QueryEvaluator {
             } else {
                 // transition to new group => ordering of previous group needed as it has (n > 1) members
                 order(columnSet, sortModelStack, sortVector, range);
+                categorize(columnSet, sortModelStack, sortVector, range);
                 range.resetRange().addToRange(i);
             }
         }
+
+        // Push sort model back onto stack and return
+        sortModelStack.push(sortModel);
     }
 
     private static ColumnSet sortColumnSet(ColumnSet columnSet, int[] sortVector) {
@@ -296,8 +323,20 @@ public class QueryEvaluator {
                 } else {
                     return createFunctionCall(call);
                 }
+            } else if(call.getFunction() instanceof BoundingBoxFunction) {
+                FormulaNode geometry = call.getArgument(0);
+                Collection<NodeMatch> nodes;
+                if(geometry instanceof SymbolNode) {
+                    nodes = resolver.resolveSymbol(((SymbolNode) geometry));
+                } else if(geometry instanceof CompoundExpr) {
+                    nodes = resolver.resolveCompoundExpr((CompoundExpr) geometry);
+                } else {
+                    throw new QuerySyntaxException("Function " + call.getFunction().getId() + " can only be applied" +
+                            " to an argument of type GeoArea.");
+                }
+                return addColumn(nodes.stream().map(n -> n.withComponent(call.getFunction().getId())).collect(Collectors.toList()));
             } else {
-                return batch.addExpression(filterLevel, rootFormClass, call);
+                throw new UnsupportedOperationException("TODO: " + call.getFunction().getId());
             }
         }
 
@@ -381,7 +420,7 @@ public class QueryEvaluator {
                 }
             } catch (FormulaException e) {
                 LOGGER.log(Level.WARNING, "Exception in calculated field " +
-                        node.getFormClass().getId() + "." + node.getExpr() + " = " +
+                        node.getFormClass().getId() + "." + node.getFieldComponent() + " = " +
                         node.getCalculation() + ": " + e.getMessage(), e);
             
                 return batch.addEmptyColumn(filterLevel, node.getFormClass());

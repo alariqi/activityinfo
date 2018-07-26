@@ -1,6 +1,7 @@
 package org.activityinfo.store.hrd.columns;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PropertyContainer;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Charsets;
@@ -84,7 +85,7 @@ public class StringPools {
     }
 
     public static int size(byte[] stringPool) {
-        return (char)((stringPool[0] << 8) + stringPool[1]);
+        return (char)((stringPool[0] << 8) | (stringPool[1] & 0xFF));
     }
 
     public static String[] toArray(byte[] pool) {
@@ -196,5 +197,9 @@ public class StringPools {
         blockEntity.setProperty(property, new Blob(updatedPool));
 
         return (char) newSize;
+    }
+
+    public static String[] toArray(Entity block, String propertyName) {
+        return toArray((Blob) block.getProperty(propertyName));
     }
 }

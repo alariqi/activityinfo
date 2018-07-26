@@ -50,7 +50,7 @@ import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.activityinfo.model.legacy.CuidAdapter.*;
-import static org.activityinfo.store.mysql.ColumnSetMatchers.hasValues;
+import static org.activityinfo.store.testing.ColumnSetMatchers.hasValues;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -535,7 +535,9 @@ public class MySqlCatalogTest extends AbstractMySqlTest {
 
         assertThat(form.cacheVersion(), greaterThan(0L));
 
-        FormSyncSet versionRange = form.getVersionRange(0, form.cacheVersion(), resourceId -> true);
+        FormSyncSet versionRange = form.getVersionRange(0, form.cacheVersion(), resourceId -> true,
+                java.util.Optional.empty());
+
         assertThat(versionRange.getUpdatedRecordCount(), equalTo(3));
 
         System.out.println(versionRange);

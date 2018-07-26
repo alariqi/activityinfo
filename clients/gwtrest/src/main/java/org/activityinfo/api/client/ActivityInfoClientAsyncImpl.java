@@ -28,8 +28,10 @@ import org.activityinfo.json.JsonParser;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
+import org.activityinfo.model.database.transfer.RequestTransfer;
 import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.database.transfer.TransferDecision;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormClassProvider;
 import org.activityinfo.model.formTree.FormTree;
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -209,11 +212,15 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, final long toVersion) {
+    public Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, final long toVersion, Optional<String> cursor) {
         String url = formUrl(formId) +
                 "/records/versionRange" +
                 "?localVersion=" + localVersion +
                 "&version=" + toVersion;
+
+        if(cursor.isPresent()) {
+            url = url + "&cursor=" + cursor.get();
+        }
 
         return get(url, value -> {
             try {
@@ -372,6 +379,22 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     @Override
     public Promise<JobStatus<?, ?>> getJobStatus(String jobId) {
         return get(baseUrl + "/jobs/" + jobId, JobStatus::fromJson);
+    }
+
+    @Override
+    public Promise<Void> requestDatabaseTransfer(String newOwnerEmail, int databaseId) {
+        RequestTransfer request = new RequestTransfer(newOwnerEmail);
+        return post(RequestBuilder.POST,
+                baseUrl + "/database/" + databaseId + "/transfer/request",
+                request.toJson().toJson());
+    }
+
+    @Override
+    public Promise<Void> cancelDatabaseTransfer(int databaseId) {
+        TransferDecision decision = TransferDecision.cancelled();
+        return post(RequestBuilder.POST,
+                baseUrl + "/database/" + databaseId + "/transfer/cancel",
+                decision.toJson().toJson());
     }
 
     private <R> Promise<R> getRaw(final String url, final Function<Response, R> parser) {

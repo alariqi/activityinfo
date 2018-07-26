@@ -64,7 +64,7 @@ import java.sql.SQLException;
 
 import static org.activityinfo.json.Json.createObject;
 import static org.activityinfo.model.legacy.CuidAdapter.*;
-import static org.activityinfo.store.mysql.ColumnSetMatchers.hasValues;
+import static org.activityinfo.store.testing.ColumnSetMatchers.hasValues;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -347,7 +347,7 @@ public class MySqlUpdateTest extends AbstractMySqlTest {
         // Query results
 
         QueryModel queryModel = new QueryModel(formClass.getId());
-        queryModel.selectResourceId();
+        queryModel.selectRecordId();
         queryModel.selectExpr("Num").as("num");
         queryModel.selectExpr("Calculation").as("calc");
 

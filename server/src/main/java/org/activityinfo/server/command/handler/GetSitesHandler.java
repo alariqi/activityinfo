@@ -18,13 +18,11 @@
  */
 package org.activityinfo.server.command.handler;
 
-import com.bedatadriven.rebar.time.calendar.LocalDate;
 import com.extjs.gxt.ui.client.data.SortInfo;
 import com.google.cloud.trace.core.TraceContext;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -35,7 +33,8 @@ import org.activityinfo.legacy.shared.command.OldGetSites;
 import org.activityinfo.legacy.shared.command.result.SiteResult;
 import org.activityinfo.legacy.shared.exception.CommandException;
 import org.activityinfo.legacy.shared.impl.OldGetSitesHandler;
-import org.activityinfo.legacy.shared.model.*;
+import org.activityinfo.legacy.shared.model.IndicatorDTO;
+import org.activityinfo.legacy.shared.model.SiteDTO;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
@@ -43,16 +42,12 @@ import org.activityinfo.model.formula.CompoundExpr;
 import org.activityinfo.model.formula.FormulaNode;
 import org.activityinfo.model.formula.SymbolNode;
 import org.activityinfo.model.legacy.CuidAdapter;
-import org.activityinfo.model.query.ColumnSet;
-import org.activityinfo.model.query.ColumnView;
-import org.activityinfo.model.query.QueryModel;
-import org.activityinfo.model.query.SortModel;
+import org.activityinfo.model.query.*;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldType;
 import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.server.command.DispatcherSync;
-import org.activityinfo.server.command.QueryFilter;
 import org.activityinfo.server.command.handler.binding.*;
 import org.activityinfo.server.command.handler.binding.dim.PartnerDimBinding;
 import org.activityinfo.server.command.handler.binding.dim.ProjectDimBinding;
@@ -95,6 +90,7 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
     private SortInfo sortInfo;
 
     private Map<ResourceId,FormTree> formTreeMap;
+    private AttributeFilterMap attributeFilters;
     private Map<ResourceId,QueryModel> queryMap = new LinkedHashMap<>();
     private Map<ResourceId,List<FieldBinding>> fieldBindingMap = new HashMap<>();
     private List<Runnable> queryResultHandlers = new ArrayList<>();
@@ -118,66 +114,6 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
     private final Stopwatch monthlyMergeTime = Stopwatch.createUnstarted();
     private final Stopwatch aggregateTime = Stopwatch.createUnstarted();
 
-    private class SiteComparator implements Comparator<SiteDTO> {
-
-        private SortInfo sortInfo;
-
-        public SiteComparator(SortInfo sortInfo) {
-            assert(sortInfo != null);
-            this.sortInfo = sortInfo;
-        }
-
-        @Override
-        public int compare(SiteDTO o1, SiteDTO o2) {
-            assert(o1 != null);
-            assert(o2 != null);
-
-            if (sortInfo.getSortField() != null) {
-                Object f1 = o1.get(sortInfo.getSortField());
-                Object f2 = o2.get(sortInfo.getSortField());
-
-                if (f1 == null || f2 == null) {
-                    LOGGER.log(Level.WARNING,"Cannot retrieve referenced sort field: {0}", sortInfo.getSortField());
-                    return 0;
-                }
-
-                switch (sortInfo.getSortDir()) {
-                    case ASC:
-                        return compareFields(f1, f2);
-                    case DESC:
-                    default:
-                        return -compareFields(f1, f2);
-                }
-            }
-
-            return 0;
-        }
-
-        private int compareFields(Object f1, Object f2) {
-            if (f1 instanceof Integer && f2 instanceof Integer) {
-                return ((Integer) f1).compareTo((Integer) f2);
-            } else if (f1 instanceof LocalDate && f2 instanceof LocalDate) {
-                return ((LocalDate) f1).compareTo((LocalDate) f2);
-            } else if (f1 instanceof String && f2 instanceof String) {
-                return ((String) f1).compareTo((String) f2);
-            } else if (f1 instanceof Double && f2 instanceof Double) {
-                return ((Double) f1).compareTo((Double) f2);
-            } else if (f1 instanceof AdminEntityDTO && f2 instanceof AdminEntityDTO) {
-                return ((AdminEntityDTO) f1).getName().compareTo(((AdminEntityDTO) f2).getName());
-            } else if (f1 instanceof LocationDTO && f2 instanceof LocationDTO) {
-                return ((LocationDTO) f1).getName().compareTo(((LocationDTO) f2).getName());
-            } else if (f1 instanceof PartnerDTO && f2 instanceof PartnerDTO) {
-                return ((PartnerDTO) f1).getName().compareTo(((PartnerDTO) f2).getName());
-            } else if (f1 instanceof ProjectDTO && f2 instanceof ProjectDTO) {
-                return ((ProjectDTO) f1).getName().compareTo(((ProjectDTO) f2).getName());
-            } else {
-                LOGGER.log(Level.WARNING,"Unimplemented sort on GetSites: '{0}'", sortInfo.getSortField());
-                return 0;
-            }
-        }
-
-    }
-
     @Override
     public SiteResult execute(GetSites cmd, User user) {
 
@@ -193,11 +129,12 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
             fetchActivityMetadata(cmd.getFilter());
             checkForLinkedActivities();
             queryFormTrees();
+            buildAttributeFilterMap();
             buildQueries();
+            setQuerySort();
             batchQueries();
             executeBatch();
             mergeMonthlyRootSites();
-            sort();
         } catch (CommandException excp) {
             // If we catch a CommandException, lets try the legacy method
             // TODO: Strip this out once robustness is established, and the Linked Indicator feature is disabled
@@ -213,6 +150,10 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
 
         LOGGER.info("Exiting execute()");
         return result;
+    }
+
+    private void buildAttributeFilterMap() {
+        attributeFilters = new AttributeFilterMap(command.getFilter(), formTreeMap.values());
     }
 
     private boolean useLegacyMethod(GetSites command, User user) {
@@ -316,7 +257,7 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
     }
 
     private FormulaNode determineQueryFilter(Filter commandFilter, FormTree formTree) {
-        QueryFilter queryFilter = new QueryFilter(commandFilter, HashMultimap.create());
+        QueryFilterBuilder queryFilter = new QueryFilterBuilder(commandFilter, attributeFilters);
         return queryFilter.composeFilter(formTree);
     }
 
@@ -475,7 +416,7 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
     private List<SiteDTO> extractMonthlySites(List<FieldBinding> fieldBindings, ColumnSet columnSet) {
         if (acceptResult(columnSet.getNumRows())) {
             totalResultLength = totalResultLength + columnSet.getNumRows();
-            SiteDTO[] extractedSiteArray = extractSiteData(fieldBindings, columnSet);
+            SiteDTO[] extractedSiteArray = extractSiteData(fieldBindings, columnSet, false);
             List<SiteDTO> extractedSiteList = Lists.newArrayList(extractedSiteArray);
             siteList.addAll(extractedSiteList);
             return extractedSiteList;
@@ -484,19 +425,21 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
     }
 
     private List<SiteDTO> extractSites(List<FieldBinding> fieldBindings, ColumnSet columnSet) {
-        if (acceptResult(columnSet.getNumRows())) {
-            SiteDTO[] sites;
-            if (command.isFetchAllReportingPeriods()) {
-                sites = extractSiteData(fieldBindings, columnSet);
-                addMonthlyRootSites(sites);
-                return Collections.emptyList();
-            } else {
-                totalResultLength = totalResultLength + columnSet.getNumRows();
-                sites = extractSiteData(fieldBindings, columnSet);
-                return Lists.newArrayList(sites);
-            }
+        SiteDTO[] sites;
+        if (command.isFetchAllReportingPeriods()) {
+            // If we are fetching all reporting periods, then these sites are roots for our monthly sites and do not
+            // contribute to the total site count
+            sites = extractSiteData(fieldBindings, columnSet, true);
+            addMonthlyRootSites(sites);
+            return Collections.emptyList();
+        } else if (acceptResult(columnSet.getNumRows())) {
+            // Otherwise these are normal sites and should count towards the total site count
+            totalResultLength = totalResultLength + columnSet.getNumRows();
+            sites = extractSiteData(fieldBindings, columnSet, false);
+            return Lists.newArrayList(sites);
+        } else {
+            return Collections.emptyList();
         }
-        return Collections.emptyList();
     }
 
     private boolean acceptResult(int numResults) {
@@ -510,11 +453,11 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
         return true;
     }
 
-    private SiteDTO[] extractSiteData(List<FieldBinding> fieldBindings, ColumnSet columnSet) {
+    private SiteDTO[] extractSiteData(List<FieldBinding> fieldBindings, ColumnSet columnSet, boolean skipPagination) {
         ColumnSet finalColumnSet;
         SiteDTO[] sites;
 
-        if (offset > 0 || limit > 0) {
+        if (!skipPagination && (offset > 0 || limit > 0)) {
             Map<String,ColumnView> paginatedColumns = Maps.newHashMap();
             int[] index = generatePaginationIndex(columnSet.getNumRows());
             sites = initialiseSiteArray(index.length);
@@ -618,31 +561,23 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
         Trace.endSpan(monthlyMergeTrace);
     }
 
-    private void sort() {
-        if (sortInfo != null && !siteList.isEmpty()) {
-            TraceContext sortTrace = Trace.startSpan("ai/cmd/GetSites/executeBatch/sortSites");
-            SiteComparator comparator = new SiteComparator(sortInfo);
-            siteList.sort(comparator);
-            Trace.endSpan(sortTrace);
+    private void setQuerySort() {
+        if (sortInfo == null) {
+            return;
         }
-    }
 
-    // Sorting on QueryEngine level
-    private void setQuerySort(QueryModel query) {
-        if (sortInfo != null) {
-            SortModel sortModel;
-            switch(sortInfo.getSortDir()) {
-                case ASC:
-                    sortModel = new SortModel(parseSortColumn(sortInfo.getSortField()), SortModel.Dir.ASC);
-                    query.addSortModel(sortModel);
-                    break;
-                case DESC:
-                default:
-                    sortModel = new SortModel(parseSortColumn(sortInfo.getSortField()), SortModel.Dir.DESC);
-                    query.addSortModel(sortModel);
-                    break;
-            }
+        SortModel sortModel;
+        switch(sortInfo.getSortDir()) {
+            case ASC:
+                sortModel = new SortModel(parseSortColumn(sortInfo.getSortField()), SortDir.ASC);
+                break;
+            case DESC:
+            default:
+                sortModel = new SortModel(parseSortColumn(sortInfo.getSortField()), SortDir.DESC);
+                break;
         }
+
+        queryMap.values().forEach(query -> query.addSortModel(sortModel));
     }
 
     // Transform from SortInfo fields to QueryEngine columns
@@ -656,7 +591,7 @@ public class GetSitesHandler implements CommandHandler<GetSites> {
             return StartEndDateFieldBinding.END_DATE_COLUMN;
         } else if (sortField.equals("locationName")) {
             return LocationFieldBinding.LOCATION_NAME_COLUMN;
-        } else if (sortField.equals("partner")) {
+        } else if (sortField.equals("partner.name")) {
             return PartnerDimBinding.PARTNER_LABEL_COLUMN;
         } else if (sortField.equals("project")) {
             return ProjectDimBinding.PROJECT_LABEL_COLUMN;

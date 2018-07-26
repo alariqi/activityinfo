@@ -43,12 +43,15 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.store.query.server.ColumnSetBuilder;
 import org.activityinfo.store.query.server.Updater;
 import org.activityinfo.store.query.shared.NullFormSupervisor;
+import org.activityinfo.store.query.shared.plan.QueryPlan;
+import org.activityinfo.store.query.shared.plan.QueryPlanBuilder;
 import org.activityinfo.store.spi.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -85,7 +88,7 @@ public class HrdCatalogTest {
     }
     
     @Test
-    public void simpleFormTest() {
+    public void simpleFormTest() throws IOException {
 
         ResourceId collectionId = ResourceId.generateId();
         ResourceId villageField = ResourceId.valueOf("FV");
@@ -137,12 +140,16 @@ public class HrdCatalogTest {
         storage.get().add(village2);
 
         QueryModel queryModel = new QueryModel(collectionId);
-        queryModel.selectResourceId().as("id");
+        queryModel.selectRecordId().as("id");
         queryModel.selectField("VILLAGE").as("village");
         queryModel.selectField("BENE").as("family_count");
         queryModel.selectExpr("BENE*5").as("individual_count");
         queryModel.selectExpr("POP").as("pop");
-        
+
+        QueryPlanBuilder queryPlanBuilder = new QueryPlanBuilder(catalog);
+        QueryPlan plan = queryPlanBuilder.build(queryModel);
+        plan.dumpGraph();
+
         ColumnSetBuilder builder = new ColumnSetBuilder(catalog, new NullFormSupervisor());
         ColumnSet columnSet = builder.build(queryModel);
         
@@ -242,7 +249,7 @@ public class HrdCatalogTest {
 
 
         QueryModel queryModel = new QueryModel(formClass.getId());
-        queryModel.selectResourceId().as("id");
+        queryModel.selectRecordId().as("id");
         queryModel.selectField("VILLAGE").as("village");
 
         ColumnSetBuilder builder = new ColumnSetBuilder(catalog, new NullFormSupervisor());
@@ -325,7 +332,7 @@ public class HrdCatalogTest {
         memberCollection.get().add(father2);
         
         QueryModel queryModel = new QueryModel(memberForm.getId());
-        queryModel.selectResourceId().as("id");
+        queryModel.selectRecordId().as("id");
         queryModel.selectField("Household ID").as("hh_id");
         queryModel.selectField("Name").as("member_name");
         queryModel.selectField("Age").as("member_age");
@@ -368,7 +375,8 @@ public class HrdCatalogTest {
         // and the version range (0, 1] should be empty.
         assertThat(formStorage.cacheVersion(), equalTo(1L));
 
-        FormSyncSet updatedRecords = formStorage.getVersionRange(0, 1L, resourceId -> true);
+        FormSyncSet updatedRecords = formStorage.getVersionRange(0, 1L, resourceId -> true,
+                java.util.Optional.empty());
 
         assertTrue(updatedRecords.isEmpty());
 
@@ -385,7 +393,7 @@ public class HrdCatalogTest {
 
         assertThat(formStorage.cacheVersion(), equalTo(2L));
 
-        FormSyncSet updated = formStorage.getVersionRange(0, 2L, resourceId -> true);
+        FormSyncSet updated = formStorage.getVersionRange(0, 2L, resourceId -> true, java.util.Optional.empty());
         assertThat(updated.getUpdatedRecordCount(), equalTo(1));
 
         // Update the first record and add a new one
@@ -400,7 +408,7 @@ public class HrdCatalogTest {
 
         assertThat(formStorage.cacheVersion(), equalTo(3L));
 
-        updated = formStorage.getVersionRange(2L, 3L, resourceId -> true);
+        updated = formStorage.getVersionRange(2L, 3L, resourceId -> true, java.util.Optional.empty());
         assertThat(updated.getUpdatedRecordCount(), equalTo(1));
 
     }

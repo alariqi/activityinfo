@@ -29,7 +29,6 @@ import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.store.hrd.FieldConverter;
 import org.activityinfo.store.hrd.FieldConverters;
-import org.activityinfo.store.hrd.columns.RecordNumbering;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,11 +60,8 @@ public class FormRecordEntity {
     private long schemaVersion;
 
     @Index
-    private int blue;
+    private int number;
 
-    @Index
-    private int red;
-    
     private EmbeddedEntity fieldValues;
 
     public FormRecordEntity() {
@@ -74,6 +70,10 @@ public class FormRecordEntity {
     public FormRecordEntity(ResourceId formId, ResourceId recordId) {
         this.formKey = FormEntity.key(formId);
         this.id = recordId.asString();
+    }
+
+    public Key<FormRecordEntity> getKey() {
+        return Key.create(this);
     }
 
     public ResourceId getFormId() {
@@ -174,25 +174,21 @@ public class FormRecordEntity {
         Key<FormRecordEntity> recordKey = Key.create(formKey, FormRecordEntity.class, recordId.asString());
         return recordKey;
     }
-
+    
     public static Key<FormRecordEntity> key(FormClass formClass, ResourceId recordId) {
         return key(formClass.getId(), recordId);
     }
 
-    public int getRecordNumber(RecordNumbering scheme) {
-        if(scheme == RecordNumbering.RED) {
-            return red;
-        } else {
-            return blue;
-        }
+    public int getRecordNumber() {
+        return number;
     }
 
-    public void setRecordNumber(RecordNumbering scheme, int number) {
-        if(scheme == RecordNumbering.RED) {
-            this.red = number;
-        } else {
-            this.blue = number;
-        }
+    public boolean hasRecordNumber() {
+        return number != 0;
+    }
+
+    public void setRecordNumber(int number) {
+        this.number = number;
     }
 
     public RecordRef getRecordRef() {

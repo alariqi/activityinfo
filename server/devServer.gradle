@@ -49,6 +49,7 @@ task appengineDevMode(type: JavaExec) {
     dependsOn project(':ui:app2').tasks.getByName("compileJava")
     dependsOn project(':ui:app').tasks.getByName('gulp_build')
 
+
     main = 'com.google.gwt.dev.DevMode'
 
     classpath configurations.devServer

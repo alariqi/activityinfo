@@ -25,7 +25,10 @@ import com.google.gwt.dom.client.Style;
 /**
  * Exports a CSV file from the browser without a call to the server
  */
-public class OfflineExporter {
+public final class OfflineExporter {
+
+    private OfflineExporter() {
+    }
 
     public static final String CSV_MIMETYPE = "text/csv;charset=utf-8";
 
@@ -64,7 +67,7 @@ public class OfflineExporter {
         var type = 'data:' + mimeType;
         if ($wnd.btoa) {
             type += ';base64';
-            data = $wnd.btoa(data);
+            data = $wnd.btoa(unescape(encodeURIComponent(data)));
         } else {
             data = $wnd.encodeURIComponent(data);
         }

@@ -1,27 +1,31 @@
 package org.activityinfo.store.hrd.columns;
 
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
-import org.activityinfo.store.hrd.entity.FormColumnStorage;
+import org.activityinfo.store.hrd.entity.ColumnDescriptor;
+import org.activityinfo.store.hrd.entity.FormEntity;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 
 public interface BlockManager {
 
-    int MAX_ENTITY_SIZE = 1_048_000;
-
+    /**
+     * @return the number of records stored in this block
+     */
     int getBlockSize();
 
-    default BlockDescriptor getBlockDescriptor(ResourceId formId, String fieldName, int recordIndex) {
-        int blockIndex = getBlockIndex(recordIndex);
-        int blockSize =  getBlockSize();
-        return new BlockDescriptor(formId, fieldName,
-                blockIndex,
-                blockIndex * blockSize,
-                blockSize);
+    /**
+     * @return the maximum number of fields that can be mapped to this column of blocks
+     */
+    int getMaxFieldSize();
+
+    String getBlockType();
+
+    default BlockId getBlockId(ResourceId formId, String columnId, int recordIndex) {
+        return new BlockId(formId, columnId, getBlockIndex(recordIndex));
 
     }
 
@@ -38,6 +42,19 @@ public interface BlockManager {
      */
     Entity update(Entity blockEntity, int recordOffset, @Nullable FieldValue fieldValue);
 
-    ColumnView buildView(FormColumnStorage header, QueryResultIterator<Entity> blockIterator);
+    ColumnView buildView(FormEntity header, TombstoneIndex deleted, Iterator<Entity> blockIterator, String component);
+
+    default ColumnView buildView(FormEntity header, TombstoneIndex tombstones, Iterator<Entity> blockIterator) {
+        return buildView(header, tombstones, blockIterator, null);
+    }
+
+
+    /**
+     * @return true if this field can be assigned to the given column block.
+     */
+    default boolean canBeAssignedTo(ColumnDescriptor descriptor) {
+        return descriptor.getBlockType().equals(getBlockType()) &&
+                descriptor.getFields().size() < getMaxFieldSize();
+    }
 }
 

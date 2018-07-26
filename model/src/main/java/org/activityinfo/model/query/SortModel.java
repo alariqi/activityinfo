@@ -18,24 +18,16 @@
  */
 package org.activityinfo.model.query;
 
+import org.activityinfo.json.Json;
+import org.activityinfo.json.JsonSerializable;
+import org.activityinfo.json.JsonValue;
+
 import java.util.List;
 
-public class SortModel {
+public class SortModel implements JsonSerializable {
 
     private String field;
-    private Dir dir = Dir.NONE;
-
-    /**
-     * {@code Dir} gives the direction of ordering:
-     *  {@code ASC} (Ascending);
-     *  {@code DSC} (Descending); or
-     *  {@code NONE} (Undefined)
-     */
-    public enum Dir {
-        ASC,
-        DESC,
-        NONE
-    }
+    private SortDir dir = SortDir.ASC;
 
     /**
      * The {@code Range} stores the indices of a group's member elements.
@@ -91,6 +83,14 @@ public class SortModel {
             endIndex++;
         }
 
+        public int getStart() {
+            return endIndex == -1 ? -1 : rows[0];
+        }
+
+        public int getEnd() {
+            return endIndex == -1 ? -1 : rows[endIndex];
+        }
+
         private int[] copySubset(int[] array, int from, int to) {
             int[] subset = new int[to-from+1];
             for (int i=0; i<subset.length; i++) {
@@ -100,8 +100,18 @@ public class SortModel {
         }
     }
 
-    public SortModel(String field, Dir dir) {
+    public SortModel() {}
+
+    public SortModel(String field, SortDir dir) {
         this.field = field;
+        this.dir = dir;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public void setDir(SortDir dir) {
         this.dir = dir;
     }
 
@@ -109,8 +119,28 @@ public class SortModel {
         return field;
     }
 
-    public Dir getDir() {
+    public SortDir getDir() {
         return dir;
+    }
+
+
+    @Override
+    public JsonValue toJson() {
+        JsonValue object = Json.createObject();
+        object.put("field", getField());
+        object.put("dir", getDir().name());
+        return object;
+    }
+
+    public static SortModel fromJson(JsonValue object) {
+        SortModel sortModel = new SortModel();
+        if (object.hasKey("field")) {
+            sortModel.setField(object.getString("field"));
+        }
+        if (object.hasKey("dir")) {
+            sortModel.setDir(SortDir.valueOf(object.getString("dir")));
+        }
+        return sortModel;
     }
 
 }

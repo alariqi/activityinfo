@@ -31,15 +31,20 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.ReferenceValue;
+import org.activityinfo.store.hrd.Hrd;
 import org.activityinfo.store.hrd.HrdFormStorage;
+import org.activityinfo.store.hrd.HrdQueryColumnBlockBuilder;
 import org.activityinfo.store.hrd.entity.FormEntity;
 import org.activityinfo.store.hrd.entity.FormRecordEntity;
 import org.activityinfo.store.hrd.entity.FormRecordSnapshotEntity;
+import org.activityinfo.store.hrd.entity.FormSchemaEntity;
+import org.activityinfo.store.hrd.op.CreateOrUpdateRecord;
 import org.activityinfo.store.hrd.op.QueryVersions;
 import org.activityinfo.store.mysql.cursor.QueryExecutor;
-import org.activityinfo.store.mysql.cursor.RecordFetcher;
+import org.activityinfo.store.mysql.cursor.SiteFetcher;
 import org.activityinfo.store.mysql.mapping.TableMapping;
 import org.activityinfo.store.mysql.metadata.Activity;
+import org.activityinfo.store.mysql.metadata.ActivityLoader;
 import org.activityinfo.store.mysql.metadata.PermissionsCache;
 import org.activityinfo.store.mysql.metadata.UserPermission;
 import org.activityinfo.store.mysql.update.*;
@@ -49,6 +54,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import static org.activityinfo.store.hrd.Hrd.ofy;
 
@@ -56,20 +62,31 @@ import static org.activityinfo.store.hrd.Hrd.ofy;
 /**
  * Collection of Sites
  */
-public class SiteFormStorage implements VersionedFormStorage {
-    
+public class SiteFormStorage implements VersionedFormStorage, FormStorageV2 {
+
+    private static final Logger LOGGER = Logger.getLogger(SiteFormStorage.class.getName());
+
     private final Activity activity;
     private final TableMapping baseMapping;
     private final QueryExecutor queryExecutor;
     private final PermissionsCache permissionsCache;
+    private final ActivityLoader activityLoader;
+
+    private FormEntity formEntity;
 
     public SiteFormStorage(Activity activity, TableMapping baseMapping,
                            QueryExecutor queryExecutor,
-                           PermissionsCache permissionsCache) {
+                           PermissionsCache permissionsCache, ActivityLoader activityLoader) {
         this.activity = activity;
         this.baseMapping = baseMapping;
         this.queryExecutor = queryExecutor;
         this.permissionsCache = permissionsCache;
+        this.activityLoader = activityLoader;
+
+        if(activity.isMigratedToHrd()) {
+            formEntity = Hrd.ofy().load().key(FormEntity.key(activity.getSiteFormClassId())).safe();
+        }
+
     }
 
     @Override
@@ -118,9 +135,24 @@ public class SiteFormStorage implements VersionedFormStorage {
     }
 
     @Override
-    public Optional<FormRecord> get(ResourceId resourceId) {
-        RecordFetcher fetcher = new RecordFetcher(this);
-        return fetcher.get(resourceId);
+    public Optional<FormRecord> get(ResourceId recordId) {
+        if(activity.isMigratedToHrd()) {
+            LOGGER.info("Delegating record fetch to HRD...");
+            return delegateToHrd().get(recordId);
+        } else {
+            SiteFetcher fetcher = new SiteFetcher(activityLoader, queryExecutor);
+            Optional<FormRecord> record = fetcher.fetch(CuidAdapter.getLegacyIdFromCuid(recordId))
+                    .transform(FormRecord::fromInstance);
+
+            // Check to make sure that this site actually belongs to this form....
+            if (record.isPresent()) {
+                if(!record.get().getFormId().equals(this.getFormClass().getId().asString())) {
+                    return Optional.absent();
+                }
+            }
+
+            return record;
+        }
     }
 
     @Override
@@ -162,10 +194,22 @@ public class SiteFormStorage implements VersionedFormStorage {
     public void updateFormClass(FormClass formClass) {
         ActivityUpdater updater = new ActivityUpdater(activity, queryExecutor);
         updater.update(formClass);
+
+        FormSchemaEntity formSchemaEntity = new FormSchemaEntity(formClass);
+        formSchemaEntity.setSchemaVersion(updater.getNewVersion());
+
+        Hrd.ofy().save().entity(formSchemaEntity).now();
+
     }
 
     @Override
     public void add(TypedRecordUpdate update) {
+
+        if(activity.isMigratedToHrd()) {
+            Hrd.ofy().transact(new CreateOrUpdateRecord(getFormClass().getId(), update));
+            return;
+        }
+
         ResourceId formClassId = getFormClass().getId();
         BaseTableInserter baseTable = new BaseTableInserter(baseMapping, update.getRecordId());
         baseTable.addValue("ActivityId", activity.getId());
@@ -210,7 +254,6 @@ public class SiteFormStorage implements VersionedFormStorage {
     }
 
     private void dualWriteToHrd(final RecordChangeType changeType, final TypedRecordUpdate update, final long newVersion, final Map<ResourceId, FieldValue> values) {
-
         ofy().transact(new VoidWork() {
             @Override
             public void vrun() {
@@ -320,6 +363,11 @@ public class SiteFormStorage implements VersionedFormStorage {
     @Override
     public void update(TypedRecordUpdate update) {
 
+        if(activity.isMigratedToHrd()) {
+            Hrd.ofy().transact(new CreateOrUpdateRecord(getFormClass().getId(), update));
+            return;
+        }
+
         FormRecord formRecord = get(update.getRecordId()).get();
         FormInstance formInstance = FormInstance.toFormInstance(getFormClass(), formRecord);
 
@@ -371,7 +419,13 @@ public class SiteFormStorage implements VersionedFormStorage {
 
     @Override
     public ColumnQueryBuilder newColumnQuery() {
-        return new SiteColumnQueryBuilder(activity, baseMapping, queryExecutor);
+        if(activity.isMigratedToHrd()) {
+            LOGGER.info("Delegating record fetch to HRD...");
+
+            return delegateToHrd().newColumnQuery();
+        } else {
+            return new SiteColumnQueryBuilder(activity, baseMapping, queryExecutor);
+        }
     }
     
     public long incrementSiteVersion() {
@@ -387,7 +441,11 @@ public class SiteFormStorage implements VersionedFormStorage {
 
     @Override
     public long cacheVersion() {
-        return activity.getVersion();
+        if(activity.isMigratedToHrd()) {
+            return formEntity.getVersion();
+        } else {
+            return activity.getVersion();
+        }
     }
 
     @Override
@@ -396,8 +454,20 @@ public class SiteFormStorage implements VersionedFormStorage {
     }
 
     @Override
-    public FormSyncSet getVersionRange(long localVersion, long toVersion, Predicate<ResourceId> visibilityPredicate) {
-        HrdFormStorage delegate = new HrdFormStorage(getFormClass());
-        return delegate.getVersionRange(localVersion, toVersion, visibilityPredicate);
+    public FormSyncSet getVersionRange(long localVersion, long toVersion, Predicate<ResourceId> visibilityPredicate, java.util.Optional<String> cursor) {
+        return delegateToHrd().getVersionRange(localVersion, toVersion, visibilityPredicate, cursor);
+    }
+
+    private HrdFormStorage delegateToHrd() {
+        return new HrdFormStorage(getFormClass());
+    }
+
+    @Override
+    public ColumnQueryBuilderV2 newColumnQueryV2() {
+        if(activity.isMigratedToHrd()) {
+            return new HrdQueryColumnBlockBuilder(formEntity);
+        } else {
+            return null;
+        }
     }
 }

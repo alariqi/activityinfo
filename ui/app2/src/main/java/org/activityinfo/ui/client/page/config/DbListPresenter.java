@@ -26,6 +26,7 @@ import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
+import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.legacy.shared.command.CreateEntity;
 import org.activityinfo.legacy.shared.command.Delete;
@@ -34,6 +35,7 @@ import org.activityinfo.legacy.shared.command.UpdateEntity;
 import org.activityinfo.legacy.shared.command.result.VoidResult;
 import org.activityinfo.legacy.shared.model.SchemaDTO;
 import org.activityinfo.legacy.shared.model.UserDatabaseDTO;
+import org.activityinfo.legacy.shared.model.UserPermissionDTO;
 import org.activityinfo.ui.client.AppEvents;
 import org.activityinfo.ui.client.ClientContext;
 import org.activityinfo.ui.client.EventBus;
@@ -52,7 +54,9 @@ import org.activityinfo.ui.client.page.common.toolbar.ActionListener;
 import org.activityinfo.ui.client.page.common.toolbar.UIActions;
 import org.activityinfo.ui.client.page.config.design.dialog.NewDbDialog;
 import org.activityinfo.ui.client.page.config.form.DatabaseForm;
+import org.activityinfo.ui.client.page.config.form.DatabaseTransferForm;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +74,8 @@ public class DbListPresenter implements ActionListener {
     private final EventBus eventBus;
     private final Dispatcher dispatcher;
     private final View view;
+
+    private final ActivityInfoClientAsyncImpl client = new ActivityInfoClientAsyncImpl();
 
     private ListStore<UserDatabaseDTO> store;
     private BaseListLoader<ListLoadResult<UserDatabaseDTO>> loader;
@@ -109,10 +115,14 @@ public class DbListPresenter implements ActionListener {
             view.setActionEnabled(UIActions.DELETE, false);
             view.setActionEnabled(UIActions.EDIT, false);
             view.setActionEnabled(UIActions.RENAME, false);
+            view.setActionEnabled(UIActions.TRANSFER_DATABASE, false);
+            view.setActionEnabled(UIActions.CANCEL_TRANSFER, false);
         } else {
             view.setActionEnabled(UIActions.DELETE, userHasRightToDeleteSelectedDatabase());
             view.setActionEnabled(UIActions.EDIT, userHasRightToEditSelectedDatabase());
             view.setActionEnabled(UIActions.RENAME, userHasRightToEditSelectedDatabase());
+            view.setActionEnabled(UIActions.TRANSFER_DATABASE, selection.canTransferDatabase());
+            view.setActionEnabled(UIActions.CANCEL_TRANSFER, selection.canCancelTransfer());
         }
     }
 
@@ -134,6 +144,10 @@ public class DbListPresenter implements ActionListener {
             onAdd();
         } else if (UIActions.RENAME.equals(actionId)) {
             onRename();
+        } else if (UIActions.TRANSFER_DATABASE.equals(actionId)) {
+            onTransfer();
+        } else if (UIActions.CANCEL_TRANSFER.equals(actionId)) {
+            onCancelTransfer();
         }
     }
 
@@ -210,6 +224,54 @@ public class DbListPresenter implements ActionListener {
                 loader.load();
             }
         });
+    }
+
+    public void onTransfer() {
+        DatabaseTransferForm form = new DatabaseTransferForm(selection, dispatcher);
+        final FormDialogImpl dialog = new FormDialogImpl(form);
+        dialog.setWidth(400);
+        dialog.setHeight(220);
+        dialog.setHeadingText(I18N.CONSTANTS.transferDatabaseLabel());
+
+        dialog.show(new FormDialogCallback() {
+            @Override
+            public void onValidated() {
+                UserPermissionDTO user = form.getUser();
+                client.requestDatabaseTransfer(user.getEmail(), selection.getId()).then(result -> {
+                    clearLocalCache();
+                    loader.load();
+                    dialog.hide();
+                    MessageBox.alert(I18N.CONSTANTS.transferDatabaseLabel(),
+                            I18N.MESSAGES.transferDatabase(user.getName()), null);
+                    return null;
+                });
+            }
+        });
+    }
+
+    private void onCancelTransfer() {
+        MessageBox.confirm(I18N.CONSTANTS.transferDatabaseLabel(),
+                I18N.CONSTANTS.pendingTransfer(),
+                new Listener<MessageBoxEvent>() {
+                    @Override
+                    public void handleEvent(MessageBoxEvent be) {
+                        if (be.getButtonClicked().getItemId().equals(Dialog.YES)) {
+                            cancelTransfer();
+                        }
+                    }
+                });
+    }
+
+    private void cancelTransfer() {
+        client.cancelDatabaseTransfer(selection.getId()).then(result -> {
+            clearLocalCache();
+            loader.load();
+            return null;
+        });
+    }
+
+    private void clearLocalCache() {
+        dispatcher.execute(new UpdateEntity(selection, Collections.EMPTY_MAP));
     }
 
     /**

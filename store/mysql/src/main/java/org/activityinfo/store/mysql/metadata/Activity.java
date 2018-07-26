@@ -19,6 +19,7 @@
 package org.activityinfo.store.mysql.metadata;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
 import com.google.common.collect.*;
@@ -91,6 +92,14 @@ public class Activity implements Serializable {
      */
     Map<Integer, LinkedActivity> linkedActivities = Maps.newHashMap();
 
+
+    public boolean hrd;
+
+    /**
+     * True if this activity has the "nullary" location type.
+     */
+    public boolean nullLocationType;
+
     public int getId() {
         return activityId;
     }
@@ -162,11 +171,11 @@ public class Activity implements Serializable {
     }
     
     public boolean hasLocationType() {
-        // hack!!
         return !isNullLocationType();
     }
 
     public int getNullaryLocationId() {
+        Preconditions.checkState(isNullLocationType(), "Only valid if this is a nullarly location type");
         // This is nasty hack to allow for activities without location types.
         // Each country has one "nullary" location type called "Country"
         // Each of these location types has exactly one location instance, with the same id.
@@ -175,7 +184,7 @@ public class Activity implements Serializable {
 
 
     private boolean isNullLocationType() {
-        return "Country".equals(locationTypeName) && locationTypeId != 20301;
+        return nullLocationType;
     }
 
     public ResourceId getProjectFormClassId() {
@@ -280,6 +289,10 @@ public class Activity implements Serializable {
     
     public boolean isDeleted() {
         return deleted;
+    }
+
+    public boolean isMigratedToHrd() {
+        return hrd;
     }
     
     public LinkedActivity getSelfLink() {

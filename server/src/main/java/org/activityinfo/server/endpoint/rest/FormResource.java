@@ -45,6 +45,7 @@ import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.geo.GeoAreaType;
+import org.activityinfo.store.query.UsageTracker;
 import org.activityinfo.store.query.output.ColumnJsonWriter;
 import org.activityinfo.store.query.output.RowBasedJsonWriter;
 import org.activityinfo.store.query.server.InvalidUpdateException;
@@ -216,18 +217,23 @@ public class FormResource {
     @Operation(summary = "Get the records that have changed between two versions of this form")
     public FormSyncSet getVersionRange(
             @QueryParam("localVersion") long localVersion,
-            @QueryParam("version") long version) {
+            @QueryParam("version") long version,
+            @QueryParam("cursor") String cursor) {
 
         FormStorage collection = assertVisible(formId);
 
-        // Compute a predicate that will tell us whether a given
+        UsageTracker.track(backend.getAuthenticatedUserId(), "sync", collection.getFormClass());
+
+
+                // Compute a predicate that will tell us whether a given
         // record should be visible to the user, based on their *current* permissions.
 
         Predicate<ResourceId> visibilityPredicate = computeVisibilityPredicate();
 
         FormSyncSet syncSet;
         if(collection instanceof VersionedFormStorage) {
-            syncSet = ((VersionedFormStorage) collection).getVersionRange(localVersion, version, visibilityPredicate);
+            syncSet = ((VersionedFormStorage) collection).getVersionRange(localVersion, version, visibilityPredicate,
+                    java.util.Optional.ofNullable(cursor));
         } else {
             syncSet = FormSyncSet.emptySet(formId);
         }
@@ -244,7 +250,7 @@ public class FormResource {
         }
 
         QueryModel queryModel = new QueryModel(formId);
-        queryModel.selectResourceId().as("id");
+        queryModel.selectRecordId().as("id");
 
         ColumnSet columnSet = executeQuery(queryModel);
         ColumnView id = columnSet.getColumnView("id");

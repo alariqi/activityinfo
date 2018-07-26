@@ -18,16 +18,23 @@
  */
 package org.activityinfo.model.query;
 
+import com.google.gwt.core.shared.GwtIncompatible;
 import org.activityinfo.model.util.HeapsortColumn;
 
-import java.io.Serializable;
-import java.util.Arrays;
+import java.io.*;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Simple Array of String values
  */
 public class StringArrayColumnView implements ColumnView, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private static final int FORMAT_UNCOMPRESSED = 0;
+    private static final int FORMAT_COMPRESSED = 1;
 
     private String[] values;
 
@@ -91,28 +98,94 @@ public class StringArrayColumnView implements ColumnView, Serializable {
 
     @Override
     public String toString() {
-        return Arrays.toString(values);
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < Math.min(values.length, 5); i++) {
+            if(i > 0) {
+                sb.append(", ");
+            }
+            if(values[i] == null) {
+                sb.append("NULL");
+            } else {
+                sb.append("'");
+                sb.append(values[i]);
+                sb.append("'");
+            }
+        }
+        if(values.length > 5) {
+            sb.append("... length=").append(values.length);
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     @Override
-    public int[] order(int[] sortVector, SortModel.Dir direction, int[] range) {
+    public int[] order(int[] sortVector, SortDir direction, int[] range) {
         int numRows = values.length;
-        switch(direction) {
-            case ASC:
-                if (range == null || range.length == numRows) {
-                    HeapsortColumn.heapsortAscending(values, sortVector, numRows);
-                } else {
-                    HeapsortColumn.heapsortAscending(values, sortVector, range.length, range);
-                }
-                break;
-            case DESC:
-                if (range == null || range.length == numRows) {
-                    HeapsortColumn.heapsortDescending(values, sortVector, numRows);
-                } else {
-                    HeapsortColumn.heapsortDescending(values, sortVector, range.length, range);
-                }
-                break;
+        if (range == null || range.length == numRows) {
+            HeapsortColumn.heapsortString(values, sortVector, numRows, direction == SortDir.ASC);
+        } else {
+            HeapsortColumn.heapsortString(values, sortVector, range.length, range, direction == SortDir.ASC);
         }
         return sortVector;
+    }
+
+    @GwtIncompatible
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        writeCompressed(out);
+    }
+
+    @GwtIncompatible
+    private void writeCompressed(ObjectOutputStream out) throws IOException {
+        DataOutputStream daos = new DataOutputStream(out);
+        daos.writeInt(FORMAT_COMPRESSED);
+
+        GZIPOutputStream gzout = new GZIPOutputStream(out);
+        DataOutputStream gzDataOut = new DataOutputStream(gzout);
+        writeArray(gzDataOut);
+        gzout.finish();
+    }
+
+    @GwtIncompatible
+    private void writeArray(DataOutputStream daos) throws IOException {
+        daos.writeInt(values.length);
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i];
+            if(value == null) {
+                daos.writeUTF("");
+            } else {
+                daos.writeUTF(value);
+            }
+        }
+    }
+
+    @GwtIncompatible
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        DataInputStream dis = new DataInputStream(in);
+        int format = dis.readInt();
+        if(format == FORMAT_COMPRESSED) {
+            readCompressed(dis);
+        }
+    }
+
+    @GwtIncompatible
+    private void readCompressed(DataInputStream in) throws IOException {
+
+        GZIPInputStream gzin = new GZIPInputStream(in);
+        DataInputStream gzDataIn = new DataInputStream(gzin);
+
+        readArray(gzDataIn);
+    }
+
+    @GwtIncompatible
+    private void readArray(DataInputStream input) throws IOException {
+        int count = input.readInt();
+        this.values = new String[count];
+
+        for (int i = 0; i < count; i++) {
+            String s = input.readUTF();
+            if(!s.isEmpty()) {
+                values[i] = s;
+            }
+        }
     }
 }

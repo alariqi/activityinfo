@@ -67,6 +67,7 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
         }
     };
     private final Survey survey;
+    private final Survey2 survey2;
     private final IntakeForm intake;
     private final BioDataForm bioData;
     private final IncidentForm incidentForm;
@@ -93,6 +94,10 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
         // Survey Use case
         survey = new Survey();
         add(survey);
+
+        // Updated Survey Case
+        survey2 = new Survey2();
+        add(survey2);
 
         // Case Tracking use case
         intake = new IntakeForm();
@@ -146,6 +151,10 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
 
     public Survey getSurvey() {
         return survey;
+    }
+
+    public Survey2 getSurvey2() {
+        return survey2;
     }
 
     public IntakeForm getIntakeForm() {

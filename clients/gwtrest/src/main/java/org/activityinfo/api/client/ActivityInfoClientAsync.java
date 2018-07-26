@@ -35,6 +35,7 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ActivityInfoClientAsync {
 
@@ -95,9 +96,10 @@ public interface ActivityInfoClientAsync {
      * @param formId the id of the form to sync
      * @param localVersion the form version that is locally present.
      * @param toVersion the desired version update
+     * @param cursor an optional cursor indicating the chunk at which to resume.
      * @return
      */
-    Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion);
+    Promise<FormSyncSet> getRecordVersionRange(String formId, long localVersion, long toVersion, Optional<String> cursor);
 
     /**
      * Create a New Record
@@ -151,5 +153,9 @@ public interface ActivityInfoClientAsync {
     <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus<T, R>>  startJob(T job);
 
     Promise<JobStatus<?, ?>> getJobStatus(String jobId);
+
+    Promise<Void> requestDatabaseTransfer(String newOwnerEmail, int databaseId);
+
+    Promise<Void> cancelDatabaseTransfer(int databaseId);
 
 }

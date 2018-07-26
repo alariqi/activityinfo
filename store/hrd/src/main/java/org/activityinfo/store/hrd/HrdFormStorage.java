@@ -18,9 +18,7 @@
  */
 package org.activityinfo.store.hrd;
 
-import com.google.appengine.api.datastore.QueryResultIterator;
 import com.google.common.base.Optional;
-import com.googlecode.objectify.cmd.Query;
 import com.vividsolutions.jts.geom.Geometry;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormPermissions;
@@ -29,18 +27,15 @@ import org.activityinfo.model.form.FormSyncSet;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.store.hrd.entity.FormEntity;
 import org.activityinfo.store.hrd.entity.FormRecordEntity;
-import org.activityinfo.store.hrd.entity.FormRecordSnapshotEntity;
 import org.activityinfo.store.hrd.op.CreateOrUpdateForm;
 import org.activityinfo.store.hrd.op.CreateOrUpdateRecord;
 import org.activityinfo.store.hrd.op.QuerySubRecords;
 import org.activityinfo.store.hrd.op.QueryVersions;
-import org.activityinfo.store.spi.ColumnQueryBuilder;
-import org.activityinfo.store.spi.RecordVersion;
-import org.activityinfo.store.spi.TypedRecordUpdate;
-import org.activityinfo.store.spi.VersionedFormStorage;
+import org.activityinfo.store.spi.*;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import static org.activityinfo.store.hrd.Hrd.ofy;
 
@@ -48,7 +43,11 @@ import static org.activityinfo.store.hrd.Hrd.ofy;
 /**
  * Accessor for forms backed by the AppEngine High-Replication Datastore (HRD)
  */
-public class HrdFormStorage implements VersionedFormStorage {
+public class HrdFormStorage implements VersionedFormStorage, FormStorageV2 {
+
+    private static final Logger LOGGER = Logger.getLogger(HrdFormStorage.class.getName());
+
+    private static final boolean COLUMN_STORAGE_ENABLED = false;
 
     private long version;
     private FormClass formClass;
@@ -57,7 +56,7 @@ public class HrdFormStorage implements VersionedFormStorage {
         this.formClass = formClass;
     }
 
-    @Override
+        @Override
     public FormPermissions getPermissions(int userId) {
         return FormPermissions.owner();
     }
@@ -105,10 +104,15 @@ public class HrdFormStorage implements VersionedFormStorage {
     public void update(final TypedRecordUpdate update) {
         ofy().transact(new CreateOrUpdateRecord(formClass.getId(), update));
     }
-    
+
     @Override
     public ColumnQueryBuilder newColumnQuery() {
         return new HrdQueryColumnBuilder(formClass);
+    }
+
+    @Override
+    public ColumnQueryBuilderV2 newColumnQueryV2() {
+        return null;
     }
 
     @Override
@@ -128,22 +132,15 @@ public class HrdFormStorage implements VersionedFormStorage {
     }
 
     @Override
-    public FormSyncSet getVersionRange(long localVersion, long toVersion, Predicate<ResourceId> visibilityPredicate) {
-
-        Query<FormRecordSnapshotEntity> query = ofy().load().type(FormRecordSnapshotEntity.class)
-                .ancestor(FormEntity.key(formClass));
-
-        if(localVersion > 0) {
-            query = query.filter("version >", localVersion);
+    public FormSyncSet getVersionRange(long localVersion, long toVersion, Predicate<ResourceId> visibilityPredicate, java.util.Optional<String> cursor) {
+        if(localVersion == 0) {
+            InitialSyncBuilder initialSync = new InitialSyncBuilder(getFormClass(), visibilityPredicate);
+            initialSync.query(toVersion, cursor);
+            return initialSync.build();
+        } else {
+            DiffBuilder diff = new DiffBuilder(getFormClass(), visibilityPredicate);
+            diff.query(localVersion, toVersion, cursor);
+            return diff.build();
         }
-
-        SyncSetBuilder builder = new SyncSetBuilder(getFormClass(), localVersion, visibilityPredicate);
-
-        QueryResultIterator<FormRecordSnapshotEntity> it = query.iterator();
-        while(it.hasNext()) {
-            FormRecordSnapshotEntity snapshot = it.next();
-            builder.add(snapshot);
-        }
-        return builder.build();
     }
 }

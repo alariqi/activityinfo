@@ -1,7 +1,7 @@
 package org.activityinfo.store.hrd.columns;
 
 import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PropertyContainer;
 
 /**
  * An array of 16-bit offsets encoded as one-based little-endian byte array.
@@ -14,13 +14,15 @@ import com.google.appengine.api.datastore.Entity;
 public class OffsetArray {
 
 
+    public static final int BYTES = 2;
+
     static final String OFFSETS_PROPERTY = "values";
 
     public static Blob update(Blob values, int index, char offset) {
         if(offset == 0) {
             return updateToZero(values, index);
         } else {
-            byte[] bytes = ValueArrays.ensureCapacity(values, index, ValueArrays.UINT16);
+            byte[] bytes = ValueArrays.ensureCapacity(values, index, BYTES);
             ValueArrays.setChar(bytes, index, offset);
 
             return new Blob(bytes);
@@ -40,19 +42,18 @@ public class OffsetArray {
         }
         byte[] bytes = values.getBytes();
 
-        if(bytes.length >= ValueArrays.requiredSize(index, ValueArrays.UINT16)) {
-            return new Blob(bytes);
-        }
+        int pos = index * BYTES;
 
-        int pos = index * ValueArrays.UINT16;
-        bytes[pos] = 0;
-        bytes[pos+1] = 0;
+        if(pos < bytes.length) {
+            bytes[pos] = 0;
+            bytes[pos + 1] = 0;
+        }
 
         return new Blob(bytes);
     }
 
     public static int length(byte[] bytes) {
-        return bytes.length / ValueArrays.UINT16;
+        return bytes.length / BYTES;
     }
 
     public static int length(Blob values) {
@@ -63,11 +64,34 @@ public class OffsetArray {
         }
     }
 
+
+    /**
+     * Retrieves the one-based offset from the entity. Zero if the offset is missing.
+     */
+    public static int get(PropertyContainer entity, String propertyName, int index) {
+        return get(((Blob) entity.getProperty(propertyName)), index);
+    }
+
+    /**
+     * Retrieves the one-based offset from the blob. Zero if the offset is missing.
+     */
+    public static int get(Blob blob, int index) {
+        if(blob == null) {
+            return 0;
+        } else {
+            return get(blob.getBytes(), index);
+        }
+    }
+
     /**
      * Retrieves the one-based offset from the byte array. Zero if the offset is missing.
      */
     public static int get(byte[] bytes, int index) {
-        int pos = index * ValueArrays.UINT16;
+        int pos = index * BYTES;
+
+        if(pos >= bytes.length) {
+            return 0;
+        }
 
         return (char) ((bytes[pos+1] << 8) | (bytes[pos] & 0xFF));
     }
@@ -81,9 +105,23 @@ public class OffsetArray {
      *
      * @return true if the offset array was updated, or false if there was no change.
      */
-    static boolean updateOffset(Entity blockEntity, int recordOffset, char value) {
+    static boolean updateOffset(PropertyContainer blockEntity, int recordOffset, char value) {
+        return updateOffset(blockEntity, OFFSETS_PROPERTY, recordOffset, value);
+    }
 
-        Blob values = (Blob) blockEntity.getProperty(OFFSETS_PROPERTY);
+    /**
+     * Updates the offset array property of a block.
+     *
+     * @param blockEntity
+     * @param propertyName
+     * @param recordOffset
+     * @param value
+     *
+     * @return true if the offset array was updated, or false if there was no change.
+     */
+    static boolean updateOffset(PropertyContainer blockEntity, String propertyName, int recordOffset, char value) {
+
+        Blob values = (Blob) blockEntity.getProperty(propertyName);
         int existingLength = length(values);
 
         if(value == 0 && recordOffset >= existingLength) {
@@ -92,7 +130,7 @@ public class OffsetArray {
 
         } else {
             values = update(values, recordOffset, value);
-            blockEntity.setProperty(OFFSETS_PROPERTY, values);
+            blockEntity.setProperty(propertyName, values);
 
             return true;
         }

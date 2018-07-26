@@ -40,7 +40,7 @@ public class TestDataSetWriter {
 
     private JsonValue fetchRecords(ResourceLocatorAdaptor locator, FormClass schema) {
         QueryModel query = new QueryModel(schema.getId());
-        query.selectResourceId().as("id");
+        query.selectRecordId().as("id");
 
         JsonValue array = Json.createArray();
 

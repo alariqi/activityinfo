@@ -21,7 +21,7 @@ package org.activityinfo.store.query.shared.columns;
 import org.activityinfo.model.query.ColumnType;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.query.EnumColumnView;
-import org.activityinfo.model.query.SortModel;
+import org.activityinfo.model.query.SortDir;
 import org.activityinfo.model.util.HeapsortColumn;
 
 import java.io.Serializable;
@@ -110,29 +110,33 @@ public class DiscreteStringColumnView implements EnumColumnView, ColumnView, Ser
     }
 
     @Override
-    public String toString() {  
+    public String toString() {
         return getClass().getSimpleName() + "{numRows=" + numRows() + "}";
     }
 
     @Override
-    public int[] order(int[] sortVector, SortModel.Dir direction, int[] range) {
+    public int[] order(int[] sortVector, SortDir direction, int[] range) {
         int numRows = values.length;
-        switch(direction) {
-            case ASC:
-                if (range == null || range.length == numRows) {
-                    HeapsortColumn.heapsortEnumAscending(values, labels, sortVector, numRows);
-                } else {
-                    HeapsortColumn.heapsortEnumAscending(values, labels, sortVector, range.length, range);
-                }
-                break;
-            case DESC:
-                if (range == null || range.length == numRows) {
-                    HeapsortColumn.heapsortEnumDescending(values, labels, sortVector, numRows);
-                } else {
-                    HeapsortColumn.heapsortEnumDescending(values, labels, sortVector, range.length, range);
-                }
-                break;
+        if (range == null || range.length == numRows) {
+            HeapsortColumn.heapsortInt(values, sortVector, numRows,
+                    HeapsortColumn.withIntDirection(this::isLessThan, direction));
+        } else {
+            HeapsortColumn.heapsortInt(values, sortVector, range.length, range,
+                    HeapsortColumn.withIntDirection(this::isLessThan, direction));
         }
         return sortVector;
     }
+
+    private boolean isLessThan(int a, int b) {
+        if (a == b) {
+            return false;
+        } else if (a < 0 && b >= 0) {
+            return true;
+        } else if (b < 0) {
+            return false;
+        } else {
+            return labels[a].compareToIgnoreCase(labels[b]) < 0;
+        }
+    }
+
 }

@@ -18,13 +18,17 @@
  */
 package org.activityinfo.store.hrd.entity;
 
+import com.google.appengine.api.datastore.Blob;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Unindex;
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.store.hrd.columns.RecordNumbering;
+import org.activityinfo.store.hrd.columns.IntValueArray;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Parent entity of all entities related to a single form.
@@ -55,12 +59,36 @@ public class FormEntity {
     private long schemaVersion;
 
 
+    @Unindex
+    private boolean columnStorageActive;
+
     /**
-     * Which of the two recordCount indexes is currently active, RED or BLUE. This allows records to be
-     * renumbered without locking the whole form for modifications.
+     * The total number of records created (since we started counting)
      */
     @Unindex
-    private RecordNumbering activeColumnStorage;
+    private int numberedRecordCount;
+
+    /**
+     * The number of records that have been deleted (since we started counting)
+     */
+    @Unindex
+    private int deletedCount;
+
+    private Map<String, FieldDescriptor> fields;
+
+    private Map<String, ColumnDescriptor> blockColumns;
+
+
+    /**
+     * Tracks the version of each tombstone block
+     */
+    private Blob tombstoneVersionMap;
+
+    /**
+     * The version number of last record od block version. Only the (currently)
+     * last record block will change, the rest are essentially immutable.
+     */
+    private long tailIdBlockVersion;
 
 
     public FormEntity() {
@@ -107,12 +135,93 @@ public class FormEntity {
         this.schemaVersion = schemaVersion;
     }
 
-    public RecordNumbering getActiveColumnStorage() {
-        return activeColumnStorage;
+    public boolean isColumnStorageActive() {
+        return columnStorageActive;
     }
 
-    public void setActiveColumnStorage(RecordNumbering activeColumnStorage) {
-        this.activeColumnStorage = activeColumnStorage;
+    public void setColumnStorageActive(boolean columnStorageActive) {
+        this.columnStorageActive = columnStorageActive;
     }
 
+    /**
+     * @return the total number of records that have been numbered (including deleted records!)
+     */
+    public int getNumberedRecordCount() {
+        return numberedRecordCount;
+    }
+
+    public void setNumberedRecordCount(int numberedRecordCount) {
+        this.numberedRecordCount = numberedRecordCount;
+    }
+
+    public int getDeletedCount() {
+        return deletedCount;
+    }
+
+    public void setDeletedCount(int deletedCount) {
+        this.deletedCount = deletedCount;
+    }
+
+    public int getRecordCount() {
+        return numberedRecordCount - deletedCount;
+    }
+
+    public FieldDescriptor getFieldDescriptor(String fieldName) {
+        if(fields == null) {
+            fields = new HashMap<>();
+        }
+        FieldDescriptor descriptor = fields.get(fieldName);
+        if(descriptor == null) {
+            descriptor = new FieldDescriptor();
+            descriptor.setVersion(version);
+
+            fields.put(fieldName, descriptor);
+        }
+
+        return descriptor;
+    }
+
+    public Map<String, ColumnDescriptor> getBlockColumns() {
+        if(blockColumns == null) {
+            blockColumns = new HashMap<>();
+        }
+        return blockColumns;
+    }
+
+    public ColumnDescriptor getFieldBlock(String columnId) {
+        ColumnDescriptor descriptor = this.blockColumns.get(columnId);
+        if(descriptor == null) {
+            throw new IllegalArgumentException("No such block: " + columnId);
+        }
+        return descriptor;
+    }
+
+    public void addFieldBlock(ColumnDescriptor column) {
+        if(this.blockColumns == null) {
+            this.blockColumns = new HashMap<>();
+        }
+        this.blockColumns.put(column.getColumnId(), column);
+    }
+
+
+    public long getTombstoneBlockVersion(int blockIndex) {
+        return IntValueArray.get(tombstoneVersionMap, blockIndex);
+    }
+
+    public void setTombstoneBlockVersion(int blockIndex, long version) {
+        if(version > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException("Version " + version + " exceeds " + Integer.MAX_VALUE);
+        }
+        this.tombstoneVersionMap = IntValueArray.update(tombstoneVersionMap, blockIndex, (int) version);
+    }
+
+    public long getTailIdBlockVersion() {
+        return tailIdBlockVersion;
+    }
+
+    public void setTailIdBlockVersion(long tailIdBlockVersion) {
+        this.tailIdBlockVersion = tailIdBlockVersion;
+    }
 }
+
+

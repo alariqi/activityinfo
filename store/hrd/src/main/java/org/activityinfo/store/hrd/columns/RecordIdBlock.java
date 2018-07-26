@@ -2,25 +2,38 @@ package org.activityinfo.store.hrd.columns;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.QueryResultIterator;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.query.StringArrayColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.primitive.TextValue;
-import org.activityinfo.store.hrd.entity.FormColumnStorage;
+import org.activityinfo.store.hrd.entity.FormEntity;
 
 import javax.annotation.Nullable;
+import java.util.BitSet;
+import java.util.Iterator;
 
 public class RecordIdBlock implements BlockManager {
 
-    public static final String FIELD_NAME = "$ID";
+    public static final String BLOCK_NAME = "$ID";
 
-    public static final ResourceId FIELD_ID = ResourceId.valueOf(FIELD_NAME);
+    public static final ResourceId FIELD_ID = ResourceId.valueOf(BLOCK_NAME);
+
+    public static final int BLOCK_SIZE = 1024 * 4;
 
     @Override
     public int getBlockSize() {
-        return 10_000;
+        return BLOCK_SIZE;
+    }
+
+    @Override
+    public int getMaxFieldSize() {
+        return 1;
+    }
+
+    @Override
+    public String getBlockType() {
+        return "id";
     }
 
     @Override
@@ -40,7 +53,7 @@ public class RecordIdBlock implements BlockManager {
     }
 
     @Override
-    public ColumnView buildView(FormColumnStorage header, QueryResultIterator<Entity> blockIterator) {
+    public ColumnView buildView(FormEntity header, TombstoneIndex tombstones, Iterator<Entity> blockIterator, String component) {
 
         String[] ids = new String[header.getRecordCount()];
 
@@ -49,7 +62,15 @@ public class RecordIdBlock implements BlockManager {
             int blockIndex = (int)(block.getKey().getId() - 1);
             int blockStart = blockIndex * getBlockSize();
 
-            StringPools.toArray((Blob) block.getProperty("ids"), ids, blockStart);
+            int targetIndex = blockStart - tombstones.countDeletedBefore(blockStart);
+            BitSet deleted = tombstones.getDeletedBitSet(blockStart, getBlockSize());
+
+            String[] values = StringPools.toArray((Blob) block.getProperty("ids"));
+            for (int i = 0; i < values.length; i++) {
+                if(!deleted.get(i)) {
+                    ids[targetIndex++] = values[i];
+                }
+            }
         }
 
         return new StringArrayColumnView(ids);

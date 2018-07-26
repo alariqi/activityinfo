@@ -135,7 +135,7 @@ public class TableViewModel {
 
     private Observable<ColumnSet> queryColumns(FormSource formStore, EffectiveTableModel table, String parentId) {
         QueryModel queryModel = new QueryModel(table.getFormId());
-        queryModel.selectResourceId().as(ID_COLUMN_ID);
+        queryModel.selectRecordId().as(ID_COLUMN_ID);
         queryModel.selectExpr(editRule(table.getFormTree())).as(EDIT_COLUMN_ID);
         if(!parentId.isEmpty()) {
             queryModel.setFilter(Formulas.equals(new SymbolNode("@parent"), new ConstantNode(parentId)));
