@@ -118,6 +118,10 @@ public class KeyMatrixSet {
         return lookupKeySet;
     }
 
+    public KeyMatrix getMatrix(ResourceId leafFormId) {
+        return map.get(leafFormId);
+    }
+
     public Collection<KeyMatrix> getMatrices() {
         return map.values();
     }

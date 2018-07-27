@@ -109,10 +109,25 @@ public class FieldMappingSet implements Iterable<FieldMapping> {
         Set<String> newIgnored = new HashSet<>(ignoredColumns);
         newIgnored.add(columnId);
 
-
         return new FieldMappingSet(newList, newIgnored);
     }
 
+    /**
+     * Returns a new {@code FieldMappingSet} that only includes mappings for the given column ids
+     */
+    public FieldMappingSet retain(Set<String> columnIds) {
+        Set<String> retainedIgnored = new HashSet<>(ignoredColumns);
+        retainedIgnored.retainAll(columnIds);
+
+        List<FieldMapping> retainedList = new ArrayList<>();
+        for (FieldMapping mapping : list) {
+            if(columnIds.contains(mapping.getColumnId())) {
+                retainedList.add(mapping);
+            }
+        }
+        return new FieldMappingSet(retainedList, retainedIgnored);
+
+    }
 
     /**
      * Returns {@code true} if the given {@code columnId} is mapped to the given {@code fieldName} and {@code role}
@@ -121,13 +136,22 @@ public class FieldMappingSet implements Iterable<FieldMapping> {
         return columnId.equals(index.get(indexKey(fieldName, role)));
     }
 
-    public boolean isIgnored(String id) {
+    public boolean isMapped(String fieldName, String role) {
+        return index.containsKey(indexKey(fieldName, role));
+    }
+
+    public boolean isColumnIgnored(String id) {
         return ignoredColumns.contains(id);
+    }
+
+    public boolean isColumnMapped(String id) {
+        return columnMap.containsKey(id);
     }
 
     @Override
     public Iterator<FieldMapping> iterator() {
         return list.iterator();
     }
+
 
 }

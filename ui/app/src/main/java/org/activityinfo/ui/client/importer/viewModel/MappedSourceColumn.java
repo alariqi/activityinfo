@@ -38,7 +38,7 @@ public class MappedSourceColumn {
         this.validation = validation;
     }
 
-    public SourceColumn getColumn() {
+    public SourceColumn getSource() {
         return column;
     }
 

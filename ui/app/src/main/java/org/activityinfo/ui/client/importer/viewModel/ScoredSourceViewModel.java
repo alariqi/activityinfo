@@ -14,11 +14,15 @@ public class ScoredSourceViewModel {
         this.matchMatrix = new ColumnMatchMatrix(viewModel.getColumns(), targets);
     }
 
-    public SourceViewModel getViewModel() {
+    public SourceViewModel getSource() {
         return viewModel;
     }
 
     public ColumnMatchMatrix getMatchMatrix() {
         return matchMatrix;
+    }
+
+    public List<SourceColumn> getColumns() {
+        return viewModel.getColumns();
     }
 }

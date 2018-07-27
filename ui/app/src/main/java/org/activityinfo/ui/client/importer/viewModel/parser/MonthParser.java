@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.importer.viewModel.parser;
 
 import com.google.gwt.regexp.shared.RegExp;
+import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.time.Month;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
@@ -22,5 +23,10 @@ public class MonthParser implements FieldParser {
         } catch(Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public FieldValue parse(@Nonnull String value) {
+        return Month.parseMonth(value);
     }
 }

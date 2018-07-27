@@ -21,8 +21,18 @@ public class SimpleColumnTarget implements ColumnTarget {
     }
 
     @Override
+    public String getRole() {
+        return FieldMapping.VALUE_ROLE;
+    }
+
+    @Override
     public boolean isApplied(String columnId, FieldMappingSet mappings) {
         return mappings.isMapped(field.getName(),  FieldMapping.VALUE_ROLE, columnId);
+    }
+
+    @Override
+    public boolean isApplied(FieldMappingSet mappings) {
+        return mappings.isMapped(field.getName(), FieldMapping.VALUE_ROLE);
     }
 
     @Override

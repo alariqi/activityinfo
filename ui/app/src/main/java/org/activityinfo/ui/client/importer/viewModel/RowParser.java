@@ -145,7 +145,7 @@ public class RowParser {
                 int columnEnd = text.indexOf(delimiter, columnStart);
                 int lineEnd = text.indexOf("\n", columnStart);
 
-                if(lineEnd > 0 && lineEnd < columnEnd) {
+                if(columnEnd < 0 || (lineEnd > 0 && lineEnd < columnEnd)) {
                     columnEnd = lineEnd;
                     lastColumn = true;
                 }

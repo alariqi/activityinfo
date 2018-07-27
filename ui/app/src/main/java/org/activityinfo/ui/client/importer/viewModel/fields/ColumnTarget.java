@@ -10,8 +10,12 @@ public interface ColumnTarget {
      */
     String getLabel();
 
+    String getRole();
+
 
     boolean isApplied(String columnId, FieldMappingSet mappings);
+
+    boolean isApplied(FieldMappingSet mappings);
 
     /**
      * Scores a source column on a scale from 0 to 1, based on how well the column's content

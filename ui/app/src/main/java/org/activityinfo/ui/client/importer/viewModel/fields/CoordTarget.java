@@ -21,8 +21,18 @@ public class CoordTarget implements ColumnTarget {
     }
 
     @Override
+    public String getRole() {
+        return axis.name();
+    }
+
+    @Override
     public boolean isApplied(String columnId, FieldMappingSet mappings) {
         return mappings.isMapped(field.getName(), axis.name(), columnId);
+    }
+
+    @Override
+    public boolean isApplied(FieldMappingSet mappings) {
+        return mappings.isMapped(field.getName(), axis.name());
     }
 
     @Override
@@ -35,4 +45,8 @@ public class CoordTarget implements ColumnTarget {
         return mappingSet.withMapping(field.getName(), axis.name(), columnId);
     }
 
+    @Override
+    public String toString() {
+        return field.getName() + "." + axis;
+    }
 }

@@ -1,6 +1,8 @@
 package org.activityinfo.ui.client.importer.viewModel.parser;
 
 import com.google.gwt.regexp.shared.RegExp;
+import org.activityinfo.model.type.FieldValue;
+import org.activityinfo.model.type.time.FortnightType;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 import javax.annotation.Nonnull;
@@ -17,5 +19,10 @@ public class FortnightParser implements FieldParser {
     @Override
     public boolean validate(@Nonnull String value) {
         return true;
+    }
+
+    @Override
+    public FieldValue parse(@Nonnull String value) {
+        return FortnightType.INSTANCE.parseString(value);
     }
 }

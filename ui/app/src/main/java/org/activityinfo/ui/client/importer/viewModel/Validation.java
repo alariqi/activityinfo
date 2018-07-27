@@ -7,4 +7,6 @@ public interface Validation {
     int VALIDATING = 2;
 
     int getRowStatus(int rowIndex);
+
+    boolean isDone();
 }

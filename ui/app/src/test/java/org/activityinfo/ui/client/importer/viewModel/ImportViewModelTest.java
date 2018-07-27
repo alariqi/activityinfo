@@ -1,12 +1,20 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.type.FieldValue;
+import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.model.type.ReferenceValue;
 import org.activityinfo.observable.Connection;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.importer.state.FieldMapping;
+import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.state.ImportSource;
 import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
@@ -17,16 +25,27 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertThat;
 
 public class ImportViewModelTest {
+
+    private static final int COLUMN_WIDTH = 20;
 
     private TestSetup testSetup = new TestSetup();
     private StatefulValue<ImportState> state;
     private ImportViewModel viewModel;
     private Connection<SourceViewModel> sourceView;
     private Connection<MappedSourceViewModel> mappedView;
-
+    private Connection<ValidatedTable> validatedView;
+    private Connection<ImportedTable> importedView;
 
     @Test
     public void qis() throws IOException {
@@ -51,6 +70,8 @@ public class ImportViewModelTest {
 
         dumpMappings();
         dumpColumnHeaders();
+
+
     }
 
     @Test
@@ -64,6 +85,19 @@ public class ImportViewModelTest {
 
         dumpTargets();
         dumpColumnMatrix();
+        dumpDerivedMappings();
+
+        assertMapped("District", "District Name");
+        assertMapped("Name", "Name");
+
+        dumpValidation();
+
+
+        RecordRef chittagongRef = new RecordRef(ResourceId.valueOf("E0000000002"), ResourceId.valueOf("z0000000002"));
+
+        List<FormRecord> records = importRecords();
+        assertThat(records, hasSize(1));
+        assertThat(getField(records.get(0), "Administrative Unit"), equalTo(new ReferenceValue(chittagongRef)));
     }
 
 
@@ -87,6 +121,8 @@ public class ImportViewModelTest {
 
         sourceView = testSetup.connect(viewModel.getSource());
         mappedView = testSetup.connect(viewModel.getMappedSource());
+        validatedView = testSetup.connect(viewModel.getValidatedTable());
+        importedView = testSetup.connect(viewModel.getImportedTable());
     }
 
     private void importResource(String resourceName) throws IOException {
@@ -108,6 +144,40 @@ public class ImportViewModelTest {
         state.update(s -> s.updateMappings(m -> target.apply(m, columnId)));
     }
 
+    private void dumpDerivedMappings() {
+        dumpHeader("Derived Mappings");
+
+        FieldMappingSet derivedMappings = mappedView.assertLoaded().getFieldMappingSet();
+        for (FieldMapping derivedMapping : derivedMappings) {
+            System.out.println(findColumnLabelById(
+                    derivedMapping.getColumnId()) + " => " +
+                    findTargetLabel(derivedMapping));
+        }
+    }
+
+    private void dumpHeader(final String header) {
+        System.out.println();
+        System.out.println("==== " + header + " ====");
+    }
+
+
+    private void assertMapped(String columnLabel, String targetLabel) {
+
+        ColumnTarget target = findTargetByLabel(targetLabel);
+        String columnId = findColumnIdByLabel(columnLabel);
+
+        FieldMappingSet fieldMappingSet = mappedView.assertLoaded().getFieldMappingSet();
+        if (!target.isApplied(columnId, fieldMappingSet)) {
+            throw new AssertionError("Column " + columnLabel + " is not mapped to " + targetLabel);
+        }
+    }
+
+    private void assertMappingComplete() {
+        if(!mappedView.assertLoaded().isComplete()) {
+            throw new AssertionError("Mapping is not complete");
+        }
+    }
+
     private ColumnTarget findTargetByLabel(String label) {
         for (FieldViewModel field : viewModel.getFields()) {
             for (ColumnTarget columnTarget : field.getTargets()) {
@@ -119,6 +189,20 @@ public class ImportViewModelTest {
         throw new AssertionError("No column target with label '" + label + "'");
     }
 
+
+    private String findTargetLabel(FieldMapping mapping) {
+        for (FieldViewModel field : viewModel.getFields()) {
+            if(field.getFieldName().equals(mapping.getFieldName())) {
+                for (ColumnTarget target : field.getTargets()) {
+                    if (target.getRole().equals(mapping.getRole())) {
+                        return target.getLabel();
+                    }
+                }
+            }
+        }
+        throw new RuntimeException("Cannot find target for " + mapping);
+    }
+
     private String findColumnIdByLabel(String columnLabel) {
         for (SourceColumn column : sourceView.assertLoaded().getColumns()) {
             if(column.getLabel().equals(columnLabel)) {
@@ -128,6 +212,71 @@ public class ImportViewModelTest {
         throw new AssertionError("No column with label '" + columnLabel + "'");
     }
 
+    private String findColumnLabelById(String columnId) {
+        return sourceView.assertLoaded().getColumns().stream()
+                .filter(c -> c.getId().equals(columnId))
+                .map(c -> c.getLabel())
+                .findAny()
+                .orElse(columnId);
+    }
+
+
+    private void dumpValidation() {
+        dumpHeader("Validation Table");
+
+        ValidatedTable validatedTable = validatedView.assertLoaded();
+
+        printRow(validatedTable.getColumns().stream().map(c -> c.getStatus().name()));
+        printRow(validatedTable.getColumns().stream().map(c -> c.getColumn().getLabel()));
+        printRow(validatedTable.getColumns().stream().map(c -> Strings.repeat("-", COLUMN_WIDTH)));
+
+        for (int i = 0; i < validatedTable.getNumRows(); i++) {
+            int rowIndex = i;
+            printRow(validatedTable.getColumns().stream().map(c -> {
+                return validationSymbol(c.getValidation().getRowStatus(rowIndex)) + " " +
+                        c.getColumnView().getString(rowIndex);
+            }));
+        }
+
+    }
+
+    private String validationSymbol(int status) {
+        switch (status) {
+            case Validation.VALID:
+                return "✓";
+            case Validation.VALIDATING:
+                return "⌛";
+            case Validation.INVALID:
+                return "✗";
+        }
+        return "?";
+    }
+
+    private void printRow(Stream<?> cells) {
+        StringBuilder line = new StringBuilder();
+        Iterator<?> it = cells.iterator();
+        while(it.hasNext()) {
+            line.append("| ");
+            line.append(cell(it.next()));
+            line.append(" ");
+        }
+        line.append("|");
+        System.out.println(line.toString());
+    }
+
+    private String cell(Object o) {
+        String text;
+        if(o == null) {
+            text = "";
+        } else {
+            text = o.toString();
+        }
+        if(text.length() <= COLUMN_WIDTH) {
+            return Strings.padEnd(text, COLUMN_WIDTH, ' ');
+        } else {
+            return text.substring(0, COLUMN_WIDTH - 3) + "...";
+        }
+    }
 
 
 
@@ -160,7 +309,22 @@ public class ImportViewModelTest {
         for (MappedSourceColumn column : mappedView.assertLoaded().getColumns()) {
             System.out.println(column.getStatusLabel() + " / " + column.getLabel());
         }
+    }
 
+    private List<FormRecord> importRecords() {
+        return Lists.newArrayList(importedView.assertLoaded().getRecords());
+
+    }
+
+    private FieldValue getField(FormRecord record, String fieldLabel) {
+        List<FormField> fields = viewModel.getFormTree().getRootFormClass().getFields();
+        for (FormField field : fields) {
+            if(field.getLabel().equals(fieldLabel)) {
+                return field.getType().parseJsonValue(record.getFields().get(field.getName()));
+            }
+        }
+        throw new AssertionError("No such field '" + fieldLabel + "', root fields = " +
+            fields.stream().map(f -> "'" + f.getLabel() + "'").collect(Collectors.joining(", ")));
     }
 
 }

@@ -1,6 +1,8 @@
 package org.activityinfo.ui.client.importer.viewModel.parser;
 
 import com.google.gwt.regexp.shared.RegExp;
+import org.activityinfo.model.type.FieldValue;
+import org.activityinfo.model.type.time.YearValue;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
 import javax.annotation.Nonnull;
@@ -17,10 +19,15 @@ public class YearParser implements FieldParser {
     @Override
     public boolean validate(@Nonnull String value) {
         try {
-            double year = Double.parseDouble(value);
+            int year = Integer.parseInt(value);
             return year >= 1000 && year <= 9999;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public FieldValue parse(@Nonnull String value) {
+        return new YearValue(Integer.parseInt(value));
     }
 }

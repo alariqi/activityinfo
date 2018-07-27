@@ -1,6 +1,7 @@
 package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.importer.viewModel.MappedSourceColumn;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 
@@ -22,6 +23,19 @@ public class GeoPointMappedField implements MappedField {
     @Override
     public boolean isComplete() {
         return latitudeColumn.isPresent() && longitudeColumn.isPresent();
+    }
+
+    @Override
+    public Observable<FieldImporter> getImporter() {
+        if(!latitudeColumn.isPresent() || !longitudeColumn.isPresent()) {
+            throw new IllegalStateException();
+        }
+        return Observable.just(new GeoPointImporter(field.getName(), latitudeColumn.get(), longitudeColumn.get()));
+    }
+
+    @Override
+    public FormField getField() {
+        return field;
     }
 
     @Override

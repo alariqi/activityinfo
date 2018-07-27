@@ -49,7 +49,7 @@ import java.util.*;
  * Where k1 = the village name, k2 = the territory name, and k3 = province name.
  *
  */
-class KeyMatrix {
+public class KeyMatrix {
 
     private static final String ID_COLUMN = "id";
 
@@ -85,6 +85,19 @@ class KeyMatrix {
      */
     private String keyColumn(LookupKey lookupKey) {
         return "k" + lookupKey.getKeyIndex();
+    }
+
+
+
+    public Observable<LookupIndex> index(List<LookupKey> mappedKeys) {
+        return keyColumns.transform(columnSet -> {
+            List<ColumnView> keys = new ArrayList<>();
+            for (LookupKey mappedKey : mappedKeys) {
+                keys.add(columnSet.getColumnView(keyColumn(mappedKey)));
+            }
+
+            return new LookupIndex(formId, columnSet.getColumnView(ID_COLUMN), keys);
+        });
     }
 
 

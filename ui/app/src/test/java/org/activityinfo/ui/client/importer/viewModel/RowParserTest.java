@@ -4,9 +4,11 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.Resources;
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.store.testing.ColumnSetMatchers;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 import static com.google.common.io.Resources.getResource;
@@ -97,6 +99,17 @@ public class RowParserTest {
         assertThat(status.getString(1), equalTo("pp"));
         assertThat(status.getString(61), equalTo("np"));
         assertThat(status.getString(62), equalTo("up"));
+    }
 
+    @Test
+    public void trailingNewLine() throws IOException {
+        URL resource = Resources.getResource(ImportViewModel.class, "qis-villages.csv");
+        String text = Resources.toString(resource, Charsets.UTF_8);
+
+        RowParser parser = new RowParser(text, ',');
+        ColumnView[] columnViews = parser.parseColumns(2);
+
+        assertThat(columnViews[0], ColumnSetMatchers.hasValues("Name", "Village 1"));
+        assertThat(columnViews[1], ColumnSetMatchers.hasValues("District", "Chittagong"));
     }
 }

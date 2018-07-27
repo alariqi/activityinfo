@@ -12,6 +12,7 @@ public class SimpleValidator implements IncrementalTask<Validation> {
 
         private final BitSet invalid = new BitSet();
         private int rowsValidated = 0;
+        private boolean done;
 
         @Override
         public int getRowStatus(int rowIndex) {
@@ -20,6 +21,11 @@ public class SimpleValidator implements IncrementalTask<Validation> {
             } else {
                 return VALIDATING;
             }
+        }
+
+        @Override
+        public boolean isDone() {
+            return done;
         }
     }
 
@@ -55,9 +61,13 @@ public class SimpleValidator implements IncrementalTask<Validation> {
             currentRow ++;
         }
         result.rowsValidated = currentRow;
-        return currentRow < numRows;
 
-
+        if(currentRow == numRows) {
+            result.done = true;
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override

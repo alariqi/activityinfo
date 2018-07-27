@@ -10,4 +10,9 @@ public class NoValidation implements Validation {
     public int getRowStatus(int rowIndex) {
         return VALID;
     }
+
+    @Override
+    public boolean isDone() {
+        return true;
+    }
 }

@@ -107,7 +107,6 @@ public class ReferenceFieldWidget implements FieldWidget {
     @Override
     public void init(FieldValue value) {
         ReferenceValue referenceValue = (ReferenceValue) value;
-        RecordRef recordRef = referenceValue.getOnlyReference();
         viewModel.setInitialSelection(referenceValue.getReferences());
     }
 

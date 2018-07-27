@@ -24,8 +24,9 @@ public class ImportViewModel {
     private final Observable<ScoredSourceViewModel> scoredSource;
     private final Observable<String> selectedColumnId;
     private final Observable<MappedSourceViewModel> mappedSource;
-    private final Observable<Optional<SelectedColumnViewModel>> columnTargetSelection;
+    private final Observable<Optional<SelectedColumnViewModel>> selectedColumnView;
     private final Observable<ValidatedTable> validatedTable;
+    private final Observable<ImportedTable> importedTable;
 
     public static Observable<Maybe<ImportViewModel>> compute(FormStore formStore, Observable<ImportState> state) {
 
@@ -79,10 +80,12 @@ public class ImportViewModel {
 
         this.validatedTable = mappedSource.join(s -> s.getValidatedTable());
 
+        this.importedTable = validatedTable.join(t -> t.getImportedTable());
+
         // Compute a viewModel of the current selected column that shows the current choice as well as alternatives
         // ranked by suitability.
 
-        this.columnTargetSelection = Observable.join(mappedSource, selectedColumnId, (s, id) -> {
+        this.selectedColumnView = Observable.join(mappedSource, selectedColumnId, (s, id) -> {
             return s.getColumnById(id).transform(optionalColumn ->
                     optionalColumn.map(column ->
                         new SelectedColumnViewModel(s, column)));
@@ -126,7 +129,7 @@ public class ImportViewModel {
     }
 
     public Observable<SelectedColumnViewModel> getSelectedColumnView() {
-        return columnTargetSelection.transformIf(x -> com.google.common.base.Optional.fromJavaUtil(x));
+        return selectedColumnView.transformIf(x -> com.google.common.base.Optional.fromJavaUtil(x));
     }
 
     public FieldViewModelSet getFields() {
@@ -137,7 +140,13 @@ public class ImportViewModel {
         return validatedTable;
     }
 
+    public Observable<ImportedTable> getImportedTable() {
+        return importedTable;
+    }
+
     public Observable<Boolean> isMappingComplete() {
         return mappedSource.transform(m -> m.isComplete()).cache();
     }
+
+
 }

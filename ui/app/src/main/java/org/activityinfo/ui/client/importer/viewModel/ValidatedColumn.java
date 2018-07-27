@@ -1,5 +1,7 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
+import org.activityinfo.model.query.ColumnView;
+
 public class ValidatedColumn {
     private final MappedSourceColumn column;
     private Validation validation;
@@ -23,5 +25,9 @@ public class ValidatedColumn {
 
     public String getId() {
         return column.getId();
+    }
+
+    public ColumnView getColumnView() {
+        return getColumn().getSource().getColumnView();
     }
 }

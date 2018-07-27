@@ -28,7 +28,7 @@ public class SelectedColumnViewModel {
         // Now find the targets that match by name (and are not excluded by content)
         bestTargets = columnMatrix.findBestTargets(column.getId());
 
-        this.ignored = fieldMappingSet.isIgnored(column.getId());
+        this.ignored = fieldMappingSet.isColumnIgnored(column.getId());
     }
 
 

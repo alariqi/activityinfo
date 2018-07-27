@@ -23,8 +23,18 @@ public class ReferenceTarget implements ColumnTarget {
     }
 
     @Override
+    public String getRole() {
+        return lookupKey.getKeyId();
+    }
+
+    @Override
     public boolean isApplied(String columnId, FieldMappingSet mappings) {
         return mappings.isMapped(field.getName(), lookupKey.getKeyId(), columnId);
+    }
+
+    @Override
+    public boolean isApplied(FieldMappingSet mappings) {
+        return mappings.isMapped(field.getName(), lookupKey.getKeyId());
     }
 
     @Override

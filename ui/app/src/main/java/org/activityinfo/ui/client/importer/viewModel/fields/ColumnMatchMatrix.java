@@ -65,6 +65,14 @@ public class ColumnMatchMatrix {
         return targets;
     }
 
+    public ColumnTarget getTarget(int index) {
+        return targets.get(index);
+    }
+
+    public SourceColumn getSourceColumn(int index) {
+        return columns.get(index);
+    }
+
     public int findColumnIndexFromId(String columnId) {
         for (int i = 0; i < columns.size(); i++) {
             if(columns.get(i).getId().equals(columnId)) {
@@ -120,5 +128,31 @@ public class ColumnMatchMatrix {
         other.sort(Ordering.natural());
 
         return new BestColumnTargets(nameMatches, other);
+    }
+
+    /**
+     * Finds the best target for a given columnId, given the filter {@code unmatchedTargets}
+     * @return the index of the best target match, or -1 if there is no match
+     */
+    public int findBestTarget(String columnId, boolean[] unmatchedTargets) {
+        int columnIndex = findColumnIndexFromId(columnId);
+        if(columnIndex < 0) {
+            return -1;
+        }
+
+        int bestTargetIndex = -1;
+        double bestScore = Double.MIN_VALUE;
+
+        for (int i = 0; i < numTargets; i++) {
+            if(unmatchedTargets[i]) {
+                double score = getNameScore(columnIndex, i);
+                if(score > bestScore) {
+                    bestTargetIndex = i;
+                    bestScore = score;
+                }
+            }
+        }
+
+        return bestTargetIndex;
     }
 }
