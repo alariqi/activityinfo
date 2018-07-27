@@ -1,0 +1,6 @@
+steps:
+- name: gcr.io/cloud-builders/git
+  args: ['clone', 'https://github.com/bedatadriven/activityinfo']
+- name: 'gcr.io/cloud-builders/gradle'
+  args: ['test', 'server:appengineDeploy', '-Penv=ai-dev']
+
