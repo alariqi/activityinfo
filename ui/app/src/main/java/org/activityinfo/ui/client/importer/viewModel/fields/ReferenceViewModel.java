@@ -74,6 +74,7 @@ public class ReferenceViewModel extends FieldViewModel {
             if (lookupKeyMap.containsKey(sourceColumn.getId())) {
                 keys[keyIndex] = lookupKeyMap.get(sourceColumn.getId());
                 columns[keyIndex] = sourceColumn;
+                keyIndex++;
             }
         }
 

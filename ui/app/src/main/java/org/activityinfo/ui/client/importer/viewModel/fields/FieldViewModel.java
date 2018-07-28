@@ -16,7 +16,7 @@ import java.util.Optional;
  * <p>Most field types are considered "simple" and can be bound only to a single column. For example,
  * fields of TextType, LocalDateType, are all considered to be simple and can be matched to a single target.</p>
  *
- * <p>GeoPoint fields must be bound to exactly two fields in odrer </p>
+ * <p>GeoPoint fields must be bound to exactly two fields, for latitude and longitude values</p>
  */
 public abstract class FieldViewModel {
 
@@ -30,11 +30,12 @@ public abstract class FieldViewModel {
         return field;
     }
 
-    public abstract List<ColumnTarget> getTargets();
-
-    public String getFieldName() {
+    public final String getFieldName() {
         return field.getName();
     }
 
+    public abstract List<ColumnTarget> getTargets();
+
     public abstract Optional<MappedField> mapColumns(SourceViewModel source, FieldMappingSet fieldMappingSet);
+
 }

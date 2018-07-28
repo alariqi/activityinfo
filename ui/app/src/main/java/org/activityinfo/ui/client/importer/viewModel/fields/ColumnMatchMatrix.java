@@ -13,6 +13,7 @@ public class ColumnMatchMatrix {
     private static final Logger LOGGER = Logger.getLogger(ColumnMatchMatrix.class.getName());
 
     private static final LatinPlaceNameScorer SCORER = new LatinPlaceNameScorer();
+    public static final double PROBABLE_THRESHOLD = 0.5;
 
     private final List<SourceColumn> columns;
     private final List<ColumnTarget> targets;
@@ -90,6 +91,10 @@ public class ColumnMatchMatrix {
         return contentScores[(targetIndex * numColumns) + columnIndex];
     }
 
+    /**
+     * Dumps this score matrix to a CSV string that can be used for debugging.
+     * @param scoreByName true to score by name, otherwise by content
+     */
     public String toCsv(boolean scoreByName) {
         StringBuilder csv = new StringBuilder();
         for (SourceColumn column : columns) {
@@ -117,7 +122,7 @@ public class ColumnMatchMatrix {
                 ColumnTarget target = targets.get(i);
                 double nameScore = getNameScore(columnIndex, i);
                 double contentScore = getContentScore(columnIndex, i);
-                if(nameScore > 0.5) {
+                if(nameScore > PROBABLE_THRESHOLD) {
                     nameMatches.add(new ScoredColumnTarget(target, nameScore, contentScore));
                 } else if(contentScore > 0) {
                     other.add(new ScoredColumnTarget(target, nameScore, contentScore));
@@ -146,7 +151,7 @@ public class ColumnMatchMatrix {
         for (int i = 0; i < numTargets; i++) {
             if(unmatchedTargets[i]) {
                 double score = getNameScore(columnIndex, i);
-                if(score > bestScore) {
+                if(score > bestScore && score > PROBABLE_THRESHOLD) {
                     bestTargetIndex = i;
                     bestScore = score;
                 }
