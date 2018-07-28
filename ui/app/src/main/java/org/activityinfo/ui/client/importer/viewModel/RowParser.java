@@ -19,6 +19,7 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.regexp.shared.RegExp;
 import org.activityinfo.model.query.ColumnView;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class RowParser {
 
     public static final char QUOTE_CHAR = '"';
 
+    private static final RegExp DOUBLE_QUOTES = RegExp.compile("\"\"");
 
     public interface EventListener {
         void field(String string);
@@ -102,6 +104,8 @@ public class RowParser {
                 int columnStart = currentPos;
                 int columnEnd;
 
+                boolean quotedQuotes = false;
+
                 while(true) {
                     int nextQuote = text.indexOf(QUOTE_CHAR, currentPos);
                     if(nextQuote == -1) {
@@ -133,9 +137,15 @@ public class RowParser {
                         currentPos = columnEnd + 3;
                         break;
                     }
+                    quotedQuotes = true;
+                    currentPos = nextQuote + 1;
                 }
 
-                eventListener.field(text.substring(columnStart, columnEnd));
+                String cell = text.substring(columnStart, columnEnd);
+                if(quotedQuotes) {
+                    cell = cell.replaceAll("\"\"", "\"");
+                }
+                eventListener.field(cell);
 
 
             } else {

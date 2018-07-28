@@ -5,12 +5,15 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+import org.activityinfo.json.Json;
+import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.model.type.ReferenceValue;
+import org.activityinfo.model.type.primitive.TextValue;
 import org.activityinfo.observable.Connection;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.importer.state.FieldMapping;
@@ -20,6 +23,7 @@ import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldViewModel;
 import org.activityinfo.ui.client.store.TestSetup;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -27,6 +31,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,7 +76,9 @@ public class ImportViewModelTest {
         dumpMappings();
         dumpColumnHeaders();
 
+        assertMappingComplete();
 
+        verifyImport("qis-expected.json");
     }
 
     @Test
@@ -97,7 +104,47 @@ public class ImportViewModelTest {
 
         List<FormRecord> records = importRecords();
         assertThat(records, hasSize(1));
+        assertThat(getField(records.get(0), "Name"), equalTo(TextValue.valueOf("Village 1")));
         assertThat(getField(records.get(0), "Administrative Unit"), equalTo(new ReferenceValue(chittagongRef)));
+    }
+
+    @Test
+    @Ignore("wip")
+    public void nfiActivity() throws IOException {
+
+        ResourceId formId = ResourceId.valueOf("a0000000033");
+
+        loadDataSet("nfi.json");
+        startImport(formId);
+
+        importResource("nfi.csv");
+
+        dumpDerivedMappings();
+    }
+
+    @Test
+    public void camps() throws IOException {
+
+        ResourceId formId = ResourceId.valueOf("L0000001451");
+
+        loadDataSet("somalia.json");
+        startImport(formId);
+
+        importResource("somali-camps.csv");
+
+
+        map("Region", "Region Name");
+        map("Admin2", "District Name");
+        map("Village Name", "Name");
+        map("Pcode", "Alternate Name");
+        map("Latitude", "Geographic coordinates - Latitude");
+        map("Longitude", "Geographic coordinates - Longitude");
+
+        assertMappingComplete();
+
+        dumpDerivedMappings();
+
+        verifyImport("somalia-expected.json");
     }
 
 
@@ -174,7 +221,12 @@ public class ImportViewModelTest {
 
     private void assertMappingComplete() {
         if(!mappedView.assertLoaded().isComplete()) {
-            throw new AssertionError("Mapping is not complete");
+            throw new AssertionError("Mapping is not complete: " +
+                    mappedView.assertLoaded()
+                            .getMissingRequiredFields()
+                            .stream()
+                            .map(f -> f.getField().getLabel())
+                            .collect(Collectors.joining(", ")));
         }
     }
 
@@ -325,6 +377,48 @@ public class ImportViewModelTest {
         }
         throw new AssertionError("No such field '" + fieldLabel + "', root fields = " +
             fields.stream().map(f -> "'" + f.getLabel() + "'").collect(Collectors.joining(", ")));
+    }
+
+    private void verifyImport(String resourceName) throws IOException {
+        URL testResource = Resources.getResource(ImportViewModelTest.class, resourceName);
+        String json = Resources.toString(testResource, Charsets.UTF_8);
+        JsonValue array = Json.parse(json);
+
+        List<FormRecord> records = importRecords();
+
+        List<FormField> fields = viewModel.getFormTree().getRootFormClass().getFields();
+
+        if(records.size() != array.length()) {
+            throw new AssertionError("Expected " + array.length() + " records to be imported, found " + records.size());
+        }
+
+        int mismatchCount = 0;
+
+        for (int i = 0; i < array.length(); i++) {
+            JsonValue expectedFields = array.get(i).get("fields");
+            JsonValue actualFields = records.get(i).getFields();
+
+            for (String fieldName : expectedFields.keys()) {
+                JsonValue expectedValue = expectedFields.get(fieldName);
+                JsonValue actualValue = actualFields.get(fieldName);
+                if(!Objects.equals(expectedValue, actualValue)) {
+                    System.out.println("In row #" + i + ": " + actualValue.toJson() + " != " + expectedValue.toJson());
+                    mismatchCount++;
+                }
+            }
+        }
+        if(mismatchCount > 0) {
+            throw new AssertionError("Imported data had " + mismatchCount + " mismatch(es)");
+        }
+    }
+
+    private void writeImportResults() throws IOException {
+        JsonValue array = Json.createArray();
+        Iterator<FormRecord> it = importedView.assertLoaded().getRecords();
+        while(it.hasNext()) {
+            array.add(it.next().toJson());
+        }
+        Files.asCharSink(new File("/tmp/tmp.json"), Charsets.UTF_8).write(Json.stringify(array, 2));
     }
 
 }

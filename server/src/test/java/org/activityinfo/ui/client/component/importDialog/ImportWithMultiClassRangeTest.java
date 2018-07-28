@@ -100,6 +100,12 @@ public class ImportWithMultiClassRangeTest extends AbstractImporterTest {
         setUser(3);
 
         FormTree formTree = assertResolves(locator.getFormTree(NFI_DISTRIBUTION_FORM_CLASS));
+
+        TestDataSetWriter writer = new TestDataSetWriter();
+        writer.addWithRecords(locator, formTree);
+        writer.write("/home/alex/dev/activityinfo/ui/app/src/test/resources/org/activityinfo/ui/client/importer/viewModel/nfi.json");
+
+
         FormTreePrettyPrinter.print(formTree);
 
         importModel = new ImportModel(formTree);
@@ -130,6 +136,8 @@ public class ImportWithMultiClassRangeTest extends AbstractImporterTest {
         showValidationGrid(validatedResult);
 
         assertResolves(importer.persist(importModel));
+
+        writer.writeExported("/home/alex/dev/activityinfo/ui/app/src/test/resources/org/activityinfo/ui/client/importer/viewModel/nfi-expected.json");
 
         GetSites query = new GetSites(Filter.filter().onActivity(33));
         query.setSortInfo(new SortInfo("date2", Style.SortDir.DESC));

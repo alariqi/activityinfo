@@ -2,6 +2,7 @@ package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.io.match.coord.CoordinateAxis;
 import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.ui.client.importer.state.FieldMappingSet;
 import org.activityinfo.ui.client.importer.viewModel.SourceColumn;
 import org.activityinfo.ui.client.importer.viewModel.SourceViewModel;
@@ -16,7 +17,7 @@ public class GeoPointViewModel extends FieldViewModel {
     private final CoordTarget latitudeTarget;
     private final CoordTarget longitudeTarget;
 
-    public GeoPointViewModel(FormField field) {
+    public GeoPointViewModel(FormTree formTree, FormField field) {
         super(field);
         this.field = field;
         this.latitudeTarget = new CoordTarget(field, CoordinateAxis.LATITUDE);

@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.List;
 
 import static com.google.common.io.Resources.getResource;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -73,6 +74,20 @@ public class RowParserTest {
                 "USA"));
 
         assertThat(rows.get(1).getColumnValue(0), equalTo("2"));
+    }
+
+    @Test
+    public void quotesInTheMiddle() {
+        String text = "1,2,\"Il s'agit d'une intervention humanitaire en faveurs des Congolais refoules de l\"\"angola\"";
+        List<ParsedRow> rows = new RowParser(text, ',').parseRows();
+
+        assertThat(rows, hasSize(1));
+
+        ParsedRow firstRow = rows.get(0);
+        assertThat(firstRow.getColumnValue(0), equalTo("1"));
+        assertThat(firstRow.getColumnValue(1), equalTo("2"));
+        assertThat(firstRow.getColumnValue(2), equalTo(
+                "Il s'agit d'une intervention humanitaire en faveurs des Congolais refoules de l\"angola"));
     }
 
     @Test

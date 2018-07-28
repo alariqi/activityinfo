@@ -24,6 +24,7 @@ import org.activityinfo.json.JsonValue;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 /**
  * Server-side implementation of JsonString.
@@ -95,6 +96,20 @@ public class JreJsonString extends JreJsonValue implements JsonValue {
     @Override
     public boolean isString() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JreJsonString that = (JreJsonString) o;
+        return Objects.equals(string, that.string);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(string);
     }
 
     @com.google.gwt.core.shared.GwtIncompatible

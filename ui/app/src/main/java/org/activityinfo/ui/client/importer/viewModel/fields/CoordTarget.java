@@ -14,10 +14,13 @@ public class CoordTarget implements ColumnTarget {
         this.axis = axis;
     }
 
-
     @Override
     public String getLabel() {
-        return field.getLabel() + " " + axis.getLocalizedName();
+        return label(field, axis);
+    }
+
+    public static String label(FormField field, CoordinateAxis axis) {
+        return field.getLabel() + " - " + axis.getLocalizedName();
     }
 
     @Override

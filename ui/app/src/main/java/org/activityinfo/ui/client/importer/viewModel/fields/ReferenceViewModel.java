@@ -103,8 +103,6 @@ public class ReferenceViewModel extends FieldViewModel {
             return keyMatrixSet.getMatrix(referenceType.getRange().iterator().next());
         }
 
-        // The following is a heuristic...
-
         Set<ResourceId> forms = new HashSet<>();
 
         for (LookupKey key : keys) {
@@ -112,7 +110,13 @@ public class ReferenceViewModel extends FieldViewModel {
                 forms.add(key.getFormId());
             }
         }
+        for (LookupKey key : keys) {
+            if(referenceType.getRange().contains(key.getFormId())) {
+                forms.removeAll(keySet.getAncestorForms(key.getFormId()));
+            }
+        }
 
+        // Remove
         if(forms.size() == 1) {
             return keyMatrixSet.getMatrix(Iterables.getOnlyElement(forms));
         }

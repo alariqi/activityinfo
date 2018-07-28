@@ -41,9 +41,13 @@ public class MappedSourceViewModel {
 
         // Are all required fields mapped?
         for (FieldViewModel field : fields) {
-            if(!mappedFields.containsKey(field.getFieldName()) ||
+            if(field.getField().isRequired()) {
+
+                if(!mappedFields.containsKey(field.getFieldName()) ||
                     !mappedFields.get(field.getFieldName()).isComplete()) {
-                missingRequiredFields.add(field);
+
+                    missingRequiredFields.add(field);
+                }
             }
         }
 
@@ -100,5 +104,9 @@ public class MappedSourceViewModel {
 
     public boolean isComplete() {
         return missingRequiredFields.isEmpty();
+    }
+
+    public List<FieldViewModel> getMissingRequiredFields() {
+        return missingRequiredFields;
     }
 }

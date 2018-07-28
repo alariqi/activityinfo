@@ -1,0 +1,962 @@
+{
+  "forms": [
+    {
+      "schema": {
+        "id": "E0000001451",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "Region",
+        "elements": [
+          {
+            "id": "E00000014510000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000014510000000003",
+            "code": "code",
+            "label": "Code",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000014510000000005",
+            "code": "boundary",
+            "label": "Geography",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geoArea"
+          }
+        ]
+      },
+      "records": [
+        {
+          "recordId": "z0000002688",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Awdal"
+          }
+        },
+        {
+          "recordId": "z0000002689",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Bakol (Bakool)"
+          }
+        },
+        {
+          "recordId": "z0000002690",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Bari (North East)"
+          }
+        },
+        {
+          "recordId": "z0000002691",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Bay"
+          }
+        },
+        {
+          "recordId": "z0000002692",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Banadir (Banaadir - Mogadishu)"
+          }
+        },
+        {
+          "recordId": "z0000002693",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Galgaduud (Galgadoud)"
+          }
+        },
+        {
+          "recordId": "z0000002694",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Gedo (Gedu)"
+          }
+        },
+        {
+          "recordId": "z0000002695",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Hiran (Hiiraan)"
+          }
+        },
+        {
+          "recordId": "z0000002696",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Jubbada Hoose (Lower Juba)"
+          }
+        },
+        {
+          "recordId": "z0000002697",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Shabeellaha Hoose (Lower Shabelle)"
+          }
+        },
+        {
+          "recordId": "z0000002698",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Jubbada Dhexe (Middle Juba)"
+          }
+        },
+        {
+          "recordId": "z0000002699",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Shabeellaha Dhexe (Middle Shabelle)"
+          }
+        },
+        {
+          "recordId": "z0000002700",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Mudug"
+          }
+        },
+        {
+          "recordId": "z0000002701",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Nugal (Nugaal)"
+          }
+        },
+        {
+          "recordId": "z0000002702",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Sanag (Sanaag)"
+          }
+        },
+        {
+          "recordId": "z0000002703",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Sool (Soul)"
+          }
+        },
+        {
+          "recordId": "z0000002704",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Toghdeer (Tojtier)"
+          }
+        },
+        {
+          "recordId": "z0000002705",
+          "formId": "E0000001451",
+          "fields": {
+            "E00000014510000000001": "Woqooyi Galbeed"
+          }
+        }
+      ]
+    },
+    {
+      "schema": {
+        "id": "E0000001517",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "District",
+        "elements": [
+          {
+            "id": "E00000015170000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000015170000000003",
+            "code": "code",
+            "label": "Code",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "E00000015170000000005",
+            "code": "boundary",
+            "label": "Geography",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geoArea"
+          },
+          {
+            "id": "E00000015170000000002",
+            "code": "parent",
+            "label": "Region",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "reference",
+            "key": true,
+            "superProperties": [
+              "_parent"
+            ],
+            "typeParameters": {
+              "cardinality": "single",
+              "range": [
+                {
+                  "formId": "E0000001451"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "records": [
+        {
+          "recordId": "z0000322833",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Aadan",
+            "E00000015170000000002": "E0000001451:z0000002699"
+          }
+        },
+        {
+          "recordId": "z0000322834",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Afgooye (Afgoi)",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322835",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Afmadow",
+            "E00000015170000000002": "E0000001451:z0000002696"
+          }
+        },
+        {
+          "recordId": "z0000322836",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Baar-Dheere",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322837",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Badhaadhe",
+            "E00000015170000000002": "E0000001451:z0000002696"
+          }
+        },
+        {
+          "recordId": "z0000322838",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Badhan",
+            "E00000015170000000002": "E0000001451:z0000002702"
+          }
+        },
+        {
+          "recordId": "z0000322839",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Baki",
+            "E00000015170000000002": "E0000001451:z0000002688"
+          }
+        },
+        {
+          "recordId": "z0000322840",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Balcad",
+            "E00000015170000000002": "E0000001451:z0000002699"
+          }
+        },
+        {
+          "recordId": "z0000322841",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Bander-Beyla (Benderbela)",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322842",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Baraawe",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322843",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Baydhabo",
+            "E00000015170000000002": "E0000001451:z0000002691"
+          }
+        },
+        {
+          "recordId": "z0000322844",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Beled Weyn",
+            "E00000015170000000002": "E0000001451:z0000002695"
+          }
+        },
+        {
+          "recordId": "z0000322845",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Beled Xaawo (Bula-hawa)",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322846",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Berbera",
+            "E00000015170000000002": "E0000001451:z0000002705"
+          }
+        },
+        {
+          "recordId": "z0000322847",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Boorama",
+            "E00000015170000000002": "E0000001451:z0000002688"
+          }
+        },
+        {
+          "recordId": "z0000322848",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Bosaaso",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322849",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Bu'aale",
+            "E00000015170000000002": "E0000001451:z0000002698"
+          }
+        },
+        {
+          "recordId": "z0000322850",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Burao",
+            "E00000015170000000002": "E0000001451:z0000002704"
+          }
+        },
+        {
+          "recordId": "z0000322851",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Burtinle",
+            "E00000015170000000002": "E0000001451:z0000002701"
+          }
+        },
+        {
+          "recordId": "z0000322852",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Buuhoodle",
+            "E00000015170000000002": "E0000001451:z0000002704"
+          }
+        },
+        {
+          "recordId": "z0000322853",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Buulo Burdo (Bulo-Burte)",
+            "E00000015170000000002": "E0000001451:z0000002695"
+          }
+        },
+        {
+          "recordId": "z0000322854",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Buur Xakaba (Bur Hacaba)",
+            "E00000015170000000002": "E0000001451:z0000002691"
+          }
+        },
+        {
+          "recordId": "z0000322855",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Caabudwaaq",
+            "E00000015170000000002": "E0000001451:z0000002693"
+          }
+        },
+        {
+          "recordId": "z0000322856",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Cadaado",
+            "E00000015170000000002": "E0000001451:z0000002693"
+          }
+        },
+        {
+          "recordId": "z0000322857",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Cadale",
+            "E00000015170000000002": "E0000001451:z0000002699"
+          }
+        },
+        {
+          "recordId": "z0000322858",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Calawla (Alula)",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322859",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Caynabo",
+            "E00000015170000000002": "E0000001451:z0000002703"
+          }
+        },
+        {
+          "recordId": "z0000322860",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceel Barde (El Barde)",
+            "E00000015170000000002": "E0000001451:z0000002689"
+          }
+        },
+        {
+          "recordId": "z0000322861",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceel Buur (El Bur)",
+            "E00000015170000000002": "E0000001451:z0000002693"
+          }
+        },
+        {
+          "recordId": "z0000322862",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceel Dheer (El Dere)",
+            "E00000015170000000002": "E0000001451:z0000002693"
+          }
+        },
+        {
+          "recordId": "z0000322863",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceel Waaq (El Wak)",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322864",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceel-Afwein",
+            "E00000015170000000002": "E0000001451:z0000002702"
+          }
+        },
+        {
+          "recordId": "z0000322865",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Ceerigaabo (Erigavo)",
+            "E00000015170000000002": "E0000001451:z0000002702"
+          }
+        },
+        {
+          "recordId": "z0000322866",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Dhuusamareeb",
+            "E00000015170000000002": "E0000001451:z0000002693"
+          }
+        },
+        {
+          "recordId": "z0000322867",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Diinsoor",
+            "E00000015170000000002": "E0000001451:z0000002691"
+          }
+        },
+        {
+          "recordId": "z0000322868",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Dolow",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322869",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Eyl",
+            "E00000015170000000002": "E0000001451:z0000002701"
+          }
+        },
+        {
+          "recordId": "z0000322870",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Gaalkacayo",
+            "E00000015170000000002": "E0000001451:z0000002700"
+          }
+        },
+        {
+          "recordId": "z0000322871",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Gabiley",
+            "E00000015170000000002": "E0000001451:z0000002705"
+          }
+        },
+        {
+          "recordId": "z0000322872",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Garbahaaray",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322873",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Garoowe",
+            "E00000015170000000002": "E0000001451:z0000002701"
+          }
+        },
+        {
+          "recordId": "z0000322874",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Goldogob",
+            "E00000015170000000002": "E0000001451:z0000002700"
+          }
+        },
+        {
+          "recordId": "z0000322875",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Hargeysa",
+            "E00000015170000000002": "E0000001451:z0000002705"
+          }
+        },
+        {
+          "recordId": "z0000322876",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Hobyo",
+            "E00000015170000000002": "E0000001451:z0000002700"
+          }
+        },
+        {
+          "recordId": "z0000322877",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Iskushuban",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322878",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Jalalaqsi",
+            "E00000015170000000002": "E0000001451:z0000002695"
+          }
+        },
+        {
+          "recordId": "z0000322879",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Jamaame",
+            "E00000015170000000002": "E0000001451:z0000002696"
+          }
+        },
+        {
+          "recordId": "z0000322880",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Jariiban",
+            "E00000015170000000002": "E0000001451:z0000002700"
+          }
+        },
+        {
+          "recordId": "z0000322881",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Jawhar",
+            "E00000015170000000002": "E0000001451:z0000002699"
+          }
+        },
+        {
+          "recordId": "z0000322882",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Jilib",
+            "E00000015170000000002": "E0000001451:z0000002698"
+          }
+        },
+        {
+          "recordId": "z0000322883",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Kismaayo",
+            "E00000015170000000002": "E0000001451:z0000002696"
+          }
+        },
+        {
+          "recordId": "z0000322884",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Kuntuwaaray",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322885",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Lascaanod (Lasanod)",
+            "E00000015170000000002": "E0000001451:z0000002703"
+          }
+        },
+        {
+          "recordId": "z0000322886",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Lughaya",
+            "E00000015170000000002": "E0000001451:z0000002688"
+          }
+        },
+        {
+          "recordId": "z0000322887",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Luuk",
+            "E00000015170000000002": "E0000001451:z0000002694"
+          }
+        },
+        {
+          "recordId": "z0000322888",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Marka",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322889",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Mogadisho",
+            "E00000015170000000002": "E0000001451:z0000002692"
+          }
+        },
+        {
+          "recordId": "z0000322890",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Oodweyne",
+            "E00000015170000000002": "E0000001451:z0000002704"
+          }
+        },
+        {
+          "recordId": "z0000322891",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Qandala",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322892",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Qansax Dheere",
+            "E00000015170000000002": "E0000001451:z0000002691"
+          }
+        },
+        {
+          "recordId": "z0000322893",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Qardho",
+            "E00000015170000000002": "E0000001451:z0000002690"
+          }
+        },
+        {
+          "recordId": "z0000322894",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Qoryooley",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322895",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Rab Dhuure",
+            "E00000015170000000002": "E0000001451:z0000002689"
+          }
+        },
+        {
+          "recordId": "z0000322896",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Saakow",
+            "E00000015170000000002": "E0000001451:z0000002698"
+          }
+        },
+        {
+          "recordId": "z0000322897",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Sablale",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322898",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Saylac",
+            "E00000015170000000002": "E0000001451:z0000002688"
+          }
+        },
+        {
+          "recordId": "z0000322899",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Sheekh",
+            "E00000015170000000002": "E0000001451:z0000002704"
+          }
+        },
+        {
+          "recordId": "z0000322900",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Taleex",
+            "E00000015170000000002": "E0000001451:z0000002703"
+          }
+        },
+        {
+          "recordId": "z0000322901",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Tiyeeglow",
+            "E00000015170000000002": "E0000001451:z0000002689"
+          }
+        },
+        {
+          "recordId": "z0000322902",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Wajid",
+            "E00000015170000000002": "E0000001451:z0000002689"
+          }
+        },
+        {
+          "recordId": "z0000322903",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Wanla Waeyn",
+            "E00000015170000000002": "E0000001451:z0000002697"
+          }
+        },
+        {
+          "recordId": "z0000322904",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Xarardheere (Harardere)",
+            "E00000015170000000002": "E0000001451:z0000002700"
+          }
+        },
+        {
+          "recordId": "z0000322905",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Xudun",
+            "E00000015170000000002": "E0000001451:z0000002703"
+          }
+        },
+        {
+          "recordId": "z0000322906",
+          "formId": "E0000001517",
+          "fields": {
+            "E00000015170000000001": "Xudur (Hudur)",
+            "E00000015170000000002": "E0000001451:z0000002689"
+          }
+        }
+      ]
+    },
+    {
+      "schema": {
+        "id": "geoPoint",
+        "schemaVersion": 0,
+        "label": "Geographic coordinates",
+        "elements": [
+          {
+            "id": "latitude",
+            "code": "latitude",
+            "label": "Latitude",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "quantity",
+            "typeParameters": {
+              "units": "degrees",
+              "aggregation": "SUM"
+            }
+          },
+          {
+            "id": "longitude",
+            "code": "longitude",
+            "label": "Longitude",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "quantity",
+            "typeParameters": {
+              "units": "degrees",
+              "aggregation": "SUM"
+            }
+          }
+        ]
+      },
+      "records": [
+        
+      ]
+    },
+    {
+      "schema": {
+        "id": "L0000001451",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "Village",
+        "elements": [
+          {
+            "id": "L00000014510000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "L00000014510000000004",
+            "code": "axe",
+            "label": "Alternate Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+              
+            }
+          },
+          {
+            "id": "L00000014510000000006",
+            "code": "admin",
+            "label": "Administrative Unit",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "reference",
+            "typeParameters": {
+              "cardinality": "multiple",
+              "range": [
+                {
+                  "formId": "E0000001451"
+                },
+                {
+                  "formId": "E0000001517"
+                }
+              ]
+            }
+          },
+          {
+            "id": "L00000014510000000005",
+            "code": "point",
+            "label": "Geographic coordinates",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geopoint"
+          }
+        ]
+      },
+      "records": [
+        
+      ]
+    }
+  ]
+}

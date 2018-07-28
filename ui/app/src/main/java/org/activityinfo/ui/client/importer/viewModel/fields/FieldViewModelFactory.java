@@ -70,7 +70,7 @@ public class FieldViewModelFactory implements FieldTypeVisitor<Optional<FieldVie
 
     @Override
     public Optional<FieldViewModel> visitGeoPoint(GeoPointType geoPointType) {
-        return Optional.of(new GeoPointViewModel(field));
+        return Optional.of(new GeoPointViewModel(formTree, field));
     }
 
     @Override

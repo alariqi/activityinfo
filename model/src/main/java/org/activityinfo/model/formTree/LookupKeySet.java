@@ -134,11 +134,12 @@ public class LookupKeySet {
         Optional<FormField> referenceKey = findReferenceKey(formClass);
         if(referenceKey.isPresent()) {
             ReferenceType referenceType = (ReferenceType) referenceKey.get().getType();
-            ResourceId referencedFormId = Iterables.getOnlyElement(referenceType.getRange());
-            FormClass referencedFormClass = formTree.getFormClass(referencedFormId);
-            parentMap.put(formId, referencedFormId);
-            parentKey = addLevels(referencedFormClass);
-            parentFieldId = referenceKey.get().getId().asString();
+            for (ResourceId referencedFormId : referenceType.getRange()) {
+                FormClass referencedFormClass = formTree.getFormClass(referencedFormId);
+                parentMap.put(formId, referencedFormId);
+                parentKey = addLevels(referencedFormClass);
+                parentFieldId = referenceKey.get().getId().asString();
+            }
         }
 
         // Now check for text key fields

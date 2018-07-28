@@ -31,6 +31,7 @@ import org.activityinfo.ui.client.component.importDialog.model.validation.Valida
 import org.activityinfo.ui.client.component.importDialog.model.validation.ValidatedRowTable;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,7 @@ import java.util.List;
  */
 public class PersistImportCommand implements ImportCommand<Void> {
 
+    public static List<FormInstance> EXPORTED_RECORDS = new ArrayList<>();
 
     private ImportCommandExecutor commandExecutor;
     private PromisesExecutionMonitor monitor;
@@ -63,6 +65,9 @@ public class PersistImportCommand implements ImportCommand<Void> {
                 for (FieldImporter importer : commandExecutor.getImporters()) {
                     importer.updateInstance(row, newInstance);
                 }
+
+                EXPORTED_RECORDS.add(newInstance);
+
                 toPersist.add(newInstance);
             }
         }

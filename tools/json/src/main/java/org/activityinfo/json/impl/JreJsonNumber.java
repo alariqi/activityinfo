@@ -24,6 +24,7 @@ import org.activityinfo.json.JsonValue;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Objects;
 
 /**
  * Server-side implementation of JsonNumber.
@@ -91,6 +92,20 @@ public class JreJsonNumber extends JreJsonValue  {
             toReturn = toReturn.substring(0, toReturn.length() - 2);
         }
         return toReturn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JreJsonNumber that = (JreJsonNumber) o;
+        return Double.compare(that.number, number) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(number);
     }
 
     @Override
