@@ -38,8 +38,8 @@ import org.activityinfo.model.type.enumerated.EnumType;
 import org.activityinfo.model.type.number.QuantityType;
 import org.activityinfo.model.type.primitive.TextType;
 import org.activityinfo.model.type.subform.SubFormReferenceType;
-import org.activityinfo.ui.client.component.importDialog.model.source.PastedTable;
 import org.activityinfo.ui.client.page.config.design.importer.SchemaImporterV3;
+import org.activityinfo.ui.client.page.config.design.importer.SourceTable;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -200,10 +200,8 @@ public class SchemaCsvWriterV3Test {
                 Charsets.UTF_8);
     }
 
-    private PastedTable readExportAsTable(String resourceName) throws IOException {
-        PastedTable table = new PastedTable(readExport(resourceName));
-        table.parseAllRows();
-        return table;
+    private SourceTable readExportAsTable(String resourceName) throws IOException {
+        return new SourceTable(readExport(resourceName));
     }
 
     @Test
@@ -232,7 +230,7 @@ public class SchemaCsvWriterV3Test {
     @Test
     public void importSurveyForm() {
 
-        PastedTable pastedTable = new PastedTable(expectedSurveyExport);
+        SourceTable pastedTable = new SourceTable(expectedSurveyExport);
         SchemaImporterV3 importer = new SchemaImporterV3(database.getId(), null, null);
 
         assertTrue("columns found", importer.parseColumns(pastedTable));
@@ -261,7 +259,7 @@ public class SchemaCsvWriterV3Test {
     @Test
     public void missingFieldNames() throws IOException {
 
-        PastedTable pastedTable = readExportAsTable("malformed.csv");
+        SourceTable pastedTable = readExportAsTable("malformed.csv");
 
         SchemaImporterV3 importer = new SchemaImporterV3(database.getId(), null, null);
 
@@ -280,7 +278,7 @@ public class SchemaCsvWriterV3Test {
     @Test
     public void missingReferences() throws IOException {
 
-        PastedTable pastedTable = readExportAsTable("malformed-ref.csv");
+        SourceTable pastedTable = readExportAsTable("malformed-ref.csv");
 
         System.out.println(pastedTable);
 

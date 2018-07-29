@@ -1,0 +1,11 @@
+
+
+dependencies {
+    compile project(':model')
+    compile libraries.guava
+}
+
+jar {
+    from project.sourceSets.main.allSource
+    from project.sourceSets.main.output
+}

@@ -2,7 +2,6 @@ package org.activityinfo.ui.client.component.importDialog;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharSource;
-import com.google.common.io.Files;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormClass;
@@ -66,16 +65,5 @@ public class TestDataSetWriter {
         CharSource.wrap(json).copyTo(com.google.common.io.Files.asCharSink(new File(file), Charsets.UTF_8));
     }
 
-    public void writeExported(String file) throws IOException {
-
-        JsonValue array = Json.createArray();
-
-        for (FormInstance exportedRecord : PersistImportCommand.EXPORTED_RECORDS) {
-            array.add(FormRecord.fromInstance(exportedRecord).toJson());
-        }
-
-        Files.asCharSink(new File(file), Charsets.UTF_8).write(Json.stringify(array, 2));
-
-    }
 
 }

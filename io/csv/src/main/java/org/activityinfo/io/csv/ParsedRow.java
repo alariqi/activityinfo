@@ -16,21 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.activityinfo.ui.client;
+package org.activityinfo.io.csv;
 
-import org.activityinfo.model.legacy.CuidAdapter;
-import org.activityinfo.model.resource.ResourceId;
+import java.util.List;
 
-public class App3 {
-    public static void openNewTable(Integer activityId) {
-        openNewTable( CuidAdapter.activityFormClass(activityId));
+public class ParsedRow {
+
+    private final List<String> fields;
+
+    public ParsedRow(List<String> fields) {
+        this.fields = fields;
     }
 
-    public static void openNewTable(ResourceId formId) {
-        com.google.gwt.user.client.Window.open("/app?ui=3#table/" + formId.asString(), "_blank", null);
+    public int getColumnCount() {
+        return fields.size();
     }
 
-    public static void openImporter(ResourceId formId) {
-        com.google.gwt.user.client.Window.open("/app?ui=3#import/" + formId.asString(), "_blank", null);
+    @Override
+    public String toString() {
+        return fields.toString();
+    }
+
+    public String getColumnValue(int i) {
+        return fields.get(i);
     }
 }

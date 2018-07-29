@@ -39,9 +39,6 @@ import org.activityinfo.model.type.subform.SubFormReferenceType;
 import org.activityinfo.promise.Promise;
 import org.activityinfo.promise.PromiseExecutionOperation;
 import org.activityinfo.promise.PromisesExecutionGuard;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceColumn;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceRow;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceTable;
 import org.activityinfo.ui.client.dispatch.ResourceLocator;
 
 import javax.annotation.Nullable;

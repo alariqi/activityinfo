@@ -126,6 +126,23 @@ public class LatinWordDistanceTest {
         assertThat(comparator.distance("AAYTANIT", "AITANIT"), not(infinite()));
     }
 
+    @Test
+    public void initialU() {
+
+        // Usually we don't consider inserting vowels to have much impact
+        // on word similarity as they tend to pop up everywhere, but inserting
+        // an initial vowel makes a BIG difference.
+
+//        assertThat(comparator.distance("UNION", "NAME"), infinite());
+//        assertThat(comparator.distance("NION", "NAME"), not(infinite()));
+//
+//        // Extra initial vowels are okay if they are doubled
+//        assertThat(comparator.distance("AALEX", "LEX"), equalTo(LatinWordDistance.EXTRA_VOWEL_COST));
+
+//        assertThat(comparator.distance("AALEX", "ELEX"), equalTo(LatinWordDistance.EXTRA_VOWEL_COST));
+
+    }
+
     void assertMatches(String x, String y) {
         double score = comparator.distance(x, y);
         double similarity = comparator.similarity(x, y);

@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
+import org.activityinfo.io.csv.ColumnBuilder;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.query.StringArrayColumnView;
 

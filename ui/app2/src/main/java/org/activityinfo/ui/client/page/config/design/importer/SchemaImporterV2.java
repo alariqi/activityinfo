@@ -29,8 +29,6 @@ import org.activityinfo.legacy.shared.command.CreateEntity;
 import org.activityinfo.legacy.shared.command.result.BatchResult;
 import org.activityinfo.legacy.shared.command.result.CreateResult;
 import org.activityinfo.legacy.shared.model.*;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceRow;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceTable;
 import org.activityinfo.ui.client.dispatch.Dispatcher;
 import org.activityinfo.ui.client.page.config.design.importer.wrapper.*;
 

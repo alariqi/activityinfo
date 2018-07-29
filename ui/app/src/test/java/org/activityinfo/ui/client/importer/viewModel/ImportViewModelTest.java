@@ -147,6 +147,21 @@ public class ImportViewModelTest {
         verifyImport("somalia-expected.json");
     }
 
+    @Test
+    public void schools() throws IOException {
+
+        ResourceId formId = ResourceId.valueOf("L0000000002");
+
+        loadDataSet("nfi.json");
+        startImport(formId);
+
+        importResource("schools.csv");
+
+        dumpDerivedMappings();
+
+
+    }
+
 
 
     /**

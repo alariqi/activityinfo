@@ -17,6 +17,7 @@ dependencies {
     compile project(':clients:gwtrpc')
     compile project(':clients:gwtrest')
     compile project(':io:match')
+    compile project(':io:csv')
     compile project(':ui:icons')
 
     compile libraries.gwt.user

@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.date.DateRange;
-import org.activityinfo.ui.client.component.importDialog.model.type.formatter.DateFormatterFactory;
+import org.activityinfo.model.type.time.LocalDate;
 
 import java.util.Date;
 
@@ -130,7 +130,7 @@ public class DateRangePanel implements IsWidget {
     }
 
     public static DateBox.Format createFormat() {
-        return new DateBox.DefaultFormat(DateTimeFormat.getFormat(DateFormatterFactory.FORMAT));
+        return new DateBox.DefaultFormat(DateTimeFormat.getFormat(LocalDate.ISO_FORMAT));
     }
 
 

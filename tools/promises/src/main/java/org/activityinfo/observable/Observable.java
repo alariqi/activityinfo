@@ -365,6 +365,13 @@ public abstract class Observable<T> {
     }
 
     /**
+     * Executes a task that can be divided into batches in the browser to avoid blocking the event loop.
+     */
+    public static <T> Observable<T> incremental(IncrementalTask<T> task) {
+        return new IncrementalObservable<>(task, EventLoopScheduler.SCHEDULER);
+    }
+
+    /**
      * Returns a new {@code Observable} that will only fire change notification values
      * when the source's value has actually changed.
      *

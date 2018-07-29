@@ -14682,6 +14682,95 @@
     },
     {
       "schema": {
+        "id": "L0000000002",
+        "schemaVersion": 1,
+        "databaseId": "geodb",
+        "label": "School",
+        "elements": [
+          {
+            "id": "L00000000020000000001",
+            "code": "name",
+            "label": "Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": true,
+            "type": "FREE_TEXT",
+            "key": true,
+            "superProperties": [
+              "label"
+            ],
+            "typeParameters": {
+
+            }
+          },
+          {
+            "id": "L00000000020000000004",
+            "code": "axe",
+            "label": "Alternate Name",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "FREE_TEXT",
+            "typeParameters": {
+
+            }
+          },
+          {
+            "id": "L00000000020000000006",
+            "code": "admin",
+            "label": "Administrative Unit",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "reference",
+            "typeParameters": {
+              "cardinality": "multiple",
+              "range": [
+                {
+                  "formId": "E0000000001"
+                },
+                {
+                  "formId": "E0000000002"
+                },
+                {
+                  "formId": "E0000000003"
+                },
+                {
+                  "formId": "E0000000004"
+                },
+                {
+                  "formId": "E0000000005"
+                },
+                {
+                  "formId": "E0000000007"
+                },
+                {
+                  "formId": "E0000000008"
+                }
+              ]
+            }
+          },
+          {
+            "id": "L00000000020000000005",
+            "code": "point",
+            "label": "Geographic coordinates",
+            "description": null,
+            "relevanceCondition": null,
+            "visible": true,
+            "required": false,
+            "type": "geopoint"
+          }
+        ]
+      },
+      "records": [
+
+      ]
+    },
+    {
+      "schema": {
         "id": "P0000000004",
         "schemaVersion": 1,
         "databaseId": "d0000000004",

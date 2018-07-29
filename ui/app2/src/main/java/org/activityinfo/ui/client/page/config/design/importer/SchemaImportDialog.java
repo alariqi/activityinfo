@@ -40,7 +40,6 @@ import com.google.gwt.user.client.ui.*;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.legacy.shared.Log;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.ui.client.component.importDialog.model.source.PastedTable;
 import org.activityinfo.ui.client.style.BaseStylesheet;
 import org.activityinfo.ui.client.widget.ModalDialog;
 import org.activityinfo.ui.client.widget.ProgressBar;
@@ -247,7 +246,7 @@ public class SchemaImportDialog {
     }
 
     private void tryValidateImport() {
-        PastedTable source = new PastedTable(textArea.getText());
+        SourceTable source = new SourceTable(textArea.getText());
         if(source.getColumns().size() < 2 || source.getRows().size() <= 1) {
             onInputInvalid(I18N.CONSTANTS.invalidTableData());
             return;

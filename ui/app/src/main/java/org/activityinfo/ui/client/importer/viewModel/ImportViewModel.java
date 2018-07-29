@@ -46,11 +46,11 @@ public class ImportViewModel {
         // Compute the SourceViewModel as a function of the text the user has pasted in
         // to the UI (or in the future, what has been uploaded)
 
-        this.source = state.transform(s -> s.getSource()).cache().transform(source -> {
+        this.source = state.transform(s -> s.getSource()).cache().join(source -> {
             if(source.isPresent()) {
-                return new SourceViewModel(source.get().getText());
+                return Observable.incremental(new SourceParser(source.get().getText()));
             } else {
-                return new SourceViewModel();
+                return Observable.just(new SourceViewModel());
             }
         });
 

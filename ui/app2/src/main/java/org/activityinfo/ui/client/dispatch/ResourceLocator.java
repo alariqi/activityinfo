@@ -18,14 +18,16 @@
  */
 package org.activityinfo.ui.client.dispatch;
 
-import org.activityinfo.model.form.*;
+import org.activityinfo.model.form.CatalogEntry;
+import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.form.FormInstance;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.query.ColumnSet;
 import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.promise.PromiseExecutionOperation;
 import org.activityinfo.promise.PromisesExecutionMonitor;
 
 import javax.annotation.Nullable;
@@ -74,8 +76,6 @@ public interface ResourceLocator {
     Promise<Void> persist(List<FormInstance> formInstances);
 
     Promise<Void> persist(List<FormInstance> formInstances, @Nullable PromisesExecutionMonitor monitor);
-
-    Promise<Void> persistOperation(List<PromiseExecutionOperation> resources, @Nullable PromisesExecutionMonitor monitor);
 
     Promise<Void> remove(ResourceId formId, ResourceId resourceId);
 

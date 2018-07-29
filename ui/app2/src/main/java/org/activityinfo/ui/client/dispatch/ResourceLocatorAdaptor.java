@@ -21,7 +21,10 @@ package org.activityinfo.ui.client.dispatch;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gwt.core.shared.GWT;
-import org.activityinfo.api.client.*;
+import org.activityinfo.api.client.ActivityInfoClientAsync;
+import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
+import org.activityinfo.api.client.FormRecordUpdateBuilder;
+import org.activityinfo.api.client.NewFormRecordBuilder;
 import org.activityinfo.json.Json;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormTree;
@@ -32,7 +35,9 @@ import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.SerialNumber;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.ObservablePromise;
-import org.activityinfo.promise.*;
+import org.activityinfo.promise.Maybe;
+import org.activityinfo.promise.Promise;
+import org.activityinfo.promise.PromisesExecutionMonitor;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -177,11 +182,6 @@ ResourceLocatorAdaptor implements ResourceLocator {
             promises.add(persist(instance));
         }
         return Promise.waitAll(promises);
-    }
-
-    @Override
-    public Promise<Void> persistOperation(List<PromiseExecutionOperation> operations, @Nullable PromisesExecutionMonitor monitor) {
-        return PromisesExecutionGuard.newInstance().withMonitor(monitor).executeSerially(operations);
     }
 
     public Promise<Void> remove(ResourceId formId, ResourceId resourceId) {

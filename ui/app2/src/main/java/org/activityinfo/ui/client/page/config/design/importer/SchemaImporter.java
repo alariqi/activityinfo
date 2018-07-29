@@ -26,9 +26,6 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceColumn;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceRow;
-import org.activityinfo.ui.client.component.importDialog.model.source.SourceTable;
 
 import java.util.List;
 import java.util.Set;
@@ -191,7 +188,6 @@ public abstract class SchemaImporter {
 
     public final boolean parseColumns(SourceTable source) {
         this.source = source;
-        this.source.parseAllRows();
         missingColumns.clear();
         findColumns();
         return missingColumns.isEmpty();

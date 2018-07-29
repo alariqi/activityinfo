@@ -1,8 +1,5 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
-import org.activityinfo.model.query.ColumnView;
-import org.activityinfo.ui.client.base.ConsoleTimer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,29 +11,8 @@ public class SourceViewModel {
     public SourceViewModel() {
     }
 
-    public SourceViewModel(String pastedText) {
-
-        ConsoleTimer.time("import.parse");
-
-        DelimiterGuesser guesser = new DelimiterGuesser(pastedText);
-        char delimiter = guesser.guess();
-        if(delimiter != 0) {
-            RowParser parser = new RowParser(pastedText, delimiter);
-            List<ParsedRow> headerRows = parser.parseRows(1);
-            if(headerRows.size() == 1) {
-                ParsedRow headerRow = headerRows.get(0);
-                int numColumns = headerRow.getColumnCount();
-                if (numColumns > 0) {
-                    ColumnView[] columns = parser.parseColumns(numColumns);
-                    for (int i = 0; i < numColumns; i++) {
-                        String id = "column" + i;
-                        this.columns.add(new SourceColumn(id, headerRow.getColumnValue(i), columns[i]));
-                    }
-                }
-            }
-        }
-
-        ConsoleTimer.timeEnd("import.parse");
+    public SourceViewModel(List<SourceColumn> columns) {
+        this.columns = columns;
     }
 
     public boolean isValid() {
@@ -45,6 +21,10 @@ public class SourceViewModel {
 
     public List<SourceColumn> getColumns() {
         return columns;
+    }
+
+    public SourceColumn getColumn(int columnIndex) {
+        return columns.get(columnIndex);
     }
 
     public int getRowCount() {

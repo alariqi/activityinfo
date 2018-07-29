@@ -36,7 +36,6 @@ import org.activityinfo.legacy.shared.model.UserDatabaseDTO;
 import org.activityinfo.server.command.CommandTestCase2;
 import org.activityinfo.server.database.OnDataSet;
 import org.activityinfo.server.endpoint.rest.SchemaCsvWriter;
-import org.activityinfo.ui.client.component.importDialog.model.source.PastedTable;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -108,9 +107,9 @@ public class SchemaImporterV2Test extends CommandTestCase2 {
         return set.size() < list.size();
     }
 
-    private static PastedTable source(String resourceName) throws IOException {
+    private static SourceTable source(String resourceName) throws IOException {
         String csv = Resources.toString(Resources.getResource(resourceName), Charsets.UTF_8);
-        return new PastedTable(csv);
+        return new SourceTable(csv);
     }
 
     private UserDatabaseDTO db() {
