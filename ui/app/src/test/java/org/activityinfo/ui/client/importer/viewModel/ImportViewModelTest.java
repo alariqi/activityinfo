@@ -123,6 +123,7 @@ public class ImportViewModelTest {
     }
 
     @Test
+    @Ignore("wip")
     public void camps() throws IOException {
 
         ResourceId formId = ResourceId.valueOf("L0000001451");
@@ -148,6 +149,7 @@ public class ImportViewModelTest {
     }
 
     @Test
+    @Ignore("wip")
     public void schools() throws IOException {
 
         ResourceId formId = ResourceId.valueOf("L0000000002");

@@ -58,7 +58,7 @@ public class ValidatedTable {
             }
 
             importedTable = Observable.flatten(importers).transform(
-                    list -> new ImportedTable(fields.getFormId(), validRowSet, list));
+                    list -> new ImportedTable(fields.getFormId(), ValidatedTable.this, validRowSet, list));
 
 
         } else {

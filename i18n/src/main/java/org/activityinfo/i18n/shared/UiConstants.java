@@ -2048,5 +2048,11 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Some required fields in the form have not been matched. Please match all required fields to proceed.")
     String requiredFieldsNotMapped();
 
+    @DefaultStringValue("Review invalid records")
+    String reviewInvalidRecords();
+
+    @DefaultStringValue("Download invalid records as CSV")
+    String downloadInvalidRecordsAsCSV();
+
 }
 

@@ -17,6 +17,7 @@ import org.activityinfo.ui.client.importer.state.ImportSource;
 import org.activityinfo.ui.client.importer.state.ImportState;
 import org.activityinfo.ui.client.importer.state.ImportUpdater;
 import org.activityinfo.ui.client.importer.viewModel.ImportViewModel;
+import org.activityinfo.ui.client.importer.viewModel.ImportedTable;
 import org.activityinfo.ui.client.importer.viewModel.SelectedColumnViewModel;
 import org.activityinfo.ui.client.importer.viewModel.fields.ColumnTarget;
 import org.activityinfo.ui.client.importer.viewModel.fields.ScoredColumnTarget;
@@ -105,17 +106,22 @@ public class ImportView {
 
     private VTree body() {
         return new ReactiveComponent(viewModel.getCurrentStep().transform(step -> {
-            if(step == ImportState.ImportStep.CHOOSE_SOURCE) {
-                return chooseSource();
-            } else {
-                return matchColumns();
+            switch (step) {
+                default:
+                case CHOOSE_SOURCE:
+                    return chooseSource();
+                case MATCH_COLUMNS:
+                    return matchColumns();
+                case REVIEW_INVALID:
+                    return verifyRecords();
             }
         }));
-
     }
+
 
     private VTree chooseSource() {
         return H.div("importer",
+                H.div("importer__main",
                 importHeader(I18N.CONSTANTS.uploadYourData()),
                 H.div("importer__body importer__source",
                         pasteTarget(),
@@ -127,8 +133,54 @@ public class ImportView {
                                 Buttons.button(I18N.CONSTANTS.upload())
                                         .primary()
                                         .icon(Icon.BUBBLE_IMPORT)
-                                        .build()))));
+                                        .build())))));
     }
+
+
+    private VTree matchColumns() {
+        return H.div("importer",
+                H.div("importer__main",
+                        importHeader(I18N.CONSTANTS.matchFieldStep(),
+                                requiredFieldError()),
+                        H.div("importer__body importer__match",
+                                matchDataTable())),
+                columnPanel());
+    }
+
+    private VTree verifyRecords() {
+        return new ReactiveComponent(viewModel.getImportedTable().transform(table -> {
+            return H.div("importer",
+                H.div("importer__main",
+                        importHeader(I18N.CONSTANTS.reviewInvalidRecords(),
+                                validCountHeader(table),
+                                invalidCountHeader(table),
+                                downloadInvalidButton(table)),
+                        H.div("importer__body importer__verify",
+                                InvalidDataTable.render(table))));
+        }));
+
+    }
+
+
+
+    private VTree validCountHeader(ImportedTable table) {
+        return H.p(Props.withClass("importer__valid-count"),
+                new VText(I18N.MESSAGES.validRecordCount(table.getValidRecordCount())));
+    }
+
+    private VTree invalidCountHeader(ImportedTable table) {
+        return H.p(Props.withClass("importer__invalid-count"),
+                new VText(I18N.MESSAGES.invalidRecordCount(table.getInvalidRecordCount())));
+    }
+
+    private VTree downloadInvalidButton(ImportedTable table) {
+        return H.div(Buttons
+                .button(I18N.CONSTANTS.downloadInvalidRecordsAsCSV())
+                .primary()
+                .icon(Icon.BUBBLE_EXPORT)
+                .build());
+    }
+
 
     private VTree pasteTarget() {
         Observable<Optional<ImportSource>> sourceText = viewModel
@@ -140,7 +192,6 @@ public class ImportView {
             PropMap props = Props.create();
             props.set("value", s.map(source -> source.getText()).orElse(""));
             props.oninput(event -> {
-                LOGGER.info("TextArea: onInput");
                 onSourceInput(event);
             });
 
@@ -158,14 +209,6 @@ public class ImportView {
         }
     }
 
-    private VTree matchColumns() {
-        return H.div("importer",
-                importHeader(I18N.CONSTANTS.matchFieldStep(),
-                        requiredFieldError()),
-                H.div("importer__body importer__match",
-                        matchDataTable(),
-                        columnPanel()));
-    }
 
     private VTree requiredFieldError() {
         Observable<Boolean> complete = viewModel.getMappedSource().transform(m -> m.isComplete()).cache();

@@ -33,18 +33,22 @@ public class MatchTableView {
         return Observable.transform(source, selectedColumnId, (s, selectedId) -> {
             List<DataTableColumn> columns = new ArrayList<>();
             for (MappedSourceColumn column : s.getColumns()) {
-                columns.add(new DataTableColumnBuilder()
-                        .setId(column.getId())
-                        .setHeading(column.getLabel())
-                        .setHeadingClass(headerClass(column))
-                        .setWidth(150)
-                        .setColumnSelected(column.getId().equals(selectedId))
-                        .setSurtitle(column.getStatusLabel())
-                        .build());
+                columns.add(dataTableColumn(column, column.getId().equals(selectedId)));
             }
             return columns;
         });
 
+    }
+
+    public static DataTableColumn dataTableColumn(MappedSourceColumn column, boolean selected) {
+        return new DataTableColumnBuilder()
+                .setId(column.getId())
+                .setHeading(column.getLabel())
+                .setHeadingClass(headerClass(column))
+                .setWidth(150)
+                .setColumnSelected(selected)
+                .setSurtitle(column.getStatusLabel())
+                .build();
     }
 
     private static String headerClass(MappedSourceColumn column) {

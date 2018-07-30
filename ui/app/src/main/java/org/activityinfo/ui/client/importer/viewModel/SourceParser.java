@@ -49,8 +49,6 @@ public class SourceParser implements IncrementalTask<SourceViewModel> {
         for (int i = 0; i < headings.size(); i++) {
             columns[i] = createBuilder();
         }
-
-
     }
 
 

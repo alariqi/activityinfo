@@ -12,17 +12,35 @@ import java.util.List;
 
 public class ImportedTable {
     private final ResourceId formId;
+    private final ValidatedTable validatedTable;
     private final ValidRowSet validRowSet;
     private final List<FieldImporter> fieldImporters;
 
-    public ImportedTable(ResourceId formId, ValidRowSet validRowSet, List<FieldImporter> fieldImporters) {
+    public ImportedTable(ResourceId formId, ValidatedTable validatedTable, ValidRowSet validRowSet, List<FieldImporter> fieldImporters) {
         this.formId = formId;
+        this.validatedTable = validatedTable;
         this.validRowSet = validRowSet;
         this.fieldImporters = fieldImporters;
     }
 
     public Iterator<FormRecord> getRecords() {
         return new RecordIterator();
+    }
+
+    public int getValidRecordCount() {
+        return validRowSet.getValidRowCount();
+    }
+
+    public int getInvalidRecordCount() {
+        return validRowSet.getInvalidRowCount();
+    }
+
+    public ValidatedTable getValidatedTable() {
+        return validatedTable;
+    }
+
+    public ValidRowSet getValidRowSet() {
+        return validRowSet;
     }
 
     private class RecordIterator implements Iterator<FormRecord> {

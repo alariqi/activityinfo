@@ -206,12 +206,6 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("Deleting {0} row(s) from {1}...")
     String deletingRows(int size, String formClassLabel);
 
-    @DefaultMessage("<b>Showing {0} of {1} columns.</b> You can choose visible columns with ''{2}'' button")
-    SafeHtml notAllColumnsAreShown(int visibleColumns, int allColumns, String chooseColumnButtonName);
-
-    @DefaultMessage("Field is mandatory but not mapped: {0}")
-    String fieldIsMandatory(String fieldLabel);
-
     @DefaultMessage("Please map all mandatory columns, missed mapping for {0} required fields: {1}")
     String missedMapping(int missedColumnCount, String columnLabels);
 
@@ -321,6 +315,11 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("Do you want to delete Target: ''{0}'' from your Database?")
     String requestConfirmationToDeleteTarget(String targetName);
 
-}
+    @DefaultMessage("{0} records are valid and ready for importing now")
+    String validRecordCount(int count);
 
+    @DefaultMessage("Below are {0} records that have validation issues. If you continue importing, these rows will be ignored and not imported.")
+    String invalidRecordCount(int count);
+
+}
 
