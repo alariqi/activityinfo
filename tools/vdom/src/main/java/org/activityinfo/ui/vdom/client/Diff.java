@@ -38,8 +38,6 @@ public class Diff {
 
     private DomBuilder domBuilder  = new DomBuilder();
 
-    private boolean isSvgMode = false;
-
     public Diff(RenderContext context) {
         this.context = context;
     }
@@ -56,7 +54,7 @@ public class Diff {
 
     }
 
-    private void walk(VTree previous, VTree updated, Node dom, boolean isSvgMode) {
+    private Node walk(VTree previous, VTree updated, Node dom, boolean isSvgMode) {
 
         assert previous != null;
 
@@ -67,29 +65,32 @@ public class Diff {
             // which have marked themselves as dirty with refresh()
 
             if (previous instanceof VComponent) {
-                diffComponent((VComponent) previous, dom.cast());
+                return diffComponent((VComponent) previous, dom.cast(), isSvgMode);
 
             } else if (previous.hasComponents()) {
                 diffChildren(previous, updated, dom.cast(), isSvgMode);
+                return dom;
             }
 
         } else if (updated instanceof VComponent) {
             if (previous instanceof VComponent) {
-                diffComponents((VComponent)previous, (VComponent)updated, dom.cast());
+                return diffComponents((VComponent)previous, (VComponent)updated, dom.cast(), isSvgMode);
             } else {
                 // Replacing a non-component with a new component
-                replace(previous, updated, dom.cast(), isSvgMode);
+                return replace(previous, updated, dom.cast(), isSvgMode);
             }
 
         } else if (updated instanceof VNode) {
             if (previous instanceof VNode) {
-                diffVNodes((VNode)previous, (VNode)updated, dom.cast());
+                return diffVNodes((VNode)previous, (VNode)updated, dom.cast(), isSvgMode);
 
             } else if(previous instanceof VComponent) {
                 walk(((VComponent) previous).vNode, updated, dom, isSvgMode);
                 unmountQueue.add(previous);
+                return dom;
+
             } else {
-                replace(previous, updated, dom, isSvgMode);
+                return replace(previous, updated, dom, isSvgMode);
             }
 
         } else if (updated instanceof VText) {
@@ -98,13 +99,17 @@ public class Diff {
                     Text textNode = dom.cast();
                     textNode.setData(((VText) updated).getText());
                 }
+                return dom;
+
             } else {
-                replace(previous, updated, dom, isSvgMode);
+                return replace(previous, updated, dom, isSvgMode);
             }
         }
+
+        return dom;
     }
 
-    private void replace(VTree old, VTree updated, Node oldDomNode, boolean isSvgMode) {
+    private Node replace(VTree old, VTree updated, Node oldDomNode, boolean isSvgMode) {
 
         Node newDomNode = domBuilder.render(updated, isSvgMode);
 
@@ -116,17 +121,25 @@ public class Diff {
         if(old.hasComponents()) {
             unmountQueue.add(old);
         }
+
+        return newDomNode;
     }
 
-    private void diffVNodes(VNode previous, VNode updated, Element dom) {
+    private Node diffVNodes(VNode previous, VNode updated, Element dom, boolean isSvgMode) {
         if (previous.tag.equals(updated.tag) &&
             Objects.equals(previous.key, updated.key)) {
+
+            if(previous.tag.equals("svg")) {
+                isSvgMode = true;
+            }
 
             Properties.diffProperties(dom, updated.properties, previous.properties, isSvgMode);
             diffChildren(previous, updated, dom, isSvgMode);
 
+            return dom;
+
         } else {
-            replace(previous, updated, dom, isSvgMode);
+            return replace(previous, updated, dom, isSvgMode);
         }
     }
 
@@ -174,7 +187,7 @@ public class Diff {
     /**
      * Updates a single component in place
      */
-    private void diffComponent(VComponent component, Element dom) {
+    private Node diffComponent(VComponent component, Element dom, boolean isSvgMode) {
         VTree previous = component.vNode;
         if(previous == null) {
             throw new IllegalStateException();
@@ -182,7 +195,7 @@ public class Diff {
 
         if(component.isDirty()) {
             VTree updated = component.forceRender();
-            walk(previous, updated, dom, isSvgMode);
+            return walk(previous, updated, dom, isSvgMode);
 
         } else {
 
@@ -190,20 +203,22 @@ public class Diff {
             // still need to look for dirty components within the
             // component's tree
             if(previous.hasComponents()) {
-                walk(previous, previous, dom, isSvgMode);
+                return walk(previous, previous, dom, isSvgMode);
+            } else {
+                return dom;
             }
         }
     }
 
 
-    private void diffComponents(VComponent prevComponent, VComponent updatedComponent, Element dom) {
+    private Node diffComponents(VComponent prevComponent, VComponent updatedComponent, Element dom, boolean isSvgMode) {
 
         assert prevComponent != null;
         assert updatedComponent != null;
         assert prevComponent.isRendered();
 
         if(updatedComponent.executeUpdate(prevComponent)) {
-            return;
+            return dom;
         }
 
 
@@ -213,12 +228,13 @@ public class Diff {
         assert prevTree != null;
         assert updatedTree != null;
 
-        walk(prevTree, updatedTree, dom, isSvgMode);
+        Element newDom = walk(prevTree, updatedTree, dom, isSvgMode).cast();
 
-
-        fireMountRecursively(updatedComponent, dom);
+        fireMountRecursively(updatedComponent, newDom);
 
         unmountQueue.add(prevComponent);
+
+        return newDom;
     }
 
 
