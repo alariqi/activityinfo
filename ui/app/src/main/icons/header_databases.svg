@@ -1,23 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22" height="25"
-     viewBox="0 0 22 25">
-    <defs>
-        <path id="nr6va"
-              d="M1128.21 22.58c0-.93-4.25-3.04-9.5-3.04-5.24 0-9.49 2.11-9.49 3.04v16.23c0 .93 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04z"/>
-        <path id="nr6vb" d="M1109.22 33.47c0 .94 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04"/>
-        <path id="nr6vc" d="M1109.22 27.78c0 .94 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04"/>
-    </defs>
-    <g>
-        <g transform="translate(-1108 -18)">
-            <g>
-                <use fill="#fff" fill-opacity="0" stroke="#243233" stroke-miterlimit="50" stroke-width="2"
-                     xlink:href="#nr6va"/>
-            </g>
-            <g>
-                <use fill="#fff" fill-opacity="0" stroke="#243233" stroke-miterlimit="50" xlink:href="#nr6vb"/>
-            </g>
-            <g>
-                <use fill="#fff" fill-opacity="0" stroke="#243233" stroke-miterlimit="50" xlink:href="#nr6vc"/>
-            </g>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="25" viewBox="0 0 22 25">
+    <g transform="translate(-1108 -18)" fill-opacity="0"  stroke="#243233" stroke-miterlimit="50">
+        <path stroke-width="2" d="M1128.21 22.58c0-.93-4.25-3.04-9.5-3.04-5.24 0-9.49 2.11-9.49 3.04v16.23c0 .93 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04z"/>
+        <path d="M1109.22 33.47c0 .94 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04"/>
+        <path d="M1109.22 27.78c0 .94 4.25 3.04 9.5 3.04 5.24 0 9.49-2.1 9.5-3.04"/>
     </g>
 </svg>
