@@ -237,12 +237,12 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
     }
 
     @Override
-    public <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus<T, R>> startJob(T job) {
+    public <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus> startJob(T job) {
         return Promise.rejected(new UnsupportedOperationException());
     }
 
     @Override
-    public Promise<JobStatus<?, ?>> getJobStatus(String jobId) {
+    public Promise<JobStatus> getJobStatus(String jobId) {
         return Promise.rejected(new UnsupportedOperationException());
     }
 

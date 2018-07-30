@@ -40,6 +40,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.ObservableTree;
+import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Function2;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
@@ -48,10 +49,7 @@ import org.activityinfo.ui.client.store.offline.FormOfflineStatus;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.SnapshotStatus;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class FormStoreImpl implements FormStore {
@@ -64,6 +62,8 @@ public class FormStoreImpl implements FormStore {
     private final Map<ResourceId, Observable<Maybe<UserDatabaseMeta>>> databaseCache = new HashMap<>();
 
     private Observable<List<UserDatabaseMeta>> cachedDatabaseList;
+
+    private StatefulValue<List<Observable<JobStatus>>> activeJobs = new StatefulValue<>(Collections.emptyList());
 
     public FormStoreImpl(HttpStore httpStore, OfflineStore offlineStore, Scheduler scheduler) {
         this.httpStore = httpStore;
@@ -116,7 +116,7 @@ public class FormStoreImpl implements FormStore {
                 }
 
                 return Observable.flatten(databases).transform(maybes -> {
-                   List<UserDatabaseMeta> result = new ArrayList<>();
+                    List<UserDatabaseMeta> result = new ArrayList<>();
                     for (Maybe<UserDatabaseMeta> maybe : maybes) {
                         if(maybe.isVisible()) {
                             result.add(maybe.get());
@@ -160,8 +160,8 @@ public class FormStoreImpl implements FormStore {
                 }
 
                 Observable<RecordTree> recordTree = new ObservableTree<>(
-                    new RecordTreeLoader(FormStoreImpl.this, formTree, rootRecordRef),
-                    scheduler);
+                        new RecordTreeLoader(FormStoreImpl.this, formTree, rootRecordRef),
+                        scheduler);
 
                 return recordTree.transform(new Function<RecordTree, Maybe<RecordTree>>() {
                     @Override
@@ -177,11 +177,11 @@ public class FormStoreImpl implements FormStore {
     @Override
     public Observable<Maybe<FormRecord>> getRecord(RecordRef recordRef) {
         return offlineStore.getCurrentSnapshot().join(snapshot -> {
-           if(snapshot.isFormCached(recordRef.getFormId())) {
-               return offlineStore.getCachedRecord(recordRef);
-           } else {
-               return httpStore.getRecord(recordRef);
-           }
+            if(snapshot.isFormCached(recordRef.getFormId())) {
+                return offlineStore.getCachedRecord(recordRef);
+            } else {
+                return httpStore.getRecord(recordRef);
+            }
         });
     }
 
@@ -259,8 +259,17 @@ public class FormStoreImpl implements FormStore {
     }
 
     @Override
-    public <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus<T, R>> startJob(T job) {
-        return httpStore.startJob(job);
+    public <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus> startJob(T job) {
+        Observable<JobStatus> status = httpStore.startJob(job);
+        activeJobs.update(oldList -> {
+            List<Observable<JobStatus>> newList = new ArrayList<>(oldList);
+            newList.add(status);
+            return newList;
+        });
+        return status;
     }
 
+    public Observable<List<JobStatus>> getJobs() {
+        return activeJobs.join(jobs -> Observable.flatten(jobs));
+    }
 }

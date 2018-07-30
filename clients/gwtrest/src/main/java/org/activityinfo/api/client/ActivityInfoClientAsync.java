@@ -150,9 +150,9 @@ public interface ActivityInfoClientAsync {
 
     Promise<Void> updateAnalysis(AnalysisUpdate analysis);
 
-    <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus<T, R>>  startJob(T job);
+    <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus>  startJob(T job);
 
-    Promise<JobStatus<?, ?>> getJobStatus(String jobId);
+    Promise<JobStatus> getJobStatus(String jobId);
 
     Promise<Void> requestDatabaseTransfer(String newOwnerEmail, int databaseId);
 

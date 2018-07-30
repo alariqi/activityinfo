@@ -118,8 +118,7 @@ public class ImportView {
         return H.div("importer",
                 importHeader(I18N.CONSTANTS.uploadYourData()),
                 H.div("importer__body importer__source",
-                        new VNode(HtmlTag.TEXTAREA, Props.create()
-                                .oninput(event -> onSourceInput(event))),
+                        pasteTarget(),
                         H.div("importer__source__buttons",
                             H.div(
                                 H.h3("Add your data here"),
@@ -131,7 +130,33 @@ public class ImportView {
                                         .build()))));
     }
 
+    private VTree pasteTarget() {
+        Observable<Optional<ImportSource>> sourceText = viewModel
+                .getState()
+                .transform(s -> s.getSource())
+                .cache();
 
+        return new ReactiveComponent(sourceText.transform(s -> {
+            PropMap props = Props.create();
+            props.set("value", s.map(source -> source.getText()).orElse(""));
+            props.oninput(event -> {
+                LOGGER.info("TextArea: onInput");
+                onSourceInput(event);
+            });
+
+            return new VNode(HtmlTag.TEXTAREA, props);
+        }));
+
+    }
+
+    private void onSourceInput(Event event) {
+        TextAreaElement textarea = event.getEventTarget().cast();
+        if(Strings.isNullOrEmpty(textarea.getValue())) {
+            updater.update(s -> s.withSource(Optional.empty()));
+        } else {
+            updater.update(s -> s.withSource(Optional.of(new ImportSource(textarea.getValue()))));
+        }
+    }
 
     private VTree matchColumns() {
         return H.div("importer",
@@ -293,12 +318,4 @@ public class ImportView {
 
 
 
-    private void onSourceInput(Event event) {
-        TextAreaElement textarea = event.getEventTarget().cast();
-        if(Strings.isNullOrEmpty(textarea.getValue())) {
-            updater.update(s -> s.withSource(Optional.empty()));
-        } else {
-            updater.update(s -> s.withSource(Optional.of(new ImportSource(textarea.getValue()))));
-        }
-    }
 }

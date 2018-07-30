@@ -1,6 +1,6 @@
 .forminput {
   color: $white;
-  z-index: 1000;
+  z-index: $z-level-overlay;
   position: absolute;
   left: 0;
   right: 0;

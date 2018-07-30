@@ -25,14 +25,14 @@ import static org.activityinfo.json.Json.createObject;
 /**
  * Shows the status of the job status
  */
-public class JobStatus<T extends JobDescriptor<R>, R extends JobResult> {
+public class JobStatus {
 
     private String id;
-    private T descriptor;
+    private JobDescriptor descriptor;
     private JobState state;
-    private R result;
+    private JobResult result;
 
-    public JobStatus(String id, T descriptor, JobState state, R jobResult) {
+    public JobStatus(String id, JobDescriptor descriptor, JobState state, JobResult jobResult) {
         this.id = id;
         this.descriptor = descriptor;
         this.state = state;
@@ -43,11 +43,11 @@ public class JobStatus<T extends JobDescriptor<R>, R extends JobResult> {
         return id;
     }
 
-    public T getDescriptor() {
+    public JobDescriptor getDescriptor() {
         return descriptor;
     }
 
-    public R getResult() {
+    public JobResult getResult() {
         return result;
     }
 
@@ -80,4 +80,7 @@ public class JobStatus<T extends JobDescriptor<R>, R extends JobResult> {
         return new JobStatus(id, descriptor, state, result);
     }
 
+    public boolean isPending() {
+        return state != JobState.COMPLETED && state != JobState.FAILED;
+    }
 }

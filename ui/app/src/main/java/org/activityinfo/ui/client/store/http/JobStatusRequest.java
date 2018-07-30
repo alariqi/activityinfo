@@ -25,7 +25,7 @@ import org.activityinfo.model.job.JobStatus;
 import org.activityinfo.promise.Promise;
 
 
-public class JobStatusRequest<T extends JobDescriptor<R>, R extends JobResult> implements HttpRequest<JobStatus<T, R>> {
+public class JobStatusRequest<T extends JobDescriptor<R>, R extends JobResult> implements HttpRequest<JobStatus> {
 
     private String jobId;
 
@@ -34,13 +34,13 @@ public class JobStatusRequest<T extends JobDescriptor<R>, R extends JobResult> i
     }
 
     @Override
-    public Promise<JobStatus<T, R>> execute(ActivityInfoClientAsync async) {
+    public Promise<JobStatus> execute(ActivityInfoClientAsync async) {
         return (Promise)async.getJobStatus(jobId);
     }
 
 
     @Override
-    public int refreshInterval(JobStatus<T, R> result) {
+    public int refreshInterval(JobStatus result) {
         switch (result.getState()) {
             // Once the job is started, query the server
             // every 500 milliseconds for an update.

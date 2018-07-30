@@ -23,7 +23,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.info.Info;
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.json.Json;
 import org.activityinfo.model.formTree.RecordTree;
@@ -36,9 +35,9 @@ import org.activityinfo.ui.client.base.button.IconButton;
 import org.activityinfo.ui.client.base.button.IconButtonStyle;
 import org.activityinfo.ui.client.base.container.CssLayoutContainer;
 import org.activityinfo.ui.client.base.container.StaticHtml;
-import org.activityinfo.ui.client.base.info.Alert;
-import org.activityinfo.ui.client.base.info.ErrorConfig;
-import org.activityinfo.ui.client.base.info.SuccessConfig;
+import org.activityinfo.ui.client.base.toaster.Alert;
+import org.activityinfo.ui.client.base.toaster.Toast;
+import org.activityinfo.ui.client.base.toaster.Toaster;
 import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.input.viewModel.FormInputViewModel;
 import org.activityinfo.ui.client.input.viewModel.FormInputViewModelBuilder;
@@ -196,14 +195,20 @@ public class FormInputView implements IsWidget {
             @Override
             public void onFailure(Throwable caught) {
                 enableButtons(true);
-                Info.display(new ErrorConfig(caught));
+                Toaster.show(new Toast.Builder()
+                    .error(caught)
+                    .autoHide()
+                    .build());
             }
 
             @Override
             public void onSuccess(Void result) {
                 enableButtons(true);
 
-                Info.display(new SuccessConfig(I18N.CONSTANTS.changesSaved()));
+                Toaster.show(new Toast.Builder()
+                        .success(I18N.CONSTANTS.changesSaved())
+                        .autoHide()
+                        .build());
 
                 inputHandler.savedRecord(viewModel.getRecordRef());
             }
@@ -221,8 +226,10 @@ public class FormInputView implements IsWidget {
             formPanel.scrollToFirstError();
         });
 
-        ErrorConfig errorConfig = new ErrorConfig(I18N.CONSTANTS.pleaseCompleteForm());
-        Info.display(errorConfig);
+        Toaster.show(new Toast.Builder()
+            .error(I18N.CONSTANTS.pleaseCompleteForm())
+            .autoHide()
+            .build());
     }
 
 

@@ -144,16 +144,6 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.info.Css3InfoAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.info.Info.InfoAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.ui.client.base.info.Css3DefaultInfoConfigAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.info.DefaultInfoConfig.DefaultInfoConfigAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
   <replace-with class="org.activityinfo.ui.client.base.window.Css3WindowAppearance">
     <when-type-is class="com.sencha.gxt.widget.core.client.Window.WindowAppearance"/>
     <when-property-is name="gxt.theme" value="activityinfo"/>

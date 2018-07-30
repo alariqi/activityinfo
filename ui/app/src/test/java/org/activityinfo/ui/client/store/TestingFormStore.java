@@ -212,7 +212,7 @@ public class TestingFormStore implements FormStore {
     }
 
     @Override
-    public <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus<T, R>> startJob(T job) {
+    public <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus> startJob(T job) {
         return Observable.loading();
     }
 

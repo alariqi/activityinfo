@@ -29,7 +29,6 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.model.job.ExportFormJob;
 import org.activityinfo.model.job.ExportResult;
 import org.activityinfo.model.job.JobState;
 import org.activityinfo.model.job.JobStatus;
@@ -39,12 +38,12 @@ import org.activityinfo.observable.Subscription;
 public class ExportJobDialog {
 
     private Dialog dialog;
-    private Observable<JobStatus<ExportFormJob, ExportResult>> jobStatus;
+    private Observable<JobStatus> jobStatus;
     private Subscription jobSubscription;
     private final AutoProgressBar progressBar;
     private final Anchor downloadLink;
 
-    public ExportJobDialog(Observable<JobStatus<ExportFormJob, ExportResult>> jobStatus) {
+    public ExportJobDialog(Observable<JobStatus> jobStatus) {
         this.jobStatus = jobStatus;
 
         progressBar = new AutoProgressBar();
@@ -78,7 +77,7 @@ public class ExportJobDialog {
                     progressBar.reset();
                     progressBar.updateProgress(1, I18N.CONSTANTS.downloadReady());
                     downloadLink.setVisible(true);
-                    downloadLink.setHref(observable.get().getResult().getDownloadUrl());
+                    downloadLink.setHref(((ExportResult) observable.get().getResult()).getDownloadUrl());
                     dialog.forceLayout();
 
                     ExportJobDialog.this.dialog.getButton(Dialog.PredefinedButton.CANCEL).setText(I18N.CONSTANTS.close());

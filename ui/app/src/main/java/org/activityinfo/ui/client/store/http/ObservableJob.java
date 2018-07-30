@@ -28,27 +28,27 @@ import org.activityinfo.model.job.JobStatus;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Promise;
 
-public class ObservableJob<T extends JobDescriptor<R>, R extends JobResult> extends Observable<JobStatus<T, R>> {
+public class ObservableJob<T extends JobDescriptor<R>, R extends JobResult> extends Observable<JobStatus> {
 
     private ActivityInfoClientAsync client;
-    private Promise<JobStatus<T, R>> startResult;
+    private Promise<JobStatus> startResult;
 
-    private JobStatus<T, R> currentStatus;
+    private JobStatus currentStatus;
 
     private Scheduler scheduler = Scheduler.get();
 
-    public ObservableJob(ActivityInfoClientAsync client, T descriptor, Promise<JobStatus<T, R>> startResult) {
+    public ObservableJob(ActivityInfoClientAsync client, T descriptor, Promise<JobStatus> startResult) {
         this.client = client;
         this.startResult = startResult;
-        this.startResult.then(new AsyncCallback<JobStatus<T, R>>() {
+        this.startResult.then(new AsyncCallback<JobStatus>() {
             @Override
             public void onFailure(Throwable caught) {
                 // Failed to start the job - we're done.
-                currentStatus = new JobStatus<T, R>(null, descriptor, JobState.FAILED, null);
+                currentStatus = new JobStatus(null, descriptor, JobState.FAILED, null);
             }
 
             @Override
-            public void onSuccess(JobStatus<T, R> result) {
+            public void onSuccess(JobStatus result) {
                 currentStatus = result;
                 schedulePoll();
             }
@@ -68,14 +68,14 @@ public class ObservableJob<T extends JobDescriptor<R>, R extends JobResult> exte
     }
 
     private void poll() {
-        client.getJobStatus(currentStatus.getId()).then(new AsyncCallback<JobStatus<?, ?>>() {
+        client.getJobStatus(currentStatus.getId()).then(new AsyncCallback<JobStatus>() {
             @Override
             public void onFailure(Throwable caught) {
 
             }
 
             @Override
-            public void onSuccess(JobStatus<?, ?> result) {
+            public void onSuccess(JobStatus result) {
 
             }
         });
@@ -87,7 +87,7 @@ public class ObservableJob<T extends JobDescriptor<R>, R extends JobResult> exte
     }
 
     @Override
-    public JobStatus<T, R> get() {
+    public JobStatus get() {
         return currentStatus;
     }
 }

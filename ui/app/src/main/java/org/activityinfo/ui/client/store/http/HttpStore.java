@@ -31,7 +31,6 @@ import org.activityinfo.model.form.FormSyncSet;
 import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.job.JobDescriptor;
-import org.activityinfo.model.job.JobResult;
 import org.activityinfo.model.job.JobState;
 import org.activityinfo.model.job.JobStatus;
 import org.activityinfo.model.query.ColumnSet;
@@ -104,15 +103,15 @@ public class HttpStore {
         return new ObservableTask<T>(new RequestTask<T>(httpBus, request), watcher);
     }
 
-    public <T extends JobDescriptor<R>, R extends JobResult> Observable<JobStatus<T, R>> startJob(T job) {
+    public Observable<JobStatus> startJob(JobDescriptor job) {
 
-        Observable<JobStatus<T, R>> jobCreated = get(new StartJobRequest<>(job));
+        Observable<JobStatus> jobCreated = get(new StartJobRequest(job));
 
         return jobCreated.join(initialStatus -> {
             if(initialStatus.getState() == JobState.FAILED) {
                 return Observable.just(initialStatus);
             } else {
-                return get(new JobStatusRequest<T, R>(initialStatus.getId()));
+                return get(new JobStatusRequest(initialStatus.getId()));
             }
         });
     }

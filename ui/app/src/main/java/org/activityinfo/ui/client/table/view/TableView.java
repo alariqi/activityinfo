@@ -153,6 +153,7 @@ public class TableView {
 
         VTree exportButton = Buttons.button(I18N.CONSTANTS.export())
                 .icon(Icon.BUBBLE_EXPORT)
+                .onSelect(event -> updater.startExport())
                 .build();
 
         VTree fullscreenButton = Buttons.button(I18N.CONSTANTS.fullscreen())
@@ -180,5 +181,6 @@ public class TableView {
             }
         }));
     }
+
 
 }

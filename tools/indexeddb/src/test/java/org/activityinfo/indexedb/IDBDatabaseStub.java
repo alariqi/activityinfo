@@ -104,6 +104,11 @@ public class IDBDatabaseStub implements IDBDatabase {
             return storeMap.get(name).transaction(mode);
         }
 
+        @Override
+        public <T> T objectStore(ObjectStoreDefinition<T> definition) {
+            return definition.wrap(objectStore(definition.getName()));
+        }
+
         public void run() {
             boolean succeeded;
             try {

@@ -115,7 +115,13 @@
       box-shadow: inset 2px 0 0 $green, /* left */
       inset 0 2px 0 0 $green, /* top */
       inset 0 -2px 0 0 $green /* bottom */
-    ;
+      ;
+    }
+
+    td:last-child {
+      box-shadow:  inset -2px 0 0 $green, /* right */
+      inset 0 2px 0 0 $green, /* top */
+      inset 0 -2px 0 0 $green /* bottom */
     }
   }
 }

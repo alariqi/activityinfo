@@ -67,6 +67,8 @@ task appengineDevMode(type: JavaExec) {
             ":tools:vdom",
             ":tools:promises",
             ":model",
+            ":io:match",
+            ":io:csv",
             ":analysis"];
 
     for(sourceProject in sourceProjects) {

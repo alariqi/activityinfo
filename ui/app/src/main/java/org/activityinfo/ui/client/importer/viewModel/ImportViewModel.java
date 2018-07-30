@@ -92,6 +92,10 @@ public class ImportViewModel {
         });
     }
 
+    public Observable<ImportState> getState() {
+        return state;
+    }
+
     public Observable<Boolean> isSourceValid() {
         return source.transform(s -> s.isValid());
     }

@@ -20,28 +20,26 @@ package org.activityinfo.ui.client.store.http;
 
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.model.job.JobDescriptor;
-import org.activityinfo.model.job.JobResult;
 import org.activityinfo.model.job.JobStatus;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.ui.client.store.FormChange;
 
 
-public class StartJobRequest<T extends JobDescriptor<R>, R extends JobResult> implements HttpRequest<JobStatus<T, R>> {
+public class StartJobRequest implements HttpRequest<JobStatus> {
 
-    private final T job;
+    private final JobDescriptor job;
 
-    public StartJobRequest(T job) {
+    public StartJobRequest(JobDescriptor job) {
         this.job = job;
     }
 
     @Override
-    public Promise<JobStatus<T, R>> execute(ActivityInfoClientAsync async) {
+    public Promise<JobStatus> execute(ActivityInfoClientAsync async) {
         return async.startJob(job);
     }
 
 
     @Override
-    public int refreshInterval(JobStatus<T, R> result) {
+    public int refreshInterval(JobStatus result) {
         return -1;
     }
 }

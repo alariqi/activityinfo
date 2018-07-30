@@ -28,9 +28,9 @@ import org.activityinfo.json.JsonParser;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
-import org.activityinfo.model.database.transfer.RequestTransfer;
 import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.database.transfer.RequestTransfer;
 import org.activityinfo.model.database.transfer.TransferDecision;
 import org.activityinfo.model.form.*;
 import org.activityinfo.model.formTree.FormClassProvider;
@@ -49,11 +49,7 @@ import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -368,7 +364,7 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     }
 
     @Override
-    public <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus<T, R>> startJob(T job) {
+    public <T extends JobDescriptor<R>, R extends JobResult> Promise<JobStatus> startJob(T job) {
 
         JobRequest request = new JobRequest(job, LocaleInfo.getCurrentLocale().getLocaleName());
 
@@ -377,7 +373,7 @@ public class ActivityInfoClientAsyncImpl implements ActivityInfoClientAsync {
     }
 
     @Override
-    public Promise<JobStatus<?, ?>> getJobStatus(String jobId) {
+    public Promise<JobStatus> getJobStatus(String jobId) {
         return get(baseUrl + "/jobs/" + jobId, JobStatus::fromJson);
     }
 

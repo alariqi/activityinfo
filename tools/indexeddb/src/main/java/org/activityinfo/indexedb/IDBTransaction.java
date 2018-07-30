@@ -25,8 +25,6 @@ public interface IDBTransaction {
 
     IDBObjectStore objectStore(String name);
 
-    default  <T> T objectStore(ObjectStoreDefinition<T> definition) {
-        return definition.wrap(objectStore(definition.getName()));
-    }
+    <T> T objectStore(ObjectStoreDefinition<T> definition);
 
 }

@@ -19,6 +19,7 @@
 package org.activityinfo.model.form;
 
 import org.activityinfo.json.JsonParser;
+import org.activityinfo.json.JsonSerializable;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
@@ -30,7 +31,7 @@ import java.util.Map;
 
 import static org.activityinfo.json.Json.createObject;
 
-public final class FormRecord {
+public class FormRecord implements JsonSerializable {
     
     private String recordId;
     private String formId;
@@ -89,6 +90,7 @@ public final class FormRecord {
         return formRecord;
     }
 
+    @Override
     public JsonValue toJson() {
         
         assert recordId != null;

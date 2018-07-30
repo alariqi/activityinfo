@@ -1,0 +1,86 @@
+
+/*
+ * The toaster element contains all the active toasts.
+ * We use flexbox to lay the toasts out within this container, so it has to fill
+ * the entire viewport.
+ *
+ * N.B. This relies on the "pointer-events" CSS property to ensure that we can overlay the container
+ * while ensuring that the content underneath is still visible and clickable.
+ */
+
+.toaster {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  padding: 0.5rem;
+
+  display: flex;
+  flex-direction: column-reverse;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+
+  z-index: $z-level-toaster;
+}
+
+
+.toast {
+  position: relative;
+  padding: 1.5rem 1.25rem;
+  background-color: $white;
+  box-shadow: 0 2px 6px rgba(105, 127, 151, 0.3);
+  margin-top: 1rem;
+  margin-right: 1rem;
+  width: 24rem;
+  pointer-events: all;
+}
+
+.toast--error:before, .toast--success:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  width: 3rem;
+  height: 0.375rem;
+}
+
+.toast--error:before {
+  background-color: #d2003d;
+}
+
+.toast--success:before {
+  background-color: $green;
+}
+
+.toast__header {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: $gretasemibold;
+  color: #466366;
+}
+
+.toast__message {
+  color: $black;
+  font-family: $gretasemibold;
+  font-size: 1.125rem;
+}
+
+.toast button {
+  display: inline-block;
+  padding: 0.5rem;
+  font-size: 0.75rem;
+  font-family: $gretasemibold;
+  border-radius: $borderradius-s;
+  border: 1px solid $black;
+  margin-left: 0.5rem;
+  outline: none;
+}
+
+.toast button:hover {
+  color: $white;
+  background-color: $black;
+}

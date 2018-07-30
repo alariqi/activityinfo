@@ -31,6 +31,7 @@
 
   <inherits name="org.activityinfo.model.Model"/>
   <inherits name="org.activityinfo.io.Match"/>
+  <inherits name="org.activityinfo.io.Csv"/>
   <inherits name="org.activityinfo.store.query.Query"/>
   <inherits name="org.activityinfo.Analysis"/>
   <inherits name="org.activityinfo.api.ApiClient"/>

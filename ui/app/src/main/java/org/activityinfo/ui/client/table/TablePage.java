@@ -4,6 +4,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.analysis.ImmutableTableAnalysisModel;
 import org.activityinfo.model.analysis.ImmutableTableColumn;
 import org.activityinfo.model.analysis.TableColumn;
+import org.activityinfo.model.job.ExportFormJob;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.observable.Observable;
@@ -133,6 +134,11 @@ public class TablePage extends Page implements SliderUpdater {
                         dropColumn(dropTarget);
                     }
                 };
+            }
+
+            @Override
+            public void startExport() {
+                formStore.startJob(new ExportFormJob(state.get().getActiveTable().getAnalysisModel()));
             }
 
             private void dropColumn(DropTarget dropTarget) {

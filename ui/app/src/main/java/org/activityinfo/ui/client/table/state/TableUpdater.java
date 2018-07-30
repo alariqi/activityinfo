@@ -31,4 +31,6 @@ public interface TableUpdater {
     void editSelection();
 
     FieldChoiceUpdater fieldChoiceUpdater();
+
+    void startExport();
 }

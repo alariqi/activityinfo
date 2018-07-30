@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.base.info;
+package org.activityinfo.ui.client.base.toaster;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;

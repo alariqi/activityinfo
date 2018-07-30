@@ -46,25 +46,25 @@ public class ExportJobTask implements ExportDialog.AsyncTask {
 
     @Override
     public void start(final AsyncCallback<ExportDialog.AsyncTaskPoller> callback) {
-        client.startJob(job).then(new AsyncCallback<JobStatus<JobDescriptor<ExportResult>, ExportResult>>() {
+        client.startJob(job).then(new AsyncCallback<JobStatus>() {
             @Override
             public void onFailure(Throwable caught) {
                 callback.onFailure(caught);
             }
 
             @Override
-            public void onSuccess(final JobStatus<JobDescriptor<ExportResult>, ExportResult> result) {
+            public void onSuccess(final JobStatus result) {
                 callback.onSuccess(new ExportDialog.AsyncTaskPoller() {
                     @Override
                     public void poll(final ExportDialog.ProgressCallback pollCallback) {
-                        client.getJobStatus(result.getId()).then(new AsyncCallback<JobStatus<?, ?>>() {
+                        client.getJobStatus(result.getId()).then(new AsyncCallback<JobStatus>() {
                             @Override
                             public void onFailure(Throwable caught) {
                                 pollCallback.onFailure(caught);
                             }
 
                             @Override
-                            public void onSuccess(JobStatus<?, ?> result) {
+                            public void onSuccess(JobStatus result) {
                                 if(result.getState() == JobState.COMPLETED) {
                                     ExportResult exportResult = (ExportResult) result.getResult();
                                     pollCallback.onDownloadReady(exportResult.getDownloadUrl());

@@ -33,7 +33,7 @@ import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.ActivityInfoClientAsyncImpl;
 import org.activityinfo.indexedb.IDBFactoryImpl;
 import org.activityinfo.storage.LocalStorage;
-import org.activityinfo.ui.client.store.FormStore;
+import org.activityinfo.ui.client.header.JobNotifier;
 import org.activityinfo.ui.client.store.FormStoreImpl;
 import org.activityinfo.ui.client.store.http.ConnectionListener;
 import org.activityinfo.ui.client.store.http.HttpStore;
@@ -64,6 +64,7 @@ public class AppEntryPoint implements EntryPoint {
         AppCacheMonitor3 monitor = new AppCacheMonitor3(appCache);
         monitor.start();
 
+
         ConnectionListener connectionListener = new ConnectionListener();
         connectionListener.start();
 
@@ -72,8 +73,12 @@ public class AppEntryPoint implements EntryPoint {
 
         OfflineStore offlineStore = new OfflineStore(httpStore, IDBFactoryImpl.create());
 
-        FormStore formStore = new FormStoreImpl(httpStore, offlineStore, Scheduler.get());
+        FormStoreImpl formStore = new FormStoreImpl(httpStore, offlineStore, Scheduler.get());
         LocalStorage storage = LocalStorage.create();
+
+        JobNotifier jobNotifier = new JobNotifier(formStore.getJobs());
+        jobNotifier.start();
+
 
         // Start synchronizer...
         RecordSynchronizer synchronizer = new RecordSynchronizer(httpStore, offlineStore);
