@@ -115,19 +115,15 @@ public class SourceColumn {
     }
 
     /**
-     * Compute the average matching score of values across a sample of the columns.
+     * Find the proportion of matching values across the sample
      */
-    public double   scoreSample(Set<String> expected) {
+    public double scoreSample(Set<String> expected) {
         double sumOfScores = 0;
         int countOfScores = 0;
-
-        LatinPlaceNameScorer scorer = new LatinPlaceNameScorer();
 
         for (int i = 0; i < sample.length; i++) {
             if(expected.contains(sample[i])) {
                 sumOfScores += 1.0;
-            } else {
-                sumOfScores += bestScore(scorer, sample[i], expected);
             }
             countOfScores ++;
         }
