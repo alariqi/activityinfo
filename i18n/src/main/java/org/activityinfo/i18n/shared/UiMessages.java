@@ -318,8 +318,9 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @DefaultMessage("{0} records are valid and ready for importing now")
     String validRecordCount(int count);
 
-    @DefaultMessage("Below are {0} records that have validation issues. If you continue importing, these rows will be ignored and not imported.")
-    String invalidRecordCount(int count);
+    @DefaultMessage("Below are {0} rows that have validation issues. If you continue importing, these rows will be ignored and not imported.")
+    @AlternateMessage({"one", "Below is one row that has validation issues. If you continue importing, this row will be ignored and not imported."})
+    String invalidRecordCount(@PluralCount int count);
 
 }
 

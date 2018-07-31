@@ -71,7 +71,6 @@ public class MappedSourceViewModel {
                        validatedColumns -> new ValidatedTable(fields, mappedFields, validatedColumns));
 
 
-
     }
 
     public SourceViewModel getSource() {
@@ -95,6 +94,7 @@ public class MappedSourceViewModel {
     }
 
     public Observable<ValidatedTable> getValidatedTable() {
+        assert validatedTable != null : "validated table is null!";
         return validatedTable;
     }
 

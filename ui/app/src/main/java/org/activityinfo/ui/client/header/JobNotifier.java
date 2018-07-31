@@ -32,7 +32,7 @@ public class JobNotifier {
 
     private void update(List<JobStatus> jobs) {
         for (JobStatus job : jobs) {
-            if(job.isPending() && startedJobs.contains(job.getId())) {
+            if(job.isPending() && !startedJobs.contains(job.getId())) {
                 startedJobs.add(job.getId());
                 notifyStart(job);
             }
@@ -47,7 +47,7 @@ public class JobNotifier {
     private void notifyStart(JobStatus job) {
 
         Toaster.show(new Toast.Builder()
-                .success("Started job")
+                .success("Starting export...")
                 .autoHide()
                 .build());
     }

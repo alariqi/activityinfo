@@ -44,7 +44,7 @@ public class ImportPage extends Page implements ImportUpdater {
 
     @Override
     public VTree render() {
-        return AppFrame.render(formStore, ImportView.render(formStore, viewModel, this));
+        return AppFrame.render(formStore, ImportView.render(viewModel, this));
     }
 
     @Override

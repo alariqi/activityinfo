@@ -63,6 +63,8 @@ public class ValidatedTable {
 
         } else {
             validRows = Observable.loading();
+            importedTable = Observable.loading();
+
         }
     }
 
@@ -99,6 +101,7 @@ public class ValidatedTable {
     }
 
     public Observable<ImportedTable> getImportedTable() {
+        assert importedTable != null : "imported table is null!";
         return importedTable;
     }
 }

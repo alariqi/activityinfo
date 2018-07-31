@@ -1,12 +1,15 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
+import org.activityinfo.io.csv.CsvWriter;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldImporter;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,6 +44,36 @@ public class ImportedTable {
 
     public ValidRowSet getValidRowSet() {
         return validRowSet;
+    }
+
+    public String invalidCsv() {
+        try {
+            CsvWriter writer = new CsvWriter();
+            int numColumns = validatedTable.getNumColumns();
+            Object[] columns = new String[numColumns];
+            ColumnView[] columnViews = validatedTable.getColumnViews();
+
+            // Write headers
+            for (int j=0;j<numColumns;++j) {
+                columns[j] = validatedTable.getColumns().get(j).getColumn().getLabel();
+            }
+            writer.writeLine(columns);
+
+            // Write invalid rows
+            int[] invalidMap = validRowSet.buildInvalidMap();
+            for (int i = 0; i < invalidMap.length; i++) {
+                int rowIndex = invalidMap[i];
+                for (int j=0;j<numColumns;++j) {
+                    columns[j] = columnViews[j].getString(rowIndex);
+                }
+                writer.writeLine(columns);
+            }
+            return writer.toString();
+
+        } catch (IOException e) {
+            // Should not happen.
+            return null;
+        }
     }
 
     private class RecordIterator implements Iterator<FormRecord> {

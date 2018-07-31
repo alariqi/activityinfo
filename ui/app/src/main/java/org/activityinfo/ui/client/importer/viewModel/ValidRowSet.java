@@ -15,8 +15,8 @@ public class ValidRowSet {
         for (int i = 0; i < numRows; i++) {
 
             for (int j = 0; j < validation.length; j++) {
-                if (validation[j].getRowStatus(j) == Validation.INVALID) {
-                    invalidRows.set(j);
+                if (validation[j].getRowStatus(i) == Validation.INVALID) {
+                    invalidRows.set(i);
                     invalidRowCount++;
                     break;
                 }

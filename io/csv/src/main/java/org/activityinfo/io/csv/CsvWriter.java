@@ -16,11 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.activityinfo.server.endpoint.rest;
+package org.activityinfo.io.csv;
 
+import java.io.Closeable;
 import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 
 public class CsvWriter implements AutoCloseable {
 
@@ -29,14 +28,15 @@ public class CsvWriter implements AutoCloseable {
      */
     public static final char BYTEORDER_MARK = '\ufeff';
 
-    private Writer writer;
+    public static final String MIME_TYPE = "text/csv";
+
+    private Appendable writer;
 
     public CsvWriter() throws IOException {
-        this.writer = new StringWriter();
-        writer.append(BYTEORDER_MARK);
+        this(new StringBuilder());
     }
 
-    public CsvWriter(Writer writer) throws IOException {
+    public CsvWriter(Appendable writer) throws IOException {
         this.writer = writer;
         this.writer.append(BYTEORDER_MARK);
     }
@@ -71,6 +71,8 @@ public class CsvWriter implements AutoCloseable {
 
     @Override
     public void close() throws IOException {
-        writer.close();
+        if(writer instanceof Closeable) {
+            ((Closeable) writer).close();
+        }
     }
 }

@@ -62,7 +62,6 @@ public class InvalidDataTable {
             int rowCount = (endIndex - startIndex);
             VTree[] rows = new VTree[rowCount];
 
-
             for (int i = 0; i < rowCount; i++) {
                 int rowIndex = invalidMap[startIndex + i];
                 String rowId = "" + rowIndex;

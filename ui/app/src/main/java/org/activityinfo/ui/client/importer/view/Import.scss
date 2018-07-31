@@ -29,11 +29,12 @@
 
 .importer__header p {
   font-size: 1rem;
-  margin: 0;
+  margin: 0 0 1rem;
 }
 
-.importer__valid-count {
+p.importer__valid-count {
   font-family: $gretasemibold;
+  margin-bottom: 0;
 }
 
 .importer__header .surtitle {
