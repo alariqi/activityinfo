@@ -52,9 +52,8 @@ p.importer__valid-count {
   border: 1px solid #e6ebea;
 
   /* Center the instructions in this container */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  @include centerchild();
+
   text-align: center;
 }
 
@@ -154,3 +153,20 @@ p.importer__valid-count {
   }
 }
 
+.importer__commit {
+  padding: 0.5rem;
+  width: 27rem;
+}
+
+.importer__commit__progress {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  margin-bottom: 3rem;
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+  }
+
+}

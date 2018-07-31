@@ -90,6 +90,7 @@ public class ImportViewModel {
                     optionalColumn.map(column ->
                         new SelectedColumnViewModel(s, column)));
         });
+
     }
 
     public Observable<ImportState> getState() {
@@ -151,6 +152,5 @@ public class ImportViewModel {
     public Observable<Boolean> isMappingComplete() {
         return mappedSource.transform(m -> m.isComplete()).cache();
     }
-
 
 }

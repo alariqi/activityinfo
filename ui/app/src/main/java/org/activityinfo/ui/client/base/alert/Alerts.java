@@ -8,4 +8,9 @@ public class Alerts {
     public static VNode error(String message) {
         return H.div("alert alert--error", H.t(message));
     }
+
+    public static VNode warning(String message) {
+        return H.div("alert alert--warning", H.t(message));
+    }
+
 }

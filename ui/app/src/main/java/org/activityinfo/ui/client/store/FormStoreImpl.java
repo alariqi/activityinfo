@@ -80,7 +80,10 @@ public class FormStoreImpl implements FormStore {
     public Observable<FormTree> getFormTree(ResourceId rootFormId) {
         Observable<FormTree> tree = formTreeCache.get(rootFormId);
         if(tree == null) {
-            tree = new ObservableTree<>(new FormTreeLoader(rootFormId, this::getFormMetadata), scheduler);
+            tree = new ObservableTree<>(new FormTreeLoader(rootFormId, this::getFormMetadata), scheduler)
+                        .optimistic()
+                        .cache(FormTree::isUnchanged);
+
             formTreeCache.put(rootFormId, tree);
         }
         return tree;

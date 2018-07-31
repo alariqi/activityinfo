@@ -18,19 +18,19 @@
  */
 package org.activityinfo.observable;
 
-import com.google.common.base.Objects;
-
 class CachedObservable<T> extends Observable<T> {
 
     private final Observable<T> source;
+    private final CachePredicate<T> cachePredicate;
 
     private Subscription sourceSubscription;
 
     private boolean previouslyLoading;
     private T previousValue;
 
-    public CachedObservable(Observable<T> source) {
+    public CachedObservable(Observable<T> source, CachePredicate<T> cachePredicate) {
         this.source = source;
+        this.cachePredicate = cachePredicate;
     }
 
     @Override
@@ -45,7 +45,7 @@ class CachedObservable<T> extends Observable<T> {
                         CachedObservable.this.fireChange();
                     }
                 } else {
-                    if(previouslyLoading || !Objects.equal(previousValue, observable.get())) {
+                    if(previouslyLoading || !cachePredicate.isSame(previousValue, observable.get())) {
                         previouslyLoading = false;
                         previousValue = observable.get();
                         CachedObservable.this.fireChange();

@@ -1,0 +1,29 @@
+
+
+.progress {
+
+}
+
+.progress__bar {
+  background-color: $green-pale;
+}
+
+.progress__complete {
+  background-color: $green;
+}
+
+.progress__message {
+  font-size: 1rem;
+  font-family: $gretalight;
+}
+
+.progress__percent {
+  color: $black;
+  font-family: $gretasemibold;
+  font-size: 1.25rem;
+  float: right;
+}
+
+.progress__bar, .progress__complete {
+  height: 0.75rem;
+}

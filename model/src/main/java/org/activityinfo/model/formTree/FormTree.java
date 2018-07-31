@@ -47,6 +47,8 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
     private ResourceId rootFormId;
 
 
+
+
     public enum State {
         VALID,
         DELETED,
@@ -539,5 +541,24 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
             s.append(node.debugPath()).append("\n");
         }
         return s.toString();
+    }
+
+    public static boolean isUnchanged(FormTree a, FormTree b) {
+        if(!a.getRootFormId().equals(b.getRootFormId())) {
+            return false;
+        }
+        if(a.getForms().size() != b.getForms().size()) {
+            return false;
+        }
+        for (FormMetadata fa : a.getForms()) {
+            FormMetadata fb = b.getFormMetadata(fa.getId());
+            if(fa.isVisible() != fb.isVisible()) {
+                return false;
+            }
+            if(fa.isVisible() && fa.getSchemaVersion() != fb.getSchemaVersion()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

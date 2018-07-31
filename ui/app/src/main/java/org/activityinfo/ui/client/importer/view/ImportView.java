@@ -103,10 +103,15 @@ public class ImportView {
                 .build();
     }
 
-    static VTree doneButton() {
+    static VTree doneButton(ImportViewModel viewModel, ImportUpdater updater) {
         return Buttons.button(I18N.CONSTANTS.done())
                 .icon(Icon.BUBBLE_CHECKMARK)
                 .primary()
+                .onSelect(event -> {
+                    viewModel.getImportedTable().ifLoaded(table -> {
+                        updater.startImport(table);
+                    });
+                })
                 .build();
     }
 

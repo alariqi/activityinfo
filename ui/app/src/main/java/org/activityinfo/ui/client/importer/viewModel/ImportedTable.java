@@ -1,12 +1,9 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
 import org.activityinfo.io.csv.CsvWriter;
-import org.activityinfo.json.Json;
-import org.activityinfo.json.JsonValue;
-import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.query.ColumnView;
+import org.activityinfo.model.resource.RecordUpdate;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordRef;
 import org.activityinfo.ui.client.importer.viewModel.fields.FieldImporter;
 
 import java.io.IOException;
@@ -26,7 +23,11 @@ public class ImportedTable {
         this.fieldImporters = fieldImporters;
     }
 
-    public Iterator<FormRecord> getRecords() {
+    public ResourceId getFormId() {
+        return formId;
+    }
+
+    public Iterator<RecordUpdate> getRecords() {
         return new RecordIterator();
     }
 
@@ -76,7 +77,7 @@ public class ImportedTable {
         }
     }
 
-    private class RecordIterator implements Iterator<FormRecord> {
+    private class RecordIterator implements Iterator<RecordUpdate> {
 
         private int nextRowIndex;
 
@@ -91,16 +92,17 @@ public class ImportedTable {
         }
 
         @Override
-        public FormRecord next() {
+        public RecordUpdate next() {
 
             ResourceId recordId = ResourceId.generateSubmissionId(formId);
 
-            JsonValue fields = Json.createObject();
-            for (FieldImporter fieldImporter : fieldImporters) {
-                fields.put(fieldImporter.getFieldName(), fieldImporter.getValue(nextRowIndex).toJson());
-            }
 
-            FormRecord record = new FormRecord(new RecordRef(formId, recordId), null, fields);
+            RecordUpdate record = new RecordUpdate();
+            record.setFormId(formId);
+            record.setRecordId(recordId);
+            for (FieldImporter fieldImporter : fieldImporters) {
+                record.setFieldValue(fieldImporter.getFieldName(), fieldImporter.getValue(nextRowIndex).toJson());
+            }
 
             // Find the next valid row
             advanceToNextValidRow();

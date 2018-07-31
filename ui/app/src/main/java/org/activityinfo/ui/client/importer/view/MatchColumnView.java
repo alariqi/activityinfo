@@ -59,7 +59,7 @@ public class MatchColumnView {
             // If there are no *invalid* rows, we can skip the review step
 
             if(v.getInvalidRowCount() == 0) {
-                return ImportView.doneButton();
+                return ImportView.doneButton(viewModel, updater);
             } else {
                 return continueToReviewButton(updater);
             }

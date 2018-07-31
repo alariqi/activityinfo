@@ -44,3 +44,11 @@
     background-color: $green;
   }
 }
+
+/* Centers this container's only child */
+
+@mixin centerchild() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

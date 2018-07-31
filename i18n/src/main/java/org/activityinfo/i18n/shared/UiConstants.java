@@ -2054,5 +2054,11 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Download invalid records as CSV")
     String downloadInvalidRecordsAsCSV();
 
+    @DefaultStringValue("Do not close this tab or window")
+    String doNotClose();
+
+    @DefaultStringValue("Import in progress")
+    String importInProgress();
+
 }
 

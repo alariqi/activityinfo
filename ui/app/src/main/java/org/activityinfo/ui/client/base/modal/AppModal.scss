@@ -1,0 +1,18 @@
+
+
+.appmodal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: #91f2ca;
+  opacity: 0.95;
+  z-index: $z-level-modal-overlay;
+  @include centerchild();
+}
+
+.appmodal > div {
+  box-shadow: 0 0.188rem 0.625rem rgba(104, 149, 145, 0.3);
+  background-color: $white;
+}

@@ -14,8 +14,6 @@ import java.util.stream.Stream;
 
 public class Toaster {
 
-    private static final int AUTO_HIDE_DELAY_MS = 2500;
-
     private static Toaster INSTANCE;
 
     public static void show(Toast toast) {
@@ -39,7 +37,7 @@ public class Toaster {
             Scheduler.get().scheduleFixedDelay(() -> {
                 hideToast(toast);
                 return false;
-            }, AUTO_HIDE_DELAY_MS);
+            }, toast.getAutoHideDelay());
         }
         vdom.update(renderToasts(toasts));
     }

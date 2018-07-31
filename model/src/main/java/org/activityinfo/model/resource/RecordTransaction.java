@@ -57,6 +57,11 @@ public final class RecordTransaction {
     }
 
     @JsOverlay
+    public int getChangeCount() {
+        return changes.length;
+    }
+
+    @JsOverlay
     public static RecordTransactionBuilder builder() {
         return new RecordTransactionBuilder();
     }

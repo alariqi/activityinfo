@@ -5,6 +5,8 @@ import org.activityinfo.i18n.shared.I18N;
 
 public class Toast {
 
+    static final int DEFAULT_AUTO_HIDE_DELAY_MS = 2500;
+
     private ToastType type;
 
     private String title;
@@ -16,7 +18,7 @@ public class Toast {
     /**
      * True if the toast should be hidden after a suitable delay
      */
-    private boolean autoHide;
+    private int autoHide;
 
     private Toast() {
     }
@@ -34,7 +36,7 @@ public class Toast {
     }
 
     public boolean isAutoHide() {
-        return autoHide;
+        return autoHide > 0;
     }
 
     public boolean hasAction() {
@@ -47,6 +49,10 @@ public class Toast {
 
     public Runnable getAction() {
         return action;
+    }
+
+    public int getAutoHideDelay() {
+        return autoHide;
     }
 
     public static class Builder {
@@ -93,7 +99,12 @@ public class Toast {
         }
 
         public Builder autoHide() {
-            toast.autoHide = true;
+            toast.autoHide = DEFAULT_AUTO_HIDE_DELAY_MS;
+            return this;
+        }
+
+        public Builder autoHide(int milliseconds) {
+            toast.autoHide = milliseconds;
             return this;
         }
 

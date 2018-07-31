@@ -322,5 +322,10 @@ public interface UiMessages extends com.google.gwt.i18n.client.Messages {
     @AlternateMessage({"one", "Below is one row that has validation issues. If you continue importing, this row will be ignored and not imported."})
     String invalidRecordCount(@PluralCount int count);
 
+    @DefaultMessage("{0} records processed")
+    String recordsProcessed(int recordsProcessed);
+
+    @DefaultMessage("{0} records imported.")
+    String recordsImported(int recordsCommitted);
 }
 
