@@ -131,6 +131,15 @@ public final class RecordUpdate {
     }
 
     @JsOverlay
+    public void setFieldValue(String fieldId, FieldValue value) {
+        if(value == null) {
+            setFieldValue(fieldId, Json.createNull());
+        } else {
+            setFieldValue(fieldId, value.toJson());
+        }
+    }
+
+    @JsOverlay
     public void setFieldValue(String fieldId, String value) {
         setFieldValue(fieldId, Json.create(value));
     }

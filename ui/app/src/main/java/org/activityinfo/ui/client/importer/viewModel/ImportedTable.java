@@ -96,12 +96,11 @@ public class ImportedTable {
 
             ResourceId recordId = ResourceId.generateSubmissionId(formId);
 
-
             RecordUpdate record = new RecordUpdate();
             record.setFormId(formId);
             record.setRecordId(recordId);
             for (FieldImporter fieldImporter : fieldImporters) {
-                record.setFieldValue(fieldImporter.getFieldName(), fieldImporter.getValue(nextRowIndex).toJson());
+                record.setFieldValue(fieldImporter.getFieldName(), fieldImporter.getValue(nextRowIndex));
             }
 
             // Find the next valid row
