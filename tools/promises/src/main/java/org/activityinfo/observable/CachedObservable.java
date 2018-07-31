@@ -45,7 +45,7 @@ class CachedObservable<T> extends Observable<T> {
                         CachedObservable.this.fireChange();
                     }
                 } else {
-                    if(previouslyLoading || !cachePredicate.isSame(previousValue, observable.get())) {
+                    if(previouslyLoading || previousValue == null || !cachePredicate.isSame(previousValue, observable.get())) {
                         previouslyLoading = false;
                         previousValue = observable.get();
                         CachedObservable.this.fireChange();
