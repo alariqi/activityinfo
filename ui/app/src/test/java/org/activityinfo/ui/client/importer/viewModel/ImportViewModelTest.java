@@ -8,7 +8,7 @@ import com.google.common.io.Resources;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormField;
-import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.resource.RecordUpdate;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.FieldValue;
 import org.activityinfo.model.type.RecordRef;
@@ -102,7 +102,7 @@ public class ImportViewModelTest {
 
         RecordRef chittagongRef = new RecordRef(ResourceId.valueOf("E0000000002"), ResourceId.valueOf("z0000000002"));
 
-        List<FormRecord> records = importRecords();
+        List<RecordUpdate> records = importRecords();
         assertThat(records, hasSize(1));
         assertThat(getField(records.get(0), "Name"), equalTo(TextValue.valueOf("Village 1")));
         assertThat(getField(records.get(0), "Administrative Unit"), equalTo(new ReferenceValue(chittagongRef)));
@@ -380,12 +380,12 @@ public class ImportViewModelTest {
         }
     }
 
-    private List<FormRecord> importRecords() {
+    private List<RecordUpdate> importRecords() {
         return Lists.newArrayList(importedView.assertLoaded().getRecords());
 
     }
 
-    private FieldValue getField(FormRecord record, String fieldLabel) {
+    private FieldValue getField(RecordUpdate record, String fieldLabel) {
         List<FormField> fields = viewModel.getFormTree().getRootFormClass().getFields();
         for (FormField field : fields) {
             if(field.getLabel().equals(fieldLabel)) {
@@ -401,7 +401,7 @@ public class ImportViewModelTest {
         String json = Resources.toString(testResource, Charsets.UTF_8);
         JsonValue array = Json.parse(json);
 
-        List<FormRecord> records = importRecords();
+        List<RecordUpdate> records = importRecords();
 
         List<FormField> fields = viewModel.getFormTree().getRootFormClass().getFields();
 
@@ -431,9 +431,9 @@ public class ImportViewModelTest {
 
     private void writeImportResults() throws IOException {
         JsonValue array = Json.createArray();
-        Iterator<FormRecord> it = importedView.assertLoaded().getRecords();
+        Iterator<RecordUpdate> it = importedView.assertLoaded().getRecords();
         while(it.hasNext()) {
-            array.add(it.next().toJson());
+            array.add(Json.toJson(it.next()));
         }
         Files.asCharSink(new File("/tmp/tmp.json"), Charsets.UTF_8).write(Json.stringify(array, 2));
     }
