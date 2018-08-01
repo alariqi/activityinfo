@@ -10,4 +10,5 @@ public interface ImportUpdater {
 
     void startImport(ImportedTable table);
 
+    void cancel();
 }

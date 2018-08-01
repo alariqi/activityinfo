@@ -90,9 +90,10 @@ public class ImportView {
                         children.stream()));
     }
 
-    static VTree cancelButton() {
+    static VTree cancelButton(ImportUpdater updater) {
         return Buttons.button(I18N.CONSTANTS.cancel())
                 .icon(Icon.BUBBLE_CLOSE)
+                .onSelect(event -> updater.cancel())
                 .build();
     }
 

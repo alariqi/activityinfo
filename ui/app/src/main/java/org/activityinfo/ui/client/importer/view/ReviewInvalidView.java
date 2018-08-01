@@ -25,7 +25,7 @@ public class ReviewInvalidView {
 
     private static VTree navigation(ImportViewModel viewModel, ImportUpdater updater) {
         return H.div(
-                ImportView.cancelButton(),
+                ImportView.cancelButton(updater),
                 ImportView.backButton(ImportState.ImportStep.MATCH_COLUMNS, updater),
                 ImportView.doneButton(viewModel, updater));
     }

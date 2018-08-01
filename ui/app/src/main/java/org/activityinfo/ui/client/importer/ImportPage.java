@@ -26,6 +26,7 @@ import java.util.function.Function;
 public class ImportPage extends Page implements ImportUpdater {
 
     private final FormStore formStore;
+    private final ImportPlace place;
 
     private StatefulValue<ImportState> state;
     private Observable<Maybe<ImportViewModel>> viewModel;
@@ -36,6 +37,7 @@ public class ImportPage extends Page implements ImportUpdater {
 
     public ImportPage(FormStore formStore, ImportPlace place) {
         this.formStore = formStore;
+        this.place = place;
         this.state = new StatefulValue<>(new ImportState(place.getFormId()));
         this.viewModel = ImportViewModel.compute(formStore, state);
     }
@@ -73,11 +75,17 @@ public class ImportPage extends Page implements ImportUpdater {
 
         importer.start(() -> {
             modal.hide();
-            onImportComplete(table, importer);
+            onImportComplete(importer);
         });
     }
 
-    private void onImportComplete(ImportedTable table, RecordImporter importer) {
+    @Override
+    public void cancel() {
+        importComplete = true;
+        navigateToTable();
+    }
+
+    private void onImportComplete(RecordImporter importer) {
 
         importComplete = true;
 
@@ -86,8 +94,11 @@ public class ImportPage extends Page implements ImportUpdater {
             .autoHide(7500)
             .build());
 
-        // Navigate to the table view
-        History.replaceItem(new TablePlace(table.getFormId()).toString());
+        navigateToTable();
+    }
+
+    private void navigateToTable() {
+        History.replaceItem(new TablePlace(place.getFormId()).toString());
     }
 
     @Override

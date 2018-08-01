@@ -35,7 +35,7 @@ public class MatchColumnView {
     }
 
     private static VTree navigation(ImportViewModel viewModel, ImportUpdater updater) {
-        return H.div(cancelButton(),
+        return H.div(cancelButton(updater),
                 ImportView.backButton(ImportState.ImportStep.CHOOSE_SOURCE, updater),
                 continueButton(viewModel, updater));
     }

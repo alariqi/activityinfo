@@ -32,7 +32,7 @@ public class ChooseSourceView {
 
 
     private static VTree navigation(ImportViewModel viewModel, ImportUpdater updater) {
-        return H.div(cancelButton(),
+        return H.div(cancelButton(updater),
                      continueButton(viewModel, updater));
     }
 
