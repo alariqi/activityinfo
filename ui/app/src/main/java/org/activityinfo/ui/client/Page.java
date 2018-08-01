@@ -19,4 +19,8 @@ public abstract class Page {
     public String mayStop() {
         return null;
     }
+
+    public void stop() {
+
+    }
 }

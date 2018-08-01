@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -160,10 +161,37 @@ public class ImportViewModelTest {
         importResource("schools.csv");
 
         dumpDerivedMappings();
+    }
 
+    @Test
+    public void intakeMatching() throws IOException {
+        ResourceId formId = ResourceId.valueOf("a1897171135");
+
+        loadDataSet("intake.json");
+        startImport(formId);
+
+        importResource("intake.csv");
+
+        dumpDerivedMappings();
+
+        dumpValidation();
+
+        assertMappingComplete();
+
+        assertThat(importedView.assertLoaded().getValidRecordCount(), equalTo(28));
 
     }
 
+    @Test
+    public void afghanRefs() throws IOException {
+        ResourceId formId = ResourceId.valueOf("a1897171179");
+        loadDataSet("ref.json");
+        startImport(formId);
+
+        importResource("ref.csv");
+
+        writeImportResults();
+    }
 
 
     /**
@@ -303,7 +331,7 @@ public class ImportViewModelTest {
             int rowIndex = i;
             printRow(validatedTable.getColumns().stream().map(c -> {
                 return validationSymbol(c.getValidation().getRowStatus(rowIndex)) + " " +
-                        c.getColumnView().getString(rowIndex);
+                        nullToEmpty(c.getColumnView().getString(rowIndex));
             }));
         }
 

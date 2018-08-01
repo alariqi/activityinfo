@@ -1,0 +1,30 @@
+Partner Name	1.Family Registration Number	Protection Code	Case Worker ID	2.Case Open Date	3.Gender	4.Date of Birth	Age	5. Area	6. Case Status	7.Case affects?	7a. # Minor Males affected	7b. # Minor Females affected	7c. # Adult Males affected	7d. # Adult Females affected	7e. # Persons with disability affected	8. Refugee Vunerabilities 	8a.Other	9. Other Actions	10. Level of Urgency	If the refugee is a child (0-17year) who is the primary caretaker at present? 	Comments
+Default	1-33333333	333-00002	333					001 - Beirut
+Default	1-14302018	101-00001	101	2018-06-18	Female			005 - Tyre	Closed	Individual						Mental health/ psychological condition/ illness		Case reopened	Low risk (one week)	Alone	Added a test case to see how it would appear and how the fields react
+Default	1-00000000	002-00003	002	2017-05-02				004 - Saida		Family / please answer 7a, 7b,7c and 7d	4	3
+Default	1-00000000	333-00004	333	2017-05-11	Female	1990-02-10	28.475		Closed	Individual								Case reopened	Low risk (one week)	Alone
+Default	1-12345612	123-00001	123	2017-04-05						Individual
+Default	1-34232432	333-00001	333	2017-04-18				005 - Tyre		Individual
+Default	1-12345678	333-00003	333	2017-05-03	Female	1990-03-10	28.3916666667		Closed	Family / please answer 7a, 7b,7c and 7d	0	0	0	1	0	Remote Location/ Geographical exclusion		Case Transferred	Low risk (one week)	Alone	Testing
+Default	1-98764500	00005		2017-05-11		2010-11-08	7.7305555556	004 - Saida	Closed	Individual						Remote Location/ Geographical exclusion			Low risk (one week)	Alone
+Default	32533	003-00001	003	2017-07-12	Male	1982-01-06	36.5694444444	002 - Beqaa	Closed	Family / please answer 7a, 7b,7c and 7d	4	4	5	6	6	Remote Location/ Geographical exclusion, Physical (Person with disability) 		Case reopened	High risk (24hr)	Other adult family member *seperated child)
+Default	1-03121992	435-00001	435	2017-04-25	Female	1999-03-12	19.3861111111	003 - NLA		Individual
+Default	1-04052017	00004		2017-05-04				005 - Tyre	Opened	Family / please answer 7a, 7b,7c and 7d	0	0	0	0	0				Low risk (one week)	Alone
+Default	1-11052017	333-00006	333	2017-05-11	Male	2013-05-05	5.2388888889		Opened	Family / please answer 7a, 7b,7c and 7d	1	2	0	0	0	Remote Location/ Geographical exclusion		Case Transferred	High risk (24hr)	Alone
+Default	1-11052017	333-00005	333	2017-05-11		2010-03-04	8.4083333333		Opened	Individual						Sensory (Person with disability)		Case reopened	Medium risk (72hr)	Other minor / sibling aged 0- 17 years (unaccompanied child)
+Default	1-00000000	000-00002	000	2017-04-12				003 - NLA		Family / please answer 7a, 7b,7c and 7d
+Default		001-00005	001	2017-04-21				001 - Beirut		Individual											"This the new entry I'm saving while talking to Sasha
+"
+Default	1-04052017	323-00001	323	2017-05-04	Female	1997-05-02	21.2472222222		Opened	Family / please answer 7a, 7b,7c and 7d	0	0	1	1	2	Chronic illness/Medical Needs		Case Transferred	Medium risk (72hr)	Both parents
+Default		001-00004	001	2017-04-10				001 - Beirut		Family / please answer 7a, 7b,7c and 7d
+Default	1-23426189	007-00001	007	2017-04-20				003 - NLA		Family / please answer 7a, 7b,7c and 7d	2	1
+Default	1-17052017	140-00001	140	2017-05-17	Male	2017-05-17	1.2055555556	004 - Saida	Opened	Individual						Life Threatening medical condition		Case reopened	Medium risk (72hr)	Other adult, non-related (unaccompanied child)
+Default	1-18052017	354-00001	354	2017-05-18	Female	1997-05-16	21.2083333333		Closed	Individual						Financial Hardship Abject poverty		Case reopened	Low risk (one week)	Alone
+Default		001-00001	001	2017-04-12				001 - Beirut		Individual
+Default	1-11051700	00006		2017-05-11		1996-03-06	22.4027777778		Closed	Individual								Case Transferred	Low risk (one week)	Alone	Male gender selected
+Default	1-34433333	001-00003	001	2017-04-20				002 - Beqaa		Family / please answer 7a, 7b,7c and 7d
+Default	1-34433333	002-00001	002	2017-04-22				002 - Beqaa		Family / please answer 7a, 7b,7c and 7d
+Default		001-00006	001	2016-12-28				004 - Saida		Individual
+Default		000-00001	000	2017-04-04				003 - NLA		Family / please answer 7a, 7b,7c and 7d
+Default	1-00000000	002-00002	002	2017-04-06				002 - Beqaa		Family / please answer 7a, 7b,7c and 7d
+Default		00007		2017-06-14	Male	2017-06-21	1.1111111111	002 - Beqaa	Opened	Family / please answer 7a, 7b,7c and 7d	2	45	5	6	7	Life Threatening medical condition, Remote Location/ Geographical exclusion, Sensory (Person with disability), Physical (Person with disability) 		Case Transferred	Medium risk (72hr)	Both parents, Other minor / sibling aged 0- 17 years (unaccompanied child)	Adding a new record test

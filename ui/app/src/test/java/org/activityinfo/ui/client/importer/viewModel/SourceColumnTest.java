@@ -15,6 +15,13 @@ public class SourceColumnTest {
         assertThat(column.getDateCount(), equalTo(2));
     }
 
+    @Test
+    public void zeros() {
+        SourceColumn column = column("0", "0", "0", "0");
+        assertThat(column.getNumberFraction(), equalTo(1.0));
+
+    }
+
     private SourceColumn column(String... values) {
         return new SourceColumn("A", "B", new StringArrayColumnView(values));
     }

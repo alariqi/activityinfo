@@ -2,10 +2,7 @@ package org.activityinfo.ui.client.importer.viewModel.fields;
 
 import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.type.FieldTypeVisitor;
-import org.activityinfo.model.type.NarrativeType;
-import org.activityinfo.model.type.ReferenceType;
-import org.activityinfo.model.type.SerialNumberType;
+import org.activityinfo.model.type.*;
 import org.activityinfo.model.type.attachment.AttachmentType;
 import org.activityinfo.model.type.barcode.BarcodeType;
 import org.activityinfo.model.type.enumerated.EnumType;
@@ -80,7 +77,14 @@ public class FieldViewModelFactory implements FieldTypeVisitor<Optional<FieldVie
 
     @Override
     public Optional<FieldViewModel> visitEnum(EnumType enumType) {
-        return Optional.of(new SimpleFieldViewModel(field, new EnumParser(enumType)));
+        if(enumType.getValues().size() == 0) {
+            return Optional.empty();
+        }
+        if(enumType.getCardinality() == Cardinality.MULTIPLE) {
+            return Optional.of(new SimpleFieldViewModel(field, new DelimitedMultiEnumParser(enumType)));
+        } else {
+            return Optional.of(new SimpleFieldViewModel(field, new EnumParser(enumType)));
+        }
     }
 
     @Override

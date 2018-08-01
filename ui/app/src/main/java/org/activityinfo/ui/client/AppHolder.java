@@ -61,6 +61,8 @@ public class AppHolder implements IsWidget {
             if(currentPage.tryNavigate(place)) {
                 return;
             }
+
+            currentPage.stop();
         }
 
         currentPlace = place;

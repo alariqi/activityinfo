@@ -30,6 +30,8 @@ public class RecordImporter {
 
     private int recordsUpdated = 0;
 
+    private boolean cancelled = false;
+
 
     public RecordImporter(FormStore formStore, ImportedTable table) {
         this.formStore = formStore;
@@ -48,6 +50,10 @@ public class RecordImporter {
     }
 
     private void queueNextBatch() {
+
+        if(cancelled) {
+            return;
+        }
 
         if(!recordIt.hasNext()) {
             onComplete.run();
@@ -95,5 +101,9 @@ public class RecordImporter {
 
     public int getRecordsCommitted() {
         return progress.get().getRecordsCommitted();
+    }
+
+    public void cancel() {
+        cancelled = true;
     }
 }

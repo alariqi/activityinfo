@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.importer.viewModel;
 
+import com.google.common.base.Strings;
 import org.activityinfo.io.csv.ColumnBuilder;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.query.StringArrayColumnView;
@@ -13,7 +14,7 @@ public class JvmColumnBuilder implements ColumnBuilder {
 
     @Override
     public void add(String value) {
-        values.add(value);
+        values.add(Strings.emptyToNull(value));
     }
 
     @Override

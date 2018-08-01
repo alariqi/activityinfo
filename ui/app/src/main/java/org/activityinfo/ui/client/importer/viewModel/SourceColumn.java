@@ -2,12 +2,10 @@ package org.activityinfo.ui.client.importer.viewModel;
 
 import com.google.gwt.regexp.shared.RegExp;
 import org.activityinfo.io.match.date.LatinDateParser;
-import org.activityinfo.io.match.names.LatinPlaceNameScorer;
 import org.activityinfo.model.query.ColumnView;
 import org.activityinfo.model.type.time.LocalDate;
 
 import java.util.Random;
-import java.util.Set;
 
 public class SourceColumn {
 
@@ -56,6 +54,10 @@ public class SourceColumn {
 
         validRows = columnView.numRows() - missingCount;
         sample = sample(20);
+    }
+
+    public String[] getSample() {
+        return sample;
     }
 
     private boolean isDate(String value) {
@@ -114,26 +116,6 @@ public class SourceColumn {
         return numberCount > 0;
     }
 
-    /**
-     * Find the proportion of matching values across the sample
-     */
-    public double scoreSample(Set<String> expected) {
-        double sumOfScores = 0;
-        int countOfScores = 0;
-
-        for (int i = 0; i < sample.length; i++) {
-            if(expected.contains(sample[i])) {
-                sumOfScores += 1.0;
-            }
-            countOfScores ++;
-        }
-        if(countOfScores == 0) {
-            return 0;
-        } else {
-            return sumOfScores / (double)countOfScores;
-        }
-    }
-
     public double scoreSample(RegExp regex) {
         int count = 0;
         for (int i = 0; i < sample.length; i++) {
@@ -170,17 +152,6 @@ public class SourceColumn {
             }
         }
         return sample;
-    }
-
-    private double bestScore(LatinPlaceNameScorer scorer, String value, Set<String> expected) {
-        double bestScore = 0;
-        for (String s : expected) {
-            double score = scorer.score(s, value);
-            if(score > bestScore) {
-                bestScore = score;
-            }
-        }
-        return bestScore;
     }
 
     public boolean isEmpty() {
