@@ -238,7 +238,7 @@ public class RootResource {
         UserProfile profile = new UserProfile();
         profile.setUserId(authenticatedUser.getUserId());
         profile.setEmail(authenticatedUser.getEmail());
-        profile.setAvatarUrl(Gravatar.getAvatar(authenticatedUser.getEmail()));
+        profile.setAvatarUrl(GravatarService.getAvatar(authenticatedUser.getEmail()));
         return profile;
     }
 
@@ -250,7 +250,7 @@ public class RootResource {
             throw new WebApplicationException(Status.UNAUTHORIZED);
         }
 
-        return Response.temporaryRedirect(new URI(Gravatar.gravatarUrl(authenticatedUser.getEmail()))).build();
+        return Response.temporaryRedirect(new URI(GravatarService.gravatarUrl(authenticatedUser.getEmail()))).build();
     }
 
 }

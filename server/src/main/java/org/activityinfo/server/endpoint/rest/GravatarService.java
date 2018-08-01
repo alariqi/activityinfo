@@ -15,9 +15,9 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Gravatar {
+public class GravatarService {
 
-    private static final Logger LOGGER = Logger.getLogger(Gravatar.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(GravatarService.class.getName());
 
     private static final MemcacheService memcacheService = MemcacheServiceFactory.getMemcacheService();
 
@@ -75,7 +75,7 @@ public class Gravatar {
      * @return a
      */
     @SuppressWarnings("deprecation")
-    private static String emailHash(String emailAddress) {
+    static String emailHash(String emailAddress) {
         return Hashing.md5().hashString(emailAddress.trim().toLowerCase(), Charsets.UTF_8).toString();
     }
 
