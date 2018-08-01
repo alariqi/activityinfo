@@ -9,7 +9,10 @@ public class GravatarServiceTest {
 
     @Test
     public void gravatarTest() {
-        assertThat(GravatarService.emailHash("MyEmailAddress@example.com "), equalTo("f9879d71855b5ff21e4963273a886bfc"));
+
+        // See https://en.gravatar.com/site/implement/hash/
+
+        assertThat(GravatarService.emailHash("MyEmailAddress@example.com "), equalTo("0bc83cb571cd1c50ba6f3e8a78ef1346"));
     }
 
 }
