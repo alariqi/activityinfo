@@ -13,8 +13,13 @@ public class Gravatar implements Avatar {
 
         PropMap imageProps = Props.create();
         imageProps.setClass("avatar");
-        imageProps.set("src", "https://www.gravatar.com/avatar/989835256acefc4a5f286184c0e1337b.png");
+        imageProps.set("src", avatarUrl());
 
         return new VNode(HtmlTag.IMG, imageProps);
     }
+
+    private String avatarUrl() {
+        return "/resources/profile/avatar";
+    }
 }
+    

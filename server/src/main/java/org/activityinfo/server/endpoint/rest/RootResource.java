@@ -30,6 +30,7 @@ import org.activityinfo.legacy.shared.model.DTOViews;
 import org.activityinfo.legacy.shared.model.UserDatabaseDTO;
 import org.activityinfo.model.query.QueryModel;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.user.UserProfile;
 import org.activityinfo.server.DeploymentConfiguration;
 import org.activityinfo.server.authentication.ServerSideAuthProvider;
 import org.activityinfo.server.command.DispatcherSync;
@@ -50,6 +51,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @Path("/resources")
@@ -223,6 +226,31 @@ public class RootResource {
     @Path("/analysis")
     public AnalysesResource getAnalysis() {
         return new AnalysesResource(permissionOracle, userProvider);
+    }
+
+    @GET
+    @Path("/profile")
+    public UserProfile getUserProfile() {
+        AuthenticatedUser authenticatedUser = userProvider.get();
+        if(authenticatedUser.isAnonymous()) {
+            throw new WebApplicationException(Status.UNAUTHORIZED);
+        }
+        UserProfile profile = new UserProfile();
+        profile.setUserId(authenticatedUser.getUserId());
+        profile.setEmail(authenticatedUser.getEmail());
+        profile.setAvatarUrl(Gravatar.getAvatar(authenticatedUser.getEmail()));
+        return profile;
+    }
+
+    @GET
+    @Path("/profile/avatar")
+    public Response getUserAvatar() throws URISyntaxException {
+        AuthenticatedUser authenticatedUser = userProvider.get();
+        if(authenticatedUser.isAnonymous()) {
+            throw new WebApplicationException(Status.UNAUTHORIZED);
+        }
+
+        return Response.temporaryRedirect(new URI(Gravatar.gravatarUrl(authenticatedUser.getEmail()))).build();
     }
 
 }
