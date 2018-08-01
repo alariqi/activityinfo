@@ -30,4 +30,8 @@ public class ReferenceImporter implements FieldImporter {
         }
         return new ReferenceValue(new RecordRef(referencedFormId, ResourceId.valueOf(recordId)));
     }
+
+    public String getRecordId(int rowIndex) {
+        return recordIds[rowIndex];
+    }
 }

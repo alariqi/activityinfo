@@ -13,6 +13,7 @@ import org.activityinfo.ui.client.store.FormStore;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,7 @@ public class FieldViewModelSet implements Iterable<FieldViewModel> {
     private static final Logger LOGGER = Logger.getLogger(FieldViewModelSet.class.getName());
 
     private ResourceId formId;
+    private Optional<FieldViewModel> parentField;
     private List<FieldViewModel> fields = new ArrayList<>();
     private List<ColumnTarget> targets = new ArrayList<>();
 
@@ -32,6 +34,8 @@ public class FieldViewModelSet implements Iterable<FieldViewModel> {
                 targets.addAll(vm.getTargets());
             });
         }
+
+
     }
 
     public ResourceId getFormId() {

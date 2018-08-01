@@ -81,7 +81,7 @@ public class ReferenceMatcher implements IncrementalTask<ReferenceMatcher.Result
         while(currentRow < numRows && remaining > 0) {
 
             for (int i = 0; i < columns.length; i++) {
-                keyBuffer[i] = columns[i].getString(i);
+                keyBuffer[i] = columns[i].getString(currentRow);
             }
 
             result.matchedIds[currentRow] = index.lookup(keyBuffer);

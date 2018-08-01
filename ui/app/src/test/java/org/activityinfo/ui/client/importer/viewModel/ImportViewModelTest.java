@@ -183,14 +183,18 @@ public class ImportViewModelTest {
     }
 
     @Test
-    public void afghanRefs() throws IOException {
-        ResourceId formId = ResourceId.valueOf("a1897171179");
-        loadDataSet("ref.json");
+    public void subFormImport() throws IOException {
+
+        ResourceId formId = ResourceId.valueOf("subform1");
+
+        loadDataSet("subforms.json");
         startImport(formId);
 
-        importResource("ref.csv");
+        importResource("subforms-repeating.csv");
 
-        writeImportResults();
+        dumpDerivedMappings();
+
+        verifyImport("subforms-repeating-expected.json");
     }
 
 
@@ -431,8 +435,6 @@ public class ImportViewModelTest {
 
         List<RecordUpdate> records = importRecords();
 
-        List<FormField> fields = viewModel.getFormTree().getRootFormClass().getFields();
-
         if(records.size() != array.length()) {
             throw new AssertionError("Expected " + array.length() + " records to be imported, found " + records.size());
         }
@@ -440,6 +442,16 @@ public class ImportViewModelTest {
         int mismatchCount = 0;
 
         for (int i = 0; i < array.length(); i++) {
+
+            String expectedParent = array.get(i).getString("parentRecordId");
+            String actualParent = records.get(i).getParentRecordId();
+
+            if(!Objects.equals(expectedParent, actualParent)) {
+                System.out.println("In row #" + i + ": parent "  +
+                        actualParent + " != " + expectedParent);
+                mismatchCount++;
+            }
+
             JsonValue expectedFields = array.get(i).get("fields");
             JsonValue actualFields = records.get(i).getFields();
 
@@ -447,7 +459,14 @@ public class ImportViewModelTest {
                 JsonValue expectedValue = expectedFields.get(fieldName);
                 JsonValue actualValue = actualFields.get(fieldName);
                 if(!Objects.equals(expectedValue, actualValue)) {
-                    System.out.println("In row #" + i + ": " + actualValue.toJson() + " != " + expectedValue.toJson());
+                    System.out.println("In row #" + i + ": " + fieldName + " "  + actualValue.toJson() + " != " + expectedValue.toJson());
+                    mismatchCount++;
+                }
+            }
+            for (String fieldName : actualFields.keys()) {
+                if(!expectedFields.hasKey(fieldName)) {
+                    JsonValue actualValue = actualFields.get(fieldName);
+                    System.out.println("In row #" + i + ": " + fieldName + " " + actualValue.toJson() + " != missing");
                     mismatchCount++;
                 }
             }
