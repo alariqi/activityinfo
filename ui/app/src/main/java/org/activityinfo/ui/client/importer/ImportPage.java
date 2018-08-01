@@ -29,7 +29,10 @@ public class ImportPage extends Page implements ImportUpdater {
 
     private StatefulValue<ImportState> state;
     private Observable<Maybe<ImportViewModel>> viewModel;
+
     private boolean importComplete = false;
+    private AppModal modal;
+    private RecordImporter importer;
 
     public ImportPage(FormStore formStore, ImportPlace place) {
         this.formStore = formStore;
@@ -50,6 +53,7 @@ public class ImportPage extends Page implements ImportUpdater {
         return null;
     }
 
+
     @Override
     public VTree render() {
         return AppFrame.render(formStore, ImportView.render(viewModel, this));
@@ -62,9 +66,9 @@ public class ImportPage extends Page implements ImportUpdater {
 
     @Override
     public void startImport(ImportedTable table) {
-        RecordImporter importer = new RecordImporter(formStore, table);
+        importer = new RecordImporter(formStore, table);
 
-        AppModal modal = new AppModal(CommittingView.render(importer.getProgress()));
+        modal = new AppModal(CommittingView.render(importer.getProgress()));
         modal.show();
 
         importer.start(() -> {
@@ -86,4 +90,13 @@ public class ImportPage extends Page implements ImportUpdater {
         History.replaceItem(new TablePlace(table.getFormId()).toString());
     }
 
+    @Override
+    public void stop() {
+        if(importer != null) {
+            importer.cancel();
+        }
+        if(modal != null) {
+            modal.hide();
+        }
+    }
 }
