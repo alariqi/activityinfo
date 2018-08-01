@@ -20,8 +20,6 @@ package org.activityinfo.io.match.names;
 
 import com.google.common.annotations.VisibleForTesting;
 
-import static java.lang.Math.max;
-
 /**
  * Scores the similarity between two names names written in a Latin
  * script.
@@ -42,9 +40,6 @@ public class LatinPlaceNameScorer {
     private final LatinPlaceName y = new LatinPlaceName();
 
     private final LatinWordDistance distanceFunction = new LatinWordDistance();
-
-    // Use a flyweight array for tracking permutations
-    private final int permutation[] = new int[LatinPlaceName.MAX_PARTS];
 
     public LatinPlaceNameScorer() {
     }
@@ -96,10 +91,7 @@ public class LatinPlaceNameScorer {
 
         // first try with no merging
 
-        double score = findBestPermutationScore();
-
-
-        return score;
+        return score();
 
     }
 
@@ -114,18 +106,13 @@ public class LatinPlaceNameScorer {
      * score the similarity between each part X[i] and Y[j] and find the best
      * assignment from i -> j.
      *
-     * <ul>
-     *     <li>score([KAYES, COMMUNE], [COMMUNE, DE])</li>
-     *     <li>score([KAYES, COMMUNE], [COMMUNE, KAYES])</li>
-     *     <li>score([KAYES, COMMUNE], [DE, KAYES]</li>
-     *     <li>score([KAYES, COMMUNE], [KAYES, COMMUNE]</li>
-     *     <li>etc</li>
-     * </ul>
-     * @return
+     *           | COMMUNE | DE   | KAYES  |
+     * KAYES     |       0 |    0 |     1  |
+     * COMMUNE   |       1 |    0 |     1  |
+     *
      */
     @VisibleForTesting
-    double findBestPermutationScore() {
-
+    double score() {
         // swap x and y if necessary so that
         // left.numParts <= right.numParts
 
@@ -139,62 +126,65 @@ public class LatinPlaceNameScorer {
         }
 
         // find the similarity between each pair of parts in left and right
-
         int leftParts = left.partCount();
         int rightParts = right.partCount();
 
-        double scores[][] = new double[leftParts][rightParts];
-        for(int i=0;i<leftParts;++i) {
-            for(int j=0;j<rightParts;++j) {
-                scores[i][j] = similarity(left, i, right, j);
+        // keep track of which parts we have matched on the right so that we
+        // don't count it twice
+        boolean[] columnsMatched = new boolean[rightParts];
+
+        // Our numerator is the (minimum) length of matching part pairs, weighted by
+        // by their similarity score.
+
+        // The denominator is the sum of the minimum length of matching part pairs, together
+        // with the sum of all unmatched pairs.
+
+        double numerator = 0;
+        double denominator = 0;
+
+        // For each left part, find the best matching right part, if there is one.
+
+        for (int i = 0; i < leftParts; i++) {
+
+            int leftLength = left.charCount(i);
+
+            // Find the best remaining column to match
+            int bestRight = -1;
+            double bestScore = 0;
+            for (int j = 0; j < rightParts; j++) {
+                if(!columnsMatched[j]) {
+                    double score = similarity(left, i, right, j);
+                    if(score > 0 && score > bestScore) {
+                        bestRight = j;
+                        bestScore = score;
+                    }
+                }
             }
-        }
 
-        // now find the best partial permutation among the right name parts, taking
-        // the score
-        double bestScore = 0;
-
-        // loop through each partial permutation of the right parts
-        PartialPermutations.first(permutation, rightParts);
-        do {
-            double numerator = 0;
-            double denominator = 0;
-
-            // keep track of the parts from the right that
-            // are not included in this permutation, they
-            // need to be included in the denominator
-            double extraRightParts = right.charCount();
-
-            for(int leftPart=0;leftPart<leftParts;++leftPart) {
-                int rightPart = permutation[leftPart];
-
-                double score = scores[leftPart][rightPart];
-
-                int leftLength = left.charCount(leftPart);
-                int rightLength = right.charCount(rightPart);
+            // Did we match?
+            if(bestRight != -1) {
+                columnsMatched[bestRight] = true;
 
                 // we use the minimum length of the word as the weight
                 // to avoid inflating short words that match longer words because
                 // of lots of vowels
-                int minLength = Math.min(leftLength, rightLength);
-                numerator += score * (double)minLength;
+                int minLength = Math.min(leftLength, right.charCount(bestRight));
+                numerator += bestScore * (double)minLength;
+                denominator += minLength;
 
-                if(score > 0.0) {
-                    denominator += minLength;
-                } else {
-                    denominator += leftLength + rightLength;
-                }
-
-                extraRightParts -= rightLength;
+            } else {
+                denominator += leftLength;
             }
+        }
 
-            denominator += extraRightParts;
+        // Add unmatched "right" parts to the denominator
+        for (int j = 0; j < rightParts; j++) {
+            if(!columnsMatched[j]) {
+                denominator += right.charCount(j);
+            }
+        }
 
-            bestScore = max(bestScore, numerator / denominator);
-
-        } while(PartialPermutations.next(permutation, rightParts, leftParts));
-
-       return bestScore;
+        return numerator / denominator;
     }
 
     private double similarity(LatinPlaceName left, int leftPartIndex, LatinPlaceName right, int rightPartIndex) {
@@ -250,7 +240,4 @@ public class LatinPlaceNameScorer {
             return 0.0;
         }
     }
-
-
-
 }

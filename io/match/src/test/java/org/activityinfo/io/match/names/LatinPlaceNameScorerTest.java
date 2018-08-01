@@ -18,11 +18,8 @@
  */
 package org.activityinfo.io.match.names;
 
-import com.google.common.collect.Lists;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -32,31 +29,6 @@ public class LatinPlaceNameScorerTest {
 
     public static final double MINIMUM_SCORE = 0.25;
 
-    @Test
-    public void permutations() {
-
-        String y[] = new String[] { "COMMUNE", "DE", "KAYES" };
-
-        List<String> permutations = Lists.newArrayList();
-
-        int a[] = PartialPermutations.identity(y.length);
-
-        do {
-            String permuted = y[a[0]] + " " + y[a[1]];
-            System.out.println(permuted);
-            permutations.add(permuted);
-        }
-        while(PartialPermutations.next(a, y.length, 2));
-
-        assertThat(permutations, contains(
-                "COMMUNE DE",
-                "COMMUNE KAYES",
-                "DE COMMUNE",
-                "DE KAYES",
-                "KAYES COMMUNE",
-                "KAYES DE"));
-    }
-    
     @Test
     public void matchCodes() {
         LatinPlaceNameScorer scorer = new LatinPlaceNameScorer();
@@ -68,7 +40,7 @@ public class LatinPlaceNameScorerTest {
         LatinPlaceNameScorer scorer = new LatinPlaceNameScorer();
         scorer.init("COMMUNE DE KAYES", "COMMUNE KAYES");
 
-        double bestScore = scorer.findBestPermutationScore();
+        double bestScore = scorer.score();
 
         // the score ~ number of characters matched
         double numerator = "COMMUNEKAYES".length();
@@ -153,6 +125,15 @@ public class LatinPlaceNameScorerTest {
         assertThat(scorer.score("Joffre Ville", "Joffreville"), equalTo(1.0));
         assertThat(scorer.score("Joffreville", "Joffre Ville"), equalTo(1.0));
 
+    }
+
+    @Test
+    public void longFieldNames() {
+        String field1 = "2.2 Name of organization/department receiving the referral";
+        String field2 = "If the refugee is a child (0-17year) who is the primary caretaker at present? ";
+
+        final LatinPlaceNameScorer scorer = new LatinPlaceNameScorer();
+        System.out.println(scorer.score(field1, field2));
     }
 
 //

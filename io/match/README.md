@@ -77,11 +77,14 @@ Given two input strings each broken into an array of parts, for example,
 [`COMMUNE`, `DE`, `GOUMERA`] and [`GOUMERA`, `COMUNE`], we compute a similarity score for each 
 pair of parts from the left and right:
 
-|        | GOUMERA | COMUNE   |
-|--------|--------:|---------:|
-|COMMUNE |     0.0 |  **0.93**|
-|DE      |     0.0 |     0.00 |
-|GOUMERA | **1.0** |     0.00 |
+
+|        | COMMUNE | DE       | GOUMERA   |
+|--------|--------:|---------:|:---------:|
+|GOUMERA |     0.0 |     0.00 |   **1.0** |
+|COMUNE  |**0.93** |     0.00 |       0.0 |
+
+The "left" and "right" names are chosen such that the "left" name has
+fewer or equal parts than the right name.
 
 The similarity score between two parts is computed depending on the type
 of parts:
@@ -93,18 +96,22 @@ of parts:
   alphabetic part is a roman numeral and then compare exactly with the number.
   Otherwise the two parts have a similarity of zero. 
   
-With the similarity matrix in hand, we take the best score of all permutations
-of the left and right parts, weighted by part length. In the example above,
-we would consider six permutations:
+With the similarity matrix in hand, we find the best matching column for each
+row in the matrix, ensuring that we match a column to at most one row.
 
-* [COMMUNE, GOUMERA] ⇔ [COMUNE, DE] = 0.37
-* [COMMUNE, GOUMERA] ⇔ [COMUNE, GOUMERA] = 0.86 (missing "DE")
-* [COMMUNE, GOUMERA] ⇔ [DE, COMUNE] = 0
-* [COMMUNE, GOUMERA] ⇔ [DE, GOUMERA] = 0.24
-* [COMMUNE, GOUMERA] ⇔ [GOUMERA, DE] = 0
+Finally, we compute a score between 0 and 1 indicating how well the two
+names match. Specifically:
 
-The best permutation is the second one, where the order of 
-[GOUMERA, COMUNE] is flipped.
+We define the **numerator** as the sum of the lengths of all matching parts, weighted
+by their similarity scores. In the example above, "COMMUNE" best matches "COMUNE"
+with a similarity of 0.93. We use the minimum length of the two parts, which
+in this case is 6 characters, weighted by 0.93, contributes 5.58 to the
+numerator.
+
+"GOUMERA" matches "GOUMERA" exactly, so contributes 6 * 1.0 to the numerator.
+
+The denominator includes lengths of the matching parts (6 + 6) as well as the
+unmatched "DE" (2).
 
 ### Phonetic Similarity Algorithm
 
