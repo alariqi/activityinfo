@@ -19,9 +19,9 @@
 package org.activityinfo.ui.client;
 
 import com.google.gwt.core.client.Scheduler;
-import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import org.activityinfo.i18n.shared.I18N;
+import org.activityinfo.ui.client.base.toaster.Toast;
+import org.activityinfo.ui.client.base.toaster.Toaster;
 
 import java.util.logging.Logger;
 
@@ -69,12 +69,12 @@ public class AppCacheMonitor3 {
     }
 
     private void promptUser() {
-        MessageBox messageBox = new MessageBox("ActivityInfo");
-        messageBox.setMessage(I18N.CONSTANTS.newVersionChoice());
-        messageBox.setPredefinedButtons(Dialog.PredefinedButton.OK, Dialog.PredefinedButton.CANCEL);
-        messageBox.getButton(Dialog.PredefinedButton.OK).addSelectHandler(event -> {
-            appCache.loadUpdate();
-        });
-        messageBox.show();
+        Toaster.show(new Toast.Builder()
+            .autoHideSeconds(5)
+            .message(I18N.CONSTANTS.newVersionChoice())
+            .action(I18N.CONSTANTS.load(), () -> {
+                appCache.loadUpdate();
+            })
+            .build());
     }
 }

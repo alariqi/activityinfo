@@ -103,6 +103,11 @@ public class Toast {
             return this;
         }
 
+        public Builder autoHideSeconds(int delay) {
+            toast.autoHide = delay * 1000;
+            return this;
+        }
+
         public Builder autoHide(int milliseconds) {
             toast.autoHide = milliseconds;
             return this;
