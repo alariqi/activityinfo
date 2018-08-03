@@ -49,7 +49,7 @@ allprojects {
 
 apply from: "./gradle/buildNumber.gradle"
 apply from: "./gradle/libraries.gradle"
-apply from: "./gradle/license.gradle"
+//apply from: "./gradle/license.gradle"
 apply from: './gradle/database.gradle'
 apply from: "./gradle/environment.gradle"
 apply from: "./gradle/java.gradle"
