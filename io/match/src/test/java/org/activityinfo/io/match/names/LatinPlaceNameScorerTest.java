@@ -136,6 +136,19 @@ public class LatinPlaceNameScorerTest {
         System.out.println(scorer.score(field1, field2));
     }
 
+    @Test
+    public void nonLatinNames() {
+        // When matching non-latin names, the algorithm should degrade gracefuly to score exact matches as 1.0
+        // and everything else as 0.0
+
+        LatinPlaceNameScorer scorer = new LatinPlaceNameScorer();
+
+        assertThat(scorer.score("رقم تسجيل العائلة", "رقم تسجيل العائلة"), equalTo(1.0));
+        assertThat(scorer.score("رقم تسجيل العائلة", "فلسطيني قادم من سوريا"), equalTo(0.0));
+        assertThat(scorer.score("نعم", "Yes"), equalTo(0.0));
+        assertThat(scorer.score("Yes / نعم", "Yes / نعم"), equalTo(1.0));
+    }
+
 //
 //    @Test
 //    public void profileNames() throws IOException {
