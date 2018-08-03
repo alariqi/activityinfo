@@ -1,4 +1,9 @@
+
+/*rtl:begin:ignore*/
+
+
 .logo {
+  direction:ltr;
   transition: padding 0.2s ease;
   display: flex;
   align-items: center;
@@ -37,3 +42,5 @@
 .logo:hover svg path {
   fill: $black;
 }
+
+/*rtl:end:ignore*/
