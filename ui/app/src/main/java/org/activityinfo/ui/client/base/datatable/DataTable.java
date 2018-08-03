@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.base.datatable;
 
+import com.google.gwt.i18n.client.LocaleInfo;
 import elemental2.dom.*;
 import jsinterop.base.Js;
 import org.activityinfo.analysis.table.Sorting;
@@ -304,7 +305,14 @@ public class DataTable {
         @Override
         public void handleEvent(Event evt) {
             // Sync the header scrolling
-            headerTable.style.transform = "translateX(" + (-tableBody.scrollLeft) + "px)";
+            double translation;
+            if(LocaleInfo.getCurrentLocale().isRTL()) {
+                double scrollRight = tableBody.clientWidth - (tableBody.scrollWidth - tableBody.scrollLeft);
+                translation =  -scrollRight;
+            } else {
+                translation = -tableBody.scrollLeft;
+            }
+            headerTable.style.transform = "translateX(" + translation + "px)";
 
             // Update our estimate of row height with a measured value
             if(!measuredRowHeight) {
