@@ -60,12 +60,7 @@ public class ChooseSourceView {
         return H.div("importer__source__buttons",
                 H.div(
                         H.h3("Add your data here"),
-                        H.p("Paste your copied table in this text field."),
-                        H.p("Alternatively, upload a CSV or XLS file."),
-                        Buttons.button(I18N.CONSTANTS.upload())
-                                .primary()
-                                .icon(Icon.BUBBLE_IMPORT)
-                                .build()));
+                        H.p(I18N.CONSTANTS.pasteSpreadsheetInstructions())));
     }
 
 
