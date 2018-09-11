@@ -44,8 +44,6 @@
   <inherits name="org.activityinfo.ui.codemirror.CodeMirror"/>
   <inherits name="org.activityinfo.ui.vdom.VDom"/>
 
-  <inherits name="com.bedatadriven.rebar.appcache.AppCache"/>
-
   <inherits name="elemental2.dom.Dom"/>
 
   <set-property name="gwt.logging.logLevel" value="FINEST"/>
