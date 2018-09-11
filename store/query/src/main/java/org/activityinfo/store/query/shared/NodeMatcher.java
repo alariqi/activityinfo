@@ -30,7 +30,6 @@ import org.activityinfo.model.formula.functions.FormulaFunction;
 import org.activityinfo.model.formula.functions.StatFunction;
 import org.activityinfo.model.query.ColumnModel;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.model.type.RecordFieldType;
 import org.activityinfo.model.type.ReferenceType;
 import org.activityinfo.model.type.enumerated.EnumItem;
 import org.activityinfo.model.type.enumerated.EnumType;
@@ -127,10 +126,9 @@ public class NodeMatcher {
                     matches.add(Collections.singleton(result.get()));
                 }
             } else if(field.getType() instanceof GeoPointType) {
-                Optional<NodeMatch> result = matchCoordinate(queryPath, field);
-                if(result.isPresent()) {
-                    matches.add(Collections.singleton(result.get()));
-                }
+                matchCoordinate(queryPath, field).ifPresent(match -> {
+                    matches.add(Collections.singleton(match));
+                });
             }
         }
         if(matches.size() > 0) {
@@ -168,12 +166,12 @@ public class NodeMatcher {
         return Optional.absent();
     }
 
-    private Optional<NodeMatch> matchCoordinate(QueryPath queryPath, FormTree.Node field) {
+    private java.util.Optional<NodeMatch> matchCoordinate(QueryPath queryPath, FormTree.Node field) {
         String symbol = queryPath.peek().toLowerCase();
         if(symbol.equals("latitude") || symbol.equals("longitude")) {
-            return Optional.of(NodeMatch.forFieldComponent(field, symbol));
+            return java.util.Optional.of(NodeMatch.forFieldComponent(field, symbol));
         } else {
-            return Optional.absent();
+            return java.util.Optional.empty();
         }
     }
 
@@ -185,8 +183,13 @@ public class NodeMatcher {
 
         List<NodeMatch> matches = Lists.newLinkedList();
 
+        // Check for a reference to a form label
+        if(path.isLeaf() && path.head().equals(ColumnModel.FORM_NAME_SYMBOL)) {
+            matches.add(NodeMatch.forLabel(path.head(), tree.getRootFormClass()));
+        }
+
         // Check for a reference to a form record id or the form id
-        if (path.isLeaf() && path.head().equals(ColumnModel.ID_SYMBOL) || path.head().equals(ColumnModel.CLASS_SYMBOL)) {
+        if (path.isLeaf() && path.head().equals(ColumnModel.RECORD_ID_SYMBOL) || path.head().equals(ColumnModel.FORM_ID_SYMBOL)) {
             matches.add(NodeMatch.forId(path.head(), tree.getRootFormClass()));
         }
 
@@ -194,6 +197,11 @@ public class NodeMatcher {
         for (FormTree.Node field : fields) {
             if(path.matches(field)) {
                 matches.add(NodeMatch.forField(field, currentAggregation()));
+            } else if(field.getType() instanceof GeoPointType) {
+                String symbol = path.head().toLowerCase();
+                if(symbol.equals("latitude") || symbol.equals("longitude")) {
+                    matches.add(NodeMatch.forFieldComponent(field, symbol));
+                }
             }
         }
 
@@ -224,7 +232,7 @@ public class NodeMatcher {
             if(childForm.isPresent()) {
                 Iterable<FormTree.Node> childFields = parentField.getChildren(childFormId);
 
-                if (path.matches(childForm.get()) && path.peek().equals(ColumnModel.ID_SYMBOL)) {
+                if (path.matches(childForm.get()) && path.peek().equals(ColumnModel.RECORD_ID_SYMBOL)) {
                     results.add(NodeMatch.forId(parentField, childForm.get()));
 
                 } else if (path.matches(childForm.get()) || path.matches(parentField)) {

@@ -31,9 +31,10 @@
     <meta name="description" content="ActivityInfo"/>
     <meta name="application-url" content="${appUrl}"/>
     <meta http-equiv="X-UA-Compatible" content="IE=10">
+    <meta name="gwt:property" content="locale=${locale}">
     <link rel="icon" href="/about/assets/images/logo-activityinfo.png">
 
-    <title>${domain.title}</title>
+    <title>ActivityInfo</title>
 
     <style type="text/css">
         #loading-box {

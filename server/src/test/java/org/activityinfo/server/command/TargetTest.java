@@ -28,6 +28,7 @@ import org.activityinfo.legacy.shared.model.TargetDTO;
 import org.activityinfo.legacy.shared.model.UserDatabaseDTO;
 import org.activityinfo.server.database.OnDataSet;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

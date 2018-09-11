@@ -79,7 +79,7 @@ public class DbListPage extends ContentPanel implements DbListPresenter.View, Pa
     }
 
     private void createGrid() {
-        grid = new Grid<UserDatabaseDTO>(presenter.getStore(), createColumnModel());
+        grid = new Grid<>(presenter.getStore(), createColumnModel());
         grid.setAutoExpandColumn("fullName");
         grid.setLoadMask(true);
 
@@ -114,6 +114,7 @@ public class DbListPage extends ContentPanel implements DbListPresenter.View, Pa
         columns.add(new ColumnConfig("name", I18N.CONSTANTS.name(), 100));
         columns.add(new ColumnConfig("fullName", I18N.CONSTANTS.fullName(), 150));
         columns.add(new ColumnConfig("ownerName", I18N.CONSTANTS.ownerName(), 150));
+        columns.add(new ColumnConfig("billingAccountName", I18N.CONSTANTS.billingAccount(), 150));
         columns.add(createCountryColumn());
         return new ColumnModel(columns);
     }

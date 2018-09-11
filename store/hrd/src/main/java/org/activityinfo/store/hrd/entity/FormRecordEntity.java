@@ -174,7 +174,7 @@ public class FormRecordEntity {
         Key<FormRecordEntity> recordKey = Key.create(formKey, FormRecordEntity.class, recordId.asString());
         return recordKey;
     }
-    
+
     public static Key<FormRecordEntity> key(FormClass formClass, ResourceId recordId) {
         return key(formClass.getId(), recordId);
     }

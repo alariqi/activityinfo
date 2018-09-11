@@ -28,6 +28,7 @@ import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import org.activityinfo.legacy.shared.Log;
+import org.activityinfo.ui.client.billing.BillingSupervisor;
 import org.activityinfo.ui.client.dispatch.state.SafeStateProvider;
 import org.activityinfo.ui.client.inject.AppInjector;
 import org.activityinfo.ui.client.inject.ClientSideAuthProvider;
@@ -100,6 +101,8 @@ public class ActivityInfoEntryPoint implements EntryPoint {
             createCaches(injector);
 
             AppCacheMonitor.start();
+
+            new BillingSupervisor().run();
         }
 
         Log.info("Application: everyone plugged, firing Init event");

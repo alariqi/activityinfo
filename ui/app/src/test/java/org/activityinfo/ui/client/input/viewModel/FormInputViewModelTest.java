@@ -18,8 +18,18 @@
  */
 package org.activityinfo.ui.client.input.viewModel;
 
-import net.lightoze.gwt.i18n.server.LocaleProxy;
 import org.activityinfo.model.resource.RecordTransaction;
+import org.activityinfo.model.database.RecordLock;
+import org.activityinfo.model.database.Resource;
+import org.activityinfo.model.database.ResourceType;
+import org.activityinfo.model.database.UserDatabaseMeta;
+import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.form.FormMetadata;
+import org.activityinfo.model.form.FormPermissions;
+import org.activityinfo.model.formTree.FormClassProviders;
+import org.activityinfo.model.formTree.FormMetadataProvider;
+import org.activityinfo.model.formTree.FormTree;
+import org.activityinfo.model.formTree.FormTreeBuilder;
 import org.activityinfo.model.resource.RecordUpdate;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.RecordRef;
@@ -37,6 +47,7 @@ import org.activityinfo.ui.client.input.model.FormInputModel;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.activityinfo.ui.client.store.TestingFormStore;
 import org.junit.Before;
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -49,12 +60,6 @@ import static org.junit.Assert.assertTrue;
 public class FormInputViewModelTest {
 
     private TestSetup setup = new TestSetup();
-
-    @Before
-    public void setup() {
-        LocaleProxy.initialize();
-    }
-
 
     @Test
     public void testSurveyRelevance() {

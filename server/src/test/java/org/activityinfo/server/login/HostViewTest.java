@@ -39,7 +39,8 @@ public class HostViewTest extends ViewTestCase {
 
         HostPageModel pageModel = new HostPageModel(
                 "http://www.activityinfo.org");
-        pageModel.setBootstrapScript("/ActivityInfo/en.js");
+        pageModel.setLocale("en");
+        pageModel.setBootstrapScript("/ActivityInfo/ActivityInfo.nocache.js");
         assertProcessable(pageModel);
     }
 }

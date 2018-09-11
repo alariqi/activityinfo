@@ -18,6 +18,7 @@
  */
 package org.activityinfo.api.client;
 
+import org.activityinfo.model.account.AccountStatus;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
@@ -157,5 +158,7 @@ public interface ActivityInfoClientAsync {
     Promise<Void> requestDatabaseTransfer(String newOwnerEmail, int databaseId);
 
     Promise<Void> cancelDatabaseTransfer(int databaseId);
+
+    Promise<AccountStatus> getAccountStatus();
 
 }

@@ -45,7 +45,7 @@ import org.activityinfo.promise.Function2;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 import org.activityinfo.ui.client.store.http.*;
-import org.activityinfo.ui.client.store.offline.FormOfflineStatus;
+import org.activityinfo.store.query.shared.FormOfflineStatus;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.SnapshotStatus;
 

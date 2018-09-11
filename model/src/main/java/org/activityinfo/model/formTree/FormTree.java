@@ -207,6 +207,20 @@ public class FormTree implements FormClassProvider, FormMetadataProvider {
             return toString(field.getLabel(), this.getDefiningFormClass()) + ":" + field.getType();
         }
 
+        public String fieldLabel() {
+            return toLabel(field.getLabel());
+        }
+
+        public String formFieldLabel() {
+            return getDefiningFormClass() != null
+                    ? toLabel(getDefiningFormClass().getLabel()) + "." + toLabel(field.getLabel())
+                    : toLabel(field.getLabel());
+        }
+
+        private String toLabel(String label) {
+            return label.toLowerCase().trim().replace(" ","_");
+        }
+
         private String toString(String label, FormClass definingFormClass) {
             String field = "[";
             if(definingFormClass != null && definingFormClass.getLabel() != null)  {

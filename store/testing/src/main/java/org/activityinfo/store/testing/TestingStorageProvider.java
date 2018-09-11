@@ -22,7 +22,6 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import com.google.gwt.core.shared.GwtIncompatible;
-import net.lightoze.gwt.i18n.server.LocaleProxy;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
 import org.activityinfo.model.form.FormClass;
@@ -49,10 +48,6 @@ import java.util.Map;
 
 @GwtIncompatible
 public class TestingStorageProvider implements FormStorageProvider, TransactionalStorageProvider {
-
-    static {
-        LocaleProxy.initialize();
-    }
 
     private final LocaliteForm localiteForm;
     private Map<ResourceId, TestingFormStorage> formMap = new HashMap<>();
@@ -84,6 +79,7 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
     private final NfiForm nfiForm;
     private final ClinicForm clinicForm;
     private final IdpLocationForm idpLocationForm;
+    private final LocationSelectionForm locationSelectionForm;
 
     private final SimpleReferenceForm simpleReferenceForm;
     private final MultipleTextKeysForm multipleTextKeysForm;
@@ -119,7 +115,8 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
         villageForm = new VillageForm(new UnitTestingIds(), 140*10, territory);
         localiteForm = new LocaliteForm(new UnitTestingIds(), 250, province, territory, healthZone);
         nfiForm = new NfiForm(new UnitTestingIds(), villageForm);
-        add(province, territory, healthZone, villageForm, localiteForm, nfiForm);
+        locationSelectionForm = new LocationSelectionForm(new UnitTestingIds(), localiteForm);
+        add(province, territory, healthZone, villageForm, localiteForm, nfiForm, locationSelectionForm);
 
         // Empty form
         EmptyForm empty = new EmptyForm();
@@ -273,6 +270,10 @@ public class TestingStorageProvider implements FormStorageProvider, Transactiona
 
     public LocaliteForm getLocaliteForm() {
         return localiteForm;
+    }
+
+    public LocationSelectionForm getLocationSelectionForm() {
+        return locationSelectionForm;
     }
 
     public SimpleReferenceForm getSimpleReferenceForm() {

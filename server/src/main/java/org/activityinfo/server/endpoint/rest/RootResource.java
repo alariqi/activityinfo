@@ -253,4 +253,8 @@ public class RootResource {
         return Response.temporaryRedirect(new URI(GravatarService.gravatarUrl(authenticatedUser.getEmail()))).build();
     }
 
+    @Path("/accounts")
+    public AccountResource getAccounts() {
+        return new AccountResource(entityManager.get(), userProvider);
+    }
 }

@@ -18,12 +18,19 @@
  */
 package org.activityinfo.store.hrd.op;
 
+import com.google.common.base.Optional;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
 import com.googlecode.objectify.cmd.Query;
 import org.activityinfo.model.form.FormClass;
+import org.activityinfo.model.form.FormField;
 import org.activityinfo.model.form.SubFormKind;
 import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.model.type.FieldValue;
+import org.activityinfo.model.type.RecordRef;
+import org.activityinfo.model.type.time.PeriodType;
+import org.activityinfo.store.hrd.FieldConverter;
+import org.activityinfo.store.hrd.FieldConverters;
 import org.activityinfo.store.hrd.entity.FormEntity;
 import org.activityinfo.store.hrd.entity.FormRecordEntity;
 import org.activityinfo.store.hrd.entity.FormRecordSnapshotEntity;
@@ -99,9 +106,36 @@ public class QueryVersions implements Work<List<RecordVersion>> {
     private String subformKey(FormRecordSnapshotEntity snapshot) {
         if (formClass.getSubFormKind() == SubFormKind.REPEATING) {
             return "";
-        } else { // period
-            int indexOf = snapshot.getRecordId().asString().indexOf(snapshot.getParentRecordId());
-            return snapshot.getRecordId().asString().substring(indexOf + snapshot.getParentRecordId().length() + 1);
+        } else {
+            return getPeriodKey(snapshot);
         }
     }
+
+    private String getPeriodKey(FormRecordSnapshotEntity snapshot) {
+        Optional<String> periodKey = periodKeyFromPeriodField(snapshot);
+        if (periodKey.isPresent()) {
+            return periodKey.get();
+        } else {
+            return periodKeyFromRecordId(snapshot.getRecordId());
+        }
+    }
+
+    private Optional<String> periodKeyFromPeriodField(FormRecordSnapshotEntity snapshot) {
+        Optional<FormField> periodField = formClass.getFieldIfPresent(ResourceId.valueOf("period"));
+        if (periodField.isPresent()) {
+            FieldConverter converter = FieldConverters.forType(periodField.get().getType());
+            Object period = snapshot.getRecord().getFieldValues().getProperty(periodField.get().getName());
+            FieldValue periodValue = converter.toFieldValue(period);
+            return periodValue != null ? Optional.of(periodValue.toString()) : Optional.absent();
+        } else {
+            return Optional.absent();
+        }
+    }
+
+    private String periodKeyFromRecordId(ResourceId subFormRecordId) {
+        RecordRef ref = new RecordRef(formClass.getId(), subFormRecordId);
+        PeriodType periodType = formClass.getSubFormKind().getPeriodType();
+        return periodType.fromSubFormKey(ref).toString();
+    }
+
 }

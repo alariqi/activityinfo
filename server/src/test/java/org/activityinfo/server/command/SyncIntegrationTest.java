@@ -26,7 +26,6 @@ import com.google.gson.JsonParser;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import net.lightoze.gwt.i18n.server.LocaleProxy;
 import org.activityinfo.TestOutput;
 import org.activityinfo.fixtures.InjectionSupport;
 import org.activityinfo.fixtures.Modules;
@@ -48,11 +47,10 @@ import org.activityinfo.server.database.hibernate.entity.Location;
 import org.activityinfo.server.database.hibernate.entity.LocationType;
 import org.activityinfo.server.endpoint.gwtrpc.GwtRpcModule;
 import org.activityinfo.ui.client.dispatch.Dispatcher;
-import org.activityinfo.ui.client.local.LocalModuleStub;
-import org.activityinfo.ui.client.local.sync.pipeline.InstallPipeline;
+import org.activityinfo.ui.client.offline.LocalModuleStub;
+import org.activityinfo.ui.client.offline.sync.pipeline.InstallPipeline;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,14 +75,9 @@ import static org.junit.Assert.assertTrue;
         TestHibernateModule.class,
         GwtRpcModule.class,
 })
-public class SyncIntegrationTest extends LocalHandlerTestCase {
+public class SyncIntegrationTest extends OfflineHandlerTestCase {
     @Inject
     private KeyGenerator keyGenerator;
-
-    @BeforeClass
-    public static void setupLocale() {
-        LocaleProxy.initialize();
-    }
 
     @Before
     public void setupLogging() {

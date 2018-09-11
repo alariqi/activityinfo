@@ -25,6 +25,7 @@ import org.activityinfo.api.client.FormRecordUpdateBuilder;
 import org.activityinfo.api.client.NewFormRecordBuilder;
 import org.activityinfo.json.Json;
 import org.activityinfo.json.JsonValue;
+import org.activityinfo.model.account.AccountStatus;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
@@ -282,6 +283,11 @@ public class ActivityInfoClientAsyncStub implements ActivityInfoClientAsync {
     @Override
     public Promise<Void> cancelDatabaseTransfer(int i) {
         return Promise.rejected(new UnsupportedOperationException("TODO"));
+    }
+
+    @Override
+    public Promise<AccountStatus> getAccountStatus() {
+        return Promise.rejected(new UnsupportedOperationException());
     }
 
 }

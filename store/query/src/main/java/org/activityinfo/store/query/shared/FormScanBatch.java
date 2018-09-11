@@ -127,12 +127,18 @@ public class FormScanBatch {
             return addJoinedColumn(filterLevel, match);
 
         } else {
-            // id column, simple root column or embedded form
-            if (match.isRootId()) {
-                return addRecordIdColumn(filterLevel, match.getFormClass().getId());
-
-            } else {
-                return getDataColumn(filterLevel, match.getFormClass().getId(), match);
+            // form label column, id column, simple root column or embedded form
+            switch (match.getType()) {
+                case FORM_NAME:
+                    return addConstantColumn(filterLevel, match.getFormClass(), match.getFormClass().getLabel());
+                case RECORD_ID:
+                    return addRecordIdColumn(filterLevel, match.getFormClass().getId());
+                case FORM_ID:
+                    return addConstantColumn(filterLevel, match.getFormClass(), match.getFormClass().getId().asString());
+                case FIELD:
+                    return getDataColumn(filterLevel, match.getFormClass().getId(), match);
+                default:
+                    throw new UnsupportedOperationException("Type: " + match.getType());
             }
         }
     }
@@ -172,7 +178,7 @@ public class FormScanBatch {
             case FIELD:
                 column = getDataColumn(filterLevel, match.getFormClass().getId(), match);
                 break;
-            case ID:
+            case RECORD_ID:
                 column = addRecordIdColumn(filterLevel, match.getFormClass().getId());
                 break;
             default:
@@ -269,15 +275,27 @@ public class FormScanBatch {
         return filter(filterLevel, formId, getTable(formId).addField(fieldExpr));
     }
 
+
     /**
      * Adds a request for a "constant" column to the query batch. We don't actually need any data from
      * the form, but we do need the row count of the base table.
-     * @param formClass
+     * @param rootFormClass
      * @param value
      * @return
      */
-    public Slot<ColumnView> addConstantColumn(FilterLevel filterLevel, FormClass formClass, FieldValue value) {
-        return new ConstantColumnBuilder(addRowCount(filterLevel, formClass), value);
+    public Slot<ColumnView> addConstantColumn(FilterLevel filterLevel, FormClass rootFormClass, FieldValue value) {
+        return new ConstantColumnBuilder(addRowCount(filterLevel, rootFormClass), value);
+    }
+
+    /**
+     * Adds a request for a "constant" String column to the query batch. We don't actually need any data from
+     * the form, but we do need the row count of the base table.
+     * @param rootFormClass
+     * @param value
+     * @return
+     */
+    public Slot<ColumnView> addConstantColumn(FilterLevel filterLevel, FormClass rootFormClass, String value) {
+        return new ConstantColumnBuilder(addRowCount(filterLevel, rootFormClass), TextValue.valueOf(value));
     }
 
     public Slot<Integer> addRowCount(FilterLevel filterLevel, ResourceId formId) {

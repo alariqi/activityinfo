@@ -22,6 +22,7 @@ import com.google.common.base.Optional;
 import org.activityinfo.api.client.ActivityInfoClientAsync;
 import org.activityinfo.api.client.FormRecordUpdateBuilder;
 import org.activityinfo.api.client.NewFormRecordBuilder;
+import org.activityinfo.model.account.AccountStatus;
 import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
@@ -259,4 +260,10 @@ public class AsyncClientStub implements ActivityInfoClientAsync {
     public Promise<Void> cancelDatabaseTransfer(int i) {
         return Promise.rejected(new UnsupportedOperationException());
     }
+
+    @Override
+    public Promise<AccountStatus> getAccountStatus() {
+        return Promise.rejected(new UnsupportedOperationException());
+    }
+
 }

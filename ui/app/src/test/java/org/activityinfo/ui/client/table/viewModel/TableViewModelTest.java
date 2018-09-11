@@ -18,7 +18,6 @@
  */
 package org.activityinfo.ui.client.table.viewModel;
 
-import net.lightoze.gwt.i18n.server.LocaleProxy;
 import org.activityinfo.analysis.table.EffectiveTableColumn;
 import org.activityinfo.analysis.table.EffectiveTableModel;
 import org.activityinfo.json.JsonValue;
@@ -41,7 +40,6 @@ import org.activityinfo.ui.client.table.TablePlace;
 import org.activityinfo.ui.client.table.state.SliderState;
 import org.activityinfo.ui.client.table.state.TableState;
 import org.activityinfo.ui.client.table.view.DeleteRecordAction;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -55,11 +53,6 @@ import static org.junit.Assert.assertThat;
 public class TableViewModelTest {
 
     private TestSetup setup = new TestSetup();
-
-    @Before
-    public void setup() {
-        LocaleProxy.initialize();
-    }
 
 
     @Test
