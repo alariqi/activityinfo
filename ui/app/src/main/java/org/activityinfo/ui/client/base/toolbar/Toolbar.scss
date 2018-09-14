@@ -8,6 +8,14 @@
   margin-bottom: 0.5rem;
 }
 
+.toolbar {
+
+  .button + .button {
+    margin-left: 0.5rem;
+  }
+
+}
+
 /*
  * __actions contains the buttons of the toolbar and are
  * aligned to the start of the toolbar (left)
