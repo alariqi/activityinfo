@@ -28,37 +28,18 @@ public class ListTable {
     }
 
     public VTree render() {
-        return new ReactiveComponent("listtable", listItems.transform(items ->
-                div("listtable",
-                        items.stream().map(this::renderItem))));
+        return new ReactiveComponent("listtable", listItems.transform(items -> {
+            if(items.isEmpty()) {
+                return emptyState;
+            } else {
+                return div("listtable",
+                        items.stream().map(this::renderItem));
+            }
+        }));
     }
 
     private VTree renderItem(ListItem item) {
-/*
-<div class="listtable__item {offlineClass}">
-  <a href="{href}" class="listtable__item__label">
-    <div class="listtable__item__avatar">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18px" height="27px" viewBox="0 0 18 27" class="avatar" preserveAspectRatio="xMinYMin meet">
-        <use xlink:href="{avatarHref}"></use>
-      </svg>
-    </div>
-    <span class="listtable__item__title">
-      {label}
-    </span>
-    <span class="listtable__item__offlineindicator">
-      available offline
-    </span>
-  </a>
 
-  <button class="listtable__item__options">
-    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="17" viewBox="0 0 21 17" class="icon" preserveAspectRatio="xMinYMin meet">
-      <use xlink:href="#options"></use>
-    </svg>
-    Options
-  </button>
-</div>
-
- */
         PropMap labelProps = Props.withClass("listtable__item__label").href(item.getHref());
 
         return div("listtable__item",

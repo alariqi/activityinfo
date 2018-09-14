@@ -26,6 +26,7 @@ import org.activityinfo.ui.client.database.DatabaseListPlace;
 import org.activityinfo.ui.client.database.DatabasePlace;
 import org.activityinfo.ui.client.importer.ImportPlace;
 import org.activityinfo.ui.client.input.RecordPlace;
+import org.activityinfo.ui.client.reports.ReportListPlace;
 import org.activityinfo.ui.client.table.TablePlace;
 
 import javax.annotation.Nullable;
@@ -54,6 +55,9 @@ public class AppPlaceHistoryMapper implements Function<String, Place> {
                 } else {
                     return new AnalysisPlace(ResourceId.generateCuid());
                 }
+
+            } else if (parts[0].equals("reports")) {
+                return new ReportListPlace();
 
             } else if (parts[0].equals("databases")) {
                 return DatabaseListPlace.INSTANCE;

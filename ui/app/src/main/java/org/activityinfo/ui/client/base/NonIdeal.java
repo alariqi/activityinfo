@@ -48,7 +48,8 @@ public class NonIdeal {
                         backToDatabaseOverviewLink()));
     }
 
-    private static VNode illustration(String href) {
+
+    public static VNode illustration(String href) {
         return Svg.svg("nonideal__illustration", href, "0 0 12 12");
     }
 

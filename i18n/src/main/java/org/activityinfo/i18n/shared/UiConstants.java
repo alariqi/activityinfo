@@ -2075,5 +2075,11 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Billing Account")
     String billingAccount();
 
+    @DefaultStringValue("Bit empty in here.")
+    String emptyHeader();
+
+    @DefaultStringValue("Looks like you haven't created any reports yet. Get started by clicking the \"New Pivot Table\" or \"New Map\" buttons that are highlighted.")
+    String emptyReports();
+
 }
 
