@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.fields.viewModel;
+package org.activityinfo.ui.client.reports.formSelection.viewModel;
 
 import org.activityinfo.model.resource.ResourceId;
 

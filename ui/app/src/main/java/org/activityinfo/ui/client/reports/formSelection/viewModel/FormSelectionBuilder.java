@@ -1,4 +1,4 @@
-package org.activityinfo.ui.client.fields.viewModel;
+package org.activityinfo.ui.client.reports.formSelection.viewModel;
 
 import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.model.database.Resource;
@@ -6,7 +6,7 @@ import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.promise.Maybe;
-import org.activityinfo.ui.client.fields.state.FormSelectionModel;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.ArrayList;
@@ -18,20 +18,20 @@ import java.util.stream.Collectors;
 public class FormSelectionBuilder {
 
 
-    public static FormSelectionViewModel compute(FormStore formStore, FormSelectionModel model) {
+    public static FormSelectionViewModel compute(FormStore formStore, FormSelectionState model) {
 
         List<Observable<FormSelectionColumn>> columns = new ArrayList<>();
 
         FormSelectionColumn root = new FormSelectionColumn(0,
                 Arrays.asList(
-                    new FormSelectionItem(FormSelectionModel.DATABASE_ROOT_ID, I18N.CONSTANTS.databases(), FormSelectionItem.Selection.NONE),
-                    new FormSelectionItem(FormSelectionModel.REPORTS_ROOT_ID, I18N.CONSTANTS.reports(), FormSelectionItem.Selection.NONE)),
+                    new FormSelectionItem(FormSelectionState.DATABASE_ROOT_ID, I18N.CONSTANTS.databases(), FormSelectionItem.Selection.NONE),
+                    new FormSelectionItem(FormSelectionState.REPORTS_ROOT_ID, I18N.CONSTANTS.reports(), FormSelectionItem.Selection.NONE)),
                         selection(model.getNavigationPath(), 0));
 
         columns.add(Observable.just(root));
 
         if(model.getNavigationPath().size() >= 1 &&
-                model.getNavigationPath().get(0).equals(FormSelectionModel.DATABASE_ROOT_ID)) {
+                model.getNavigationPath().get(0).equals(FormSelectionState.DATABASE_ROOT_ID)) {
 
             databaseColumns(formStore, model, columns);
         }
@@ -40,14 +40,14 @@ public class FormSelectionBuilder {
         return new FormSelectionViewModel(columns);
     }
 
-    private static void databaseColumns(FormStore formStore, FormSelectionModel model, List<Observable<FormSelectionColumn>> columns) {
+    private static void databaseColumns(FormStore formStore, FormSelectionState model, List<Observable<FormSelectionColumn>> columns) {
 
         // If we have navigated to databases, the next column is a list of all databases.
 
         Observable<FormSelectionColumn> databasesColumn = formStore.getDatabases().transform(list -> {
             List<FormSelectionItem> items = list
                     .stream()
-                    .map(d -> new FormSelectionItem(d.getDatabaseId(), d.getLabel(),
+                    .map(d -> new FormSelectionItem(d.getDatabaseId(), I18N.CONSTANTS.database(), d.getLabel(),
                             model.isSelected(d.getDatabaseId()) ?
                             FormSelectionItem.Selection.ALL :
                             FormSelectionItem.Selection.NONE))
@@ -72,14 +72,14 @@ public class FormSelectionBuilder {
         }
     }
 
-    private static FormSelectionColumn databaseColumn(FormSelectionModel model, Maybe<UserDatabaseMeta> d, int columnIndex) {
+    private static FormSelectionColumn databaseColumn(FormSelectionState model, Maybe<UserDatabaseMeta> d, int columnIndex) {
         ResourceId parentId = model.getNavigationPath().get(columnIndex - 1);
 
         List<FormSelectionItem> items = new ArrayList<>();
         if(d.isVisible()) {
             for (Resource resource : d.get().getResources()) {
                 if(resource.getParentId().equals(parentId)) {
-                    items.add(new FormSelectionItem(resource.getId(), resource.getLabel(),
+                    items.add(new FormSelectionItem(resource.getId(), surtitle(resource), resource.getLabel(),
                             model.isSelected(resource.getId()) ?
                                     FormSelectionItem.Selection.ALL :
                                     FormSelectionItem.Selection.NONE));
@@ -88,6 +88,18 @@ public class FormSelectionBuilder {
         }
 
         return new FormSelectionColumn(columnIndex, items, model.getCurrent(columnIndex));
+    }
+
+    private static String surtitle(Resource resource) {
+        switch (resource.getType()) {
+            case DATABASE:
+                return I18N.CONSTANTS.database();
+            case FOLDER:
+                return I18N.CONSTANTS.folder();
+            default:
+            case FORM:
+                return I18N.CONSTANTS.form();
+        }
     }
 
     private static Optional<ResourceId> selection(List<ResourceId> selectionPath, int columnIndex) {

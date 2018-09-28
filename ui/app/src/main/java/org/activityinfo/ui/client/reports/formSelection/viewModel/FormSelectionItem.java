@@ -1,10 +1,11 @@
-package org.activityinfo.ui.client.fields.viewModel;
+package org.activityinfo.ui.client.reports.formSelection.viewModel;
 
 import org.activityinfo.model.resource.ResourceId;
 
 import java.util.Objects;
 
 public class FormSelectionItem {
+
 
     public enum Selection {
         ALL,
@@ -13,13 +14,19 @@ public class FormSelectionItem {
     }
 
     private ResourceId id;
+    private String surtitle;
     private Selection selected;
     private String label;
 
-    public FormSelectionItem(ResourceId id, String label, Selection selected) {
+    public FormSelectionItem(ResourceId id, String surtitle, String label, Selection selected) {
         this.id = id;
+        this.surtitle = surtitle;
         this.label = label;
         this.selected = selected;
+    }
+
+    public FormSelectionItem(ResourceId id, String label, Selection selected) {
+        this(id, null, label, selected);
     }
 
     public ResourceId getId() {
@@ -32,6 +39,15 @@ public class FormSelectionItem {
 
     public String getLabel() {
         return label;
+    }
+
+
+    public boolean hasSurtitle() {
+        return surtitle != null;
+    }
+
+    public String getSurtitle() {
+        return surtitle;
     }
 
     @Override

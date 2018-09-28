@@ -4,6 +4,7 @@ import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
+import org.activityinfo.ui.client.reports.formSelection.view.FormSelectionView;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
 import org.activityinfo.ui.vdom.shared.tree.VText;

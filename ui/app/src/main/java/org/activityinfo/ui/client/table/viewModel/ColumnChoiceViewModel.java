@@ -11,6 +11,7 @@ import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.state.FieldChoiceState;
 import org.activityinfo.ui.client.fields.viewModel.*;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;

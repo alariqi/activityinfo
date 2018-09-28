@@ -2,7 +2,11 @@ package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.observable.Connection;
 import org.activityinfo.store.testing.IraqDatabase;
-import org.activityinfo.ui.client.fields.state.FormSelectionModel;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionBuilder;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionColumn;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionItem;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 
@@ -16,7 +20,7 @@ public class FormSelectionViewModelTest {
 
     @Test
     public void start() {
-        FormSelectionModel model = new FormSelectionModel();
+        FormSelectionState model = new FormSelectionState();
         FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
         assertThat(viewModel.getColumns(), hasSize(1));
@@ -27,8 +31,8 @@ public class FormSelectionViewModelTest {
 
         setup.describeDatabase(IraqDatabase.database());
 
-        FormSelectionModel model = new FormSelectionModel()
-                .navigateTo(0, FormSelectionModel.DATABASE_ROOT_ID);
+        FormSelectionState model = new FormSelectionState()
+                .navigateTo(0, FormSelectionState.DATABASE_ROOT_ID);
 
         FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
@@ -36,7 +40,7 @@ public class FormSelectionViewModelTest {
 
         Connection<FormSelectionColumn> databaseColumn = setup.connect(viewModel.getColumns().get(1));
         assertThat(databaseColumn.assertLoaded().getItems(), contains(
-                new FormSelectionItem(IraqDatabase.DATABASE_ID, IraqDatabase.LABEL, FormSelectionItem.Selection.NONE)));
+                new FormSelectionItem(IraqDatabase.DATABASE_ID, surtitle, IraqDatabase.LABEL, FormSelectionItem.Selection.NONE)));
     }
 
 

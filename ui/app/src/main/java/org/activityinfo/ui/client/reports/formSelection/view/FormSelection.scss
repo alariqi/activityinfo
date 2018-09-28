@@ -16,6 +16,7 @@
   flex: none;
   overflow-y: auto;
   overflow-x: hidden;
+  @include darkscrollbars();
 }
 
 .formselection__item {
@@ -28,7 +29,7 @@
   padding-left: 0.5rem;
   padding-bottom: 0.25rem;
   border: 2px solid transparent;
-
+  border-radius: 3px;
 }
 
 .formselection__item__inner {
@@ -44,7 +45,7 @@
 }
 
 .formselection__item:hover {
-  border: 2px solid $green-pale;
+  background-color: $box-background;
 }
 
 .formselection__item--selected {
