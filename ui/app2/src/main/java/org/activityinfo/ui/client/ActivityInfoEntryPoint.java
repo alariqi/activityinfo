@@ -109,6 +109,12 @@ public class ActivityInfoEntryPoint implements EntryPoint {
 
         injector.getEventBus().fireEvent(AppEvents.INIT);
 
+        try {
+            new BillingSupervisor().run();
+        } catch (Throwable e){
+            Log.error("Billing warning failed", e);
+        }
+
     }
 
 

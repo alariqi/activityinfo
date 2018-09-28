@@ -71,8 +71,7 @@ dependencies {
 
     compile project(':tools:vdom')
 
-    compile libraries.appcache.client
-    compile libraries.appcache.linker
+    compile libraries.rebar.appcache
 
     compile libraries.sencha.gxt
     compile libraries.sencha.chart
@@ -134,15 +133,10 @@ task compileApp(type: JavaExec) {
     jvmArgs "-Dgwt.persistentunitcache=true"
     jvmArgs "-Dgwt.persistentunitcachedir=${buildDir}/gwtCache"
 
-    if("true".equals(project.property("gwtSoyc"))) {
-        args '-compileReport'
-    }
-
     args '-logLevel', 'INFO'
     args '-sourceLevel', '1.8'
     args '-localWorkers', Integer.toString(Runtime.runtime.availableProcessors() - 2)
     args '-war', outputDir
-    args '-extra', "${buildDir}/gwt-extra"
     args 'org.activityinfo.ui.AppProd'
 
 }

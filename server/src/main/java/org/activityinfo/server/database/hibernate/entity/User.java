@@ -285,4 +285,5 @@ public class User implements java.io.Serializable {
     public AuthenticatedUser asAuthenticatedUser() {
         return new AuthenticatedUser("XYZ", getId(), getEmail(), getLocale());
     }
+
 }

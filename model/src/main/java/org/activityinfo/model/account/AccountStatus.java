@@ -12,8 +12,11 @@ import java.util.Date;
  */
 public class AccountStatus implements JsonSerializable {
 
+    public static final int FREE_TRIAL_LIMIT = 10;
+
     public static final int DAYS_PER_WEEK = 7;
     private int userAccountId;
+    private String billingAccountName;
     private boolean legacy;
     private boolean trial;
     private int expirationTime;
@@ -52,12 +55,21 @@ public class AccountStatus implements JsonSerializable {
         return databaseCount;
     }
 
+    public String getBillingAccountName() {
+        return billingAccountName;
+    }
+
     public int hoursUntilExpiration(Date now) {
-        int secondsNow = (int) (now.getTime() / 1000);
-        int secondsUntil = getExpirationTime() - secondsNow;
+        int secondsUntil = secondsUntilExpiration(now);
         int hours = Math.floorDiv(secondsUntil, 3600);
         return hours;
     }
+
+    private int secondsUntilExpiration(Date now) {
+        int secondsNow = (int) (now.getTime() / 1000);
+        return getExpirationTime() - secondsNow;
+    }
+
 
     public int daysUntilExpiration(Date now) {
         int hours = hoursUntilExpiration(now);
@@ -89,6 +101,9 @@ public class AccountStatus implements JsonSerializable {
      * True if the user should be warned about expiration
      */
     public boolean shouldWarn(Date now) {
+        if(databaseCount == 0) {
+            return false;
+        }
         int daysLeft = daysUntilExpiration(now);
         if(trial) {
             if(legacy) {
@@ -140,18 +155,30 @@ public class AccountStatus implements JsonSerializable {
         object.put("userCount", userCount);
         object.put("databaseCount", databaseCount);
         object.put("legacy", legacy);
+        object.put("userAccountId", userAccountId);
+        object.put("billingAccountName", billingAccountName);
         return object;
     }
 
     public static AccountStatus fromJson(JsonValue object) {
         AccountStatus status = new AccountStatus();
+        status.userAccountId = (int)object.getNumber("userAccountId");
         status.trial = object.getBoolean("trial");
         status.legacy = object.getBoolean("legacy");
         status.expirationTime = (int) object.getNumber("expirationTime");
         status.userLimit = (int) object.getNumber("userLimit");
         status.userCount = (int) object.getNumber("userCount");
         status.databaseCount = (int)object.getNumber("databaseCount");
+        status.billingAccountName = object.getString("billingAccountName");
         return status;
+    }
+
+    public boolean isExpired() {
+        return secondsUntilExpiration(new Date()) < 0;
+    }
+
+    public boolean isNewDatabaseAllowed() {
+        return !isExpired();
     }
 
     public static class Builder {
@@ -159,11 +186,15 @@ public class AccountStatus implements JsonSerializable {
 
         public Builder setExpirationTime(Date time) {
             if(time != null) {
-                status.expirationTime = (int) (time.getTime() / 1000);
+                long seconds = (time.getTime() / 1000L);
+                if(seconds > Integer.MAX_VALUE) {
+                    status.expirationTime = Integer.MAX_VALUE;
+                } else {
+                    status.expirationTime = (int)seconds;
+                }
             }
             return this;
         }
-
 
         public Builder setExpirationTime(LocalDate date) {
             return setExpirationTime(date.atMidnightInMyTimezone());
@@ -196,6 +227,11 @@ public class AccountStatus implements JsonSerializable {
 
         public Builder setUserAccountId(int userAccountId) {
             status.userAccountId = userAccountId;
+            return this;
+        }
+
+        public Builder setBillingAccountName(String name) {
+            status.billingAccountName = name;
             return this;
         }
 

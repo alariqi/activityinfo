@@ -2081,5 +2081,7 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Looks like you haven't created any reports yet. Get started by clicking the \"New Pivot Table\" or \"New Map\" buttons that are highlighted.")
     String emptyReports();
 
+    @DefaultStringValue("User limit exceeded")
+    String usersExceeded();
 }
 
