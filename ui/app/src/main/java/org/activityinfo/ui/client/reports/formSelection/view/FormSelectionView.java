@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.reports.formSelection.view;
 
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.Icon;
 import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionUpdater;
@@ -50,8 +51,8 @@ public class FormSelectionView {
         VNode checkmark = H.div(checkboxProps, Icon.CHECKMARK.tree());
 
         VTree surtitle;
-        if(item.hasSurtitle()) {
-            surtitle = H.div("surtitle", new VText(item.getSurtitle()));
+        if(item.getType() != FormSelectionItem.ItemType.ROOT) {
+            surtitle = H.div("surtitle", new VText(surtitle(item)));
         } else {
             surtitle = null;
         }
@@ -62,6 +63,20 @@ public class FormSelectionView {
                         checkmark,
                         surtitle,
                         new VText(item.getLabel()))));
+    }
+
+    private static String surtitle(FormSelectionItem item) {
+        switch (item.getType()) {
+            case DATABASE:
+                return I18N.CONSTANTS.database();
+            case FOLDER:
+                return I18N.CONSTANTS.folder();
+            default:
+            case FORM:
+                return I18N.CONSTANTS.form();
+            case SUBFORM:
+                return I18N.CONSTANTS.subForm();
+        }
     }
 
 }

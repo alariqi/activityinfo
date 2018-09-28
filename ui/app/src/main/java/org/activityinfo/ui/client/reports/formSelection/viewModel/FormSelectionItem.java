@@ -4,7 +4,8 @@ import org.activityinfo.model.resource.ResourceId;
 
 import java.util.Objects;
 
-public class FormSelectionItem {
+public class FormSelectionItem implements Comparable<FormSelectionItem> {
+
 
 
     public enum Selection {
@@ -13,21 +14,27 @@ public class FormSelectionItem {
         SOME
     }
 
+    public enum ItemType {
+        ROOT,
+        DATABASE,
+        FOLDER,
+        FORM,
+        SUBFORM
+
+    }
+
     private ResourceId id;
-    private String surtitle;
+    private final ItemType type;
     private Selection selected;
     private String label;
 
-    public FormSelectionItem(ResourceId id, String surtitle, String label, Selection selected) {
+    public FormSelectionItem(ResourceId id, ItemType type, String label, Selection selected) {
         this.id = id;
-        this.surtitle = surtitle;
+        this.type = type;
         this.label = label;
         this.selected = selected;
     }
 
-    public FormSelectionItem(ResourceId id, String label, Selection selected) {
-        this(id, null, label, selected);
-    }
 
     public ResourceId getId() {
         return id;
@@ -41,13 +48,8 @@ public class FormSelectionItem {
         return label;
     }
 
-
-    public boolean hasSurtitle() {
-        return surtitle != null;
-    }
-
-    public String getSurtitle() {
-        return surtitle;
+    public ItemType getType() {
+        return type;
     }
 
     @Override
@@ -63,6 +65,16 @@ public class FormSelectionItem {
                 selected == that.selected &&
                 Objects.equals(label, that.label);
     }
+
+    @Override
+    public int compareTo(FormSelectionItem o) {
+        if(this.getType() == o.getType()) {
+            return this.getLabel().compareToIgnoreCase(o.getLabel());
+        }  else {
+            return this.getType().compareTo(o.getType());
+        }
+    }
+
 
     @Override
     public int hashCode() {
