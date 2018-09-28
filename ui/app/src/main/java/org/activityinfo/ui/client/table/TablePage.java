@@ -115,16 +115,6 @@ public class TablePage extends Page implements SliderUpdater {
             public FieldChoiceUpdater fieldChoiceUpdater() {
                 return new FieldChoiceUpdater() {
                     @Override
-                    public void navigateToForm(int columnIndex, ResourceId itemId) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
-                    public void selectForm(ResourceId id) {
-                        throw new UnsupportedOperationException();
-                    }
-
-                    @Override
                     public void update(Function<FieldChoiceState, FieldChoiceState> function) {
                         state.update(slider -> slider.updateTable(formId, t -> t.updateColumnOptions(function)));
                     }

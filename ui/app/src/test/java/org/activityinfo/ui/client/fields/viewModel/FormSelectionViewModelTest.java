@@ -40,7 +40,7 @@ public class FormSelectionViewModelTest {
 
         Connection<FormSelectionColumn> databaseColumn = setup.connect(viewModel.getColumns().get(1));
         assertThat(databaseColumn.assertLoaded().getItems(), contains(
-                new FormSelectionItem(IraqDatabase.DATABASE_ID, surtitle, IraqDatabase.LABEL, FormSelectionItem.Selection.NONE)));
+                new FormSelectionItem(IraqDatabase.DATABASE_ID, "Database", IraqDatabase.LABEL, FormSelectionItem.Selection.NONE)));
     }
 
 

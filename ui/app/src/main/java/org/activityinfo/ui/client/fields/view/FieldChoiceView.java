@@ -4,7 +4,6 @@ import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.state.FieldChoiceUpdater;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
-import org.activityinfo.ui.client.reports.formSelection.view.FormSelectionView;
 import org.activityinfo.ui.vdom.shared.html.H;
 import org.activityinfo.ui.vdom.shared.tree.ReactiveComponent;
 import org.activityinfo.ui.vdom.shared.tree.VText;
@@ -14,12 +13,9 @@ import static org.activityinfo.ui.vdom.shared.html.H.div;
 
 public class FieldChoiceView {
 
-    private FieldChoiceViewModel viewModel;
-    private FieldChoiceUpdater updater;
 
     public static VTree render(FieldChoiceViewModel viewModel, FieldChoiceUpdater updater) {
 
-        VTree formList = FormSelectionView.render(viewModel.getFormSelection(), updater);
         VTree availableList = FieldListView.available(viewModel, updater);
         VTree selectedList = ReportListView.render(viewModel, updater);
 
@@ -33,8 +29,7 @@ public class FieldChoiceView {
                 .leftSide()
                 .full(m == DesignMode.EXPANDED)
                 .expandedWidth("46rem")
-                .content(m == DesignMode.EXPANDED ?
-                        div("fieldpanel", formList, availableList) :
+                .content(
                         div("fieldpanel", availableList, selectedList))
                 .build()));
 
