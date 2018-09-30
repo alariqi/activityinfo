@@ -1,0 +1,29 @@
+
+// Loader styles
+// Most of the loader styles are defined in the Host html file so they can
+// be used as the initial loader
+
+.loader--dark:before {
+  background-color: #010101;
+}
+.loader--dark {
+  .loader__blob:nth-child(1) {
+    background-color: $green;
+  }
+  .loader__blob:nth-child(2) {
+    background-color: $white;
+  }
+  .loader__blob:nth-child(3) {
+    background-color: #466366;
+  }
+}
+
+.loader--small {
+  width: 6.25rem;
+  height: 6.25rem;
+
+  .loader__blob {
+    width: 0.65rem;
+    height: 0.65rem;
+  }
+}

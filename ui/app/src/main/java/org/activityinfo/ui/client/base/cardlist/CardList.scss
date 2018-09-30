@@ -1,0 +1,48 @@
+
+
+.cardlist {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.cardlist__item {
+  padding: 1rem;
+  background-color: $box-background;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.cardlist__item--placeholder {
+  background-color: #466366;
+  height: 5rem;
+}
+
+.cardlist__item--dragging {
+  opacity: 0.4;
+}
+
+.cardlist__item--included {
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-left: 0.25rem solid $green;
+  }
+}
+
+.cardlist__item__label {
+  color: $white;
+  font-family: $gretasemibold;
+  font-size: 1rem;
+  line-height: 1.125rem;
+}
+
+
+.cardgroup {
+  h3, ul {
+    padding: 0 1rem 1rem;
+  }
+}

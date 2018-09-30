@@ -1,9 +1,10 @@
 package org.activityinfo.ui.client.reports.pivot;
 
+import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.AppFrame;
 import org.activityinfo.ui.client.Page;
-import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
+import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
 import org.activityinfo.ui.client.reports.pivot.state.PivotState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.view.PivotView;
@@ -11,6 +12,8 @@ import org.activityinfo.ui.client.reports.pivot.viewModel.PivotPageViewModel;
 import org.activityinfo.ui.client.store.FormStore;
 import org.activityinfo.ui.vdom.shared.tree.VTree;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 public class PivotPage extends Page {
@@ -34,10 +37,24 @@ public class PivotPage extends Page {
             }
 
             @Override
-            public void updateFormSelection(Function<FormSelectionState, FormSelectionState> function) {
+            public void updateFormSelection(Function<FormPath, FormPath> function) {
                 state.update(s -> s.withFormSelection(function.apply(s.getFormSelection())));
             }
+
+            @Override
+            public void selectForms(Set<ResourceId> forms, boolean select) {
+                state.update(s -> s.updateModel(m -> {
+                    Set<ResourceId> selection = new HashSet<>(m.getForms());
+                    if(select) {
+                        selection.addAll(forms);
+                    } else {
+                        selection.removeAll(forms);
+                    }
+                    return m.withForms(selection);
+                }));
+            }
         };
+
         PivotPageViewModel viewModel = new PivotPageViewModel(formStore, state);
 
         return AppFrame.render(formStore, PivotView.render(viewModel, updater));

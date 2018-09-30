@@ -31,6 +31,7 @@ public class PivotViewModel {
 
     public PivotViewModel(Observable<PivotModel> pivotModel, FormSource source) {
         this.formSource = source;
+
         this.formForest = pivotModel.join(m -> {
             LOGGER.info("Updating form forest");
 

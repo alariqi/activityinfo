@@ -2,11 +2,8 @@ package org.activityinfo.ui.client.fields.viewModel;
 
 import org.activityinfo.observable.Connection;
 import org.activityinfo.store.testing.IraqDatabase;
-import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionBuilder;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionColumn;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionItem;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.*;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 
@@ -20,7 +17,7 @@ public class FormSelectionViewModelTest {
 
     @Test
     public void start() {
-        FormSelectionState model = new FormSelectionState();
+        FormPath model = new FormPath();
         FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
         assertThat(viewModel.getColumns(), hasSize(1));
@@ -31,16 +28,17 @@ public class FormSelectionViewModelTest {
 
         setup.describeDatabase(IraqDatabase.database());
 
-        FormSelectionState model = new FormSelectionState()
-                .navigateTo(0, FormSelectionState.DATABASE_ROOT_ID);
+        FormPath model = new FormPath()
+                .navigateTo(0, FormPath.DATABASE_ROOT_ID);
 
         FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
 
         assertThat(viewModel.getColumns(), hasSize(2));
 
-        Connection<FormSelectionColumn> databaseColumn = setup.connect(viewModel.getColumns().get(1));
+        Connection<SelectionColumn> databaseColumn = setup.connect(viewModel.getColumns().get(1));
         assertThat(databaseColumn.assertLoaded().getItems(), contains(
-                new FormSelectionItem(IraqDatabase.DATABASE_ID, "Database", IraqDatabase.LABEL, FormSelectionItem.Selection.NONE)));
+                new SelectionNode(IraqDatabase.DATABASE_ID, NodeType.DATABASE,
+                        IraqDatabase.LABEL, SelectionStatus.NONE)));
     }
 
 

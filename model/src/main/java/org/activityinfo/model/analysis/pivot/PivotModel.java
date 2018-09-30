@@ -36,6 +36,7 @@ public abstract class PivotModel implements AnalysisModel {
 
     public static final String TYPE = "pivot";
 
+    public abstract Set<ResourceId> getForms();
     public abstract List<MeasureModel> getMeasures();
     public abstract List<DimensionModel> getDimensions();
 
@@ -76,6 +77,13 @@ public abstract class PivotModel implements AnalysisModel {
         return ImmutablePivotModel.builder()
                 .from(this)
                 .dimensions(ImmutableLists.remove(getDimensions(), dimensionId, d -> d.getId()))
+                .build();
+    }
+
+    public PivotModel withForms(Set<ResourceId> formIds) {
+        return ImmutablePivotModel.builder()
+                .from(this)
+                .forms(formIds)
                 .build();
     }
 

@@ -44,8 +44,8 @@ import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Function2;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
-import org.activityinfo.ui.client.store.http.*;
 import org.activityinfo.store.query.shared.FormOfflineStatus;
+import org.activityinfo.ui.client.store.http.*;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.SnapshotStatus;
 
@@ -130,6 +130,16 @@ public class FormStoreImpl implements FormStore {
             });
         }
         return cachedDatabaseList;
+    }
+
+    private boolean databaseContains(UserDatabaseMeta database, Set<ResourceId> resourceIds) {
+        for (ResourceId resourceId : resourceIds) {
+            if(database.getDatabaseId().equals(resourceId) ||
+                    database.getResource(resourceId).isPresent()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
