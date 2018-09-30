@@ -1,27 +1,24 @@
 package org.activityinfo.ui.client.fields.viewModel;
 
-import org.activityinfo.observable.Connection;
+import org.activityinfo.model.resource.ResourceId;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.store.testing.IraqDatabase;
 import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.*;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.contains;
+import java.util.Collections;
+import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 public class FormSelectionViewModelTest {
 
     private TestSetup setup = new TestSetup();
-
-    @Test
-    public void start() {
-        FormPath model = new FormPath();
-        FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
-
-        assertThat(viewModel.getColumns(), hasSize(1));
-    }
 
     @Test
     public void selectDatabase() {
@@ -31,14 +28,15 @@ public class FormSelectionViewModelTest {
         FormPath model = new FormPath()
                 .navigateTo(0, FormPath.DATABASE_ROOT_ID);
 
-        FormSelectionViewModel viewModel = FormSelectionBuilder.compute(setup.getFormStore(), model);
+        Observable<Set<ResourceId>> selection = Observable.just(Collections.emptySet());
+
+        Observable<FormSelectionViewModel> viewModelObs = FormSelectionViewModel.compute(setup.getFormStore(), selection, Observable.just(model));
+        FormSelectionViewModel viewModel = setup.connect(viewModelObs).assertLoaded();
 
         assertThat(viewModel.getColumns(), hasSize(2));
 
-        Connection<SelectionColumn> databaseColumn = setup.connect(viewModel.getColumns().get(1));
-        assertThat(databaseColumn.assertLoaded().getItems(), contains(
-                new SelectionNode(IraqDatabase.DATABASE_ID, NodeType.DATABASE,
-                        IraqDatabase.LABEL, SelectionStatus.NONE)));
+        assertThat(viewModel.getColumns().get(0).getItems().get(0), hasProperty("label", equalTo("Databases")));
+
     }
 
 
