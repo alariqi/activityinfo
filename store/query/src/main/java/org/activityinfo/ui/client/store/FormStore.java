@@ -21,7 +21,6 @@ package org.activityinfo.ui.client.store;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.formTree.RecordTree;
@@ -50,10 +49,6 @@ public interface FormStore extends FormSource {
     Observable<Maybe<RecordTree>> getRecordTree(RecordRef rootRecordId);
 
     Promise<Void> deleteForm(ResourceId formId);
-
-    Observable<List<CatalogEntry>> getCatalogRoots();
-
-    Observable<List<CatalogEntry>> getCatalogChildren(ResourceId parentId);
 
     Observable<List<FormRecord>> getSubRecords(ResourceId formId, RecordRef parent);
 

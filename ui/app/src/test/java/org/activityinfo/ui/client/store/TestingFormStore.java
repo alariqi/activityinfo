@@ -23,7 +23,10 @@ import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.form.*;
+import org.activityinfo.model.form.FormMetadata;
+import org.activityinfo.model.form.FormPermissions;
+import org.activityinfo.model.form.FormRecord;
+import org.activityinfo.model.form.RecordHistory;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.formTree.RecordTree;
 import org.activityinfo.model.job.JobDescriptor;
@@ -39,9 +42,9 @@ import org.activityinfo.observable.ObservableTree;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
+import org.activityinfo.store.query.shared.FormOfflineStatus;
 import org.activityinfo.store.spi.FormStorage;
 import org.activityinfo.store.testing.TestingStorageProvider;
-import org.activityinfo.store.query.shared.FormOfflineStatus;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -138,16 +141,6 @@ public class TestingFormStore implements FormStore {
     public Promise<Void> deleteForm(ResourceId formId) {
         deleted.add(formId);
         return Promise.resolved(null);
-    }
-
-    @Override
-    public Observable<List<CatalogEntry>> getCatalogRoots() {
-        throw new UnsupportedOperationException("TODO");
-    }
-
-    @Override
-    public Observable<List<CatalogEntry>> getCatalogChildren(ResourceId parentId) {
-        throw new UnsupportedOperationException("TODO");
     }
 
     @Override

@@ -24,7 +24,6 @@ import org.activityinfo.model.analysis.Analysis;
 import org.activityinfo.model.analysis.AnalysisUpdate;
 import org.activityinfo.model.database.DatabaseHeader;
 import org.activityinfo.model.database.UserDatabaseMeta;
-import org.activityinfo.model.form.CatalogEntry;
 import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.form.FormRecord;
 import org.activityinfo.model.form.RecordHistory;
@@ -45,7 +44,10 @@ import org.activityinfo.promise.Function2;
 import org.activityinfo.promise.Maybe;
 import org.activityinfo.promise.Promise;
 import org.activityinfo.store.query.shared.FormOfflineStatus;
-import org.activityinfo.ui.client.store.http.*;
+import org.activityinfo.ui.client.store.http.DatabaseListRequest;
+import org.activityinfo.ui.client.store.http.DatabaseRequest;
+import org.activityinfo.ui.client.store.http.HttpStore;
+import org.activityinfo.ui.client.store.http.SubRecordsRequest;
 import org.activityinfo.ui.client.store.offline.OfflineStore;
 import org.activityinfo.ui.client.store.offline.SnapshotStatus;
 
@@ -87,16 +89,6 @@ public class FormStoreImpl implements FormStore {
             formTreeCache.put(rootFormId, tree);
         }
         return tree;
-    }
-
-    @Override
-    public Observable<List<CatalogEntry>> getCatalogRoots() {
-        return httpStore.get(new CatalogRequest());
-    }
-
-    @Override
-    public Observable<List<CatalogEntry>> getCatalogChildren(ResourceId parentId) {
-        return httpStore.get(new CatalogRequest(parentId));
     }
 
     @Override
