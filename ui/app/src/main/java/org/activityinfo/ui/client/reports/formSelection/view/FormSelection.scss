@@ -1,9 +1,41 @@
+/*
 
+ +----------------------------------------------------------------------------------------------+
+ | formselection                                                                                |
+ | +------------------------------------------------------------------------------------------+ |
+ | | formselection__header                                                                    | |
+ | |                                                                                          | |
+ | |                                                                                          | |
+ | +------------------------------------------------------------------------------------------+ |
+ | +------------------------------------------------------------------------------------------+ |
+ | | formselection__body                                                                      | |
+ | |                                                                                          | |
+ | | +----------------------------------------------------------+ +-------------------------+ | |
+ | | | formselection__forms                                     | | formselection__fields   | | |
+ | | |                                                          | |                         | | |
+ | | | +----------------+ +---------------+ +-------------+     | |                         | | |
+ | | | | column         | | column        | |column       |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | |                | |               | |             |     | |                         | | |
+ | | | +----------------+ +---------------+ +-------------+     | |                         | | |
+ | | +----------------------------------------------------------+ +-------------------------+ | |
+ | +------------------------------------------------------------------------------------------+ |
+ +----------------------------------------------------------------------------------------------+
+ */
 
 .formselection {
 
-  padding: 1rem;
-  padding-left: 2rem;
+  padding-top: 1rem;
+  padding-right: 0;
+  padding-left: 1rem;
+  padding-bottom: 0;
 
   color: $white;
   background-color: $black;
@@ -17,35 +49,51 @@
 
   // Split between the tree columns and the
   // list of fields
-  @extend %horizontal-stack__container;
+  @extend %vertical-stack__container;
 }
 
+.formselection {
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.formselection__body {
+  @extend %vertical-stack__viewport;
+  @extend %horizontal-stack__container;
+}
 
 /*
  * Container for form selection columns
  */
 .formselection__forms {
   @extend %horizontal-stack__viewport;
-  @extend %vertical-stack__container;
 }
-
-.formselection__columns {
-  @extend %vertical-stack__viewport;
-
+.formselection__forms--loaded {
   display: flex;
   flex-direction: row;
   overflow-y: hidden;
   overflow-x: auto;
 }
 
+.formselection__forms--loading {
+  @extend %center__container;
+}
+
 .formselection__column {
-  width: 15rem;
+  min-width: 15rem;
+  max-width: 25rem;
   border-right: 1px solid #466366;
   padding: 0.5rem;
-  flex: none;
-  overflow-y: auto;
+  flex: 1 1;
+  overflow-y: scroll;
   overflow-x: hidden;
   @include darkscrollbars();
+}
+
+.formselection__column:first-child {
+  padding-left: 0;
+  max-width: 15rem;
 }
 
 .formselection__item {
@@ -111,10 +159,41 @@
 
 .formselection__fields {
   @extend %vertical-stack__container;
-  flex: none;
+  width: 22rem;
+  padding-left: 1rem;
+}
+
+.formselection__fields:before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 23rem;
+  border: 1px solid #466366;
+}
+
+.formselection__fields > div {
+  padding-right: 1rem;
 }
 
 .formselection__fields__list {
   @extend %vertical-stack__viewport;
+  @include darkscrollbars();
+  margin-top: 1rem;
 }
 
+.formselection__fields__list--loading {
+  @extend %center__container;
+}
+
+.formselection__fields__list--empty {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  svg {
+    width: 80%;
+  }
+
+}

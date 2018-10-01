@@ -3,7 +3,7 @@ package org.activityinfo.ui.client.fields.viewModel;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.fields.state.DesignMode;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ public interface FieldChoiceViewModel {
 
     Observable<DesignMode> getMode();
 
-    Observable<FormSelectionViewModel> getFormSelection();
+    Observable<FormColumns> getFormSelection();
 
     Observable<FieldListViewModel> getAvailableFields();
 

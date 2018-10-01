@@ -7,7 +7,7 @@ import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.viewModel.FieldChoiceViewModel;
 import org.activityinfo.ui.client.fields.viewModel.FieldListViewModel;
 import org.activityinfo.ui.client.fields.viewModel.ReportListViewModel;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 
 import java.util.Optional;
 
@@ -39,7 +39,7 @@ public class PivotFieldViewModel implements FieldChoiceViewModel {
     }
 
     @Override
-    public Observable<FormSelectionViewModel> getFormSelection() {
+    public Observable<FormColumns> getFormSelection() {
         throw new UnsupportedOperationException("TODO");
     }
 

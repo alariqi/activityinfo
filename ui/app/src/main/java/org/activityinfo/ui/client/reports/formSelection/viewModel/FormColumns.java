@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.reports.formSelection.viewModel;
 
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
-import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
 import org.activityinfo.ui.client.store.FormStore;
 
 import java.util.ArrayList;
@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class FormSelectionViewModel {
+public class FormColumns {
 
     private final SelectionStatusMap selectionStatusMap;
     private final List<SelectionColumn> columns = new ArrayList<>();
 
-    public FormSelectionViewModel(SelectionStatusMap selectionStatusMap, FormPath path) {
+    public FormColumns(SelectionStatusMap selectionStatusMap, FormSelectionState path) {
         this.selectionStatusMap = selectionStatusMap;
 
         SelectionTree tree = selectionStatusMap.getTree();
@@ -41,11 +41,11 @@ public class FormSelectionViewModel {
         return selectionStatusMap.isSelected(id);
     }
 
-    public static Observable<FormSelectionViewModel> compute(FormStore formStore, Observable<Set<ResourceId>> selectedForms, Observable<FormPath> path) {
+    public static Observable<FormColumns> compute(FormStore formStore, Observable<Set<ResourceId>> selectedForms, Observable<FormSelectionState> path) {
 
         Observable<SelectionTree> selectionTree = formStore.getDatabases().transform(SelectionTree::new);
         Observable<SelectionStatusMap> selectionSet = org.activityinfo.observable.Observable.transform(selectionTree, selectedForms, SelectionStatusMap::new);
-        return Observable.transform(selectionSet, path, FormSelectionViewModel::new);
+        return Observable.transform(selectionSet, path, FormColumns::new);
     }
 
 }

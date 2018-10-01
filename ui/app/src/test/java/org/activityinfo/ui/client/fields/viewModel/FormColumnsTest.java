@@ -3,8 +3,8 @@ package org.activityinfo.ui.client.fields.viewModel;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.testing.IraqDatabase;
-import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 import org.activityinfo.ui.client.store.TestSetup;
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
-public class FormSelectionViewModelTest {
+public class FormColumnsTest {
 
     private TestSetup setup = new TestSetup();
 
@@ -25,13 +25,13 @@ public class FormSelectionViewModelTest {
 
         setup.describeDatabase(IraqDatabase.database());
 
-        FormPath model = new FormPath()
-                .navigateTo(0, FormPath.DATABASE_ROOT_ID);
+        FormSelectionState model = new FormSelectionState()
+                .navigateTo(0, FormSelectionState.DATABASE_ROOT_ID);
 
         Observable<Set<ResourceId>> selection = Observable.just(Collections.emptySet());
 
-        Observable<FormSelectionViewModel> viewModelObs = FormSelectionViewModel.compute(setup.getFormStore(), selection, Observable.just(model));
-        FormSelectionViewModel viewModel = setup.connect(viewModelObs).assertLoaded();
+        Observable<FormColumns> viewModelObs = FormColumns.compute(setup.getFormStore(), selection, Observable.just(model));
+        FormColumns viewModel = setup.connect(viewModelObs).assertLoaded();
 
         assertThat(viewModel.getColumns(), hasSize(2));
 

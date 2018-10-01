@@ -2,7 +2,7 @@ package org.activityinfo.ui.client.reports.pivot.state;
 
 import org.activityinfo.model.analysis.pivot.ImmutablePivotModel;
 import org.activityinfo.model.analysis.pivot.PivotModel;
-import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
 
 import java.util.function.Function;
 
@@ -10,13 +10,13 @@ public class PivotState {
 
     private String title;
     private PivotModel model;
-    private FormPath formSelection;
+    private FormSelectionState formSelection;
     private DesignPanelState panelState;
 
     public PivotState() {
         this.title = null;
         this.model = ImmutablePivotModel.builder().build();
-        this.formSelection = new FormPath();
+        this.formSelection = new FormSelectionState();
         this.panelState = DesignPanelState.FORM_SELECTION;
     }
 
@@ -35,7 +35,7 @@ public class PivotState {
         return model;
     }
 
-    public FormPath getFormSelection() {
+    public FormSelectionState getFormSelection() {
         return formSelection;
     }
 
@@ -43,7 +43,7 @@ public class PivotState {
         return panelState;
     }
 
-    public PivotState withFormSelection(FormPath updatedModel) {
+    public PivotState withFormSelection(FormSelectionState updatedModel) {
         PivotState newState = new PivotState(this);
         newState.formSelection = updatedModel;
         return newState;

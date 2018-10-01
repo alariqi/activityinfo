@@ -5,7 +5,7 @@ import org.activityinfo.model.database.Resource;
 import org.activityinfo.model.database.ResourceType;
 import org.activityinfo.model.database.UserDatabaseMeta;
 import org.activityinfo.model.resource.ResourceId;
-import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
 
 import java.util.*;
 
@@ -26,14 +26,14 @@ public class SelectionTree {
         root.type = NodeType.ROOT;
 
         SelectionNode databaseRoot = new SelectionNode();
-        databaseRoot.id = FormPath.DATABASE_ROOT_ID;
+        databaseRoot.id = FormSelectionState.DATABASE_ROOT_ID;
         databaseRoot.type = NodeType.ROOT;
         databaseRoot.label = I18N.CONSTANTS.databases();
         add(databaseRoot);
         addChild(root, databaseRoot);
 
         SelectionNode reportRoot = new SelectionNode();
-        reportRoot.id = FormPath.REPORTS_ROOT_ID;
+        reportRoot.id = FormSelectionState.REPORTS_ROOT_ID;
         reportRoot.type = NodeType.ROOT;
         reportRoot.label = I18N.CONSTANTS.reports();
         add(reportRoot);

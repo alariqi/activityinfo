@@ -11,7 +11,7 @@ import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.fields.state.DesignMode;
 import org.activityinfo.ui.client.fields.state.FieldChoiceState;
 import org.activityinfo.ui.client.fields.viewModel.*;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class ColumnChoiceViewModel implements FieldChoiceViewModel {
     }
 
     @Override
-    public Observable<FormSelectionViewModel> getFormSelection() {
+    public Observable<FormColumns> getFormSelection() {
         return Observable.loading();
     }
 

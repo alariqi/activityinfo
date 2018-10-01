@@ -20,6 +20,7 @@ package org.activityinfo.analysis.pivot.viewModel;
 
 import org.activityinfo.model.form.FormClass;
 import org.activityinfo.model.form.FormField;
+import org.activityinfo.model.form.FormMetadata;
 import org.activityinfo.model.formTree.FormTree;
 import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.model.type.ReferenceType;
@@ -98,6 +99,20 @@ public class FormForest {
             collectReferenced(formTree, formTree.getRootFields(), visited, list);
         }
 
+        return list;
+    }
+
+    public List<FormClass> getAllForms() {
+        Set<ResourceId> visited = new HashSet<>();
+        List<FormClass> list = new ArrayList<>();
+
+        for (FormTree formTree : trees.values()) {
+            for (FormMetadata form : formTree.getForms()) {
+                if(form.isVisible() && visited.add(form.getId())) {
+                    list.add(form.getSchema());
+                }
+            }
+        }
         return list;
     }
 

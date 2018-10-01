@@ -4,7 +4,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.reports.formSelection.view.FormSelectionView;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 import org.activityinfo.ui.client.reports.pivot.state.DesignPanelState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.viewModel.PivotPageViewModel;
@@ -17,7 +17,7 @@ public class PivotView {
     public static VTree render(PivotPageViewModel viewModel, PivotUpdater updater) {
 
         return new PageBuilder()
-            .heading(I18N.CONSTANTS.reports())
+            .heading(I18N.CONSTANTS.untitledReport())
             .breadcrumbs(viewModel.getBreadcrumbs())
             .body(renderBody(viewModel, updater))
             .build();
@@ -49,12 +49,12 @@ public class PivotView {
 
     private static VTree renderFormSelection(PivotPageViewModel viewModel, PivotUpdater updater) {
 
-        return FormSelectionView.render(viewModel.getFormSelection(), updater);
+        return FormSelectionView.render(viewModel.getFormSelection(), viewModel.getFieldList(), updater);
 
 
     }
 
-    private static VTree renderAvailableFields(Observable<FormSelectionViewModel> formSelection) {
+    private static VTree renderAvailableFields(Observable<FormColumns> formSelection) {
         return null;
     }
 }

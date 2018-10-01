@@ -4,7 +4,7 @@ import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.AppFrame;
 import org.activityinfo.ui.client.Page;
-import org.activityinfo.ui.client.reports.formSelection.state.FormPath;
+import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.view.PivotView;
@@ -37,7 +37,7 @@ public class PivotPage extends Page {
             }
 
             @Override
-            public void updateFormSelection(Function<FormPath, FormPath> function) {
+            public void updateFormSelection(Function<FormSelectionState, FormSelectionState> function) {
                 state.update(s -> s.withFormSelection(function.apply(s.getFormSelection())));
             }
 

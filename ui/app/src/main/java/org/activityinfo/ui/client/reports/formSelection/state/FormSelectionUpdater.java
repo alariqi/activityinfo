@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public interface FormSelectionUpdater {
 
-    void updateFormSelection(Function<FormPath, FormPath> function);
+    void updateFormSelection(Function<FormSelectionState, FormSelectionState> function);
 
     void selectForms(Set<ResourceId> forms, boolean select);
 }

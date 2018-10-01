@@ -45,5 +45,16 @@
   }
 }
 
-
+@mixin raised-edge($right: 22rem) {
+  &:before {
+    content: '';
+    width: 1rem;
+    position: absolute;
+    right: $right;
+    top: 0;
+    bottom: 0;
+    background-image: linear-gradient(to right, #000000 0%, rgba(52, 74, 76, 0) 100%);
+    opacity: 0.3;
+  }
+}
 

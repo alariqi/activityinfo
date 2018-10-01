@@ -56,7 +56,7 @@ public class EmptyStateBuilder {
 
     public VTree build() {
         List<VTree> children = new ArrayList<>();
-        children.add(NonIdeal.illustration("#nis_emptystate"));
+        children.add(empty());
         children.add(new VNode(HtmlTag.H2, new VText(I18N.CONSTANTS.emptyHeader())));
 
         children.add(new VNode(HtmlTag.P, new VText(explanationText)));
@@ -66,6 +66,10 @@ public class EmptyStateBuilder {
         }
 
         return new VNode(HtmlTag.DIV, Props.withClass("nonideal"), children);
+    }
+
+    public static VNode empty() {
+        return NonIdeal.illustration("#nis_emptystate");
     }
 
 }

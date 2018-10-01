@@ -7,18 +7,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class FormPath {
+public class FormSelectionState {
 
     public static final ResourceId DATABASE_ROOT_ID = ResourceId.valueOf("databases");
     public static final ResourceId REPORTS_ROOT_ID = ResourceId.valueOf("reports");
 
     private final List<ResourceId> path;
 
-    public FormPath() {
+    public FormSelectionState() {
         path = Collections.emptyList();
     }
 
-    public FormPath(List<ResourceId> path) {
+    public FormSelectionState(List<ResourceId> path) {
         this.path = path;
     }
 
@@ -27,13 +27,13 @@ public class FormPath {
     }
 
     /**
-     * Creates a new, updated {@code FormSelectionModel}, with the selection
+     * Creates a new, updated {@code FormSelectionState}, with the selection
      * in the n-th column changed to the given {@code resourceId}
      * @param columnIndex
      * @param resourceId
      * @return a new, updated model
      */
-    public FormPath navigateTo(int columnIndex, ResourceId resourceId) {
+    public FormSelectionState navigateTo(int columnIndex, ResourceId resourceId) {
 
         // Is there a actually a change?
         if(columnIndex < path.size()) {
@@ -48,7 +48,7 @@ public class FormPath {
         }
         newPath.add(resourceId);
 
-        return new FormPath(newPath);
+        return new FormSelectionState(newPath);
     }
 
     public Optional<ResourceId> getCurrent(int columnIndex) {
