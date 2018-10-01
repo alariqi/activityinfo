@@ -9,7 +9,7 @@
   background-color: #91f2ca;
   opacity: 0.95;
   z-index: $z-level-modal-overlay;
-  @include centerchild();
+  @extend %center__container;
 }
 
 .appmodal > div {

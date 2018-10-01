@@ -1,9 +1,10 @@
 package org.activityinfo.ui.client.reports.pivot.view;
 
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.ui.client.base.side.SidePanel;
+import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.reports.formSelection.view.FormSelectionView;
+import org.activityinfo.ui.client.reports.formSelection.viewModel.FormSelectionViewModel;
 import org.activityinfo.ui.client.reports.pivot.state.DesignPanelState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.viewModel.PivotPageViewModel;
@@ -48,13 +49,12 @@ public class PivotView {
 
     private static VTree renderFormSelection(PivotPageViewModel viewModel, PivotUpdater updater) {
 
-        VTree formSelectionView = FormSelectionView.render(viewModel.getFormSelection(), updater);
+        return FormSelectionView.render(viewModel.getFormSelection(), updater);
 
-        return new SidePanel()
-            .full()
-            .hideMode(SidePanel.HideMode.NONE)
-            .header(H.h2(I18N.CONSTANTS.reportDesign()))
-            .content(formSelectionView)
-            .build();
+
+    }
+
+    private static VTree renderAvailableFields(Observable<FormSelectionViewModel> formSelection) {
+        return null;
     }
 }

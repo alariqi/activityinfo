@@ -1,0 +1,62 @@
+/*
+  Vertical Stack Layout
+
+  Lays out children vertically, using flexbox, with all but
+  one of the children sized based on their content, and one
+  element, extending vertical-stack__viewport, which expands
+  to fill remaining space and is vertically scrollable.
+
+
+     container
+    +-------------------------+
+    | +---------------------+ |
+    | |                     | |
+    | | header              | |
+    | |                     | |
+    | +---------------------+ |
+    | +---------------------+ |
+    | |                     | |
+    | | viewport          ^ | |
+    | |                   | | |
+    | |                   | | |
+    | |                   | | |
+    | |                   | | |
+    | |                   | | |
+    | |                   v | |
+    | +---------------------+ |
+    | +---------------------+ |
+    | | footer              | |
+    | |                     | |
+    | +---------------------+ |
+    +-------------------------+
+
+*/
+
+
+
+%vertical-stack__container {
+  display: flex;
+  align-items: stretch;
+  align-content: stretch;
+  flex-direction: column;
+  overflow: hidden;
+
+  // By default, children have a fixed size
+  // and neither grow nor shrink.
+  > * {
+    flex: none;
+  }
+}
+
+/*
+ * ONE of the children of vertical stack should
+ * extend vertical-stack__content, which expands
+ * to consume any remaining space in the container, and
+ * is vertically scrollable.
+ */
+
+%vertical-stack__viewport {
+  flex: 1 1;
+  overflow-y: auto;
+}
+

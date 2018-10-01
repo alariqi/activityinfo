@@ -1,15 +1,13 @@
 
 .tabpanel {
+    @extend %vertical-stack__container;
     display: flex;
     flex-direction: column;
 }
 
 .tabpanel__strip {
     display: flex;
-    flex-grow: 0;
-    flex-shrink: 0;
     flex-direction: row;
-
     padding: 1rem;
 
     button {
@@ -43,8 +41,8 @@
 }
 
 .tabpanel__body {
-    flex-grow: 1;
-    overflow-y: auto;
+    @extend %vertical-stack__viewport;
+
     padding: 0 1rem 1rem;
 
 }

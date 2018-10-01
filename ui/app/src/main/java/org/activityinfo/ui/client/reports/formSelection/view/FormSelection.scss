@@ -1,12 +1,41 @@
 
 
 .formselection {
-  overflow-y: hidden;
-  overflow-x: auto;
-  display: flex;
+
   padding: 1rem;
   padding-left: 2rem;
-  flex-grow: 1;
+
+  color: $white;
+  background-color: $black;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: auto;
+
+  // Split between the tree columns and the
+  // list of fields
+  @extend %horizontal-stack__container;
+}
+
+
+/*
+ * Container for form selection columns
+ */
+.formselection__forms {
+  @extend %horizontal-stack__viewport;
+  @extend %vertical-stack__container;
+}
+
+.formselection__columns {
+  @extend %vertical-stack__viewport;
+
+  display: flex;
+  flex-direction: row;
+  overflow-y: hidden;
+  overflow-x: auto;
 }
 
 .formselection__column {
@@ -24,10 +53,7 @@
   color: $white;
   font-family: $gretasemibold;
   font-size: 1rem;
-  padding-top: 0.25rem;
-  padding-right: 0.5rem;
-  padding-left: 0.5rem;
-  padding-bottom: 0.25rem;
+  padding: 0.25rem 0.5rem;
   border: 2px solid transparent;
   border-radius: 3px;
 }
@@ -82,3 +108,13 @@
     top: 0.5rem;
   }
 }
+
+.formselection__fields {
+  @extend %vertical-stack__container;
+  flex: none;
+}
+
+.formselection__fields__list {
+  @extend %vertical-stack__viewport;
+}
+

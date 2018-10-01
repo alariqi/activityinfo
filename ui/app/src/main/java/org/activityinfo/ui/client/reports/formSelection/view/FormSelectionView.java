@@ -4,6 +4,7 @@ import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.ui.client.base.Loader;
 import org.activityinfo.ui.client.base.Svg;
+import org.activityinfo.ui.client.base.button.Buttons;
 import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionUpdater;
 import org.activityinfo.ui.client.reports.formSelection.viewModel.*;
 import org.activityinfo.ui.vdom.shared.html.H;
@@ -16,15 +17,29 @@ public class FormSelectionView {
 
     public static VTree render(Observable<FormSelectionViewModel> viewModel,
                                FormSelectionUpdater updater) {
+
+        return H.div("formselection",
+                H.div("formselection__forms",
+                        H.h2(I18N.CONSTANTS.reportDesign()),
+                        formColumns(viewModel, updater)),
+                H.div("formselection__fields",
+                        H.h3(I18N.CONSTANTS.fields()),
+                        doneButton(),
+                        fieldList()));
+
+    }
+
+
+    private static VTree formColumns(Observable<FormSelectionViewModel> viewModel, FormSelectionUpdater updater) {
         return new ReactiveComponent(
                 viewModel.transform(vm ->
-                        div("formselection",
+                        div("formselection__columns",
                                 vm.getColumns().stream().map(c -> FormSelectionView.column(vm, c, updater)))),
                          loadingIndicator());
     }
 
     private static VTree loadingIndicator() {
-        return div("formselection",
+        return div("formselection__columns",
                 new Loader().small().dark().build());
     }
 
@@ -107,5 +122,17 @@ public class FormSelectionView {
                 return I18N.CONSTANTS.subForm();
         }
     }
+
+    private static VTree doneButton() {
+        return Buttons.button(I18N.CONSTANTS.done())
+                .primary()
+                .block()
+                .build();
+    }
+
+    private static VTree fieldList() {
+        return H.div("formselection__fields__list");
+    }
+
 
 }

@@ -3,12 +3,10 @@ package org.activityinfo.analysis.pivot.viewModel;
 import org.activityinfo.model.analysis.pivot.ImmutablePivotModel;
 import org.activityinfo.model.analysis.pivot.PivotModel;
 import org.activityinfo.model.formTree.FormTree;
-import org.activityinfo.model.resource.ResourceId;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.store.query.shared.FormSource;
 
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -35,11 +33,8 @@ public class PivotViewModel {
         this.formForest = pivotModel.join(m -> {
             LOGGER.info("Updating form forest");
 
-            // Find unique list of forms involved in the analysis
-            Set<ResourceId> forms = m.formIds();
-
-            // Build a FormTree for each form
-            List<Observable<FormTree>> trees = forms.stream().map(id -> formSource.getFormTree(id)).collect(Collectors.toList());
+            // Build a FormTree for each selected form
+            List<Observable<FormTree>> trees = m.getForms().stream().map(id -> formSource.getFormTree(id)).collect(Collectors.toList());
 
             // Combine into a FormForest
             return Observable.flatten(trees).transform(t -> new FormForest(t));

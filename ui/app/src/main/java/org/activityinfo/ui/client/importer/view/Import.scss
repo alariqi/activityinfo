@@ -1,4 +1,28 @@
 
+/*
+
++----------------------------------------------------------------------------------------------+
+| importer                                                                                     |
+|+---------------------------------------------------------------+ +-------------------------+ |
+|| importer__main                                                | | sidepanel               | |
+|| +------------------------------------------------------------+| |                         | |
+|| | importer__header                                           || |                         | |
+|| |                                                            || |                         | |
+|| +------------------------------------------------------------+| |                         | |
+|| +------------------------------------------------------------+| |                         | |
+|| | importer__body                                             || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| |                                                            || |                         | |
+|| +------------------------------------------------------------+| |                         | |
+|+---------------------------------------------------------------+ +-------------------------+ |
++----------------------------------------------------------------------------------------------+
+
+ */
 
 .importer {
   // Fill entire page body
@@ -10,19 +34,15 @@
   padding-bottom: 0;
 
   // Split the space between the importer__main and the sidepanel
-  display: flex;
-  flex-direction: row;
+  @extend %horizontal-stack__container;
 }
 
 .importer__main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  @extend %horizontal-stack__viewport;
+  @extend %vertical-stack__container;
 }
 
 .importer__header {
-  flex: none;
   display: flex;
   justify-content: space-between;
 }
@@ -42,17 +62,15 @@ p.importer__valid-count {
 }
 
 .importer__body {
-  flex-grow: 1;
+  @extend %vertical-stack__viewport;
   position: relative;
 }
 
 .importer__source {
+  @extend %center__container;
 
   background-color: $white;
   border: 1px solid #e6ebea;
-
-  /* Center the instructions in this container */
-  @include centerchild();
 
   text-align: center;
 }
@@ -80,18 +98,11 @@ p.importer__valid-count {
 }
 
 .importer__choice {
-  display: flex;
-  flex-direction: column;
-}
-
-.importer__choice__header,
-.importer__choice__footer {
-  flex: none;
+  @extend %vertical-stack__container;
 }
 
 .importer__choice__body {
-  flex-grow: 1;
-  overflow-y: auto;
+  @extend %vertical-stack__viewport;
   padding-left: 1rem;
   padding-right: 1rem;
 }

@@ -38,6 +38,10 @@ public class PivotPageViewModel {
         this.formSelection = FormSelectionViewModel.compute(formStore, selectedForms, formSelectionPath);
     }
 
+    public Observable<FieldListViewModel> getFieldList() {
+        return pivotViewModel.getFormForest().transform(FieldListViewModel::new);
+    }
+
     public List<Breadcrumb> getBreadcrumbs() {
         return Arrays.asList(
                 REPORTS_BREADCRUMB,

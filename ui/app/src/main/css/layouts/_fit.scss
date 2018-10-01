@@ -1,0 +1,19 @@
+
+/*
+ * Fit Layout
+ *
+ * Sizes its only child to fill the size of the container.
+ */
+
+
+
+%fit__container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  > * {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+}
