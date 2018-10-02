@@ -58,6 +58,7 @@ public class PivotView {
     private static VTree renderFieldPanel(DesignPanelState state, PivotPageViewModel viewModel, PivotUpdater updater) {
         return new SidePanel()
                 .expandButtonLabel(I18N.CONSTANTS.reportDesign())
+                .leftSide()
                 .hideMode(SidePanel.HideMode.COLLAPSE)
                 .header(H.h3(I18N.CONSTANTS.reportDesign()))
                 .content(renderFieldSelection())

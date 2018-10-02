@@ -30,7 +30,7 @@ public class RecordSidePanel {
                 new TabItem(I18N.CONSTANTS.history(), history(viewModel)));
 
         return new SidePanel()
-                .expandButtonLabel(I18N.CONSTANTS.detailsHistory())
+                .expandButtonLabel(I18N.CONSTANTS.record())
                 .hideMode(SidePanel.HideMode.COLLAPSE)
                 .header(scrollButton(viewModel))
                 .expanded(viewModel.isRecordPanelExpanded(),

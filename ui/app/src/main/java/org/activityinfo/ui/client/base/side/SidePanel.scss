@@ -49,17 +49,45 @@ $sidepanel-collapsed-width: 1.875rem;
   border: 0 none;
   transform-origin: left top;
   transform: rotate(-90deg) translateX(-100%);
+
+  color: $white;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-family: $gretalight;
+
+  svg {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    transform: rotate(270deg);
+    margin-left: 0.50rem;
+  }
 }
+
+.sidepanel--left .sidepanel__expand svg {
+  transform: rotate(90deg) translateX(0.40rem);
+}
+
 
 .sidepanel__collapse {
   position: absolute;
   top: 1rem;
   right: 1rem;
-}
+  font-family: $gretalight;
+  font-size: 1rem;
+  color: $white;
 
-.sidepanel__collapse svg {
-  width: 1rem;
-  height: 1rem;
+  svg {
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    margin-left: 0.5rem;
+    transform: translateY(0.25rem);
+  }
+}
+.sidepanel--left .sidepanel__collapse svg {
+  transform: translateY(0.25rem) rotate(180deg);
+  margin-left: 0;
 }
 
 .sidepanel--collapsed {
@@ -76,11 +104,7 @@ $sidepanel-collapsed-width: 1.875rem;
   display: block;
 }
 
-button.sidepanel__expand {
-  color: $white;
-  white-space: nowrap;
-  font-size: 1rem;
-}
+
 
 button.sidepanel:focus {
   outline: none;

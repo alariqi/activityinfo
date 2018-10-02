@@ -1,5 +1,6 @@
 package org.activityinfo.ui.client.base.side;
 
+import org.activityinfo.i18n.shared.I18N;
 import org.activityinfo.observable.Observable;
 import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.base.Svg;
@@ -17,6 +18,11 @@ public class SidePanel {
         NONE
     }
 
+    public enum Side {
+        LEFT,
+        RIGHT
+    }
+
     private Observable<Boolean> expanded;
     private SidePanelUpdater updater;
     private VTree title = new VText("");
@@ -25,6 +31,7 @@ public class SidePanel {
     private boolean full = false;
     private String expandedWidth = null;
     private HideMode hideMode;
+    private Side side = Side.RIGHT;
 
     public SidePanel expanded(Observable<Boolean> expanded, SidePanelUpdater updater) {
         this.expanded = expanded;
@@ -58,6 +65,7 @@ public class SidePanel {
     }
 
     public SidePanel leftSide() {
+        this.side = Side.LEFT;
         return this;
     }
 
@@ -106,6 +114,7 @@ public class SidePanel {
 
             PropMap props = Props.create();
             props.addClassName("sidepanel");
+            props.addClassName("sidepanel--left", side == Side.LEFT);
             props.addClassName("dark");
 
             if(!e) {
@@ -137,18 +146,30 @@ public class SidePanel {
 
 
     private VNode expandButton() {
-        return new VNode(HtmlTag.BUTTON, withClass("sidepanel__expand").onclick(event -> {
-            updater.expand(true);
-        }), title, new VText(" ▲"));
+
+        PropMap buttonProps = Props.create()
+            .setClass("sidepanel__expand")
+            .onclick(event -> updater.expand(true));
+
+        return new VNode(HtmlTag.BUTTON, buttonProps, title, arrowIcon());
+    }
+
+    private VTree arrowIcon() {
+        return new Svg()
+            .setHref("#sidepanel_arrow")
+            .setViewBox("0 0 10 17")
+            .build();
     }
 
     private VNode collapseButton() {
         if(this.hideMode == HideMode.NONE) {
             return null;
         }
-        return new VNode(HtmlTag.BUTTON, withClass("sidepanel__collapse").onclick(event -> {
-            updater.expand(false);
-        }), Svg.svg(null, "#close_white"));
+        PropMap buttonProps = Props.create()
+            .setClass("sidepanel__collapse")
+            .onclick(event -> updater.expand(false));
+
+        return new VNode(HtmlTag.BUTTON, buttonProps, new VText(I18N.CONSTANTS.collapse()), arrowIcon());
     }
 
 

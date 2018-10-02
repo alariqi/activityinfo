@@ -1933,9 +1933,6 @@ public interface UiConstants extends Constants {
     @DefaultStringValue("Scroll to this record...")
     String scrollToThisRecord();
 
-    @DefaultStringValue("Details & History")
-    String detailsHistory();
-
     @DefaultStringValue("Go to subform:")
     String goToSubforms();
 
@@ -2083,5 +2080,11 @@ public interface UiConstants extends Constants {
 
     @DefaultStringValue("User limit exceeded")
     String usersExceeded();
+
+    @DefaultStringValue("Record")
+    String record();
+
+    @DefaultStringValue("Collapse")
+    String collapse();
 }
 
