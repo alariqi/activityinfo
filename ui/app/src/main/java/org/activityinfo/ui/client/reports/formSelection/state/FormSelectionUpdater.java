@@ -10,4 +10,7 @@ public interface FormSelectionUpdater {
     void updateFormSelection(Function<FormSelectionState, FormSelectionState> function);
 
     void selectForms(Set<ResourceId> forms, boolean select);
+
+    void finishFormSelection();
+
 }

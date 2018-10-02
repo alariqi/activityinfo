@@ -5,6 +5,7 @@ import org.activityinfo.observable.StatefulValue;
 import org.activityinfo.ui.client.AppFrame;
 import org.activityinfo.ui.client.Page;
 import org.activityinfo.ui.client.reports.formSelection.state.FormSelectionState;
+import org.activityinfo.ui.client.reports.pivot.state.DesignPanelState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.view.PivotView;
@@ -52,6 +53,12 @@ public class PivotPage extends Page {
                     }
                     return m.withForms(selection);
                 }));
+            }
+
+            @Override
+            public void finishFormSelection() {
+                state.update(s -> s.withPanelState(DesignPanelState.VISIBLE));
+
             }
         };
 

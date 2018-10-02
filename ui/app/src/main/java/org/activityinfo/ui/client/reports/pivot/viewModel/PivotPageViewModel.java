@@ -49,7 +49,7 @@ public class PivotPageViewModel {
     }
 
     public Observable<DesignPanelState> getPanelState() {
-        return Observable.just(DesignPanelState.FORM_SELECTION);
+        return state.transform(s -> s.getPanelState()).cache();
     }
 
     public Observable<FormColumns> getFormSelection() {

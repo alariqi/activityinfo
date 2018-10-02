@@ -52,12 +52,6 @@
   @extend %vertical-stack__container;
 }
 
-.formselection {
-  h2 {
-    font-size: 1.5rem;
-  }
-}
-
 .formselection__body {
   @extend %vertical-stack__viewport;
   @extend %horizontal-stack__container;
@@ -91,9 +85,14 @@
   @include darkscrollbars();
 }
 
+
 .formselection__column:first-child {
   padding-left: 0;
   max-width: 15rem;
+}
+
+.formselection__column:last-child {
+  border-right: none;
 }
 
 .formselection__item {

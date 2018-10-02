@@ -24,13 +24,12 @@ public class FormSelectionView {
                                FormSelectionUpdater updater) {
 
         return H.div("formselection",
-                H.div(H.h2(I18N.CONSTANTS.reportDesign())),
+                H.div(H.h3(I18N.CONSTANTS.reportDesign())),
                 H.div("formselection__body",
                     forms(formColumns, updater),
-                    fields(fields)));
+                    fields(fields, updater)));
 
     }
-
 
     private static VTree forms(Observable<FormColumns> viewModel, FormSelectionUpdater updater) {
         return new ReactiveComponent(
@@ -41,11 +40,11 @@ public class FormSelectionView {
     }
 
 
-    private static VNode fields(Observable<FieldListViewModel> fields) {
+    private static VNode fields(Observable<FieldListViewModel> fields, FormSelectionUpdater updater) {
         return H.div("formselection__fields",
                 H.div("formselection__fields__header",
                     H.h3(I18N.CONSTANTS.fields()),
-                    doneButton(fields)),
+                    doneButton(fields, updater)),
                 fieldList(fields));
     }
 
@@ -135,7 +134,7 @@ public class FormSelectionView {
         }
     }
 
-    private static VTree doneButton(Observable<FieldListViewModel> fields) {
+    private static VTree doneButton(Observable<FieldListViewModel> fields, FormSelectionUpdater updater) {
 
         Observable<Boolean> empty = fields
                 .transform(list -> list.getFields().isEmpty())
@@ -147,6 +146,7 @@ public class FormSelectionView {
                     .block()
                     .enabled(e == Boolean.FALSE)
                     .icon(Icon.BUBBLE_CHECKMARK)
+                    .onSelect(event -> updater.finishFormSelection())
                     .build();
         }));
     }

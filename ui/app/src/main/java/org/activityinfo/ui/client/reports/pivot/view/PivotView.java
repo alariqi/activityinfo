@@ -1,10 +1,9 @@
 package org.activityinfo.ui.client.reports.pivot.view;
 
 import org.activityinfo.i18n.shared.I18N;
-import org.activityinfo.observable.Observable;
+import org.activityinfo.ui.client.base.side.SidePanel;
 import org.activityinfo.ui.client.page.PageBuilder;
 import org.activityinfo.ui.client.reports.formSelection.view.FormSelectionView;
-import org.activityinfo.ui.client.reports.formSelection.viewModel.FormColumns;
 import org.activityinfo.ui.client.reports.pivot.state.DesignPanelState;
 import org.activityinfo.ui.client.reports.pivot.state.PivotUpdater;
 import org.activityinfo.ui.client.reports.pivot.viewModel.PivotPageViewModel;
@@ -33,7 +32,7 @@ public class PivotView {
     }
 
     private static VTree renderTable(PivotPageViewModel viewModel) {
-        return H.div();
+        return H.div("pivot__result");
     }
 
     private static VTree renderPanel(PivotPageViewModel viewModel, PivotUpdater updater) {
@@ -41,20 +40,34 @@ public class PivotView {
         return new ReactiveComponent(viewModel.getPanelState().transform(state -> {
             if(state == DesignPanelState.FORM_SELECTION) {
                 return renderFormSelection(viewModel, updater);
+
             } else {
-                return H.div();
+                return renderFieldPanel(state, viewModel, updater);
             }
         }));
     }
+
 
     private static VTree renderFormSelection(PivotPageViewModel viewModel, PivotUpdater updater) {
 
         return FormSelectionView.render(viewModel.getFormSelection(), viewModel.getFieldList(), updater);
 
-
     }
 
-    private static VTree renderAvailableFields(Observable<FormColumns> formSelection) {
-        return null;
+
+    private static VTree renderFieldPanel(DesignPanelState state, PivotPageViewModel viewModel, PivotUpdater updater) {
+        return new SidePanel()
+                .expandButtonLabel(I18N.CONSTANTS.reportDesign())
+                .hideMode(SidePanel.HideMode.COLLAPSE)
+                .header(H.h3(I18N.CONSTANTS.reportDesign()))
+                .content(renderFieldSelection())
+                .expandedWidth("44rem")
+                .expanded(state == DesignPanelState.VISIBLE, expanded ->
+                        updater.update(s -> s.withPanelState(expanded ? DesignPanelState.VISIBLE : DesignPanelState.COLLAPSED)))
+                .build();
+    }
+
+    private static VTree renderFieldSelection() {
+        return H.div();
     }
 }

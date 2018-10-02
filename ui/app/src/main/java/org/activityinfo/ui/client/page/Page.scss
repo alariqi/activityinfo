@@ -16,11 +16,8 @@
 
 .page--fullwidth .page__body {
 
+  @extend %fit__container;
   padding: 0;
-
-  // size child to fill the entire container
-  display: flex;
-  flex-direction: column;
 }
 
 .page__body__inner {

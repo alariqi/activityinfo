@@ -1,0 +1,9 @@
+
+
+.pivot {
+  @extend %horizontal-stack__container;
+}
+
+.pivot__result {
+  @extend %horizontal-stack__viewport;
+}

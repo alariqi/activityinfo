@@ -49,6 +49,12 @@ public class PivotState {
         return newState;
     }
 
+    public PivotState withPanelState(DesignPanelState panel) {
+        PivotState newState = new PivotState(this);
+        newState.panelState = panel;
+        return newState;
+    }
+
     public PivotState updateModel(Function<PivotModel, PivotModel> function) {
         PivotState updatedState = new PivotState(this);
         updatedState.model = function.apply(model);
