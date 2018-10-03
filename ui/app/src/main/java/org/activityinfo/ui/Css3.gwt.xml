@@ -206,18 +206,6 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.slider.Css3HorizontalSliderAppearance">
-    <any>
-      <when-type-is class="com.sencha.gxt.cell.core.client.SliderCell.SliderAppearance"/>
-      <when-type-is class="com.sencha.gxt.cell.core.client.SliderCell.HorizontalSliderAppearance"/>
-    </any>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-  <replace-with class="org.activityinfo.ui.client.base.slider.Css3VerticalSliderAppearance">
-    <when-type-is class="com.sencha.gxt.cell.core.client.SliderCell.VerticalSliderAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
 
   <replace-with class="org.activityinfo.ui.client.base.menu.Css3MenuAppearance">
     <when-type-is class="com.sencha.gxt.widget.core.client.menu.Menu.MenuAppearance"/>
@@ -264,12 +252,6 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.tree.Css3TreeAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.tree.Tree.TreeAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
-
-
   <replace-with class="org.activityinfo.ui.client.base.widget.Css3DatePickerAppearance">
     <when-type-is class="com.sencha.gxt.widget.core.client.DatePicker.DatePickerAppearance"/>
     <when-property-is name="gxt.theme" value="activityinfo"/>
@@ -285,10 +267,6 @@
     <when-property-is name="gxt.theme" value="activityinfo"/>
   </replace-with>
 
-  <replace-with class="org.activityinfo.ui.client.base.colorpalette.Css3ColorPaletteAppearance">
-    <when-type-is class="com.sencha.gxt.widget.core.client.ColorPaletteCell.ColorPaletteAppearance"/>
-    <when-property-is name="gxt.theme" value="activityinfo"/>
-  </replace-with>
 
   <replace-with class="org.activityinfo.ui.client.base.container.Css3MessageBoxAppearance">
     <when-type-is class="com.sencha.gxt.widget.core.client.box.MessageBox.MessageBoxAppearance"/>
